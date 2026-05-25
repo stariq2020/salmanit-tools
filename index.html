@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SalmanIT Tools — Free Windows Utilities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0F1F3D;
+    --blue:   #1E3A5F;
+    --green:  #2ECC71;
+    --green2: #27AE60;
+    --amber:  #F59E0B;
+    --white:  #FFFFFF;
+    --off:    #F4F7FA;
+    --muted:  #6B7280;
+    --card:   #FFFFFF;
+    --border: #E2E8F0;
+    --text:   #1A2B45;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    background: rgba(15,31,61,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem; font-weight: 800;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo span { color: var(--green); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0F1F3D 0%, #1A3A6E 50%, #0D2847 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 100px 24px 60px;
+    position: relative; overflow: hidden;
+  }
+
+  /* Grid overlay */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(46,204,113,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46,204,113,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Glow blobs */
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none; opacity: .25;
+  }
+  .blob-1 { width: 500px; height: 500px; background: #2ECC71; top: -100px; right: -100px; }
+  .blob-2 { width: 400px; height: 400px; background: #1E90FF; bottom: -80px; left: -80px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(46,204,113,0.12);
+    border: 1px solid rgba(46,204,113,0.3);
+    color: var(--green);
+    font-size: 0.8rem; font-weight: 600;
+    padding: 6px 16px; border-radius: 999px;
+    margin-bottom: 28px;
+    letter-spacing: .05em; text-transform: uppercase;
+    animation: fadeUp .6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.6rem, 6vw, 4.8rem);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+    max-width: 800px;
+    animation: fadeUp .6s .1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--green);
+  }
+
+  .hero p {
+    margin-top: 20px;
+    font-size: 1.1rem; font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px; line-height: 1.7;
+    animation: fadeUp .6s .2s ease both;
+  }
+
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 48px;
+    animation: fadeUp .6s .3s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--green);
+  }
+  .stat-lbl { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  .scroll-hint {
+    position: absolute; bottom: 32px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.3); font-size: 0.75rem;
+    animation: bounce 2s infinite;
+  }
+  .scroll-hint svg { width: 18px; height: 18px; }
+
+  /* ── TOOLS SECTION ── */
+  .section {
+    padding: 80px 24px;
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--green); margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 800; color: var(--navy);
+    line-height: 1.15; margin-bottom: 14px;
+  }
+
+  .section-sub {
+    font-size: 1rem; color: var(--muted);
+    max-width: 520px; line-height: 1.7; margin-bottom: 52px;
+  }
+
+  /* ── TOOL CARD ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+  }
+
+  .tool-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative; overflow: hidden;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+    animation: fadeUp .5s ease both;
+  }
+  .tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(30,58,95,0.12);
+    border-color: var(--green);
+  }
+
+  /* Subtle top accent line */
+  .tool-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--green), #27AE60);
+    border-radius: 20px 20px 0 0;
+  }
+
+  .tool-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, #EBF5FF, #D1FAE5);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 18px;
+  }
+
+  .tool-version {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: var(--green2);
+    background: rgba(46,204,113,0.1);
+    border-radius: 999px; padding: 2px 10px;
+    margin-bottom: 10px;
+  }
+
+  .tool-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 10px;
+  }
+
+  .tool-desc {
+    font-size: 0.92rem; color: var(--muted);
+    line-height: 1.65; margin-bottom: 20px;
+  }
+
+  .tool-features {
+    list-style: none; margin-bottom: 28px;
+  }
+  .tool-features li {
+    font-size: 0.85rem; color: var(--text);
+    padding: 4px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tool-features li::before {
+    content: '✓';
+    color: var(--green); font-weight: 700; font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .tool-meta {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.78rem; color: var(--muted);
+    margin-bottom: 20px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .tool-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .btn-download {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 14px 20px;
+    background: linear-gradient(135deg, var(--green), var(--green2));
+    color: white; font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    border: none; border-radius: 12px;
+    text-decoration: none; cursor: pointer;
+    transition: opacity .2s, transform .15s;
+    letter-spacing: .02em;
+  }
+  .btn-download:hover { opacity: .9; transform: scale(1.02); }
+  .btn-download svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    background: var(--navy);
+    padding: 80px 24px;
+  }
+  .how-inner {
+    max-width: 1100px; margin: 0 auto;
+  }
+  .how-section .section-title { color: var(--white); }
+  .how-section .section-sub   { color: rgba(255,255,255,0.5); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px; margin-top: 48px;
+  }
+  .step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 28px 24px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem; font-weight: 800;
+    color: rgba(46,204,113,0.2);
+    line-height: 1; margin-bottom: 14px;
+  }
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--white); margin-bottom: 8px;
+  }
+  .step p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+  /* ── FAQ ── */
+  .faq-list { max-width: 700px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .faq-q {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--navy); cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+  }
+  .faq-q .arrow { transition: transform .25s; font-size: 1.1rem; }
+  .faq-item.open .arrow { transform: rotate(180deg); }
+  .faq-a {
+    font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    max-height: 0; overflow: hidden;
+    transition: max-height .3s ease, margin-top .3s ease;
+  }
+  .faq-item.open .faq-a { max-height: 200px; margin-top: 12px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800;
+    color: var(--white); margin-bottom: 10px;
+  }
+  .footer-logo span { color: var(--green); }
+  footer p {
+    font-size: 0.82rem; color: rgba(255,255,255,0.3);
+    margin-top: 6px;
+  }
+  footer a { color: var(--green); text-decoration: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(8px); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-stats { gap: 24px; }
+    .stat-num { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">⚡ <span>Salman</span>IT Tools</a>
+  <div class="nav-links">
+    <a href="#tools">Tools</a>
+    <a href="#how">How it works</a>
+    <a href="#faq">FAQ</a>
+    <a href="mailto:info@salmanitservices.com">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="hero-badge">🛠️ Free Windows Utilities</div>
+
+  <h1>Fix &amp; Optimise Your PC<br>with <em>One Click</em></h1>
+
+  <p>Professional-grade Windows tools built by an IT expert. Free to download, no installation needed — just run and go.</p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">1</div>
+      <div class="stat-lbl">Tool Available</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">17</div>
+      <div class="stat-lbl">Checks &amp; Fixes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-lbl">Free</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M19 9l-7 7-7-7"/>
+    </svg>
+    scroll down
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="section" id="tools">
+  <div class="section-label">Our Tools</div>
+  <h2 class="section-title">Download &amp; Run Instantly</h2>
+  <p class="section-sub">No installation required. Just download the .exe, run as administrator, and let it do the work.</p>
+
+  <div class="tools-grid">
+
+    <!-- OneClickFix -->
+    <div class="tool-card" style="animation-delay:.1s">
+      <div class="tool-icon">⚡</div>
+      <div class="tool-version">v1.7 — Latest</div>
+      <div class="tool-name">OneClickFix</div>
+      <div class="tool-desc">A complete PC optimiser that cleans, fixes, and speeds up your Windows computer in one click. No technical knowledge needed.</div>
+      <ul class="tool-features">
+        <li>Clears temp files, browser cache &amp; Recycle Bin</li>
+        <li>Fixes broken registry startup &amp; uninstall entries</li>
+        <li>Flushes DNS, clears Event Logs</li>
+        <li>SSD/HDD detection — safe defrag handling</li>
+        <li>Windows Update &amp; Defender check</li>
+        <li>Remote PC diagnostics via WinRM</li>
+        <li>PC Health Score out of 10</li>
+      </ul>
+      <div class="tool-meta">
+        <span>🪟 Windows 10 / 11</span>
+        <span>⚡ No install needed</span>
+        <span>🔒 Free</span>
+      </div>
+      <a class="btn-download" href="https://github.com/YOUR-USERNAME/salmanit-tools/releases/latest/download/OneClickFix.exe">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/>
+        </svg>
+        Download OneClickFix.exe
+      </a>
+    </div>
+
+    <!-- Coming Soon placeholder -->
+    <div class="tool-card" style="animation-delay:.2s; opacity:.6; pointer-events:none;">
+      <div class="tool-icon">🗂️</div>
+      <div class="tool-version">Coming Soon</div>
+      <div class="tool-name">ProfileCleaner</div>
+      <div class="tool-desc">Safely remove old and unused Windows user profiles to free up disk space. Ideal for shared or managed machines.</div>
+      <ul class="tool-features">
+        <li>Lists all user profiles with last login date</li>
+        <li>Shows profile size on disk</li>
+        <li>Safe deletion with confirmation</li>
+        <li>Skips active and system profiles</li>
+      </ul>
+      <div class="tool-meta">
+        <span>🪟 Windows 10 / 11</span>
+        <span>⚡ No install needed</span>
+        <span>🔒 Free</span>
+      </div>
+      <div class="btn-download" style="background:linear-gradient(135deg,#9CA3AF,#6B7280);cursor:not-allowed;">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Coming Soon
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <div class="section-label" style="color:var(--green)">How It Works</div>
+    <h2 class="section-title">Three Steps to a Faster PC</h2>
+    <p class="section-sub">No technical knowledge needed. Our tools are designed for everyone.</p>
+
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Download</h3>
+        <p>Click the download button. Your browser saves a single .exe file — no installer, no bloatware.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Run as Admin</h3>
+        <p>Right-click the file and select "Run as administrator" so it has the access it needs to fix things properly.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Click Fix</h3>
+        <p>Hit the big green button. The tool runs all checks automatically and shows you exactly what it found and fixed.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Done</h3>
+        <p>Review your PC Health Score and follow any recommendations. Most PCs are done in under 2 minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">Common Questions</h2>
+  <p class="section-sub">Everything you need to know before downloading.</p>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Is this safe to run on my PC? <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">Yes. Our tools only perform safe, well-known Windows maintenance tasks — clearing temp files, flushing DNS, checking registry entries. We never touch system files or anything that could break Windows. The source code is openly available on GitHub.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Why does Windows show a warning when I run it? <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">Windows shows this warning for any .exe that isn't digitally signed by a paid certificate. This is normal for small independent tools. Click "More info" then "Run anyway" to proceed. The tool is completely safe.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Does it work on Windows 10 and 11? <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">Yes, both Windows 10 and Windows 11 are fully supported. OneClickFix will also warn you if your PC is running Windows 10 which reached End of Support in October 2025.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Do I need to install anything? <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">No. Just download the .exe file and run it. Nothing is installed on your system. You can delete the file when you're done.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Is my data safe? Does it connect to the internet? <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">The tools run entirely on your local machine. They do not send any data anywhere. The only internet connection is checking for Windows Updates — which goes directly to Microsoft's servers, not ours.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Who built these tools? <span class="arrow">▾</span>
+      </div>
+      <div class="faq-a">These tools are built by Salman IT Services, an IT company based in Crawley, UK. We build and maintain these tools based on real problems we see with our clients' computers every day.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚡ <span>Salman</span>IT Tools</div>
+  <p>Built by <a href="https://salmanitservices.com" target="_blank">Salman IT Services</a> — Crawley, UK</p>
+  <p style="margin-top:8px">Free Windows utilities for everyone · <a href="mailto:info@salmanitservices.com">Contact us</a></p>
+</footer>
+
+<script>
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // Staggered scroll animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.tool-card, .step, .faq-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>

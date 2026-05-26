@@ -367,6 +367,35 @@ nav {
   box-shadow: none;
 }
 
+/* ── HOW IT WORKS TABS ── */
+.how-tabs {
+  display: flex; gap: 8px;
+  margin-bottom: 0; margin-top: 40px;
+}
+.how-tab {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem; font-weight: 600;
+  padding: 10px 24px; border-radius: 10px 10px 0 0;
+  border: 1px solid var(--border); border-bottom: none;
+  background: rgba(255,255,255,0.03);
+  color: var(--muted); cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.how-tab.active {
+  background: var(--card);
+  color: var(--green);
+  border-color: rgba(0,232,122,0.2);
+}
+.how-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
+}
+.how-tab-content {
+  border: 1px solid rgba(0,232,122,0.15);
+  border-radius: 0 12px 12px 12px;
+  overflow: hidden;
+}
+
 /* ── HOW IT WORKS ── */
 .how-section {
   padding: 100px 24px;
@@ -724,31 +753,67 @@ footer a:hover { text-decoration: underline; }
 <section class="how-section" id="how">
   <div class="how-inner">
     <div class="label-tag reveal">How It Works</div>
-    <h2 class="section-h reveal">Three Steps to a Faster PC</h2>
-    <p class="section-p reveal">Designed for everyone — no IT degree required.</p>
+    <h2 class="section-h reveal">Simple for Everyone</h2>
+    <p class="section-p reveal">No IT degree required. Pick a tool below and follow the steps.</p>
 
-    <div class="steps-row reveal">
-      <div class="step">
-        <div class="step-num">01</div>
-        <h3>Download</h3>
-        <p>Click the download button. A single .exe file is saved to your computer. No installer, no bloatware, no tricks.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h3>Run as Admin</h3>
-        <p>Right-click the file and choose "Run as administrator" so the tool has the permissions it needs to fix things properly.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h3>Click Fix</h3>
-        <p>Hit the big green button. Everything runs automatically. You get a full report and a health score when it's done.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
-        <h3>Done</h3>
-        <p>Review your results, follow any recommendations. Most PCs are fully optimised in under 2 minutes.</p>
+    <!-- Tool tabs -->
+    <div class="how-tabs reveal">
+      <button class="how-tab active" onclick="switchTab(this,'tab-ocf')">⚡ OneClickFix</button>
+      <button class="how-tab" onclick="switchTab(this,'tab-pc')">🗂️ ProfileCleaner</button>
+    </div>
+
+    <!-- OneClickFix steps -->
+    <div id="tab-ocf" class="how-tab-content">
+      <div class="steps-row">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Download</h3>
+          <p>Click the download button. A single .exe file is saved to your PC. No installer, no bloatware.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Run as Admin</h3>
+          <p>Right-click the file and choose "Run as administrator" so it has the permissions it needs.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Click Fix</h3>
+          <p>Hit the big green "Fix My Computer" button. All 17 checks run automatically in one go.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>Review Results</h3>
+          <p>See exactly what was fixed, your PC Health Score out of 10, and any remaining recommendations.</p>
+        </div>
       </div>
     </div>
+
+    <!-- ProfileCleaner steps -->
+    <div id="tab-pc" class="how-tab-content" style="display:none">
+      <div class="steps-row">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Download</h3>
+          <p>Download ProfileCleaner.exe — a single file, nothing to install. Works on Windows 10 and 11.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Run as Admin</h3>
+          <p>Right-click and "Run as administrator." Admin rights are needed to read and delete user profiles.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Review Profiles</h3>
+          <p>All Windows user profiles appear colour coded. Use the filters to find inactive ones — 30 days, 6 months, 1 year.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>Delete Safely</h3>
+          <p>Click Delete on any profile you want to remove. A confirmation appears first — your current account is always protected.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -954,6 +1019,14 @@ footer a:hover { text-decoration: underline; }
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── How It Works tabs
+  function switchTab(btn, tabId) {
+    document.querySelectorAll('.how-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.how-tab-content').forEach(t => t.style.display = 'none');
+    btn.classList.add('active');
+    document.getElementById(tabId).style.display = 'block';
+  }
 
   // ── FAQ
   function toggleFaq(el) {

@@ -367,6 +367,158 @@ nav {
   box-shadow: none;
 }
 
+.ss-img-wrap {
+  position: relative; overflow: hidden; cursor: pointer;
+}
+.ss-zoom {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.5);
+  color: white; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .2s;
+}
+.ss-card:hover .ss-zoom { opacity: 1; }
+
+/* Remote info box */
+.remote-info-box {
+  margin-top: 32px;
+  background: rgba(0,232,122,0.04);
+  border: 1px solid rgba(0,232,122,0.15);
+  border-radius: 16px; padding: 28px 32px;
+}
+.remote-info-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: .05em;
+  color: var(--green); margin-bottom: 10px;
+}
+.remote-info-box > p {
+  font-size: 0.88rem; color: var(--muted);
+  line-height: 1.7; margin-bottom: 20px;
+}
+.remote-steps { display: flex; flex-direction: column; gap: 16px; }
+.remote-step {
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.remote-step-num {
+  width: 28px; height: 28px; flex-shrink: 0;
+  background: var(--green); color: var(--ink);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem; margin-top: 2px;
+}
+.remote-step div { display: flex; flex-direction: column; gap: 5px; }
+.remote-step strong { font-size: 0.9rem; color: var(--white); }
+.remote-step code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem; color: var(--green);
+  background: rgba(0,232,122,0.07);
+  border: 1px solid rgba(0,232,122,0.15);
+  padding: 5px 10px; border-radius: 6px;
+  word-break: break-all;
+}
+.remote-step span { font-size: 0.82rem; color: var(--muted); }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(0,0,0,0.92);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.lightbox.active { opacity: 1; pointer-events: all; }
+.lightbox-inner {
+  position: relative; max-width: 1100px; width: 100%;
+  transform: scale(0.95); transition: transform .25s;
+}
+.lightbox.active .lightbox-inner { transform: scale(1); }
+.lightbox-inner img {
+  width: 100%; height: auto;
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+.lightbox-close {
+  position: absolute; top: -16px; right: -16px;
+  width: 36px; height: 36px;
+  background: var(--green); color: var(--ink);
+  border: none; border-radius: 50%;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: transform .2s;
+}
+.lightbox-close:hover { transform: scale(1.1); }
+.lightbox-caption {
+  text-align: center; margin-top: 14px;
+  font-size: 0.88rem; color: rgba(255,255,255,0.6);
+}
+
+/* ── SCREENSHOTS ── */
+.screenshots-section {
+  padding: 100px 24px;
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+}
+.screenshots-inner { max-width: 1120px; margin: 0 auto; }
+
+.ss-tabs {
+  display: flex; gap: 8px;
+  margin-bottom: 32px; margin-top: 40px;
+}
+.ss-tab {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem; font-weight: 600;
+  padding: 10px 24px; border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--muted); cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.ss-tab.active {
+  background: rgba(0,232,122,0.08);
+  color: var(--green);
+  border-color: rgba(0,232,122,0.2);
+}
+.ss-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
+}
+
+.ss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.ss-grid-1 {
+  grid-template-columns: minmax(300px, 600px);
+}
+
+.ss-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.ss-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  border-color: rgba(0,232,122,0.2);
+}
+.ss-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid var(--border);
+}
+.ss-caption {
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+}
+
 /* ── HOW IT WORKS TABS ── */
 .how-tabs {
   display: flex; gap: 8px;
@@ -627,6 +779,7 @@ footer a:hover { text-decoration: underline; }
   <a class="nav-logo" href="#">⚡ SALMANIT<span class="dot">.</span>TOOLS</a>
   <div class="nav-links">
     <a href="#tools">Tools</a>
+    <a href="#screenshots">Screenshots</a>
     <a href="#how">How It Works</a>
     <a href="#faq">FAQ</a>
     <a href="#" class="nav-contact" onclick="openModal(event)">Contact</a>
@@ -749,6 +902,98 @@ footer a:hover { text-decoration: underline; }
 
   </div>
 </section>
+
+<!-- SCREENSHOTS -->
+<section class="screenshots-section" id="screenshots">
+  <div class="screenshots-inner">
+    <div class="label-tag reveal">See It In Action</div>
+    <h2 class="section-h reveal">What It Looks Like</h2>
+    <p class="section-p reveal">Real screenshots from our tools running on Windows 10 and 11. Click any image to view full size.</p>
+
+    <!-- Tab switcher -->
+    <div class="ss-tabs reveal">
+      <button class="ss-tab active" onclick="switchSsTab(this,'ss-ocf')">⚡ OneClickFix</button>
+      <button class="ss-tab" onclick="switchSsTab(this,'ss-pc')">🗂️ ProfileCleaner</button>
+    </div>
+
+    <!-- OneClickFix screenshots -->
+    <div id="ss-ocf" class="ss-content">
+      <div class="ss-grid">
+        <div class="ss-card reveal" onclick="openLightbox('oneclickfix-screenshot1.jpg','Main Screen — PC snapshot cards showing Disk Free, RAM Used, Last Reboot and Startup Apps')">
+          <div class="ss-img-wrap"><img src="oneclickfix-screenshot1.jpg" alt="OneClickFix main screen" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
+          <div class="ss-caption">Main Screen — PC snapshot at a glance</div>
+        </div>
+        <div class="ss-card reveal" onclick="openLightbox('oneclickfix-screenshot2.jpg','Scan Results — Full fix report showing all 17 checks with health score')">
+          <div class="ss-img-wrap"><img src="oneclickfix-screenshot2.jpg" alt="OneClickFix scan results" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
+          <div class="ss-caption">Scan Results — Full fix report with health score</div>
+        </div>
+        <div class="ss-card reveal" onclick="openLightbox('oneclickfix-screenshot3.jpg','Remote PC Fix — Run fixes on any machine on your network remotely')">
+          <div class="ss-img-wrap"><img src="oneclickfix-screenshot3.jpg" alt="OneClickFix remote PC fix" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
+          <div class="ss-caption">Remote PC Fix — Run fixes on any networked machine</div>
+        </div>
+      </div>
+
+      <!-- Remote PC info box -->
+      <div class="remote-info-box reveal">
+        <div class="remote-info-title">🌐 Remote PC Fix — How to set it up</div>
+        <p>OneClickFix can connect to any Windows machine on your network and run all 17 fixes remotely. Here's what you need:</p>
+        <div class="remote-steps">
+          <div class="remote-step">
+            <div class="remote-step-num">1</div>
+            <div>
+              <strong>Enable WinRM on the remote PC</strong>
+              <code>Enable-PSRemoting -Force</code>
+              <span>Run this once in PowerShell as Administrator on the remote machine</span>
+            </div>
+          </div>
+          <div class="remote-step">
+            <div class="remote-step-num">2</div>
+            <div>
+              <strong>Allow WinRM through the firewall</strong>
+              <code>netsh advfirewall firewall add rule name="WinRM" dir=in action=allow protocol=TCP localport=5985</code>
+              <span>Only needed if Windows Firewall is blocking port 5985</span>
+            </div>
+          </div>
+          <div class="remote-step">
+            <div class="remote-step-num">3</div>
+            <div>
+              <strong>Enter credentials in OneClickFix</strong>
+              <code>Computer Name or IP &nbsp;|&nbsp; DOMAIN\username &nbsp;|&nbsp; Password</code>
+              <span>Use domain admin credentials — e.g. CONTOSO\admin or just the local admin account</span>
+            </div>
+          </div>
+          <div class="remote-step">
+            <div class="remote-step-num">4</div>
+            <div>
+              <strong>Click Run Remote Fix</strong>
+              <span>OneClickFix copies itself to the remote machine, runs all fixes silently, and returns the full results — takes 2-3 minutes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ProfileCleaner screenshots -->
+    <div id="ss-pc" class="ss-content" style="display:none">
+      <div class="ss-grid ss-grid-1">
+        <div class="ss-card reveal" onclick="openLightbox('profilecleaner-screenshot1.jpg','ProfileCleaner — All user profiles listed with colour coding, size and last login date')">
+          <div class="ss-img-wrap"><img src="profilecleaner-screenshot1.jpg" alt="ProfileCleaner profile list" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
+          <div class="ss-caption">Profile List — All user profiles colour coded by activity</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt=""/>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
 
 <!-- HOW IT WORKS -->
 <section class="how-section" id="how">
@@ -1020,6 +1265,29 @@ footer a:hover { text-decoration: underline; }
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Lightbox
+  function openLightbox(src, caption) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxCaption').textContent = caption;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeLightbox(); closeModal(); }
+  });
+
+  // ── Screenshots tabs
+  function switchSsTab(btn, tabId) {
+    document.querySelectorAll('.ss-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.ss-content').forEach(t => t.style.display = 'none');
+    btn.classList.add('active');
+    document.getElementById(tabId).style.display = 'block';
+  }
 
   // ── How It Works tabs
   function switchTab(btn, tabId) {

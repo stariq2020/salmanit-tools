@@ -284,16 +284,24 @@ const msalConfig = {
   cache: { cacheLocation: 'sessionStorage' }
 };
 const msalInstance = new msal.PublicClientApplication(msalConfig);
+let msalReady = false;
 
 let accessToken = null;
 let currentAccount = null;
+
+// ── Initialize MSAL once on script load ───────────────────────────────────────
+async function initMsal() {
+  if (msalReady) return;
+  await msalInstance.initialize();
+  msalReady = true;
+}
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 async function signIn() {
   try {
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Redirecting…';
-    sessionStorage.setItem('m365_signing_in', '1');
+    await initMsal();
     await msalInstance.loginRedirect({
       scopes: SCOPES,
       prompt: 'select_account',
@@ -308,6 +316,7 @@ async function signIn() {
 }
 
 async function getToken() {
+  await initMsal();
   try {
     const result = await msalInstance.acquireTokenSilent({
       scopes: SCOPES,
@@ -988,11 +997,10 @@ async function exportPDF() {
 // ── Check for redirect on load ────────────────────────────────────────────────
 window.addEventListener('load', async () => {
   try {
-    await msalInstance.initialize();
+    await initMsal();
     const result = await msalInstance.handleRedirectPromise();
 
     if (result && result.account) {
-      // Coming back from Microsoft login redirect
       currentAccount = result.account;
       accessToken    = result.accessToken;
       console.log('MSAL: redirect sign-in complete:', currentAccount.username);
@@ -1000,7 +1008,6 @@ window.addEventListener('load', async () => {
       return;
     }
 
-    // Check if already signed in from a previous session
     const accounts = msalInstance.getAllAccounts();
     if (accounts.length > 0) {
       currentAccount = accounts[0];

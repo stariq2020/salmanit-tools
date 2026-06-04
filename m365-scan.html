@@ -204,7 +204,12 @@ function loadScript(src) {
 
 window.addEventListener('load', async function() {
   try {
-    // Try primary CDN then fallback
+    // Show loading state if returning from redirect (URL has auth code)
+    if (window.location.hash || window.location.search.includes('code=')) {
+      document.getElementById('connectBtn').disabled = true;
+      document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Completing sign-in…';
+    }
+
     try {
       await loadScript('https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js');
     } catch {
@@ -274,21 +279,26 @@ function onSignedIn() {
   document.getElementById('scanBtn').style.display = 'block';
 }
 
-window.addEventListener('load', async () => {
+// Called directly from initApp since load already fired by then
+async function handleAuth() {
   try {
+    console.log('handleAuth: hash=', window.location.hash, 'search=', window.location.search);
     const result = await msalInstance.handleRedirectPromise();
+    console.log('handleRedirectPromise result:', result);
     if (result && result.account) {
       currentAccount = result.account;
       accessToken    = result.accessToken;
+      console.log('Signed in:', currentAccount.username);
       onSignedIn(); return;
     }
     const accounts = msalInstance.getAllAccounts();
+    console.log('Existing accounts:', accounts.length);
     if (accounts.length > 0) { currentAccount = accounts[0]; onSignedIn(); }
   } catch(e) {
-    console.error('Load:', e);
+    console.error('handleAuth error:', e);
     showError('Error: ' + (e.errorCode || e.message));
   }
-});
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 async function graph(ep, token) {
@@ -707,6 +717,9 @@ if (btn) {
   btn.disabled = false;
   btn.innerHTML = '🔐 &nbsp;Sign in with Microsoft 365';
 }
+
+// Handle auth redirect or existing session
+handleAuth();
 
 } // end initApp
 </script>

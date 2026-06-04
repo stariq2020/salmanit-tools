@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free QR Code Generator — SalmanIT Tools</title>
+<meta name="description" content="Free online QR code generator. Create QR codes for URLs, text, email, phone numbers and WiFi instantly. No signup required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- AdSense placeholder — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+<style>
+:root {
+  --ink:   #080D14;
+  --deep:  #0B1120;
+  --navy:  #0F1C35;
+  --green: #00E87A;
+  --green2:#00C468;
+  --cyan:  #00C8FF;
+  --white: #F0F6FF;
+  --muted: #5A6A85;
+  --card:  #0E1A2E;
+  --border:rgba(255,255,255,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--green)}
+
+/* PAGE */
+.page{max-width:960px;margin:0 auto;padding:60px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:48px}
+
+/* TOOL CARD */
+.tool-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+@media(max-width:700px){.tool-wrap{grid-template-columns:1fr}}
+
+.input-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px}
+.input-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;color:var(--white);margin-bottom:20px}
+
+/* Type tabs */
+.type-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.type-btn{font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+.type-btn.active{background:rgba(0,232,122,0.1);border-color:rgba(0,232,122,0.3);color:var(--green)}
+.type-btn:hover:not(.active){color:var(--white);border-color:rgba(255,255,255,0.15)}
+
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;transition:border-color .2s;resize:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:rgba(0,232,122,0.4)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted)}
+.form-group select option{background:#0E1A2E;color:var(--white)}
+
+/* Size slider */
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row input[type=range]{flex:1;accent-color:var(--green)}
+.slider-val{font-size:0.85rem;font-weight:600;color:var(--green);min-width:48px;text-align:right}
+
+.generate-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-top:8px}
+.generate-btn:hover{opacity:.9;transform:scale(1.01);box-shadow:0 8px 24px rgba(0,232,122,0.3)}
+
+/* QR output */
+.qr-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:300px;justify-content:center}
+.qr-placeholder{text-align:center;color:var(--muted)}
+.qr-placeholder .icon{font-size:3.5rem;margin-bottom:12px;opacity:.3}
+.qr-placeholder p{font-size:0.88rem;line-height:1.6}
+#qrCanvas{border-radius:12px;display:none}
+.qr-actions{display:flex;gap:10px;width:100%}
+.dl-btn{flex:1;padding:12px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:700;border:none;cursor:pointer;transition:opacity .2s,transform .15s;display:none}
+.dl-png{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink)}
+.dl-svg{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid var(--border)!important}
+.dl-btn:hover{opacity:.85;transform:scale(1.02)}
+
+/* Color pickers */
+.color-row{display:flex;gap:16px}
+.color-group{flex:1}
+.color-group label{display:block;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.color-group input[type=color]{width:100%;height:38px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,0.04);cursor:pointer;padding:3px}
+
+/* Info section */
+.info-section{margin-top:60px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+.info-card .ico{font-size:1.6rem;margin-bottom:10px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;color:var(--white);margin-bottom:6px}
+.info-card p{font-size:0.82rem;color:var(--muted);line-height:1.65}
+
+/* Footer */
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+
+@media(max-width:640px){nav{padding:0 20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ SALMANIT<span class="dot">.</span>TOOLS</a>
+  <a class="nav-back" href="index.html">← Back to Home</a>
+</nav>
+
+<div class="page">
+  <div class="page-eyebrow">Free Online Tool</div>
+  <h1 class="page-title">QR Code<br><span class="acc">Generator</span></h1>
+  <p class="page-sub">Create QR codes instantly for URLs, text, email, phone numbers and WiFi. Free, no signup, no limits.</p>
+
+  <div class="tool-wrap">
+
+    <!-- Input panel -->
+    <div class="input-card">
+      <h3>Configure Your QR Code</h3>
+
+      <!-- Type selector -->
+      <div class="type-tabs">
+        <button class="type-btn active" onclick="setType(this,'url')">🔗 URL</button>
+        <button class="type-btn" onclick="setType(this,'text')">📝 Text</button>
+        <button class="type-btn" onclick="setType(this,'email')">📧 Email</button>
+        <button class="type-btn" onclick="setType(this,'phone')">📞 Phone</button>
+        <button class="type-btn" onclick="setType(this,'wifi')">📶 WiFi</button>
+      </div>
+
+      <!-- URL -->
+      <div id="f-url">
+        <div class="form-group">
+          <label>Website URL</label>
+          <input type="url" id="inp-url" placeholder="https://salmanittools.co.uk" />
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div id="f-text" style="display:none">
+        <div class="form-group">
+          <label>Your Text</label>
+          <textarea id="inp-text" rows="3" placeholder="Enter any text…"></textarea>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div id="f-email" style="display:none">
+        <div class="form-group"><label>Email Address</label><input type="email" id="inp-email" placeholder="hello@example.com"/></div>
+        <div class="form-group"><label>Subject (optional)</label><input type="text" id="inp-esubject" placeholder="Hello there"/></div>
+        <div class="form-group"><label>Body (optional)</label><textarea id="inp-ebody" rows="2" placeholder="Message body…"></textarea></div>
+      </div>
+
+      <!-- Phone -->
+      <div id="f-phone" style="display:none">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="inp-phone" placeholder="+447947707097"/>
+        </div>
+      </div>
+
+      <!-- WiFi -->
+      <div id="f-wifi" style="display:none">
+        <div class="form-group"><label>Network Name (SSID)</label><input type="text" id="inp-ssid" placeholder="MyWiFiNetwork"/></div>
+        <div class="form-group"><label>Password</label><input type="text" id="inp-wpass" placeholder="WiFi password"/></div>
+        <div class="form-group">
+          <label>Security Type</label>
+          <select id="inp-wsec">
+            <option value="WPA">WPA/WPA2</option>
+            <option value="WEP">WEP</option>
+            <option value="">None (Open)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Customisation -->
+      <div class="form-group" style="margin-top:8px">
+        <label>Size</label>
+        <div class="slider-row">
+          <input type="range" id="qr-size" min="128" max="512" value="256" step="32" oninput="document.getElementById('size-val').textContent=this.value+'px'"/>
+          <span class="slider-val" id="size-val">256px</span>
+        </div>
+      </div>
+
+      <div class="color-row">
+        <div class="color-group">
+          <label>QR Colour</label>
+          <input type="color" id="qr-color" value="#000000"/>
+        </div>
+        <div class="color-group">
+          <label>Background</label>
+          <input type="color" id="qr-bg" value="#ffffff"/>
+        </div>
+      </div>
+
+      <button class="generate-btn" onclick="generateQR()">⚡ Generate QR Code</button>
+    </div>
+
+    <!-- QR output -->
+    <div class="qr-card" id="qrCard">
+      <div class="qr-placeholder" id="qrPlaceholder">
+        <div class="icon">▦</div>
+        <p>Fill in the details on the left<br>and click Generate</p>
+      </div>
+      <canvas id="qrCanvas"></canvas>
+      <div class="qr-actions">
+        <button class="dl-btn dl-png" id="dlPng" onclick="downloadPNG()">⬇ Download PNG</button>
+        <button class="dl-btn dl-svg" id="dlSvg" onclick="downloadSVG()">⬇ Download SVG</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Use cases -->
+  <div class="info-section">
+    <div class="page-eyebrow">Use Cases</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">What Can You Use QR Codes For?</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🌐</div><h4>Website Links</h4><p>Share your website, portfolio or landing page instantly — just scan and go.</p></div>
+      <div class="info-card"><div class="ico">📶</div><h4>WiFi Sharing</h4><p>Let guests connect to your WiFi without typing the password — scan to connect.</p></div>
+      <div class="info-card"><div class="ico">📇</div><h4>Business Cards</h4><p>Add a QR code to your business card linking to your LinkedIn or website.</p></div>
+      <div class="info-card"><div class="ico">📍</div><h4>Menus & Posters</h4><p>Restaurants and events use QR codes to link to menus, tickets and info pages.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ SALMANIT<span class="dot">.</span>TOOLS</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+<!-- QR Code library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  let currentType = 'url';
+  let lastQRData  = '';
+
+  function setType(btn, type) {
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['url','text','email','phone','wifi'].forEach(t => {
+      document.getElementById('f-'+t).style.display = t === type ? 'block' : 'none';
+    });
+    currentType = type;
+  }
+
+  function buildQRData() {
+    switch(currentType) {
+      case 'url':
+        return document.getElementById('inp-url').value.trim() || 'https://salmanittools.co.uk';
+      case 'text':
+        return document.getElementById('inp-text').value.trim() || 'Hello World';
+      case 'email': {
+        const e = document.getElementById('inp-email').value.trim();
+        const s = document.getElementById('inp-esubject').value.trim();
+        const b = document.getElementById('inp-ebody').value.trim();
+        let str = 'mailto:' + e;
+        const params = [];
+        if (s) params.push('subject=' + encodeURIComponent(s));
+        if (b) params.push('body=' + encodeURIComponent(b));
+        if (params.length) str += '?' + params.join('&');
+        return str;
+      }
+      case 'phone':
+        return 'tel:' + document.getElementById('inp-phone').value.trim();
+      case 'wifi': {
+        const ssid = document.getElementById('inp-ssid').value.trim();
+        const pass = document.getElementById('inp-wpass').value.trim();
+        const sec  = document.getElementById('inp-wsec').value;
+        return `WIFI:T:${sec};S:${ssid};P:${pass};;`;
+      }
+    }
+  }
+
+  function generateQR() {
+    const data   = buildQRData();
+    const size   = parseInt(document.getElementById('qr-size').value);
+    const color  = document.getElementById('qr-color').value;
+    const bg     = document.getElementById('qr-bg').value;
+    lastQRData   = data;
+
+    const canvas = document.getElementById('qrCanvas');
+    const placeholder = document.getElementById('qrPlaceholder');
+
+    // Clear previous
+    canvas.style.display = 'none';
+    placeholder.style.display = 'block';
+
+    // Use QRCode library to draw on canvas
+    const tempDiv = document.createElement('div');
+    new QRCode(tempDiv, {
+      text: data,
+      width: size,
+      height: size,
+      colorDark: color,
+      colorLight: bg,
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // QRCode lib creates an img — draw it to our canvas
+    setTimeout(() => {
+      const img = tempDiv.querySelector('img') || tempDiv.querySelector('canvas');
+      canvas.width  = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      if (img.tagName === 'CANVAS') {
+        ctx.drawImage(img, 0, 0);
+      } else {
+        const i = new Image();
+        i.onload = () => ctx.drawImage(i, 0, 0, size, size);
+        i.src = img.src;
+      }
+      canvas.style.display = 'block';
+      placeholder.style.display = 'none';
+      document.getElementById('dlPng').style.display = 'block';
+      document.getElementById('dlSvg').style.display = 'block';
+    }, 100);
+  }
+
+  function downloadPNG() {
+    const canvas = document.getElementById('qrCanvas');
+    const a = document.createElement('a');
+    a.download = 'qrcode.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  }
+
+  function downloadSVG() {
+    const size  = parseInt(document.getElementById('qr-size').value);
+    const color = document.getElementById('qr-color').value;
+    const bg    = document.getElementById('qr-bg').value;
+    // Simple SVG wrapper around the canvas data
+    const canvas = document.getElementById('qrCanvas');
+    const dataURL = canvas.toDataURL('image/png');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+  <rect width="${size}" height="${size}" fill="${bg}"/>
+  <image href="${dataURL}" width="${size}" height="${size}"/>
+</svg>`;
+    const blob = new Blob([svg], {type:'image/svg+xml'});
+    const a = document.createElement('a');
+    a.download = 'qrcode.svg';
+    a.href = URL.createObjectURL(blob);
+    a.click();
+  }
+
+  // Generate on Enter key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') generateQR();
+  });
+</script>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="white">
+    <path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 10L4 44l10.3-2.7C17.1 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.8 30.1 8 27.1 8 24 8 15.2 15.2 8 24 8s16 7.2 16 16-7.2 16-16 16zm8.7-11.8c-.5-.2-2.8-1.4-3.2-1.5-.4-.2-.7-.2-1 .2-.3.5-1.1 1.5-1.4 1.8-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.4-.8.2-.3.1-.6 0-.8-.1-.2-1-2.5-1.4-3.4-.4-.9-.8-.7-1-.7h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.5-1.6 3.7s1.6 4.3 1.9 4.6c.2.3 3.2 5 7.8 7 1.1.5 1.9.7 2.6.9 1.1.3 2.1.3 2.9.2.9-.1 2.8-1.1 3.2-2.2.4-1.1.4-2 .3-2.2-.2-.3-.5-.4-1-.6z"/>
+  </svg>
+</a>
+<style>
+.wa-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .2s,box-shadow .2s;text-decoration:none}
+.wa-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,0.55)}
+.wa-btn svg{width:32px;height:32px;position:relative;z-index:1}
+.wa-btn::before{content:'';position:absolute;width:58px;height:58px;border-radius:50%;background:rgba(37,211,102,0.35);animation:wa-pulse 2s ease-out infinite}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+</style>
+
+</body>
+</html>

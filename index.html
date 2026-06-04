@@ -931,7 +931,7 @@ footer a:hover { text-decoration: underline; }
 
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-n">4</div>
+      <div class="stat-n">5</div>
       <div class="stat-l">Tools Live</div>
     </div>
     <div class="stat">
@@ -1040,9 +1040,42 @@ footer a:hover { text-decoration: underline; }
       </div>
     </div>
 
-  </div>
+    <!-- NetworkInfo — collapsible -->
+    <div class="tool-card reveal" data-cat="windows" style="animation-delay:.2s">
+      <div class="tc-top">
+        <div class="tool-icon-wrap" style="flex-shrink:0">🌐</div>
+        <div style="flex:1">
+          <div class="tool-badge">● v1.0 — Latest</div>
+          <div class="tool-name" style="margin-bottom:6px">NetworkInfo</div>
+          <div class="tool-desc">Full IT network dashboard — adapters, DNS, ping, traceroute, port checker, WiFi info and speed test in one tool.</div>
+        </div>
+      </div>
+      <div class="tc-actions">
+        <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/NetworkInfo.exe">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+          Download .exe
+        </a>
+        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
+      </div>
+      <div class="tc-details">
+        <div class="tc-divider"></div>
+        <ul class="tool-feats">
+          <li>Public IP, default gateway &amp; DNS servers at a glance</li>
+          <li>All network adapters — IPv4, MAC, speed, status</li>
+          <li>WiFi info — SSID, signal, channel, auth type</li>
+          <li>Ping test with bar chart — avg, min, max, packet loss</li>
+          <li>Port checker — HTTP, HTTPS, SSH, RDP, SMB quick buttons</li>
+          <li>DNS lookup — A, AAAA, MX, CNAME, TXT, NS, PTR</li>
+          <li>Traceroute with dark terminal output</li>
+          <li>Download speed test</li>
+        </ul>
+        <div class="tool-meta-row" style="margin-top:12px">
+          <span class="meta-tag">🪟 Win 10/11</span><span class="meta-tag">⚡ No Install</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">🖥️ 64-bit</span>
+        </div>
+      </div>
+    </div>
 
-  <!-- Windows Tools — Accordions -->
+  </div>
   <div class="win-accordions" data-cat="windows" style="margin-top:24px;display:flex;flex-direction:column;gap:10px">
 
     <!-- Screenshots accordion -->
@@ -1199,6 +1232,39 @@ footer a:hover { text-decoration: underline; }
           <li>Password strength indicator</li>
           <li>Generate up to 10 passwords at once</li>
           <li>Quick presets — Easy, Strong, Very Strong</li>
+        </ul>
+        <div class="tool-meta-row" style="margin-top:12px">
+          <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Network Tools — collapsible -->
+    <div class="tool-card reveal" data-cat="online" style="animation-delay:.2s">
+      <div class="tc-top">
+        <div class="tool-icon-wrap" style="flex-shrink:0">🔧</div>
+        <div style="flex:1">
+          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
+          <div class="tool-name" style="margin-bottom:6px">Network Tools</div>
+          <div class="tool-desc">IP lookup, DNS queries, geolocation, ping, reverse DNS, DMARC, SPF, DKIM and more — all in your browser.</div>
+        </div>
+      </div>
+      <div class="tc-actions">
+        <a class="dl-btn" href="network-tools.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Open Tool
+        </a>
+        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
+      </div>
+      <div class="tc-details">
+        <div class="tc-divider"></div>
+        <ul class="tool-feats">
+          <li>Your public IP with city &amp; ISP info</li>
+          <li>IP geolocation — country, region, timezone, ASN</li>
+          <li>DNS lookup — A, AAAA, MX, CNAME, TXT, NS</li>
+          <li>Full DNS scan — all record types at once</li>
+          <li>Email security — MX, SPF, DMARC, DKIM checker</li>
+          <li>Reverse DNS, latency test, multi-host ping</li>
         </ul>
         <div class="tool-meta-row" style="margin-top:12px">
           <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>

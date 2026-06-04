@@ -290,21 +290,33 @@ async function signIn() {
   try {
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Connecting…';
+
+    console.log('MSAL: starting loginPopup');
     const result = await msalInstance.loginPopup({
       scopes: SCOPES,
       prompt: 'select_account',
       redirectUri: 'https://salmanittools.co.uk/m365-scan.html'
     });
-    if (result) {
+
+    console.log('MSAL: loginPopup result:', result);
+
+    if (result && result.account) {
       currentAccount = result.account;
       accessToken    = result.accessToken;
+      console.log('MSAL: signed in as', currentAccount.username);
       onSignedIn();
+    } else {
+      console.warn('MSAL: no account in result', result);
+      showError('Sign-in completed but no account returned. Please try again.');
+      document.getElementById('connectBtn').disabled = false;
+      document.getElementById('connectBtn').innerHTML = '🔐 Connect with Microsoft 365';
     }
   } catch(e) {
+    console.error('MSAL error:', e);
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('connectBtn').innerHTML = '🔐 Connect with Microsoft 365';
     if (e.errorCode !== 'user_cancelled') {
-      showError('Sign-in failed: ' + (e.message || e));
+      showError('Sign-in failed: ' + (e.errorCode || e.message || JSON.stringify(e)));
     }
   }
 }

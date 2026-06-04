@@ -705,6 +705,81 @@ nav {
 }
 .step p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
 
+/* ── ABOUT ── */
+.about-section {
+  padding: 100px 24px;
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+}
+.about-inner { max-width: 860px; margin: 0 auto; }
+.about-card {
+  display: flex; gap: 32px; align-items: flex-start;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px; margin-top: 32px;
+}
+@media(max-width:640px){ .about-card { flex-direction: column; gap: 20px; } }
+.about-avatar {
+  width: 72px; height: 72px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+  border-radius: 18px; display: flex; align-items: center;
+  justify-content: center; font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem; letter-spacing: .05em; color: var(--ink);
+}
+.about-content h3 {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+  letter-spacing: .04em; color: var(--white); margin-bottom: 4px;
+}
+.about-title {
+  font-size: 0.82rem; font-weight: 600; color: var(--green);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px;
+}
+.about-bio {
+  font-size: 0.9rem; color: var(--muted); line-height: 1.75;
+  margin-bottom: 12px;
+}
+.about-links {
+  display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0 16px;
+}
+.about-link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  color: var(--ink); font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem; font-weight: 700; padding: 11px 22px;
+  border-radius: 10px; text-decoration: none; transition: opacity .2s, transform .15s;
+  border: none; cursor: pointer;
+}
+.about-link-btn:hover { opacity: .9; transform: scale(1.02); }
+.about-link-ghost {
+  background: transparent;
+  border: 1px solid var(--border) !important;
+  color: var(--white) !important;
+}
+.about-link-ghost:hover { border-color: var(--green) !important; color: var(--green) !important; }
+.about-note {
+  font-size: 0.8rem; color: var(--muted); font-style: italic;
+}
+
+/* ── FOOTER UPDATED ── */
+footer {
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  padding: 48px 24px 32px;
+  text-align: center;
+}
+.footer-about { max-width: 680px; margin: 16px auto 24px; }
+.footer-bio {
+  font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px;
+}
+.footer-links {
+  display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+.footer-links a { color: var(--green); text-decoration: none; transition: opacity .2s; }
+.footer-links a:hover { opacity: .75; }
+.footer-copy {
+  font-size: 0.75rem; color: var(--muted); margin-top: 8px;
+}
+
 /* ── FAQ ── */
 .faq-section { padding: 100px 24px; max-width: 1120px; margin: 0 auto; }
 .faq-wrap { max-width: 700px; margin-top: 48px; }
@@ -897,6 +972,7 @@ footer a:hover { text-decoration: underline; }
   <div class="nav-links">
     <a href="#tools">Tools</a>
     <a href="#faq">FAQ</a>
+    <a href="#about">About</a>
     <a href="#" class="nav-contact" onclick="openModal(event)">Contact</a>
   </div>
 </nav>
@@ -909,7 +985,7 @@ footer a:hover { text-decoration: underline; }
 
   <div class="hero-eyebrow">
     <span class="eyebrow-dot"></span>
-    Free Tools for Everyone — Built by IT Professionals
+    Free Tools for Everyone — Built to Make IT Easier
   </div>
 
   <h1>
@@ -917,7 +993,7 @@ footer a:hover { text-decoration: underline; }
     <span class="glow-text">JUST WORK</span>
   </h1>
 
-  <p class="hero-sub">Windows utilities, online tools and more. Free, no signup, no nonsense. Built by IT professionals for everyone.</p>
+  <p class="hero-sub">Free Windows utilities and online tools built by an IT professional with 15+ years of experience. No signup, no nonsense — just tools that work.</p>
 
   <div class="hero-cta">
     <a class="btn-primary" href="#tools">
@@ -1375,7 +1451,35 @@ footer a:hover { text-decoration: underline; }
     </div>
     <div class="faq-item reveal">
       <div class="faq-q" onclick="toggleFaq(this)">Who built these tools? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Built by Salman IT Services, an IT company based in Crawley, UK. These tools come from real problems we fix for clients every day.</div>
+      <div class="faq-a">Built by Salman Tariq, an IT Consultant with 15+ years of experience working with Microsoft, VMware and Citrix technologies. These tools were created to solve real IT problems — and shared freely so everyone can benefit.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="label-tag reveal">About</div>
+    <h2 class="section-h reveal">Who Built This?</h2>
+
+    <div class="about-card reveal">
+      <div class="about-avatar">ST</div>
+      <div class="about-content">
+        <h3>Salman Tariq</h3>
+        <p class="about-title">IT Consultant · 15+ Years Experience</p>
+        <p class="about-bio">I work with Microsoft, VMware and Citrix technologies and my current focus is Microsoft 365 — including Exchange email migrations, Azure AD, MDM and 2FA implementations.</p>
+        <p class="about-bio">I built these tools to solve real problems I come across day to day. They're free because good tools should be accessible to everyone — whether you're an IT pro or just someone trying to keep their PC running smoothly.</p>
+        <p class="about-bio">I also write about technology on my blog — covering M365, Windows, and IT tips from the field.</p>
+        <div class="about-links">
+          <a href="https://salmantechblogs.co.uk/" target="_blank" class="about-link-btn">
+            📝 &nbsp;Read my Tech Blog
+          </a>
+          <a href="#" onclick="openModal(event)" class="about-link-btn about-link-ghost">
+            ✉️ &nbsp;Get in Touch
+          </a>
+        </div>
+        <p class="about-note">💬 Have a question about these tools or just want to say hi? Feel free to reach out via the contact form or WhatsApp.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1383,7 +1487,21 @@ footer a:hover { text-decoration: underline; }
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">⚡ SALMANIT<span class="dot">.</span>TOOLS</div>
-  <p>Free Windows utilities for everyone &nbsp;·&nbsp; <a href="#" onclick="openModal(event)">Contact Us</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+
+  <div class="footer-about">
+    <p class="footer-bio">
+      Built by <strong style="color:var(--green)">Salman Tariq</strong> — IT Consultant with 15+ years of experience in Microsoft, VMware and Citrix technologies.
+      Specialising in Microsoft 365, Exchange migrations, Azure AD, MDM and 2FA.
+      These tools were built to make IT easier for everyone.
+    </p>
+    <div class="footer-links">
+      <a href="https://salmantechblogs.co.uk/" target="_blank">📝 Tech Blog</a>
+      <a href="#" onclick="openModal(event)">✉️ Get in Touch</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+
+  <p class="footer-copy">© 2026 SalmanIT Tools · Free tools, built for the community · Based in Crawley, UK</p>
 </footer>
 
 <!-- CONTACT MODAL -->

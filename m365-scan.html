@@ -274,7 +274,7 @@ const msalConfig = {
   auth: {
     clientId: CLIENT_ID,
     authority: AUTHORITY,
-    redirectUri: 'https://salmanittools.co.uk/auth-redirect.html',
+    redirectUri: 'https://salmanittools.co.uk/m365-scan.html',
     postLogoutRedirectUri: 'https://salmanittools.co.uk/m365-scan.html',
     navigateToLoginRequestUrl: false,
   },
@@ -979,6 +979,16 @@ async function exportPDF() {
 
 // ── Check for redirect on load ────────────────────────────────────────────────
 window.addEventListener('load', async () => {
+  // If this page is loaded inside a popup (as redirect target), just close it
+  if (window.opener && window.opener !== window) {
+    try {
+      await msalInstance.initialize();
+      await msalInstance.handleRedirectPromise();
+    } catch(e) {}
+    window.close();
+    return;
+  }
+
   try {
     await msalInstance.initialize();
     const result = await msalInstance.handleRedirectPromise();

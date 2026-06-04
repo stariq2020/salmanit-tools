@@ -190,9 +190,34 @@ footer a{color:var(--green);text-decoration:none}
   <p>Free tools for IT professionals &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></p>
 </footer>
 
-<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js" crossorigin="anonymous"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// Load MSAL dynamically to ensure it's ready before use
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+window.addEventListener('load', async function() {
+  try {
+    // Try primary CDN then fallback
+    try {
+      await loadScript('https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js');
+    } catch {
+      await loadScript('https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js');
+    }
+    initApp();
+  } catch(e) {
+    document.getElementById('errorCard').style.display = 'block';
+    document.getElementById('errorMsg').textContent = 'Failed to load Microsoft auth library: ' + e.message;
+  }
+});
+
+function initApp() {
 const CLIENT_ID = 'f34c0e03-f125-4bf8-bf23-568005216a70';
 const AUTHORITY = 'https://login.microsoftonline.com/common';
 const GRAPH     = 'https://graph.microsoft.com/v1.0';
@@ -670,13 +695,13 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
   win.onload = () => { setTimeout(() => { win.print(); btns.forEach(b=>b.disabled=false); }, 800); };
 }
 // Expose to global scope for HTML onclick handlers
-window.signIn       = signIn;
-window.signOut      = signOut;
-window.runScan      = runScan;
-window.exportPDF    = exportPDF;
+window.signIn        = signIn;
+window.signOut       = signOut;
+window.runScan       = runScan;
+window.exportPDF     = exportPDF;
 window.toggleSection = toggleSection;
 
-}); // end DOMContentLoaded
+} // end initApp
 </script>
 
 <a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">

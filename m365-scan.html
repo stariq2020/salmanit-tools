@@ -221,7 +221,10 @@ footer a{color:var(--green);text-decoration:none}
         <div class="results-title">Security Report</div>
         <div class="results-tenant" id="resultsTenant"></div>
       </div>
-      <button class="rescan-btn" onclick="runScan()">🔄 Re-scan</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="rescan-btn" onclick="exportPDF()">📄 Export PDF</button>
+        <button class="rescan-btn" onclick="runScan()">🔄 Re-scan</button>
+      </div>
     </div>
 
     <!-- Score cards -->
@@ -446,12 +449,16 @@ async function runScan() {
     stepActive(0);
     const [orgData, usersData, licensedData] = await Promise.all([
       graphSafe('/organization', token),
-      graphSafe('/users?$select=id,displayName,userPrincipalName,accountEnabled,assignedLicenses,userType,createdDateTime&$top=999&$count=true', token),
+      graphSafe('/users?$select=id,displayName,userPrincipalName,accountEnabled,assignedLicenses,userType,createdDateTime,jobTitle,department,mail&$top=999&$count=true', token),
       graphSafe('/subscribedSkus', token),
     ]);
 
     const orgName = orgData?.value?.[0]?.displayName || currentAccount.username.split('@')[1] || 'Your Tenant';
     document.getElementById('resultsTenant').textContent = orgName;
+
+    // Build SKU ID → friendly name map
+    const skuMap = {};
+    (licensedData?.value || []).forEach(s => { skuMap[s.skuId] = friendlyLicense(s.skuPartNumber); });
 
     const users = usersData?.value || [];
     const totalUsers = users.length;
@@ -460,6 +467,13 @@ async function runScan() {
     const disabledUsers = users.filter(u => !u.accountEnabled);
     const licensedUsers = users.filter(u => u.assignedLicenses?.length > 0);
     const unlicensedEnabled = enabledUsers.filter(u => u.assignedLicenses?.length === 0);
+
+    // Store for PDF export
+    window._scanData = window._scanData || {};
+    window._scanData.users = users;
+    window._scanData.skuMap = skuMap;
+    window._scanData.orgName = orgName;
+    window._scanData.scanDate = new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'});
 
     stepDone(0);
 
@@ -492,6 +506,8 @@ async function runScan() {
     if (mfaUsers.length > 0) {
       mfaHtml += row('No MFA', mfaUsers.slice(0,5).join(', ') + (mfaUsers.length > 5 ? ` +${mfaUsers.length-5} more` : ''), 'bad');
     }
+    window._scanData.mfaScore = mfaScore;
+    window._scanData.mfaDisabled = mfaDisabled;
     stepDone(1);
 
     // ── 2. Admin Roles ───────────────────────────────────────────────────────
@@ -672,15 +688,46 @@ async function runScan() {
     addScoreCard('💻', devices.length, 'Devices', 'var(--cyan)');
 
     // Users section
-    const usersHtml = row('Total Users', totalUsers)
+    // Users section — full table
+    let usersHtml = row('Total Users', totalUsers)
       + row('Enabled Users', enabledUsers.length, 'good')
       + row('Guest Accounts', guestUsers.length, guestUsers.length === 0 ? 'good' : 'warn')
       + row('Disabled Accounts', disabledUsers.length)
       + row('Licensed Users', licensedUsers.length)
       + row('Unlicensed (enabled)', unlicensedEnabled.length, unlicensedEnabled.length === 0 ? 'good' : 'warn');
 
-    addSection('👥', 'Users & Licenses',
-      `${totalUsers} users`, 'info', usersHtml);
+    // Full user table
+    usersHtml += `
+    <div style="margin-top:16px;margin-bottom:6px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">All Users</div>
+    <div style="overflow-x:auto">
+    <table class="user-table">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Job Title</th>
+        <th>Department</th>
+        <th>Licenses</th>
+        <th>Type</th>
+        <th>Status</th>
+      </tr>`;
+    users.slice(0, 200).forEach(u => {
+      const licenses = (u.assignedLicenses || []).map(l => skuMap[l.skuId] || l.skuId).join(', ') || '—';
+      const isGuest = u.userType === 'Guest';
+      const isEnabled = u.accountEnabled;
+      usersHtml += `<tr>
+        <td style="font-weight:600">${u.displayName || '—'}</td>
+        <td style="color:var(--muted)">${u.userPrincipalName || '—'}</td>
+        <td>${u.jobTitle || '—'}</td>
+        <td>${u.department || '—'}</td>
+        <td>${licenses !== '—' ? `<span style="color:var(--green);font-size:0.78rem">${licenses}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${isGuest ? badge('Guest','blue') : badge('Member','grey')}</td>
+        <td>${isEnabled ? badge('Enabled','green') : badge('Disabled','red')}</td>
+      </tr>`;
+    });
+    usersHtml += '</table></div>';
+    if (users.length > 200) usersHtml += `<div style="font-size:0.78rem;color:var(--muted);margin-top:8px">Showing first 200 of ${users.length} users</div>`;
+
+    addSection('👥', 'Users & Licenses', `${totalUsers} users`, 'info', usersHtml);
     addSection('🔐', 'MFA Status',
       mfaDisabled === 0 ? '✅ All enabled' : `⚠️ ${mfaDisabled} without MFA`,
       mfaDisabled === 0 ? 'ok' : 'bad', mfaHtml);
@@ -726,6 +773,208 @@ async function runScan() {
 
   document.getElementById('scanBtn').disabled = false;
   document.getElementById('scanBtn').textContent = '🔍  Run Full Security Scan';
+}
+
+// ── License name mapping ──────────────────────────────────────────────────────
+function friendlyLicense(sku) {
+  const map = {
+    'O365_BUSINESS_ESSENTIALS':      'M365 Business Basic',
+    'O365_BUSINESS_PREMIUM':         'M365 Business Standard',
+    'SPB':                           'M365 Business Premium',
+    'ENTERPRISEPACK':                'Office 365 E3',
+    'ENTERPRISEPREMIUM':             'Office 365 E5',
+    'SPE_E3':                        'M365 E3',
+    'SPE_E5':                        'M365 E5',
+    'EXCHANGESTANDARD':              'Exchange Online (Plan 1)',
+    'EXCHANGEENTERPRISE':            'Exchange Online (Plan 2)',
+    'TEAMS_ESSENTIALS':              'Microsoft Teams Essentials',
+    'TEAMS_EXPLORATORY':             'Teams Exploratory',
+    'PROJECTPREMIUM':                'Project Plan 5',
+    'PROJECTPROFESSIONAL':           'Project Plan 3',
+    'VISIOCLIENT':                   'Visio Plan 2',
+    'POWER_BI_STANDARD':             'Power BI Free',
+    'POWER_BI_PRO':                  'Power BI Pro',
+    'EMS':                           'Enterprise Mobility + Security E3',
+    'EMSPREMIUM':                    'Enterprise Mobility + Security E5',
+    'AAD_PREMIUM':                   'Azure AD Premium P1',
+    'AAD_PREMIUM_P2':                'Azure AD Premium P2',
+    'INTUNE_A':                      'Intune',
+    'DEVELOPERPACK':                 'Office 365 E3 Developer',
+    'FLOW_FREE':                     'Power Automate Free',
+    'POWERAPPS_DEV':                 'Power Apps Developer Plan',
+    'WIN10_PRO_ENT_SUB':             'Windows 10/11 Enterprise E3',
+    'DEFENDER_ENDPOINT_P1':          'Defender for Endpoint P1',
+    'DEFENDER_ENDPOINT_P2':          'Defender for Endpoint P2',
+  };
+  return map[sku] || sku.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+}
+
+// ── PDF Export ────────────────────────────────────────────────────────────────
+async function exportPDF() {
+  const btn = document.querySelector('.rescan-btn');
+  const origText = btn.textContent;
+  btn.textContent = '⏳ Generating…';
+  btn.disabled = true;
+
+  const data   = window._scanData || {};
+  const org    = data.orgName || 'Microsoft 365 Tenant';
+  const date   = data.scanDate || new Date().toLocaleDateString('en-GB');
+  const users  = data.users || [];
+  const skuMap = data.skuMap || {};
+
+  // Collect score cards
+  const scoreCards = [...document.querySelectorAll('.score-card')].map(c => ({
+    icon:  c.querySelector('.sc-icon')?.textContent || '',
+    val:   c.querySelector('.sc-val')?.textContent || '',
+    label: c.querySelector('.sc-lbl')?.textContent || '',
+    color: c.querySelector('.sc-val')?.style.color || '#fff',
+  }));
+
+  // Collect sections
+  const sections = [...document.querySelectorAll('.result-section')].map(s => ({
+    icon:    s.querySelector('.result-section-icon')?.textContent || '',
+    title:   s.querySelector('.result-section-title')?.textContent || '',
+    badge:   s.querySelector('.result-section-badge')?.textContent || '',
+    badgeClass: s.querySelector('.result-section-badge')?.className || '',
+    rows:    [...s.querySelectorAll('.res-row')].map(r => ({
+      key: r.querySelector('.res-key')?.textContent || '',
+      val: r.querySelector('.res-val')?.textContent || '',
+      cls: r.querySelector('.res-val')?.className || '',
+    })),
+  }));
+
+  // Build PDF HTML
+  const pdfHtml = `<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>M365 Security Report — ${org}</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a2b45; background: white; font-size: 11pt; }
+  .cover { background: linear-gradient(135deg, #1E3A5F, #0F1C35); color: white; padding: 60px 50px; min-height: 200px; }
+  .cover-logo { font-size: 14pt; font-weight: 700; color: #00E87A; letter-spacing: 2px; margin-bottom: 30px; }
+  .cover-title { font-size: 28pt; font-weight: 700; margin-bottom: 8px; }
+  .cover-sub { font-size: 13pt; color: rgba(255,255,255,0.7); margin-bottom: 30px; }
+  .cover-meta { display: flex; gap: 40px; }
+  .cover-meta-item label { font-size: 8pt; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); display: block; margin-bottom: 4px; }
+  .cover-meta-item span { font-size: 11pt; font-weight: 600; color: white; }
+  .body { padding: 40px 50px; }
+  .scores { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 30px; }
+  .score-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 8px; text-align: center; }
+  .score-box .val { font-size: 18pt; font-weight: 700; margin-bottom: 2px; }
+  .score-box .lbl { font-size: 7pt; text-transform: uppercase; letter-spacing: .5px; color: #6b7280; }
+  .section { margin-bottom: 20px; page-break-inside: avoid; }
+  .section-hdr { display: flex; align-items: center; gap: 10px; background: #f0f4f8; padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; }
+  .section-icon { font-size: 14pt; }
+  .section-title { font-size: 12pt; font-weight: 700; color: #1e3a5f; flex: 1; }
+  .section-badge { font-size: 8pt; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+  .badge-ok { background: #dcfce7; color: #166534; }
+  .badge-warn { background: #fef3c7; color: #92400e; }
+  .badge-bad { background: #fee2e2; color: #991b1b; }
+  .badge-info { background: #dbeafe; color: #1e40af; }
+  .res-row { display: flex; padding: 6px 14px; border-bottom: 1px solid #f1f5f9; }
+  .res-key { font-size: 8.5pt; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: #6b7280; width: 150px; flex-shrink: 0; padding-top: 1px; }
+  .res-val { font-size: 9.5pt; color: #1a2b45; flex: 1; }
+  .res-val.good { color: #166534; }
+  .res-val.warn { color: #92400e; }
+  .res-val.bad  { color: #991b1b; }
+  .user-section { margin-bottom: 20px; }
+  .user-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  .user-table th { background: #1e3a5f; color: white; padding: 7px 8px; text-align: left; font-size: 8pt; text-transform: uppercase; letter-spacing: .5px; }
+  .user-table td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; color: #1a2b45; }
+  .user-table tr:nth-child(even) td { background: #f8fafc; }
+  .lic-badge { background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 3px; font-size: 7.5pt; font-weight: 600; margin: 1px; display: inline-block; }
+  .dis-badge { background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 3px; font-size: 7.5pt; font-weight: 600; }
+  .footer { background: #f8fafc; border-top: 2px solid #00E87A; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+  .footer-logo { font-size: 11pt; font-weight: 700; color: #1e3a5f; }
+  .footer-logo span { color: #00E87A; }
+  .footer-note { font-size: 8pt; color: #6b7280; }
+  .page-break { page-break-before: always; }
+  h2 { font-size: 14pt; color: #1e3a5f; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #00E87A; }
+</style>
+</head><body>
+
+<div class="cover">
+  <div class="cover-logo">⚡ SALMANIT.TOOLS</div>
+  <div class="cover-title">M365 Security Report</div>
+  <div class="cover-sub">Microsoft 365 Tenant Security Assessment</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><label>Organisation</label><span>${org}</span></div>
+    <div class="cover-meta-item"><label>Report Date</label><span>${date}</span></div>
+    <div class="cover-meta-item"><label>Total Users</label><span>${users.length}</span></div>
+    <div class="cover-meta-item"><label>Prepared By</label><span>Salman IT Services</span></div>
+  </div>
+</div>
+
+<div class="body">
+  <h2>Executive Summary</h2>
+  <div class="scores">
+    ${scoreCards.map(s => `
+    <div class="score-box">
+      <div class="val" style="color:${s.color.replace('var(--green)','#00c468').replace('var(--warning)','#d97706').replace('var(--danger)','#dc2626').replace('var(--white)','#1a2b45').replace('var(--cyan)','#0284c7')}">${s.val}</div>
+      <div class="lbl">${s.label}</div>
+    </div>`).join('')}
+  </div>
+
+  <h2>Security Findings</h2>
+  ${sections.filter(s => !s.title.includes('Users')).map(s => {
+    const badgeCls = s.badgeClass.includes('badge-bad') ? 'bad' : s.badgeClass.includes('badge-warn') ? 'warn' : s.badgeClass.includes('badge-ok') ? 'ok' : 'info';
+    return `<div class="section">
+      <div class="section-hdr">
+        <span class="section-icon">${s.icon}</span>
+        <span class="section-title">${s.title}</span>
+        <span class="section-badge badge-${badgeCls}">${s.badge}</span>
+      </div>
+      ${s.rows.map(r => {
+        const cls = r.cls.includes('good') ? 'good' : r.cls.includes('warn') ? 'warn' : r.cls.includes('bad') ? 'bad' : '';
+        return `<div class="res-row"><span class="res-key">${r.key}</span><span class="res-val ${cls}">${r.val}</span></div>`;
+      }).join('')}
+    </div>`;
+  }).join('')}
+
+  <div class="page-break"></div>
+  <h2>User Directory with Licenses</h2>
+  <div class="user-section">
+    <table class="user-table">
+      <tr><th>#</th><th>Name</th><th>Email / UPN</th><th>Job Title</th><th>Department</th><th>Licenses</th><th>Type</th><th>Status</th></tr>
+      ${users.slice(0,500).map((u,i) => {
+        const lics = (u.assignedLicenses||[]).map(l => skuMap[l.skuId]||l.skuId);
+        const isEnabled = u.accountEnabled;
+        const isGuest = u.userType === 'Guest';
+        return `<tr>
+          <td style="color:#6b7280">${i+1}</td>
+          <td style="font-weight:600">${u.displayName||'—'}</td>
+          <td style="color:#6b7280;font-size:7.5pt">${u.userPrincipalName||'—'}</td>
+          <td>${u.jobTitle||'—'}</td>
+          <td>${u.department||'—'}</td>
+          <td>${lics.length ? lics.map(l=>`<span class="lic-badge">${l}</span>`).join('') : '<span style="color:#9ca3af">Unlicensed</span>'}</td>
+          <td>${isGuest ? '<span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:3px;font-size:7.5pt;font-weight:600">Guest</span>' : 'Member'}</td>
+          <td>${isEnabled ? '<span style="color:#166534;font-weight:600">✓ Enabled</span>' : '<span class="dis-badge">Disabled</span>'}</td>
+        </tr>`;
+      }).join('')}
+    </table>
+    ${users.length > 500 ? `<p style="font-size:8pt;color:#6b7280;margin-top:8px">Showing first 500 of ${users.length} users</p>` : ''}
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-logo">⚡ SALMANIT<span>.</span>TOOLS</div>
+  <div class="footer-note">Generated by SalmanIT Tools · salmanittools.co.uk · ${date}</div>
+  <div class="footer-note">This report is for informational purposes only. Read-only access was used — no changes were made.</div>
+</div>
+
+</body></html>`;
+
+  // Open in new window and print to PDF
+  const win = window.open('', '_blank');
+  win.document.write(pdfHtml);
+  win.document.close();
+  win.onload = () => {
+    setTimeout(() => {
+      win.print();
+      btn.textContent = origText;
+      btn.disabled = false;
+    }, 800);
+  };
 }
 
 // ── Check for redirect on load ────────────────────────────────────────────────

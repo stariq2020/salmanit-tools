@@ -290,24 +290,39 @@ async function signIn() {
   try {
     document.getElementById('connectBtn').disabled = true;
     document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Connecting…';
-    const result = await msalInstance.loginPopup({ scopes: SCOPES, prompt: 'select_account' });
-    currentAccount = result.account;
-    accessToken = result.accessToken;
-    onSignedIn();
+    const result = await msalInstance.loginPopup({
+      scopes: SCOPES,
+      prompt: 'select_account',
+      redirectUri: 'https://salmanittools.co.uk/m365-scan.html'
+    });
+    if (result) {
+      currentAccount = result.account;
+      accessToken    = result.accessToken;
+      onSignedIn();
+    }
   } catch(e) {
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('connectBtn').innerHTML = '🔐 Connect with Microsoft 365';
-    showError('Sign-in failed: ' + (e.message || e));
+    if (e.errorCode !== 'user_cancelled') {
+      showError('Sign-in failed: ' + (e.message || e));
+    }
   }
 }
 
 async function getToken() {
   try {
-    const result = await msalInstance.acquireTokenSilent({ scopes: SCOPES, account: currentAccount });
+    const result = await msalInstance.acquireTokenSilent({
+      scopes: SCOPES,
+      account: currentAccount
+    });
     accessToken = result.accessToken;
     return accessToken;
   } catch {
-    const result = await msalInstance.acquireTokenPopup({ scopes: SCOPES, account: currentAccount });
+    const result = await msalInstance.acquireTokenPopup({
+      scopes: SCOPES,
+      account: currentAccount,
+      redirectUri: 'https://salmanittools.co.uk/m365-scan.html'
+    });
     accessToken = result.accessToken;
     return accessToken;
   }
@@ -979,30 +994,25 @@ async function exportPDF() {
 
 // ── Check for redirect on load ────────────────────────────────────────────────
 window.addEventListener('load', async () => {
-  // If this page is loaded inside a popup (as redirect target), just close it
-  if (window.opener && window.opener !== window) {
-    try {
-      await msalInstance.initialize();
-      await msalInstance.handleRedirectPromise();
-    } catch(e) {}
-    window.close();
-    return;
-  }
-
   try {
     await msalInstance.initialize();
-    const result = await msalInstance.handleRedirectPromise();
-    if (result) {
-      currentAccount = result.account;
-      accessToken    = result.accessToken;
-      onSignedIn();
+
+    // If opened as popup redirect target — handle and close
+    if (window.opener && window.opener !== window) {
+      await msalInstance.handleRedirectPromise();
+      window.close();
+      return;
     }
+
+    // Main page — check if already signed in
     const accounts = msalInstance.getAllAccounts();
-    if (accounts.length > 0 && !currentAccount) {
+    if (accounts.length > 0) {
       currentAccount = accounts[0];
       onSignedIn();
     }
-  } catch(e) { console.warn('MSAL init:', e); }
+  } catch(e) {
+    console.warn('MSAL init:', e);
+  }
 });
 </script>
 

@@ -136,8 +136,8 @@ footer a{color:var(--green);text-decoration:none}
       <span class="perm-tag">Conditional Access</span><span class="perm-tag">Secure Score</span>
       <span class="perm-tag">SharePoint</span><span class="perm-tag">Devices</span>
     </div>
-    <button class="connect-btn" id="connectBtn" onclick="signIn()">
-      🔐 &nbsp;Sign in with Microsoft 365
+    <button class="connect-btn" id="connectBtn" onclick="if(window.signIn){window.signIn()}else{document.getElementById('errorCard').style.display='block';document.getElementById('errorMsg').textContent='Still loading, please wait a moment and try again.'}" disabled>
+      <span class="spinner"></span> &nbsp;Loading…
     </button>
     <div class="connect-note">🔒 You will be redirected to Microsoft to sign in · Read-only access · No data stored on our servers</div>
   </div>
@@ -700,6 +700,13 @@ window.signOut       = signOut;
 window.runScan       = runScan;
 window.exportPDF     = exportPDF;
 window.toggleSection = toggleSection;
+
+// Enable the connect button now that everything is ready
+const btn = document.getElementById('connectBtn');
+if (btn) {
+  btn.disabled = false;
+  btn.innerHTML = '🔐 &nbsp;Sign in with Microsoft 365';
+}
 
 } // end initApp
 </script>

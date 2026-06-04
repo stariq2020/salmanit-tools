@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body>
+<script src="https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js"></script>
+<script>
+  const msalInstance = new msal.PublicClientApplication({
+    auth: {
+      clientId: 'f34c0e03-f125-4bf8-bf23-568005216a70',
+      authority: 'https://login.microsoftonline.com/common',
+      redirectUri: 'https://salmanittools.co.uk/auth-redirect.html'
+    }
+  });
+  msalInstance.initialize().then(() => {
+    msalInstance.handleRedirectPromise().then(() => {
+      window.close();
+    }).catch(e => {
+      console.error(e);
+      window.close();
+    });
+  });
+</script>
+</body>
+</html>

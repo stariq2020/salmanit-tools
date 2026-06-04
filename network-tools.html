@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Network Tools — IP Lookup, DNS, Ping & More | SalmanIT Tools</title>
+<meta name="description" content="Free online network tools. Check your public IP, DNS lookup, IP geolocation, ping test and more. No signup required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- AdSense placeholder -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+<style>
+:root {
+  --ink:   #080D14; --deep: #0B1120; --navy: #0F1C35;
+  --green: #00E87A; --green2:#00C468; --cyan: #00C8FF;
+  --white: #F0F6FF; --muted: #5A6A85; --card: #0E1A2E;
+  --border:rgba(255,255,255,0.07); --danger:#EF4444; --warning:#F59E0B;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--green)}
+
+.page{max-width:1000px;margin:0 auto;padding:48px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:40px}
+
+/* My IP banner */
+.ip-banner{background:linear-gradient(135deg,rgba(0,232,122,0.08),rgba(0,200,255,0.05));border:1px solid rgba(0,232,122,0.2);border-radius:16px;padding:24px 28px;margin-bottom:36px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.ip-icon{font-size:2.5rem}
+.ip-info{flex:1}
+.ip-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:4px}
+.ip-value{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.05em;color:var(--green)}
+.ip-meta{font-size:0.82rem;color:var(--muted);margin-top:4px}
+.ip-copy{background:rgba(0,232,122,0.1);border:1px solid rgba(0,232,122,0.2);color:var(--green);padding:8px 16px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+.ip-copy:hover{background:rgba(0,232,122,0.2)}
+
+/* Jump nav */
+.jump-nav {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 36px;
+}
+.jump-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  padding: 8px 16px; border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--muted); text-decoration: none;
+  transition: all .2s; white-space: nowrap;
+}
+.jump-btn:hover {
+  background: rgba(0,232,122,0.08);
+  border-color: rgba(0,232,122,0.3);
+  color: var(--green);
+}
+
+/* Tool cards */
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.tools-grid{grid-template-columns:1fr}}
+
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden;scroll-margin-top:80px}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan));opacity:0;transition:opacity .3s}
+.tool-card:hover::before{opacity:1}
+.tool-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.05em;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+
+/* Inputs */
+.inp-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.inp{flex:1;min-width:140px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.88rem;outline:none;transition:border-color .2s}
+.inp:focus{border-color:rgba(0,232,122,0.4)}
+.inp::placeholder{color:var(--muted)}
+.sel{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.88rem;outline:none;cursor:pointer}
+.sel option{background:#0E1A2E}
+
+.run-btn{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;transition:opacity .2s,transform .15s;white-space:nowrap}
+.run-btn:hover{opacity:.9;transform:scale(1.02)}
+.run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.run-btn.cyan{background:linear-gradient(135deg,var(--cyan),#0099CC)}
+
+/* Quick buttons */
+.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.quick-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.75rem;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .2s}
+.quick-btn:hover{border-color:rgba(0,232,122,0.3);color:var(--green)}
+
+/* Results */
+.result-box{background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:0.85rem;line-height:1.7;min-height:44px;margin-top:8px;color:rgba(240,246,255,0.75)}
+.result-box.terminal{font-family:'Courier New',monospace;font-size:0.8rem;color:#00E87A;background:#060B12;max-height:200px;overflow-y:auto}
+.result-box.empty{color:var(--muted);font-style:italic}
+
+/* Result rows */
+.res-row{display:flex;align-items:flex-start;gap:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.res-row:last-child{border-bottom:none}
+.res-key{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);min-width:110px;padding-top:1px}
+.res-val{font-size:0.88rem;color:var(--white);word-break:break-all}
+.res-val.good{color:var(--green)}
+.res-val.warn{color:var(--warning)}
+.res-val.bad{color:var(--danger)}
+
+/* Ping bars */
+.ping-bars{display:flex;gap:4px;align-items:flex-end;margin-top:8px}
+.ping-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:3px}
+.ping-bar{width:20px;border-radius:3px;transition:height .3s}
+.ping-bar-val{font-size:0.65rem;color:var(--muted)}
+
+/* Full width card */
+.full-card{grid-column:1/-1}
+
+/* Geo map placeholder */
+.geo-flag{font-size:2rem;margin-right:8px}
+
+/* Loading spinner */
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,232,122,0.3);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ SALMANIT<span class="dot">.</span>TOOLS</a>
+  <a class="nav-back" href="index.html">← Back to Home</a>
+</nav>
+
+<div class="page">
+  <div class="page-eyebrow">Free Online Tool</div>
+  <h1 class="page-title">Network<br><span class="acc">Tools</span></h1>
+  <p class="page-sub">IP lookup, DNS queries, ping test, geolocation and more — all free, all in your browser.</p>
+
+  <!-- Jump Nav -->
+  <div class="jump-nav">
+    <a class="jump-btn" href="#sec-geo">🌍 IP Geo</a>
+    <a class="jump-btn" href="#sec-dns">🔎 DNS Lookup</a>
+    <a class="jump-btn" href="#sec-ping">🏓 Ping</a>
+    <a class="jump-btn" href="#sec-rdns">🔄 Reverse DNS</a>
+    <a class="jump-btn" href="#sec-fulldns">📋 Full DNS</a>
+    <a class="jump-btn" href="#sec-email">✉️ Email Security</a>
+    <a class="jump-btn" href="#sec-multi">⚡ Multi Ping</a>
+  </div>
+
+  <!-- My Public IP Banner -->
+  <div class="ip-banner" id="ipBanner">
+    <div class="ip-icon">🌍</div>
+    <div class="ip-info">
+      <div class="ip-label">Your Public IP Address</div>
+      <div class="ip-value" id="myIp"><span class="spinner"></span> Loading…</div>
+      <div class="ip-meta" id="myIpMeta">Detecting your location…</div>
+    </div>
+    <button class="ip-copy" id="copyIpBtn" onclick="copyMyIp()">📋 Copy IP</button>
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- IP Geolocation -->
+    <div class="tool-card" id="sec-geo">
+      <div class="tool-card-title">🌍 IP Geolocation</div>
+      <div class="inp-row">
+        <input class="inp" id="geoIp" placeholder="IP address (leave blank for yours)"/>
+        <button class="run-btn" onclick="runGeo()">Look Up</button>
+      </div>
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="setAndRun('geoIp','8.8.8.8',runGeo)">8.8.8.8</button>
+        <button class="quick-btn" onclick="setAndRun('geoIp','1.1.1.1',runGeo)">1.1.1.1</button>
+        <button class="quick-btn" onclick="document.getElementById('geoIp').value='';runGeo()">My IP</button>
+      </div>
+      <div class="result-box empty" id="geoResult">Enter an IP or leave blank to look up yours</div>
+    </div>
+
+    <!-- DNS Lookup -->
+    <div class="tool-card" id="sec-dns">
+      <div class="tool-card-title">🔎 DNS Lookup</div>
+      <div class="inp-row">
+        <input class="inp" id="dnsHost" placeholder="e.g. google.com"/>
+        <select class="sel" id="dnsType">
+          <option>A</option><option>AAAA</option><option>MX</option>
+          <option>CNAME</option><option>TXT</option><option>NS</option>
+        </select>
+        <button class="run-btn" onclick="runDns()">Query</button>
+      </div>
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="setAndRun('dnsHost','google.com',runDns)">google.com</button>
+        <button class="quick-btn" onclick="setAndRun('dnsHost','cloudflare.com',runDns)">cloudflare.com</button>
+        <button class="quick-btn" onclick="setAndRun('dnsHost','github.com',runDns)">github.com</button>
+      </div>
+      <div class="result-box terminal empty" id="dnsResult">Enter a domain and click Query</div>
+    </div>
+
+    <!-- Ping / Latency -->
+    <div class="tool-card" id="sec-ping">
+      <div class="tool-card-title">🏓 Latency Test</div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">Measures HTTP response time — browser security prevents true ICMP ping</p>
+      <div class="inp-row">
+        <input class="inp" id="pingHost" placeholder="e.g. google.com"/>
+        <button class="run-btn" onclick="runPing()">Test</button>
+      </div>
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="setAndRun('pingHost','google.com',runPing)">google.com</button>
+        <button class="quick-btn" onclick="setAndRun('pingHost','cloudflare.com',runPing)">cloudflare.com</button>
+        <button class="quick-btn" onclick="setAndRun('pingHost','amazon.com',runPing)">amazon.com</button>
+      </div>
+      <div class="result-box empty" id="pingResult">Enter a host and click Test</div>
+      <div class="ping-bars" id="pingBars"></div>
+    </div>
+
+    <!-- Reverse DNS -->
+    <div class="tool-card" id="sec-rdns">
+      <div class="tool-card-title">🔄 Reverse DNS Lookup</div>
+      <div class="inp-row">
+        <input class="inp" id="rdnsIp" placeholder="IP address e.g. 8.8.8.8"/>
+        <button class="run-btn cyan" onclick="runReverseDns()">Look Up</button>
+      </div>
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="setAndRun('rdnsIp','8.8.8.8',runReverseDns)">8.8.8.8</button>
+        <button class="quick-btn" onclick="setAndRun('rdnsIp','1.1.1.1',runReverseDns)">1.1.1.1</button>
+        <button class="quick-btn" onclick="setAndRun('rdnsIp','9.9.9.9',runReverseDns)">9.9.9.9</button>
+      </div>
+      <div class="result-box empty" id="rdnsResult">Enter an IP address to find its hostname</div>
+    </div>
+
+    <!-- WHOIS / Domain Info -->
+    <div class="tool-card full-card" id="sec-fulldns">
+      <div class="tool-card-title">📋 Domain DNS Records</div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px">Query multiple DNS record types for a domain at once</p>
+      <div class="inp-row">
+        <input class="inp" id="whoisHost" placeholder="e.g. salmanittools.co.uk"/>
+        <button class="run-btn" onclick="runFullDns()">Full DNS Scan</button>
+      </div>
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="setAndRun('whoisHost','google.com',runFullDns)">google.com</button>
+        <button class="quick-btn" onclick="setAndRun('whoisHost','microsoft.com',runFullDns)">microsoft.com</button>
+        <button class="quick-btn" onclick="setAndRun('whoisHost','salmanittools.co.uk',runFullDns)">salmanittools.co.uk</button>
+      </div>
+      <div class="result-box terminal empty" id="whoisResult" style="max-height:none;min-height:60px">Enter a domain and click Full DNS Scan</div>
+    </div>
+
+    <!-- Email Security Checker -->
+    <div class="tool-card full-card" id="sec-email">
+      <div class="tool-card-title">✉️ Email Security Checker</div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">Check MX, SPF, DMARC, DKIM and more for any domain</p>
+
+      <div class="inp-row">
+        <input class="inp" id="emailSecHost" placeholder="e.g. google.com"/>
+        <select class="sel" id="emailSecType" onchange="onEmailTypeChange()">
+          <option value="mx">📬 MX — Mail Servers</option>
+          <option value="spf">🔐 SPF — Sender Policy</option>
+          <option value="dmarc">🛡️ DMARC — Policy</option>
+          <option value="dkim">🔑 DKIM — Key Record</option>
+          <option value="all">🔍 All — Full Email Scan</option>
+        </select>
+        <button class="run-btn" onclick="runEmailSec()">Check</button>
+      </div>
+
+      <!-- DKIM selector row — shown only when DKIM selected -->
+      <div id="dkimSelectorRow" style="display:none;margin-bottom:10px">
+        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px">DKIM Selector — click a common one or type your own:</div>
+        <div class="inp-row" style="margin-bottom:6px">
+          <input class="inp" id="emailDkimSelector" placeholder="e.g. selector1, google, s1" style="max-width:220px"/>
+        </div>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='selector1'">selector1</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='selector2'">selector2</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='google'">google</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='s1'">s1</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='s2'">s2</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='k1'">k1</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='default'">default</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='dkim'">dkim</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='mail'">mail</button>
+          <button class="quick-btn" onclick="document.getElementById('emailDkimSelector').value='smtp'">smtp</button>
+        </div>
+      </div>
+
+      <div class="quick-btns">
+        <button class="quick-btn" onclick="setAndRun('emailSecHost','google.com',runEmailSec)">google.com</button>
+        <button class="quick-btn" onclick="setAndRun('emailSecHost','microsoft.com',runEmailSec)">microsoft.com</button>
+        <button class="quick-btn" onclick="setAndRun('emailSecHost','salmanittools.co.uk',runEmailSec)">salmanittools.co.uk</button>
+      </div>
+
+      <div class="result-box empty" id="emailSecResult" style="min-height:60px">Select a check type, enter a domain and click Check</div>
+    </div>
+
+    <!-- Multiple IPs ping -->
+    <div class="tool-card full-card" id="sec-multi">
+      <div class="tool-card-title">⚡ Multi-Host Latency Test</div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px">Test latency to multiple hosts at once — useful for comparing CDNs and DNS providers</p>
+      <div class="inp-row">
+        <button class="run-btn" onclick="runMultiPing()">▶ Test All</button>
+        <span style="font-size:0.82rem;color:var(--muted);padding:10px 4px">Tests: Google, Cloudflare, OpenDNS, Quad9, Amazon, Microsoft</span>
+      </div>
+      <div id="multiPingResults" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:8px"></div>
+    </div>
+
+  </div>
+
+  <!-- Info section -->
+  <div style="margin-top:56px">
+    <div class="page-eyebrow">Need more power?</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:10px">Download NetworkInfo for Windows</h2>
+    <p style="font-size:0.9rem;color:var(--muted);line-height:1.7;margin-bottom:20px;max-width:560px">For full IT-grade network diagnostics — real ICMP ping, traceroute, port checker, WiFi info and speed test — download the free Windows desktop app.</p>
+    <a href="index.html#tools" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:13px 24px;border-radius:10px;text-decoration:none;transition:opacity .2s">
+      ⬇ Download NetworkInfo.exe
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ SALMANIT<span class="dot">.</span>TOOLS</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="white">
+    <path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 10L4 44l10.3-2.7C17.1 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.8 30.1 8 27.1 8 24 8 15.2 15.2 8 24 8s16 7.2 16 16-7.2 16-16 16zm8.7-11.8c-.5-.2-2.8-1.4-3.2-1.5-.4-.2-.7-.2-1 .2-.3.5-1.1 1.5-1.4 1.8-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.4-.8.2-.3.1-.6 0-.8-.1-.2-1-2.5-1.4-3.4-.4-.9-.8-.7-1-.7h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.5-1.6 3.7s1.6 4.3 1.9 4.6c.2.3 3.2 5 7.8 7 1.1.5 1.9.7 2.6.9 1.1.3 2.1.3 2.9.2.9-.1 2.8-1.1 3.2-2.2.4-1.1.4-2 .3-2.2-.2-.3-.5-.4-1-.6z"/>
+  </svg>
+</a>
+<style>
+.wa-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .2s,box-shadow .2s;text-decoration:none}
+.wa-btn:hover{transform:scale(1.1)}
+.wa-btn svg{width:32px;height:32px;position:relative;z-index:1}
+.wa-btn::before{content:'';position:absolute;width:58px;height:58px;border-radius:50%;background:rgba(37,211,102,0.35);animation:wa-pulse 2s ease-out infinite}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+</style>
+
+<script>
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function setAndRun(id, val, fn) {
+  document.getElementById(id).value = val;
+  fn();
+}
+function showLoading(id) {
+  const el = document.getElementById(id);
+  el.className = 'result-box';
+  el.innerHTML = '<span class="spinner"></span> Loading…';
+}
+function showResult(id, html, isTerminal) {
+  const el = document.getElementById(id);
+  el.className = isTerminal ? 'result-box terminal' : 'result-box';
+  el.innerHTML = html;
+}
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.className = 'result-box';
+  el.innerHTML = `<span style="color:var(--danger)">❌ ${msg}</span>`;
+}
+
+// ── Geo lookup — tries multiple APIs ─────────────────────────────────────────
+async function geoLookup(ip) {
+  const apis = [
+    async () => {
+      const url = ip ? `https://get.geojs.io/v1/ip/geo/${ip}.json` : 'https://get.geojs.io/v1/ip/geo.json';
+      const r = await fetch(url);
+      const d = await r.json();
+      const data = Array.isArray(d) ? d[0] : d;
+      if (!data.ip) throw new Error('No data');
+      return { ip: data.ip, city: data.city, region: data.region, country: data.country,
+        countryCode: data.country_code?.toLowerCase(), timezone: data.timezone,
+        org: data.organization_name, lat: data.latitude, lon: data.longitude };
+    },
+    async () => {
+      const url = ip ? `https://ipapi.co/${ip}/json/` : 'https://ipapi.co/json/';
+      const r = await fetch(url);
+      const d = await r.json();
+      if (d.error) throw new Error(d.reason);
+      return { ip: d.ip, city: d.city, region: d.region, country: d.country_name,
+        countryCode: d.country_code?.toLowerCase(), timezone: d.timezone,
+        org: d.org, lat: d.latitude, lon: d.longitude, postal: d.postal, asn: d.asn };
+    },
+    async () => {
+      const url = ip ? `https://ipwho.is/${ip}` : 'https://ipwho.is/';
+      const r = await fetch(url);
+      const d = await r.json();
+      if (!d.success) throw new Error(d.message);
+      return { ip: d.ip, city: d.city, region: d.region, country: d.country,
+        countryCode: d.country_code?.toLowerCase(), timezone: d.timezone?.id,
+        org: d.connection?.isp, lat: d.latitude, lon: d.longitude, postal: d.postal };
+    },
+    async () => {
+      const url = ip ? `https://freeipapi.com/api/json/${ip}` : 'https://freeipapi.com/api/json';
+      const r = await fetch(url);
+      const d = await r.json();
+      if (!d.ipAddress) throw new Error('No data');
+      return { ip: d.ipAddress, city: d.cityName, region: d.regionName,
+        country: d.countryName, countryCode: d.countryCode?.toLowerCase(),
+        timezone: d.timeZone, lat: d.latitude, lon: d.longitude, postal: d.zipCode };
+    },
+  ];
+  for (const api of apis) {
+    try { return await api(); } catch {}
+  }
+  throw new Error('All geolocation APIs unavailable — please try again');
+}
+
+// ── My Public IP ──────────────────────────────────────────────────────────────
+let myPublicIp = '';
+
+async function loadMyIp() {
+  try {
+    const d = await geoLookup('');
+    myPublicIp = d.ip;
+    document.getElementById('myIp').textContent = d.ip;
+    const parts = [d.city, d.region, d.country].filter(v => v && v !== '-');
+    document.getElementById('myIpMeta').textContent = parts.join(', ') || 'Location unavailable';
+  } catch {
+    try {
+      const r = await fetch('https://api.ipify.org?format=json');
+      const d = await r.json();
+      myPublicIp = d.ip;
+      document.getElementById('myIp').textContent = d.ip;
+      document.getElementById('myIpMeta').textContent = 'Location unavailable';
+    } catch {
+      document.getElementById('myIp').textContent = 'Unavailable';
+      document.getElementById('myIpMeta').textContent = '';
+    }
+  }
+}
+
+function copyMyIp() {
+  if (!myPublicIp) return;
+  navigator.clipboard.writeText(myPublicIp).then(() => {
+    const btn = document.getElementById('copyIpBtn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy IP', 2000);
+  });
+}
+
+// ── IP Geolocation ────────────────────────────────────────────────────────────
+async function runGeo() {
+  const ip = document.getElementById('geoIp').value.trim();
+  showLoading('geoResult');
+  try {
+    const d = await geoLookup(ip);
+    const flag = d.countryCode
+      ? `<img src="https://flagcdn.com/24x18/${d.countryCode}.png" style="vertical-align:middle;margin-left:6px;border-radius:2px" alt="${d.country}">`
+      : '';
+    let html = '';
+    const rows = [
+      ['IP', d.ip], ['City', d.city], ['Region', d.region],
+      ['Country', (d.country || '') + flag], ['Postal', d.postal],
+      ['Coordinates', d.lat && d.lon ? `${d.lat}, ${d.lon}` : ''],
+      ['Timezone', d.timezone], ['ISP / Org', d.org], ['ASN', d.asn],
+    ];
+    rows.forEach(([k,v]) => {
+      if (v) html += `<div class="res-row"><span class="res-key">${k}</span><span class="res-val">${v}</span></div>`;
+    });
+    showResult('geoResult', html);
+  } catch(e) {
+    showError('geoResult', e.message);
+  }
+}
+
+// ── DNS Lookup ────────────────────────────────────────────────────────────────
+async function runDns() {
+  const host = document.getElementById('dnsHost').value.trim();
+  const type = document.getElementById('dnsType').value;
+  if (!host) return;
+  showLoading('dnsResult');
+  try {
+    const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(host)}&type=${type}`);
+    const d = await r.json();
+    if (!d.Answer || d.Answer.length === 0) {
+      showResult('dnsResult', `; No ${type} records found for ${host}`, true);
+      return;
+    }
+    let html = `<div style="color:#00C8FF;margin-bottom:10px;font-weight:700">; ${type} records for ${host}</div>`;
+    d.Answer.forEach((a, i) => {
+      let data = a.data;
+      let extra = '';
+      if (type === 'MX') {
+        const parts = data.split(' ');
+        extra = `<span style="color:var(--warning);margin-right:8px">Priority ${parts[0]}</span>`;
+        data = parts.slice(1).join(' ').replace(/\.$/, '');
+      } else if (type === 'TXT') {
+        data = data.replace(/^"|"$/g, '');
+      } else if (['NS','CNAME'].includes(type)) {
+        data = data.replace(/\.$/, '');
+      }
+      const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+      html += `<div style="display:flex;align-items:flex-start;gap:12px;padding:7px 10px;background:${bg};border-radius:6px;margin-bottom:2px">
+        <span style="color:var(--muted);font-size:0.72rem;min-width:24px;padding-top:2px">${i+1}.</span>
+        <div style="flex:1"><div>${extra}<span style="color:var(--green);word-break:break-all">${data}</span></div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">TTL: ${a.TTL}s</div></div></div>`;
+    });
+    document.getElementById('dnsResult').className = 'result-box';
+    document.getElementById('dnsResult').innerHTML = html;
+  } catch(e) {
+    showError('dnsResult', 'DNS query failed: ' + e.message);
+  }
+}
+
+// ── Latency / Ping ────────────────────────────────────────────────────────────
+async function runPing() {
+  const host = document.getElementById('pingHost').value.trim();
+  if (!host) return;
+  showLoading('pingResult');
+  document.getElementById('pingBars').innerHTML = '';
+  const times = [];
+  for (let i = 0; i < 5; i++) {
+    try {
+      const t0 = performance.now();
+      await fetch(`https://${host}?_=${Date.now()}`, { mode: 'no-cors', cache: 'no-cache' });
+      times.push(Math.round(performance.now() - t0));
+    } catch { times.push(null); }
+    await new Promise(res => setTimeout(res, 200));
+  }
+  const valid = times.filter(t => t !== null);
+  if (valid.length === 0) { showError('pingResult', `Could not reach ${host}`); return; }
+  const avg = Math.round(valid.reduce((a,b)=>a+b,0)/valid.length);
+  const min = Math.min(...valid);
+  const max = Math.max(...valid);
+  const loss = Math.round((times.filter(t=>t===null).length/5)*100);
+  const qual = avg < 50 ? 'good' : avg < 150 ? '' : 'bad';
+  const html = `<div class="res-row"><span class="res-key">Host</span><span class="res-val">${host}</span></div>
+<div class="res-row"><span class="res-key">Avg Latency</span><span class="res-val ${qual}">${avg}ms ${avg<50?'🟢 Excellent':avg<100?'🟡 Good':avg<200?'🟠 Fair':'🔴 Poor'}</span></div>
+<div class="res-row"><span class="res-key">Min / Max</span><span class="res-val">${min}ms / ${max}ms</span></div>
+<div class="res-row"><span class="res-key">Packet Loss</span><span class="res-val ${loss>0?'warn':''}">${loss}%</span></div>`;
+  showResult('pingResult', html);
+  const bars = document.getElementById('pingBars');
+  const maxT = Math.max(...valid, 1);
+  times.forEach(t => {
+    const wrap = document.createElement('div');
+    wrap.className = 'ping-bar-wrap';
+    const bar = document.createElement('div');
+    bar.className = 'ping-bar';
+    const h = t ? Math.max(6, Math.round(t/maxT*50)) : 6;
+    bar.style.cssText = `height:${h}px;background:${t?(t<50?'var(--green)':t<150?'var(--warning)':'var(--danger)'):'#333'}`;
+    const lbl = document.createElement('div');
+    lbl.className = 'ping-bar-val';
+    lbl.textContent = t ? `${t}ms` : 'X';
+    wrap.appendChild(bar); wrap.appendChild(lbl); bars.appendChild(wrap);
+  });
+}
+
+// ── Reverse DNS ───────────────────────────────────────────────────────────────
+async function runReverseDns() {
+  const ip = document.getElementById('rdnsIp').value.trim();
+  if (!ip) return;
+  showLoading('rdnsResult');
+  try {
+    const parts = ip.split('.').reverse().join('.');
+    const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(parts+'.in-addr.arpa')}&type=PTR`);
+    const d = await r.json();
+    if (d.Answer && d.Answer.length > 0) {
+      showResult('rdnsResult',
+        `<div class="res-row"><span class="res-key">IP</span><span class="res-val">${ip}</span></div>
+<div class="res-row"><span class="res-key">Hostname(s)</span><span class="res-val good">${d.Answer.map(a=>a.data.replace(/[.]+$/,'')).join('<br>')}</span></div>`);
+    } else {
+      showResult('rdnsResult',
+        `<div class="res-row"><span class="res-key">IP</span><span class="res-val">${ip}</span></div>
+<div class="res-row"><span class="res-key">Result</span><span class="res-val warn">No PTR record found</span></div>`);
+    }
+  } catch(e) { showError('rdnsResult', 'Lookup failed: ' + e.message); }
+}
+
+// ── Full DNS Scan ─────────────────────────────────────────────────────────────
+async function runFullDns() {
+  const host = document.getElementById('whoisHost').value.trim();
+  if (!host) return;
+  const el = document.getElementById('whoisResult');
+  el.className = 'result-box';
+  el.innerHTML = '<span class="spinner"></span> Scanning all DNS records…';
+  const types = ['A','AAAA','MX','NS','TXT','CNAME'];
+  let html = `<div style="color:#00C8FF;font-weight:700;margin-bottom:14px;font-size:0.9rem">Full DNS scan for: ${host}</div>`;
+  let found = false;
+  for (const type of types) {
+    try {
+      const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(host)}&type=${type}`);
+      const d = await r.json();
+      if (!d.Answer || d.Answer.length === 0) continue;
+      found = true;
+      html += `<div style="margin-bottom:14px"><div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--warning);margin-bottom:6px;padding:4px 8px;background:rgba(245,158,11,0.08);border-radius:4px;display:inline-block">${type} Records</div>`;
+      d.Answer.forEach((a, i) => {
+        let data = a.data;
+        let extra = '';
+        if (type === 'MX') {
+          const parts = data.split(' ');
+          extra = `<span style="color:var(--warning);font-size:0.75rem;margin-right:8px">Priority ${parts[0]}</span>`;
+          data = parts.slice(1).join(' ').replace(/\.$/, '');
+        } else if (type === 'TXT') {
+          data = data.replace(/^"|"$/g, '');
+        } else if (['NS','CNAME'].includes(type)) {
+          data = data.replace(/\.$/, '');
+        }
+        const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+        html += `<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 10px;background:${bg};border-radius:6px;margin-bottom:2px">
+          <span style="color:var(--muted);font-size:0.7rem;min-width:20px;padding-top:2px">${i+1}.</span>
+          <div style="flex:1;word-break:break-all"><div>${extra}<span style="color:var(--green)">${data}</span></div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px">TTL: ${a.TTL}s</div></div></div>`;
+      });
+      html += '</div>';
+    } catch {}
+  }
+  if (!found) html += `<div style="color:var(--muted)">No DNS records found for ${host}</div>`;
+  el.className = 'result-box';
+  el.innerHTML = html;
+}
+
+// ── Email Security Checker ────────────────────────────────────────────────────
+function onEmailTypeChange() {
+  const type = document.getElementById('emailSecType').value;
+  document.getElementById('dkimSelectorRow').style.display =
+    (type === 'dkim' || type === 'all') ? 'block' : 'none';
+}
+
+async function runEmailSec() {
+  const host = document.getElementById('emailSecHost').value.trim();
+  const type = document.getElementById('emailSecType').value;
+  if (!host) return;
+
+  const el = document.getElementById('emailSecResult');
+  el.className = 'result-box';
+  el.innerHTML = '<span class="spinner"></span> Checking…';
+
+  if (type === 'all') {
+    await runAllEmailSec(host);
+  } else if (type === 'mx')    { await showMx(host, el); }
+  else if (type === 'spf')     { await showSpf(host, el); }
+  else if (type === 'dmarc')   { await showDmarc(host, el); }
+  else if (type === 'dkim')    { await showDkim(host, el); }
+}
+
+function row(k, v, cls='') {
+  return `<div class="res-row"><span class="res-key">${k}</span><span class="res-val ${cls}">${v}</span></div>`;
+}
+function sectionHead(icon, title) {
+  return `<div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--warning);margin:14px 0 8px;padding:4px 10px;background:rgba(245,158,11,0.08);border-radius:4px;display:inline-block">${icon} ${title}</div>`;
+}
+
+async function dnsQuery(name, type) {
+  const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(name)}&type=${type}`);
+  return r.json();
+}
+
+async function showMx(host, el) {
+  try {
+    const d = await dnsQuery(host, 'MX');
+    if (!d.Answer || !d.Answer.length) {
+      el.innerHTML = row('Domain', host) + row('MX', '❌ No MX records found', 'bad');
+      return;
+    }
+    const sorted = [...d.Answer].sort((a,b) => parseInt(a.data)-parseInt(b.data));
+    let html = row('Domain', host) + row('Status', `✅ ${d.Answer.length} mail server(s) found`, 'good');
+    sorted.forEach((a,i) => {
+      const parts = a.data.split(' ');
+      const pri = parts[0]; const srv = parts.slice(1).join(' ').replace(/\.$/, '');
+      html += row(`Server ${i+1}`, `<span style="color:var(--warning);margin-right:8px">Priority ${pri}</span>${srv}`);
+      html += row('TTL', `${a.TTL}s`);
+    });
+    el.className = 'result-box'; el.innerHTML = html;
+  } catch(e) { el.className='result-box'; el.innerHTML=row('Error','❌ '+e.message,'bad'); }
+}
+
+async function showSpf(host, el) {
+  try {
+    const d = await dnsQuery(host, 'TXT');
+    const spf = d.Answer?.find(a => a.data.includes('v=spf1'));
+    if (!spf) {
+      el.innerHTML = row('Domain', host) + row('SPF', '❌ No SPF record found — anyone can spoof this domain', 'bad');
+      return;
+    }
+    const raw = spf.data.replace(/^"|"$/g, '');
+    // Parse mechanisms
+    const parts = raw.split(/\s+/);
+    const mechanisms = parts.filter(p => !p.startsWith('v='));
+    const policy = parts.find(p => p === '-all' || p === '~all' || p === '?all' || p === '+all');
+    const policyMap = {
+      '-all': { label: '✅ Hard Fail (-all) — strict, recommended', col: 'good' },
+      '~all': { label: '⚠️ Soft Fail (~all) — permissive, emails marked but not rejected', col: 'warn' },
+      '?all': { label: '⚠️ Neutral (?all) — no policy enforced', col: 'warn' },
+      '+all': { label: '❌ Pass all (+all) — dangerous, allows anyone to send', col: 'bad' },
+    };
+    const pi = policyMap[policy] || { label: policy || 'Unknown', col: '' };
+    let html = row('Domain', host)
+      + row('Status', '✅ SPF record found', 'good')
+      + row('Policy', pi.label, pi.col)
+      + row('Mechanisms', mechanisms.join(', ') || '—')
+      + row('TTL', `${spf.TTL}s`)
+      + row('Raw', `<span style="font-family:'Courier New',monospace;font-size:0.78rem;color:var(--muted);word-break:break-all">${raw}</span>`);
+    el.className = 'result-box'; el.innerHTML = html;
+  } catch(e) { el.className='result-box'; el.innerHTML=row('Error','❌ '+e.message,'bad'); }
+}
+
+async function showDmarc(host, el) {
+  try {
+    const d = await dnsQuery('_dmarc.' + host, 'TXT');
+    if (!d.Answer || !d.Answer.length) {
+      el.innerHTML = row('Domain', host) + row('DMARC', '❌ No DMARC record found', 'bad');
+      return;
+    }
+    const raw = d.Answer[0].data.replace(/^"|"$/g, '');
+    const tags = {};
+    raw.split(';').forEach(p => { const [k,v] = p.trim().split('='); if(k&&v) tags[k.trim()]=v.trim(); });
+    const pMap = {
+      'none':       { label:'⚠️ None — monitoring only, no enforcement', col:'warn' },
+      'quarantine': { label:'🔵 Quarantine — suspicious emails go to spam', col:'' },
+      'reject':     { label:'✅ Reject — strongest, unauthorised emails blocked', col:'good' },
+    };
+    const pi = pMap[tags.p] || { label: tags.p || '—', col: '' };
+    let html = row('Domain', host)
+      + row('Status', '✅ DMARC record found', 'good')
+      + row('Policy (p)', pi.label, pi.col);
+    if (tags.sp)    html += row('Subdomain (sp)', tags.sp);
+    if (tags.pct)   html += row('% Applied', tags.pct + '%');
+    if (tags.rua)   html += row('Report To', `<span style="word-break:break-all">${tags.rua}</span>`);
+    if (tags.adkim) html += row('DKIM Align', tags.adkim === 's' ? 'Strict' : 'Relaxed');
+    if (tags.aspf)  html += row('SPF Align',  tags.aspf === 's' ? 'Strict' : 'Relaxed');
+    html += row('Raw', `<span style="font-family:'Courier New',monospace;font-size:0.78rem;color:var(--muted);word-break:break-all">${raw}</span>`);
+    el.className = 'result-box'; el.innerHTML = html;
+  } catch(e) { el.className='result-box'; el.innerHTML=row('Error','❌ '+e.message,'bad'); }
+}
+
+async function showDkim(host, el) {
+  const selector = document.getElementById('emailDkimSelector').value.trim();
+  if (!selector) {
+    el.className = 'result-box';
+    el.innerHTML = row('Error', '❌ Please enter or select a DKIM selector first', 'bad');
+    return;
+  }
+  const dkimDomain = `${selector}._domainkey.${host}`;
+  try {
+    const d = await dnsQuery(dkimDomain, 'TXT');
+    if (!d.Answer || !d.Answer.length) {
+      el.innerHTML = row('Domain', host)
+        + row('Selector', selector)
+        + row('Record', `<span style="font-family:'Courier New',monospace;font-size:0.78rem;color:var(--muted)">${dkimDomain}</span>`)
+        + row('DKIM', '❌ No record found — try a different selector', 'bad');
+      return;
+    }
+    const raw = d.Answer[0].data.replace(/^"|"$/g, '');
+    const tags = {};
+    raw.split(';').forEach(p => { const [k,...v] = p.trim().split('='); if(k) tags[k.trim()]=v.join('=').trim(); });
+    const pubKey = tags.p || '';
+    const keyPreview = pubKey.length > 64 ? pubKey.substring(0,64)+'…' : pubKey;
+    let html = row('Domain', host)
+      + row('Selector', selector)
+      + row('Record', `<span style="font-family:'Courier New',monospace;font-size:0.78rem;color:var(--muted)">${dkimDomain}</span>`)
+      + row('Status', '✅ DKIM record found', 'good');
+    if (tags.v) html += row('Version', tags.v);
+    if (tags.k) html += row('Key Type', tags.k.toUpperCase());
+    if (tags.h) html += row('Hash', tags.h);
+    if (pubKey) html += row('Public Key', `<span style="font-family:'Courier New',monospace;font-size:0.75rem;color:var(--muted);word-break:break-all">${keyPreview}</span>`);
+    html += row('TTL', `${d.Answer[0].TTL}s`);
+    el.className = 'result-box'; el.innerHTML = html;
+  } catch(e) { el.className='result-box'; el.innerHTML=row('Error','❌ '+e.message,'bad'); }
+}
+
+async function runAllEmailSec(host) {
+  const el = document.getElementById('emailSecResult');
+  el.className = 'result-box';
+  el.innerHTML = '<span class="spinner"></span> Running full email security scan…';
+
+  let html = `<div style="color:#00C8FF;font-weight:700;margin-bottom:16px;font-size:0.9rem">Full Email Security Scan: ${host}</div>`;
+
+  // MX
+  html += sectionHead('📬', 'MX Records');
+  try {
+    const d = await dnsQuery(host, 'MX');
+    if (!d.Answer?.length) {
+      html += row('MX', '❌ No MX records', 'bad');
+    } else {
+      const sorted = [...d.Answer].sort((a,b) => parseInt(a.data)-parseInt(b.data));
+      sorted.forEach((a,i) => {
+        const parts = a.data.split(' ');
+        const srv = parts.slice(1).join(' ').replace(/\.$/, '');
+        html += row(`Server ${i+1}`, `<span style="color:var(--warning);margin-right:8px">Priority ${parts[0]}</span>${srv}`);
+      });
+    }
+  } catch { html += row('MX', '⚠️ Query failed', 'warn'); }
+
+  // SPF
+  html += sectionHead('🔐', 'SPF Record');
+  try {
+    const d = await dnsQuery(host, 'TXT');
+    const spf = d.Answer?.find(a => a.data.includes('v=spf1'));
+    if (!spf) {
+      html += row('SPF', '❌ No SPF record found', 'bad');
+    } else {
+      const raw = spf.data.replace(/^"|"$/g, '');
+      const policy = raw.match(/-all|~all|\?all|\+all/)?.[0];
+      const pMap = { '-all':'✅ Hard Fail', '~all':'⚠️ Soft Fail', '?all':'⚠️ Neutral', '+all':'❌ Pass All (dangerous)' };
+      html += row('Status', '✅ SPF found', 'good');
+      if (policy) html += row('Policy', pMap[policy] || policy, policy==='-all'?'good':policy==='~all'||policy==='?all'?'warn':'bad');
+      html += row('Record', `<span style="font-family:'Courier New',monospace;font-size:0.76rem;color:var(--muted);word-break:break-all">${raw}</span>`);
+    }
+  } catch { html += row('SPF', '⚠️ Query failed', 'warn'); }
+
+  // DMARC
+  html += sectionHead('🛡️', 'DMARC Policy');
+  try {
+    const d = await dnsQuery('_dmarc.' + host, 'TXT');
+    if (!d.Answer?.length) {
+      html += row('DMARC', '❌ No DMARC record found', 'bad');
+    } else {
+      const raw = d.Answer[0].data.replace(/^"|"$/g, '');
+      const tags = {};
+      raw.split(';').forEach(p => { const [k,v] = p.trim().split('='); if(k&&v) tags[k.trim()]=v.trim(); });
+      const pMap = { 'none':'⚠️ None (monitoring only)', 'quarantine':'🔵 Quarantine', 'reject':'✅ Reject (recommended)' };
+      html += row('Status', '✅ DMARC found', 'good');
+      html += row('Policy', pMap[tags.p] || tags.p || '—', tags.p==='reject'?'good':tags.p==='none'?'warn':'');
+      if (tags.rua) html += row('Reports', `<span style="word-break:break-all">${tags.rua}</span>`);
+      html += row('Record', `<span style="font-family:'Courier New',monospace;font-size:0.76rem;color:var(--muted);word-break:break-all">${raw}</span>`);
+    }
+  } catch { html += row('DMARC', '⚠️ Query failed', 'warn'); }
+
+  // DKIM
+  const selector = document.getElementById('emailDkimSelector').value.trim();
+  if (selector) {
+    html += sectionHead('🔑', `DKIM (selector: ${selector})`);
+    try {
+      const dkimDomain = `${selector}._domainkey.${host}`;
+      const d = await dnsQuery(dkimDomain, 'TXT');
+      if (!d.Answer?.length) {
+        html += row('DKIM', `❌ No record for selector "${selector}"`, 'bad');
+      } else {
+        const raw = d.Answer[0].data.replace(/^"|"$/g, '');
+        const tags = {};
+        raw.split(';').forEach(p => { const [k,...v] = p.trim().split('='); if(k) tags[k.trim()]=v.join('=').trim(); });
+        html += row('Status', '✅ DKIM found', 'good');
+        if (tags.k) html += row('Key Type', tags.k.toUpperCase());
+        const pub = tags.p || '';
+        if (pub) html += row('Public Key', `<span style="font-family:'Courier New',monospace;font-size:0.75rem;color:var(--muted)">${pub.substring(0,64)}…</span>`);
+      }
+    } catch { html += row('DKIM', '⚠️ Query failed', 'warn'); }
+  } else {
+    html += sectionHead('🔑', 'DKIM');
+    html += row('DKIM', 'ℹ️ Enter a selector above to check DKIM', '');
+  }
+
+  el.innerHTML = html;
+}
+
+// ── Multi-host ping ───────────────────────────────────────────────────────────
+// ── DKIM Checker ──────────────────────────────────────────────────────────────
+// ── Multi-host ping ───────────────────────────────────────────────────────────
+async function runMultiPing() {
+  const hosts = [
+    {name:'Google', url:'google.com'}, {name:'Cloudflare', url:'cloudflare.com'},
+    {name:'OpenDNS', url:'opendns.com'}, {name:'Quad9', url:'quad9.net'},
+    {name:'Amazon AWS', url:'aws.amazon.com'}, {name:'Microsoft', url:'microsoft.com'},
+  ];
+  const container = document.getElementById('multiPingResults');
+  container.innerHTML = '';
+  const cards = {};
+  hosts.forEach(h => {
+    const card = document.createElement('div');
+    card.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center';
+    card.innerHTML = `<div style="font-size:0.82rem;font-weight:600;color:var(--muted);margin-bottom:6px">${h.name}</div>
+      <div id="mp_${h.name}" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--muted)">…</div>
+      <div style="font-size:0.7rem;color:var(--muted)">ms</div>`;
+    container.appendChild(card);
+  });
+  await Promise.all(hosts.map(async h => {
+    try {
+      const t0 = performance.now();
+      await fetch(`https://${h.url}?_=${Date.now()}`, {mode:'no-cors',cache:'no-cache'});
+      const ms = Math.round(performance.now()-t0);
+      const col = ms<50?'var(--green)':ms<150?'var(--warning)':'var(--danger)';
+      document.getElementById(`mp_${h.name}`).style.color = col;
+      document.getElementById(`mp_${h.name}`).textContent = ms;
+    } catch {
+      document.getElementById(`mp_${h.name}`).textContent = 'X';
+      document.getElementById(`mp_${h.name}`).style.color = 'var(--danger)';
+    }
+  }));
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadMyIp();
+</script>
+
+</body>
+</html>

@@ -1088,6 +1088,7 @@ footer a:hover { text-decoration: underline; }
         <div class="ss-tabs" style="margin-bottom:20px">
           <button class="ss-tab active" onclick="switchSsTab(this,'ss-ocf')">&#x26A1; OneClickFix</button>
           <button class="ss-tab" onclick="switchSsTab(this,'ss-pc')">&#x1F5C2;&#xFE0F; ProfileCleaner</button>
+          <button class="ss-tab" onclick="switchSsTab(this,'ss-ni')">&#x1F310; NetworkInfo</button>
         </div>
         <div id="ss-ocf" class="ss-content">
           <div class="ss-grid">
@@ -1110,6 +1111,22 @@ footer a:hover { text-decoration: underline; }
             <div class="ss-card" onclick="openLightbox('profilecleaner-screenshot1.jpg','ProfileCleaner')">
               <div class="ss-img-wrap"><img src="profilecleaner-screenshot1.jpg" alt="ProfileCleaner" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
               <div class="ss-caption">Profile List &#x2014; All user profiles colour coded by activity</div>
+            </div>
+          </div>
+        </div>
+        <div id="ss-ni" class="ss-content" style="display:none">
+          <div class="ss-grid">
+            <div class="ss-card" onclick="openLightbox('networkinfo-screenshot1.jpg','NetworkInfo — full network dashboard')">
+              <div class="ss-img-wrap"><img src="networkinfo-screenshot1.jpg" alt="NetworkInfo dashboard" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Dashboard &#x2014; Public IP, gateway, DNS &amp; adapters</div>
+            </div>
+            <div class="ss-card" onclick="openLightbox('networkinfo-screenshot2.jpg','NetworkInfo — ping test and port checker')">
+              <div class="ss-img-wrap"><img src="networkinfo-screenshot2.jpg" alt="NetworkInfo ping" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Ping Test &#x2014; Bar chart with avg, min, max &amp; loss</div>
+            </div>
+            <div class="ss-card" onclick="openLightbox('networkinfo-screenshot3.jpg','NetworkInfo — traceroute and DNS lookup')">
+              <div class="ss-img-wrap"><img src="networkinfo-screenshot3.jpg" alt="NetworkInfo traceroute" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Traceroute &amp; DNS Lookup &#x2014; Full IT diagnostics</div>
             </div>
           </div>
         </div>
@@ -1143,6 +1160,7 @@ footer a:hover { text-decoration: underline; }
         <div class="how-tabs" style="margin-bottom:0">
           <button class="how-tab active" onclick="switchTab(this,'tab-ocf')">&#x26A1; OneClickFix</button>
           <button class="how-tab" onclick="switchTab(this,'tab-pc')">&#x1F5C2;&#xFE0F; ProfileCleaner</button>
+          <button class="how-tab" onclick="switchTab(this,'tab-ni')">&#x1F310; NetworkInfo</button>
         </div>
         <div id="tab-ocf" class="how-tab-content">
           <div class="steps-row">
@@ -1158,6 +1176,14 @@ footer a:hover { text-decoration: underline; }
             <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and run as administrator. Admin rights needed to read and delete profiles.</p></div>
             <div class="step"><div class="step-num">03</div><h3>Review Profiles</h3><p>Profiles appear colour coded. Filter to find inactive ones.</p></div>
             <div class="step"><div class="step-num">04</div><h3>Delete Safely</h3><p>Click Delete. Confirmation appears first &#x2014; your current account is always protected.</p></div>
+          </div>
+        </div>
+        <div id="tab-ni" class="how-tab-content" style="display:none">
+          <div class="steps-row">
+            <div class="step"><div class="step-num">01</div><h3>Download</h3><p>Download NetworkInfo.exe &#x2014; a single file, nothing to install. Works on Windows 10 and 11.</p></div>
+            <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and run as administrator. Admin rights needed to read network adapter and WiFi details.</p></div>
+            <div class="step"><div class="step-num">03</div><h3>Auto Scan</h3><p>NetworkInfo scans automatically on launch &#x2014; public IP, adapters, gateway, DNS and WiFi all shown instantly.</p></div>
+            <div class="step"><div class="step-num">04</div><h3>Use the Tools</h3><p>Run ping, traceroute, port checker, DNS lookup and speed test using the interactive panels on the dashboard.</p></div>
           </div>
         </div>
       </div>

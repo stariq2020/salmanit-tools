@@ -181,9 +181,9 @@ footer a{color:var(--green);text-decoration:none}
 
     <button class="connect-btn" id="connectBtn" onclick="signIn()">
       <svg width="20" height="20" viewBox="0 0 21 21" fill="currentColor"><path d="M10.5 0C4.7 0 0 4.7 0 10.5S4.7 21 10.5 21 21 16.3 21 10.5 16.3 0 10.5 0zm-1 14.5H6v-7h3.5v7zm0-8.5H6V3.5h3.5V6zm5 8.5H11v-7h3.5v7zm0-8.5H11V3.5h3.5V6z"/></svg>
-      Connect with Microsoft 365
+      Sign in with Microsoft 365
     </button>
-    <div class="connect-note">🔒 Read-only access · Nothing is modified · No data stored on our servers</div>
+    <div class="connect-note">🔒 Read-only access · You will be redirected to Microsoft to sign in · No data stored on our servers</div>
   </div>
 
   <!-- Status bar (shown after login) -->
@@ -289,35 +289,18 @@ let currentAccount = null;
 async function signIn() {
   try {
     document.getElementById('connectBtn').disabled = true;
-    document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Connecting…';
-
-    console.log('MSAL: starting loginPopup');
-    const result = await msalInstance.loginPopup({
+    document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Redirecting…';
+    sessionStorage.setItem('m365_signing_in', '1');
+    await msalInstance.loginRedirect({
       scopes: SCOPES,
       prompt: 'select_account',
       redirectUri: 'https://salmanittools.co.uk/m365-scan.html'
     });
-
-    console.log('MSAL: loginPopup result:', result);
-
-    if (result && result.account) {
-      currentAccount = result.account;
-      accessToken    = result.accessToken;
-      console.log('MSAL: signed in as', currentAccount.username);
-      onSignedIn();
-    } else {
-      console.warn('MSAL: no account in result', result);
-      showError('Sign-in completed but no account returned. Please try again.');
-      document.getElementById('connectBtn').disabled = false;
-      document.getElementById('connectBtn').innerHTML = '🔐 Connect with Microsoft 365';
-    }
   } catch(e) {
     console.error('MSAL error:', e);
     document.getElementById('connectBtn').disabled = false;
     document.getElementById('connectBtn').innerHTML = '🔐 Connect with Microsoft 365';
-    if (e.errorCode !== 'user_cancelled') {
-      showError('Sign-in failed: ' + (e.errorCode || e.message || JSON.stringify(e)));
-    }
+    showError('Sign-in failed: ' + (e.errorCode || e.message || e));
   }
 }
 
@@ -329,28 +312,23 @@ async function getToken() {
     });
     accessToken = result.accessToken;
     return accessToken;
-  } catch {
-    const result = await msalInstance.acquireTokenPopup({
+  } catch(e) {
+    console.warn('Silent token failed, trying redirect:', e);
+    await msalInstance.acquireTokenRedirect({
       scopes: SCOPES,
       account: currentAccount,
       redirectUri: 'https://salmanittools.co.uk/m365-scan.html'
     });
-    accessToken = result.accessToken;
-    return accessToken;
   }
 }
 
 function signOut() {
-  msalInstance.logoutPopup({ account: currentAccount });
+  msalInstance.logoutRedirect({
+    account: currentAccount,
+    postLogoutRedirectUri: 'https://salmanittools.co.uk/m365-scan.html'
+  });
   accessToken = null;
   currentAccount = null;
-  document.getElementById('connectCard').style.display = 'block';
-  document.getElementById('statusBar').style.display = 'none';
-  document.getElementById('scanBtn').style.display = 'none';
-  document.getElementById('resultsWrap').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 'none';
-  document.getElementById('connectBtn').disabled = false;
-  document.getElementById('connectBtn').innerHTML = '🔐 Connect with Microsoft 365';
 }
 
 function onSignedIn() {
@@ -1008,22 +986,27 @@ async function exportPDF() {
 window.addEventListener('load', async () => {
   try {
     await msalInstance.initialize();
+    const result = await msalInstance.handleRedirectPromise();
 
-    // If opened as popup redirect target — handle and close
-    if (window.opener && window.opener !== window) {
-      await msalInstance.handleRedirectPromise();
-      window.close();
+    if (result && result.account) {
+      // Coming back from Microsoft login redirect
+      currentAccount = result.account;
+      accessToken    = result.accessToken;
+      console.log('MSAL: redirect sign-in complete:', currentAccount.username);
+      onSignedIn();
       return;
     }
 
-    // Main page — check if already signed in
+    // Check if already signed in from a previous session
     const accounts = msalInstance.getAllAccounts();
     if (accounts.length > 0) {
       currentAccount = accounts[0];
+      console.log('MSAL: existing session found:', currentAccount.username);
       onSignedIn();
     }
   } catch(e) {
-    console.warn('MSAL init:', e);
+    console.error('MSAL load error:', e);
+    showError('Authentication error: ' + (e.errorCode || e.message));
   }
 });
 </script>

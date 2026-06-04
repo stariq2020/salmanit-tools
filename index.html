@@ -230,6 +230,123 @@ nav {
 }
 .stat-l { font-size: 0.72rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .08em; }
 
+/* ── ACCORDIONS ── */
+.accordion-wrap {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+}
+.accordion-btn {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px;
+  background: transparent;
+  border: none; cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem; font-weight: 600;
+  color: rgba(240,246,255,0.85);
+  text-align: left;
+  transition: background .2s, color .2s;
+  gap: 12px;
+}
+.accordion-btn:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--green);
+}
+.accordion-btn.open {
+  color: var(--green);
+  border-bottom: 1px solid var(--border);
+}
+.acc-arrow {
+  font-size: 1rem; color: var(--muted);
+  transition: transform .3s;
+  flex-shrink: 0;
+}
+.accordion-btn.open .acc-arrow { transform: rotate(180deg); color: var(--green); }
+.accordion-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s ease, padding .3s ease;
+  padding: 0 22px;
+}
+.accordion-body.open {
+  max-height: 2000px;
+  padding: 24px 22px;
+}
+
+/* ── COLLAPSIBLE TOOL CARDS ── */
+.tc-top {
+  display: flex; gap: 16px; align-items: flex-start;
+  margin-bottom: 16px;
+}
+.tc-actions {
+  display: flex; gap: 10px; align-items: center;
+}
+.tc-details {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s ease;
+}
+.tc-details.open { max-height: 400px; }
+.tc-divider {
+  height: 1px; background: var(--border);
+  margin: 16px 0;
+}
+.learn-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem; font-weight: 600;
+  padding: 10px 18px; border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.learn-btn:hover { border-color: var(--green); color: var(--green); }
+.learn-btn.open { border-color: var(--green); color: var(--green); }
+.learn-arrow { transition: transform .3s; display: inline-block; }
+.learn-btn.open .learn-arrow { transform: rotate(180deg); }
+
+/* ── CATEGORY HEADERS ── */
+.cat-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px; padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.cat-icon { font-size: 1.8rem; }
+.cat-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: .05em;
+  color: var(--white);
+}
+.cat-sub { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+
+/* ── FILTER TABS ── */
+.filter-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.filter-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem; font-weight: 600;
+  padding: 9px 20px; border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted); cursor: pointer;
+  transition: all .2s;
+}
+.filter-btn.active {
+  background: var(--green); color: var(--ink);
+  border-color: var(--green);
+}
+.filter-btn:hover:not(.active) {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--white);
+}
+
 /* ── TOOLS ── */
 .tools-section {
   padding: 100px 24px;
@@ -779,8 +896,6 @@ footer a:hover { text-decoration: underline; }
   <a class="nav-logo" href="#">⚡ SALMANIT<span class="dot">.</span>TOOLS</a>
   <div class="nav-links">
     <a href="#tools">Tools</a>
-    <a href="#screenshots">Screenshots</a>
-    <a href="#how">How It Works</a>
     <a href="#faq">FAQ</a>
     <a href="#" class="nav-contact" onclick="openModal(event)">Contact</a>
   </div>
@@ -794,15 +909,15 @@ footer a:hover { text-decoration: underline; }
 
   <div class="hero-eyebrow">
     <span class="eyebrow-dot"></span>
-    Free Windows Utilities — Built by IT Professionals
+    Free Tools for Everyone — Built by IT Professionals
   </div>
 
   <h1>
-    FIX YOUR PC<br>
-    <span class="glow-text">IN SECONDS</span>
+    TOOLS THAT<br>
+    <span class="glow-text">JUST WORK</span>
   </h1>
 
-  <p class="hero-sub">Professional-grade Windows tools. No installation. No technical knowledge needed. Just download, run, and let it work.</p>
+  <p class="hero-sub">Windows utilities, online tools and more. Free, no signup, no nonsense. Built by IT professionals for everyone.</p>
 
   <div class="hero-cta">
     <a class="btn-primary" href="#tools">
@@ -811,12 +926,12 @@ footer a:hover { text-decoration: underline; }
       </svg>
       Browse Tools
     </a>
-    <a class="btn-ghost" href="#how">How It Works →</a>
+    <a class="btn-ghost" href="#faq">Learn More →</a>
   </div>
 
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-n">2</div>
+      <div class="stat-n">4</div>
       <div class="stat-l">Tools Live</div>
     </div>
     <div class="stat">
@@ -837,148 +952,256 @@ footer a:hover { text-decoration: underline; }
 <!-- TOOLS -->
 <section id="tools" style="padding:100px 24px; max-width:1120px; margin:0 auto;">
   <div class="label-tag reveal">Our Tools</div>
-  <h2 class="section-h reveal">Download &amp; Run Instantly</h2>
-  <p class="section-p reveal">No installation required. Download, run as administrator, and let it do the work.</p>
+  <h2 class="section-h reveal">All Tools</h2>
+  <p class="section-p reveal">Free tools for everyone — Windows utilities, online tools and more. No signup, no cost.</p>
 
-  <div class="tools-grid">
+  <!-- Filter tabs -->
+  <div class="filter-tabs reveal">
+    <button class="filter-btn active" onclick="filterTools(this,'all')">All Tools</button>
+    <button class="filter-btn" onclick="filterTools(this,'windows')">🖥️ Windows Tools</button>
+    <button class="filter-btn" onclick="filterTools(this,'online')">🌐 Online Tools</button>
+  </div>
 
-    <!-- OneClickFix -->
-    <div class="tool-card reveal">
-      <div class="tool-icon-wrap">⚡</div>
-      <div class="tool-badge">● v1.7 — Latest Release</div>
-      <div class="tool-name">OneClickFix</div>
-      <div class="tool-desc">A complete PC optimiser that cleans, fixes, and speeds up your Windows machine in one click. Built for everyone — no tech knowledge needed.</div>
-      <ul class="tool-feats">
-        <li>Clears temp files, browser cache &amp; Recycle Bin</li>
-        <li>Fixes broken registry startup &amp; uninstall entries</li>
-        <li>Flushes DNS &amp; clears Windows Event Logs</li>
-        <li>SSD/HDD detection — handles defrag correctly</li>
-        <li>Windows Update &amp; Defender health check</li>
-        <li>Remote PC diagnostics via WinRM</li>
-        <li>PC Health Score out of 10</li>
-      </ul>
-      <div class="tool-meta-row">
-        <span class="meta-tag">🪟 Win 10 / 11</span>
-        <span class="meta-tag">⚡ No Install</span>
-        <span class="meta-tag">🔒 Free</span>
-        <span class="meta-tag">🖥️ 64-bit</span>
+  <!-- Category: Windows Tools -->
+  <div class="cat-header reveal" data-cat="windows">
+    <span class="cat-icon">🖥️</span>
+    <div>
+      <div class="cat-title">Windows Tools</div>
+      <div class="cat-sub">Download and run — no installation required</div>
+    </div>
+  </div>
+
+  <div class="tools-grid" id="grid-windows">
+
+    <!-- OneClickFix — collapsible -->
+    <div class="tool-card reveal" data-cat="windows">
+      <div class="tc-top">
+        <div class="tool-icon-wrap" style="flex-shrink:0">⚡</div>
+        <div style="flex:1">
+          <div class="tool-badge">● v1.7 — Latest</div>
+          <div class="tool-name" style="margin-bottom:6px">OneClickFix</div>
+          <div class="tool-desc">Fix, clean and optimise your Windows PC in one click. 17 automated checks — no tech knowledge needed.</div>
+        </div>
       </div>
-      <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/OneClickFix.exe">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/>
-        </svg>
-        Download OneClickFix.exe
-      </a>
+      <div class="tc-actions">
+        <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/OneClickFix.exe">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+          Download .exe
+        </a>
+        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
+      </div>
+      <div class="tc-details">
+        <div class="tc-divider"></div>
+        <ul class="tool-feats">
+          <li>Clears temp files, browser cache &amp; Recycle Bin</li>
+          <li>Fixes broken registry startup &amp; uninstall entries</li>
+          <li>Flushes DNS &amp; clears Windows Event Logs</li>
+          <li>SSD/HDD detection — handles defrag correctly</li>
+          <li>Windows Update &amp; Defender health check</li>
+          <li>Remote PC fix via WinRM</li>
+          <li>PC Health Score out of 10</li>
+        </ul>
+        <div class="tool-meta-row" style="margin-top:12px">
+          <span class="meta-tag">🪟 Win 10/11</span><span class="meta-tag">⚡ No Install</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">🖥️ 64-bit</span>
+        </div>
+      </div>
     </div>
 
-    <!-- ProfileCleaner — Live -->
-    <div class="tool-card reveal" style="animation-delay:.1s">
-      <div class="tool-icon-wrap">🗂️</div>
-      <div class="tool-badge">● v1.1 — Latest Release</div>
-      <div class="tool-name">ProfileCleaner</div>
-      <div class="tool-desc">Safely view and remove old Windows user profiles to free up disk space. Colour-coded, filterable, with bulk deletion — perfect for shared or managed machines.</div>
-      <ul class="tool-feats">
-        <li>Lists all profiles with last login date &amp; size</li>
-        <li>Colour coded — green (active), amber (30d+), red (180d+)</li>
-        <li>Filter by inactivity — 30 days, 90 days, 6 months, 1 year</li>
-        <li>Bulk select &amp; delete multiple profiles in one go</li>
-        <li>Confirmation prompt before every deletion</li>
-        <li>Skips current user &amp; system profiles automatically</li>
-        <li>Shows total space you could recover</li>
-      </ul>
-      <div class="tool-meta-row">
-        <span class="meta-tag">🪟 Win 10 / 11</span>
-        <span class="meta-tag">⚡ No Install</span>
-        <span class="meta-tag">🔒 Free</span>
-        <span class="meta-tag">🖥️ 64-bit</span>
+    <!-- ProfileCleaner — collapsible -->
+    <div class="tool-card reveal" data-cat="windows" style="animation-delay:.1s">
+      <div class="tc-top">
+        <div class="tool-icon-wrap" style="flex-shrink:0">🗂️</div>
+        <div style="flex:1">
+          <div class="tool-badge">● v2.4 — Latest</div>
+          <div class="tool-name" style="margin-bottom:6px">ProfileCleaner</div>
+          <div class="tool-desc">Safely remove old Windows user profiles to free up disk space. Colour-coded with bulk deletion support.</div>
+        </div>
       </div>
-      <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/ProfileCleaner.exe">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/>
-        </svg>
-        Download ProfileCleaner.exe
-      </a>
+      <div class="tc-actions">
+        <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/ProfileCleaner.exe">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+          Download .exe
+        </a>
+        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
+      </div>
+      <div class="tc-details">
+        <div class="tc-divider"></div>
+        <ul class="tool-feats">
+          <li>Lists all profiles with last login date &amp; size</li>
+          <li>Colour coded — green (active), amber (30d+), red (180d+)</li>
+          <li>Filter by inactivity — 30 days, 90 days, 6 months, 1 year</li>
+          <li>Bulk select &amp; delete multiple profiles in one go</li>
+          <li>Confirmation before every deletion</li>
+          <li>Skips current user &amp; system profiles automatically</li>
+        </ul>
+        <div class="tool-meta-row" style="margin-top:12px">
+          <span class="meta-tag">🪟 Win 10/11</span><span class="meta-tag">⚡ No Install</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">🖥️ 64-bit</span>
+        </div>
+      </div>
     </div>
 
   </div>
-</section>
 
-<!-- SCREENSHOTS -->
-<section class="screenshots-section" id="screenshots">
-  <div class="screenshots-inner">
-    <div class="label-tag reveal">See It In Action</div>
-    <h2 class="section-h reveal">What It Looks Like</h2>
-    <p class="section-p reveal">Real screenshots from our tools running on Windows 10 and 11. Click any image to view full size.</p>
+  <!-- Windows Tools — Accordions -->
+  <div class="win-accordions" data-cat="windows" style="margin-top:24px;display:flex;flex-direction:column;gap:10px">
 
-    <!-- Tab switcher -->
-    <div class="ss-tabs reveal">
-      <button class="ss-tab active" onclick="switchSsTab(this,'ss-ocf')">⚡ OneClickFix</button>
-      <button class="ss-tab" onclick="switchSsTab(this,'ss-pc')">🗂️ ProfileCleaner</button>
-    </div>
-
-    <!-- OneClickFix screenshots -->
-    <div id="ss-ocf" class="ss-content">
-      <div class="ss-grid">
-        <div class="ss-card reveal" onclick="openLightbox('oneclickfix-screenshot1.jpg','Main Screen — PC snapshot cards showing Disk Free, RAM Used, Last Reboot and Startup Apps')">
-          <div class="ss-img-wrap"><img src="oneclickfix-screenshot1.jpg" alt="OneClickFix main screen" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
-          <div class="ss-caption">Main Screen — PC snapshot at a glance</div>
+    <!-- Screenshots accordion -->
+    <div class="accordion-wrap">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>📸 &nbsp;See It In Action — Screenshots</span>
+        <span class="acc-arrow">&#x25BE;</span>
+      </button>
+      <div class="accordion-body">
+        <div class="ss-tabs" style="margin-bottom:20px">
+          <button class="ss-tab active" onclick="switchSsTab(this,'ss-ocf')">&#x26A1; OneClickFix</button>
+          <button class="ss-tab" onclick="switchSsTab(this,'ss-pc')">&#x1F5C2;&#xFE0F; ProfileCleaner</button>
         </div>
-        <div class="ss-card reveal" onclick="openLightbox('oneclickfix-screenshot2.jpg','Scan Results — Full fix report showing all 17 checks with health score')">
-          <div class="ss-img-wrap"><img src="oneclickfix-screenshot2.jpg" alt="OneClickFix scan results" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
-          <div class="ss-caption">Scan Results — Full fix report with health score</div>
+        <div id="ss-ocf" class="ss-content">
+          <div class="ss-grid">
+            <div class="ss-card" onclick="openLightbox('oneclickfix-screenshot1.jpg','Main Screen')">
+              <div class="ss-img-wrap"><img src="oneclickfix-screenshot1.jpg" alt="OneClickFix main" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Main Screen &#x2014; PC snapshot at a glance</div>
+            </div>
+            <div class="ss-card" onclick="openLightbox('oneclickfix-screenshot2.jpg','Scan Results')">
+              <div class="ss-img-wrap"><img src="oneclickfix-screenshot2.jpg" alt="OneClickFix results" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Scan Results &#x2014; Full fix report with health score</div>
+            </div>
+            <div class="ss-card" onclick="openLightbox('oneclickfix-screenshot3.jpg','Remote PC Fix')">
+              <div class="ss-img-wrap"><img src="oneclickfix-screenshot3.jpg" alt="OneClickFix remote" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Remote PC Fix &#x2014; Run fixes on any networked machine</div>
+            </div>
+          </div>
         </div>
-        <div class="ss-card reveal" onclick="openLightbox('oneclickfix-screenshot3.jpg','Remote PC Fix — Run fixes on any machine on your network remotely')">
-          <div class="ss-img-wrap"><img src="oneclickfix-screenshot3.jpg" alt="OneClickFix remote PC fix" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
-          <div class="ss-caption">Remote PC Fix — Run fixes on any networked machine</div>
+        <div id="ss-pc" class="ss-content" style="display:none">
+          <div class="ss-grid ss-grid-1">
+            <div class="ss-card" onclick="openLightbox('profilecleaner-screenshot1.jpg','ProfileCleaner')">
+              <div class="ss-img-wrap"><img src="profilecleaner-screenshot1.jpg" alt="ProfileCleaner" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
+              <div class="ss-caption">Profile List &#x2014; All user profiles colour coded by activity</div>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Remote PC info box -->
-      <div class="remote-info-box reveal">
-        <div class="remote-info-title">🌐 Remote PC Fix — How to set it up</div>
-        <p>OneClickFix can connect to any Windows machine on your network and run all 17 fixes remotely. Here's what you need:</p>
+    <!-- Remote Setup accordion -->
+    <div class="accordion-wrap">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>&#x1F310; &nbsp;Remote PC Fix &#x2014; How to set it up</span>
+        <span class="acc-arrow">&#x25BE;</span>
+      </button>
+      <div class="accordion-body">
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:20px">OneClickFix can connect to any Windows machine on your network and run all 17 fixes remotely.</p>
         <div class="remote-steps">
-          <div class="remote-step">
-            <div class="remote-step-num">1</div>
-            <div>
-              <strong>Enable WinRM on the remote PC</strong>
-              <code>Enable-PSRemoting -Force</code>
-              <span>Run this once in PowerShell as Administrator on the remote machine</span>
-            </div>
+          <div class="remote-step"><div class="remote-step-num">1</div><div><strong>Enable WinRM on the remote PC</strong><code>Enable-PSRemoting -Force</code><span>Run once in PowerShell as Administrator on the remote machine</span></div></div>
+          <div class="remote-step"><div class="remote-step-num">2</div><div><strong>Allow WinRM through the firewall</strong><code>netsh advfirewall firewall add rule name="WinRM" dir=in action=allow protocol=TCP localport=5985</code><span>Only needed if Windows Firewall is blocking port 5985</span></div></div>
+          <div class="remote-step"><div class="remote-step-num">3</div><div><strong>Enter credentials in OneClickFix</strong><code>Computer Name or IP | DOMAIN\username | Password</code><span>Use domain admin credentials</span></div></div>
+          <div class="remote-step"><div class="remote-step-num">4</div><div><strong>Click Run Remote Fix</strong><span>OneClickFix runs all fixes silently and returns full results in 2-3 minutes</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works accordion -->
+    <div class="accordion-wrap">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>&#x1F4CB; &nbsp;How It Works &#x2014; Step by Step</span>
+        <span class="acc-arrow">&#x25BE;</span>
+      </button>
+      <div class="accordion-body">
+        <div class="how-tabs" style="margin-bottom:0">
+          <button class="how-tab active" onclick="switchTab(this,'tab-ocf')">&#x26A1; OneClickFix</button>
+          <button class="how-tab" onclick="switchTab(this,'tab-pc')">&#x1F5C2;&#xFE0F; ProfileCleaner</button>
+        </div>
+        <div id="tab-ocf" class="how-tab-content">
+          <div class="steps-row">
+            <div class="step"><div class="step-num">01</div><h3>Download</h3><p>Click download. A single .exe file saved to your PC. No installer, no bloatware.</p></div>
+            <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and choose "Run as administrator" so it has the permissions it needs.</p></div>
+            <div class="step"><div class="step-num">03</div><h3>Click Fix</h3><p>Hit the big green button. All 17 checks run automatically in one go.</p></div>
+            <div class="step"><div class="step-num">04</div><h3>Review Results</h3><p>See what was fixed, your PC Health Score out of 10, and recommendations.</p></div>
           </div>
-          <div class="remote-step">
-            <div class="remote-step-num">2</div>
-            <div>
-              <strong>Allow WinRM through the firewall</strong>
-              <code>netsh advfirewall firewall add rule name="WinRM" dir=in action=allow protocol=TCP localport=5985</code>
-              <span>Only needed if Windows Firewall is blocking port 5985</span>
-            </div>
-          </div>
-          <div class="remote-step">
-            <div class="remote-step-num">3</div>
-            <div>
-              <strong>Enter credentials in OneClickFix</strong>
-              <code>Computer Name or IP &nbsp;|&nbsp; DOMAIN\username &nbsp;|&nbsp; Password</code>
-              <span>Use domain admin credentials — e.g. CONTOSO\admin or just the local admin account</span>
-            </div>
-          </div>
-          <div class="remote-step">
-            <div class="remote-step-num">4</div>
-            <div>
-              <strong>Click Run Remote Fix</strong>
-              <span>OneClickFix copies itself to the remote machine, runs all fixes silently, and returns the full results — takes 2-3 minutes</span>
-            </div>
+        </div>
+        <div id="tab-pc" class="how-tab-content" style="display:none">
+          <div class="steps-row">
+            <div class="step"><div class="step-num">01</div><h3>Download</h3><p>Download ProfileCleaner.exe &#x2014; nothing to install. Works on Windows 10 and 11.</p></div>
+            <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and run as administrator. Admin rights needed to read and delete profiles.</p></div>
+            <div class="step"><div class="step-num">03</div><h3>Review Profiles</h3><p>Profiles appear colour coded. Filter to find inactive ones.</p></div>
+            <div class="step"><div class="step-num">04</div><h3>Delete Safely</h3><p>Click Delete. Confirmation appears first &#x2014; your current account is always protected.</p></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ProfileCleaner screenshots -->
-    <div id="ss-pc" class="ss-content" style="display:none">
-      <div class="ss-grid ss-grid-1">
-        <div class="ss-card reveal" onclick="openLightbox('profilecleaner-screenshot1.jpg','ProfileCleaner — All user profiles listed with colour coding, size and last login date')">
-          <div class="ss-img-wrap"><img src="profilecleaner-screenshot1.jpg" alt="ProfileCleaner profile list" loading="lazy"/><div class="ss-zoom">🔍 Click to enlarge</div></div>
-          <div class="ss-caption">Profile List — All user profiles colour coded by activity</div>
+  </div>
+
+    <!-- Category: Online Tools -->
+  <div class="cat-header reveal" data-cat="online" style="margin-top:48px">
+    <span class="cat-icon">🌐</span>
+    <div>
+      <div class="cat-title">Online Tools</div>
+      <div class="cat-sub">Free web tools — works in your browser, nothing to install</div>
+    </div>
+  </div>
+
+  <div class="tools-grid" id="grid-online">
+
+    <!-- QR Generator — collapsible -->
+    <div class="tool-card reveal" data-cat="online">
+      <div class="tc-top">
+        <div class="tool-icon-wrap" style="flex-shrink:0">▦</div>
+        <div style="flex:1">
+          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
+          <div class="tool-name" style="margin-bottom:6px">QR Code Generator</div>
+          <div class="tool-desc">Create QR codes instantly for URLs, text, email, phone and WiFi. Download as PNG or SVG.</div>
+        </div>
+      </div>
+      <div class="tc-actions">
+        <a class="dl-btn" href="qr-generator.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Open Tool
+        </a>
+        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
+      </div>
+      <div class="tc-details">
+        <div class="tc-divider"></div>
+        <ul class="tool-feats">
+          <li>Supports URL, text, email, phone &amp; WiFi</li>
+          <li>Custom colours and size</li>
+          <li>Download as PNG or SVG</li>
+          <li>Works entirely in your browser — nothing sent anywhere</li>
+        </ul>
+        <div class="tool-meta-row" style="margin-top:12px">
+          <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password Generator — collapsible -->
+    <div class="tool-card reveal" data-cat="online" style="animation-delay:.1s">
+      <div class="tc-top">
+        <div class="tool-icon-wrap" style="flex-shrink:0">🔐</div>
+        <div style="flex:1">
+          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
+          <div class="tool-name" style="margin-bottom:6px">Password Generator</div>
+          <div class="tool-desc">Generate strong, secure passwords instantly. Nothing stored or sent anywhere — 100% browser-based.</div>
+        </div>
+      </div>
+      <div class="tc-actions">
+        <a class="dl-btn" href="password-generator.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Open Tool
+        </a>
+        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
+      </div>
+      <div class="tc-details">
+        <div class="tc-divider"></div>
+        <ul class="tool-feats">
+          <li>Customisable length up to 64 characters</li>
+          <li>Toggle uppercase, lowercase, numbers &amp; symbols</li>
+          <li>Password strength indicator</li>
+          <li>Generate up to 10 passwords at once</li>
+          <li>Quick presets — Easy, Strong, Very Strong</li>
+        </ul>
+        <div class="tool-meta-row" style="margin-top:12px">
+          <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>
         </div>
       </div>
     </div>
@@ -994,74 +1217,6 @@ footer a:hover { text-decoration: underline; }
     <div class="lightbox-caption" id="lightboxCaption"></div>
   </div>
 </div>
-
-<!-- HOW IT WORKS -->
-<section class="how-section" id="how">
-  <div class="how-inner">
-    <div class="label-tag reveal">How It Works</div>
-    <h2 class="section-h reveal">Simple for Everyone</h2>
-    <p class="section-p reveal">No IT degree required. Pick a tool below and follow the steps.</p>
-
-    <!-- Tool tabs -->
-    <div class="how-tabs reveal">
-      <button class="how-tab active" onclick="switchTab(this,'tab-ocf')">⚡ OneClickFix</button>
-      <button class="how-tab" onclick="switchTab(this,'tab-pc')">🗂️ ProfileCleaner</button>
-    </div>
-
-    <!-- OneClickFix steps -->
-    <div id="tab-ocf" class="how-tab-content">
-      <div class="steps-row">
-        <div class="step">
-          <div class="step-num">01</div>
-          <h3>Download</h3>
-          <p>Click the download button. A single .exe file is saved to your PC. No installer, no bloatware.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <h3>Run as Admin</h3>
-          <p>Right-click the file and choose "Run as administrator" so it has the permissions it needs.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <h3>Click Fix</h3>
-          <p>Hit the big green "Fix My Computer" button. All 17 checks run automatically in one go.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">04</div>
-          <h3>Review Results</h3>
-          <p>See exactly what was fixed, your PC Health Score out of 10, and any remaining recommendations.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ProfileCleaner steps -->
-    <div id="tab-pc" class="how-tab-content" style="display:none">
-      <div class="steps-row">
-        <div class="step">
-          <div class="step-num">01</div>
-          <h3>Download</h3>
-          <p>Download ProfileCleaner.exe — a single file, nothing to install. Works on Windows 10 and 11.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <h3>Run as Admin</h3>
-          <p>Right-click and "Run as administrator." Admin rights are needed to read and delete user profiles.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <h3>Review Profiles</h3>
-          <p>All Windows user profiles appear colour coded. Use the filters to find inactive ones — 30 days, 6 months, 1 year.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">04</div>
-          <h3>Delete Safely</h3>
-          <p>Click Delete on any profile you want to remove. A confirmation appears first — your current account is always protected.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
 
 <!-- FAQ -->
 <section class="faq-section" id="faq">
@@ -1265,6 +1420,33 @@ footer a:hover { text-decoration: underline; }
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Accordion
+  function toggleAccordion(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+
+  // ── Collapsible tool details
+  function toggleDetails(btn) {
+    const details = btn.closest('.tool-card').querySelector('.tc-details');
+    const isOpen  = details.classList.contains('open');
+    details.classList.toggle('open');
+    btn.classList.toggle('open');
+    btn.querySelector('.learn-arrow').style.transform = isOpen ? '' : 'rotate(180deg)';
+    btn.childNodes[0].textContent = isOpen ? 'Details ' : 'Hide ';
+  }
+
+  // ── Tool category filter
+  function filterTools(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('[data-cat]').forEach(el => {
+      el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
+    });
+  }
 
   // ── Lightbox
   function openLightbox(src, caption) {

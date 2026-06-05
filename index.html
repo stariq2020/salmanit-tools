@@ -1515,32 +1515,61 @@ footer a:hover { text-decoration: underline; }
 <section class="faq-section" id="faq">
   <div class="label-tag reveal">FAQ</div>
   <h2 class="section-h reveal">Common Questions</h2>
-  <p class="section-p reveal">Everything you need to know before downloading.</p>
+  <p class="section-p reveal">Security, privacy and usage questions — everything you need to know before using any of the tools.</p>
 
   <div class="faq-wrap">
+    <!-- Windows Tools -->
     <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Is this safe to run on my PC? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Yes. Our tools only perform safe, well-known Windows maintenance — clearing temp files, flushing DNS, checking registry entries. We never touch system files. Source code is available on GitHub for full transparency.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">Is it safe to run the Windows tools on my PC? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Yes. The tools only perform safe, well-known Windows maintenance — clearing temp files, flushing DNS, checking startup entries. They never touch system files or make permanent changes. Source code is available on GitHub for full transparency.</div>
     </div>
     <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Why does Windows show a warning? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Windows warns about any .exe that isn't signed by a paid certificate. This is normal for independent tools. Click "More info" then "Run anyway." The tool is completely safe.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">Why does Windows show a security warning? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Windows warns about any .exe that isn't signed by a paid code-signing certificate. This is normal for independent tools. Click "More info" then "Run anyway." The tool is completely safe — and the source code is on GitHub if you want to verify.</div>
     </div>
     <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Does it work on Windows 10 and 11? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Yes, both are fully supported. OneClickFix will also warn you if your machine is on Windows 10, which reached End of Support in October 2025.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">Do the Windows tools work on Windows 10 and 11? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Yes, both are fully supported. OneClickFix will also flag if your machine is on Windows 10, which reached End of Support in October 2025.</div>
     </div>
     <div class="faq-item reveal">
       <div class="faq-q" onclick="toggleFaq(this)">Do I need to install anything? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">No. Just download and run the .exe. Nothing is installed. Delete the file when you're done if you like.</div>
+      <div class="faq-a">No. Just download and run the .exe file. Nothing is installed on your system. Delete the file when you're done if you prefer.</div>
     </div>
     <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Does it send any data anywhere? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">No. Everything runs locally on your machine. The only external connection is checking Windows Updates — which goes directly to Microsoft, not us.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">Do the Windows tools send any data anywhere? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">No. Everything runs locally on your machine. The only external connection is when checking for Windows Updates — which goes directly to Microsoft servers, not ours.</div>
+    </div>
+
+    <!-- M365 Scanner -->
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">Is the M365 Security Scanner safe to use? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Yes. The scanner uses Microsoft's official OAuth authentication — the same login flow used by Microsoft's own admin tools. You sign in directly with Microsoft, not through our site. We never see or store your password.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">What permissions does the M365 scanner request? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Read-only permissions only — Users, Directory, MFA methods, Sign-in logs, Conditional Access policies, Secure Score, SharePoint settings and Intune devices. It cannot make any changes to your tenant. You can review and revoke permissions at any time in your Azure AD enterprise applications.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">Does the scanner store or send my tenant data anywhere? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">No. The scanner runs entirely in your browser. Data is fetched directly from Microsoft Graph API to your browser and never passes through our servers. Nothing is stored, logged or transmitted anywhere else. Close the tab and the data is gone.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">Do I need to be a Global Admin to use the scanner? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">You need an account with sufficient read permissions. Global Admin works, but a Security Reader or Global Reader role is enough for most checks. Some sections like Intune devices may need additional roles assigned.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I revoke the scanner's access after use? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Go to Microsoft Entra ID (Azure AD) → Enterprise Applications → search for "SalmanIT M365 Scanner" → click Delete or Revoke permissions. This immediately removes all access. You can also click Sign Out in the scanner itself which clears the session token.</div>
+    </div>
+
+    <!-- Online Tools -->
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">Do the online tools upload my data to a server? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">No. All online tools — including the Image Compressor, QR Generator and Password Generator — run entirely in your browser. Nothing is uploaded or transmitted. Your files and data never leave your device.</div>
     </div>
     <div class="faq-item reveal">
       <div class="faq-q" onclick="toggleFaq(this)">Who built these tools? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Built by Salman Tariq, a Senior IT Engineer with over 15 years of experience across Microsoft, VMware and Citrix technologies. These tools are built to solve real-world IT challenges encountered throughout a career in enterprise IT — and shared freely for IT professionals and everyday users alike.</div>
+      <div class="faq-a">Built by Salman Tariq, a Senior IT Engineer with over 15 years of experience across Microsoft, VMware and Citrix technologies. These tools are built to solve real-world IT challenges and shared freely for IT professionals and everyday users alike.</div>
     </div>
   </div>
 </section>

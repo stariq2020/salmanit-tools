@@ -138,8 +138,8 @@ footer a{color:var(--green);text-decoration:none}
       <span class="perm-tag">Conditional Access</span><span class="perm-tag">Secure Score</span>
       <span class="perm-tag">SharePoint</span><span class="perm-tag">Devices</span>
     </div>
-    <button class="connect-btn" id="connectBtn" onclick="if(window.signIn){window.signIn()}else{document.getElementById('errorCard').style.display='block';document.getElementById('errorMsg').textContent='Still loading, please wait a moment and try again.'}" disabled>
-      <span class="spinner"></span> &nbsp;Loading…
+    <button class="connect-btn" id="connectBtn" onclick="if(window.signIn){window.signIn()}else{document.getElementById('errorCard').style.display='block';document.getElementById('errorMsg').textContent='Still loading, please wait a moment and try again.'}">
+      🔐 &nbsp;Sign in with Microsoft 365
     </button>
     <div class="connect-note">🔒 You will be redirected to Microsoft to sign in · Read-only access · No data stored on our servers</div>
   </div>
@@ -206,21 +206,42 @@ function loadScript(src) {
 
 window.addEventListener('load', async function() {
   try {
-    // Show loading state if returning from redirect (URL has auth code)
-    if (window.location.hash || window.location.search.includes('code=')) {
+    // Only show loading spinner if returning from Microsoft redirect
+    if (window.location.search.includes('code=') || window.location.hash.includes('code=')) {
       document.getElementById('connectBtn').disabled = true;
       document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Completing sign-in…';
     }
 
+    let msalLoaded = false;
+    // Try primary CDN
     try {
       await loadScript('https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js');
-    } catch {
-      await loadScript('https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js');
+      msalLoaded = true;
+    } catch(e1) {
+      console.warn('Primary CDN failed:', e1);
     }
+    // Try fallback CDN
+    if (!msalLoaded) {
+      try {
+        await loadScript('https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js');
+        msalLoaded = true;
+      } catch(e2) {
+        console.warn('Fallback CDN failed:', e2);
+      }
+    }
+    // Try unpkg as last resort
+    if (!msalLoaded) {
+      await loadScript('https://unpkg.com/@azure/msal-browser@2.38.3/lib/msal-browser.min.js');
+    }
+
     initApp();
   } catch(e) {
+    console.error('MSAL load error:', e);
+    const btn = document.getElementById('connectBtn');
+    btn.disabled = false;
+    btn.innerHTML = '🔐 Sign in with Microsoft 365';
     document.getElementById('errorCard').style.display = 'block';
-    document.getElementById('errorMsg').textContent = 'Failed to load Microsoft auth library: ' + e.message;
+    document.getElementById('errorMsg').textContent = 'Could not load Microsoft auth library. Please check your internet connection and try refreshing the page.';
   }
 });
 
@@ -661,7 +682,6 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
 .fl{font-size:11pt;font-weight:700;color:#1e3a5f}
 .fn{font-size:8pt;color:#6b7280}
 </style><!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
 </head><body>
 <div class="cover">
   <div class="cover-logo">⚡ Salman IT Tools</div>

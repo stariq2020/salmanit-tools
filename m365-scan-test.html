@@ -498,7 +498,7 @@ async function runScan() {
 
     // 3 — Conditional Access
     stepActive(3);
-    const caData = await graphSafe('/identity/conditionalAccessPolicies', token);
+    const caData = await graphSafe('/identity/conditionalAccess/policies', token);
     console.log('CA policies raw response:', caData);
     const caPolicies = caData?.value||[];
     const caEnabled = caPolicies.filter(p=>p.state==='enabled');
@@ -523,7 +523,7 @@ async function runScan() {
 
     // 4 — Risky sign-ins
     stepActive(4);
-    const riskyData = await graphSafe('/riskDetections?$top=20', token);
+    const riskyData = await graphSafe('/identityProtection/riskDetections?$top=20', token);
     const risky = (riskyData?.value||[]).sort((a,b) => new Date(b.detectedDateTime) - new Date(a.detectedDateTime));
     const highRisk = risky.filter(r=>r.riskLevel==='high');
     let riskyHtml = row('Detections', risky.length, risky.length===0?'good':'bad')
@@ -578,15 +578,20 @@ async function runScan() {
 
     // 8 — Mail forwarding
     stepActive(8);
-    const fwdData = await graphSafe('/users?$select=displayName,userPrincipalName,mailboxSettings,assignedLicenses&$top=100', token);
-    const extFwds = (fwdData?.value||[]).filter(u => u.assignedLicenses?.length > 0).filter(u => {
-      const addr = u.mailboxSettings?.forwardingSmtpAddress;
+    // mailboxSettings can't be selected on the /users list endpoint — fetch per-user (limit to 30 licensed users for performance)
+    const licensedForFwd = licensedUsers.slice(0, 30);
+    const fwdResults = await Promise.all(licensedForFwd.map(async u => {
+      const data = await graphSafe(`/users/${u.id}?$select=displayName,userPrincipalName,mailboxSettings`, token);
+      return { user: u, settings: data?.mailboxSettings };
+    }));
+    const extFwds = fwdResults.filter(r => {
+      const addr = r.settings?.forwardingSmtpAddress;
       return addr && !addr.includes(currentAccount.username.split('@')[1]);
     });
     let fwdHtml = extFwds.length
       ? row('External Forwards', '⚠️ '+extFwds.length+' mailbox(es) forwarding externally','bad')
-      : row('External Forwarding','✅ None detected','good');
-    extFwds.forEach(u => { fwdHtml += row(u.displayName||u.userPrincipalName, u.mailboxSettings.forwardingSmtpAddress,'warn'); });
+      : row('External Forwarding','✅ None detected (checked '+licensedForFwd.length+' mailboxes)','good');
+    extFwds.forEach(r => { fwdHtml += row(r.user.displayName||r.user.userPrincipalName, r.settings.forwardingSmtpAddress,'warn'); });
     if (extFwds.length) issues++;
     stepDone(8);
 

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Free M365 Security Scanner — Salman IT Tools</title>
+<meta name="description" content="Free Microsoft 365 tenant security scanner. Check MFA, admin roles, risky sign-ins, Conditional Access, SharePoint and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--green)}
+.page{max-width:1000px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
+.connect-card{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:20px;padding:40px;text-align:center;margin-bottom:40px}
+.connect-icon{font-size:3.5rem;margin-bottom:16px}
+.connect-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.05em;color:var(--white);margin-bottom:10px}
+.connect-sub{font-size:0.92rem;color:var(--muted);line-height:1.7;max-width:500px;margin:0 auto 28px}
+.connect-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:16px 36px;border-radius:14px;border:none;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.connect-btn:hover{opacity:.9;transform:scale(1.02);box-shadow:0 10px 30px rgba(0,232,122,0.3)}
+.connect-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.connect-note{font-size:0.78rem;color:var(--muted);margin-top:14px}
+.perms-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.perm-tag{font-size:0.72rem;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(0,232,122,0.08);border:1px solid rgba(0,232,122,0.15);color:rgba(240,246,255,0.6)}
+.status-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-bottom:28px;display:none;align-items:center;gap:12px}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-txt{font-size:0.88rem;color:var(--muted)}
+.status-user{font-weight:600;color:var(--white)}
+.sign-out-btn{margin-left:auto;font-size:0.78rem;color:var(--muted);background:transparent;border:1px solid var(--border);padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .2s}
+.sign-out-btn:hover{border-color:var(--danger);color:var(--danger)}
+.scan-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;border:none;border-radius:14px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-bottom:32px;display:none}
+.scan-btn:hover{opacity:.9;transform:scale(1.01);box-shadow:0 10px 30px rgba(0,232,122,0.3)}
+.scan-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.progress-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;display:none}
+.progress-title{font-size:0.88rem;font-weight:600;color:var(--white);margin-bottom:14px}
+.progress-steps{display:flex;flex-direction:column;gap:8px}
+.progress-step{display:flex;align-items:center;gap:10px;font-size:0.82rem;color:var(--muted);transition:color .3s}
+.progress-step.done{color:var(--green)}
+.progress-step.active{color:var(--white)}
+.progress-step .step-icon{width:20px;text-align:center;flex-shrink:0}
+.progress-bar-outer{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:16px}
+.progress-bar-inner{height:4px;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:2px;width:0%;transition:width .5s ease}
+.results-wrap{display:none}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+.results-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white)}
+.results-tenant{font-size:0.88rem;color:var(--muted);margin-top:4px}
+.rescan-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
+.rescan-btn:hover{background:rgba(255,255,255,0.08)}
+.score-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:28px}
+.score-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.score-card .sc-icon{font-size:1.8rem;margin-bottom:8px}
+.score-card .sc-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.03em;margin-bottom:4px}
+.score-card .sc-lbl{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.result-section{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden}
+.result-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;transition:background .2s;user-select:none}
+.result-section-hdr:hover{background:rgba(255,255,255,0.02)}
+.result-section-hdr-left{display:flex;align-items:center;gap:12px}
+.result-section-icon{font-size:1.3rem}
+.result-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.04em;color:var(--white)}
+.result-section-badge{font-size:0.72rem;font-weight:700;padding:3px 8px;border-radius:6px}
+.badge-ok{background:rgba(0,232,122,0.12);color:var(--green)}
+.badge-warn{background:rgba(245,158,11,0.12);color:var(--warning)}
+.badge-bad{background:rgba(239,68,68,0.12);color:var(--danger)}
+.badge-info{background:rgba(0,200,255,0.1);color:var(--cyan)}
+.result-section-body{padding:0 20px 20px;display:none}
+.result-section-body.open{display:block}
+.section-arrow{color:var(--muted);transition:transform .3s;font-size:0.9rem}
+.section-arrow.open{transform:rotate(180deg)}
+.res-row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.res-row:last-child{border-bottom:none}
+.res-key{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);min-width:160px;padding-top:1px;flex-shrink:0}
+.res-val{font-size:0.88rem;color:var(--white);word-break:break-word;flex:1}
+.res-val.good{color:var(--green)}
+.res-val.warn{color:var(--warning)}
+.res-val.bad{color:var(--danger)}
+.res-val.info{color:var(--cyan)}
+.user-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:0.82rem}
+.user-table th{text-align:left;padding:8px 10px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border)}
+.user-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.03);color:rgba(240,246,255,0.8)}
+.user-table tr:hover td{background:rgba(255,255,255,0.02)}
+.badge{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;margin:1px}
+.badge-green{background:rgba(0,232,122,0.12);color:var(--green)}
+.badge-red{background:rgba(239,68,68,0.12);color:var(--danger)}
+.badge-amber{background:rgba(245,158,11,0.12);color:var(--warning)}
+.badge-blue{background:rgba(0,200,255,0.1);color:var(--cyan)}
+.badge-grey{background:rgba(255,255,255,0.06);color:var(--muted)}
+.cta-card{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:32px}
+.cta-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.cta-card p{font-size:0.9rem;color:var(--muted);margin-bottom:20px;line-height:1.7}
+.cta-wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:white;font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;padding:13px 28px;border-radius:10px;text-decoration:none;transition:opacity .2s}
+.cta-wa:hover{opacity:.9}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,232,122,0.3);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-card{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:20px;margin-bottom:20px;display:none}
+.error-card h4{color:var(--danger);margin-bottom:6px;font-size:0.95rem}
+.error-card p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center;margin-top:60px}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.res-key{min-width:100px}}
+
+/* CA Policy clickable rows */
+.ca-policy-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;font-size:0.88rem}
+.ca-policy-row:hover{background:rgba(0,200,255,0.06);border-color:rgba(0,200,255,0.25)}
+
+/* CA Explainer Modal */
+.ca-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.ca-modal-overlay.open{display:flex}
+.ca-modal{background:var(--card);border:1px solid var(--border);border-radius:18px;max-width:720px;width:100%;max-height:85vh;overflow-y:auto;padding:28px}
+.ca-modal-close{position:sticky;top:0;float:right;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;margin-left:12px}
+.ca-modal-close:hover{background:rgba(239,68,68,0.1);border-color:var(--danger);color:var(--danger)}
+.ca-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.ca-summary{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:12px;padding:18px 20px;margin:16px 0;font-size:0.95rem;line-height:1.8;color:var(--white)}
+.ca-summary strong{color:var(--cyan)}
+.ca-detail-section{margin-bottom:14px}
+.ca-detail-section h4{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.pill{display:inline-block;background:rgba(0,232,122,0.1);color:var(--green);font-size:0.76rem;font-weight:600;padding:2px 10px;border-radius:6px;margin:2px}
+.pill.warn{background:rgba(245,158,11,0.1);color:var(--warning)}
+.pill.cyan{background:rgba(0,200,255,0.1);color:var(--cyan)}
+.pill.red{background:rgba(239,68,68,0.1);color:var(--danger)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <a class="nav-back" href="index.html">← Back to Home</a>
+</nav>
+
+<div class="page">
+  <div class="page-eyebrow">Free Security Tool</div>
+  <h1 class="page-title">M365 Security<br><span class="acc">Scanner</span></h1>
+  <p class="page-sub">Connect your Microsoft 365 tenant and get a full security health report — MFA status, admin roles, risky sign-ins, Conditional Access, SharePoint, devices and more.</p>
+
+  <div class="connect-card" id="connectCard">
+    <div class="connect-icon">🔐</div>
+    <div class="connect-title">Connect Your M365 Tenant</div>
+    <div class="connect-sub">Sign in with your Microsoft 365 admin account. We request read-only permissions — we never modify anything in your tenant.</div>
+    <div class="perms-list">
+      <span class="perm-tag">Read-Only</span><span class="perm-tag">Users &amp; MFA</span>
+      <span class="perm-tag">Admin Roles</span><span class="perm-tag">Sign-in Logs</span>
+      <span class="perm-tag">Conditional Access</span><span class="perm-tag">Secure Score</span>
+      <span class="perm-tag">SharePoint</span><span class="perm-tag">Devices</span>
+    </div>
+    <button class="connect-btn" id="connectBtn" onclick="if(window.signIn){window.signIn()}else{document.getElementById('errorCard').style.display='block';document.getElementById('errorMsg').textContent='Still loading, please wait a moment and try again.'}">
+      🔐 &nbsp;Sign in with Microsoft 365
+    </button>
+    <div class="connect-note">🔒 You will be redirected to Microsoft to sign in · Read-only access · No data stored on our servers</div>
+  </div>
+
+  <div class="status-bar" id="statusBar">
+    <div class="status-dot"></div>
+    <div>
+      <div class="status-user" id="statusUser">Connected</div>
+      <div class="status-txt" id="statusTenant"></div>
+    </div>
+    <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
+  </div>
+
+  <button class="scan-btn" id="scanBtn" onclick="runScan()">🔍 &nbsp;Run Full Security Scan</button>
+
+  <div class="error-card" id="errorCard">
+    <h4>⚠️ Scan Error</h4>
+    <p id="errorMsg">Something went wrong.</p>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-title">Running security scan…</div>
+    <div class="progress-steps" id="progressSteps"></div>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+  </div>
+
+  <div class="results-wrap" id="resultsWrap">
+    <div class="results-header">
+      <div>
+        <div class="results-title">Security Report</div>
+        <div class="results-tenant" id="resultsTenant"></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="rescan-btn" onclick="exportPDF()">📄 Export PDF</button>
+        <button class="rescan-btn" onclick="runScan()">🔄 Re-scan</button>
+      </div>
+    </div>
+    <div class="score-row" id="scoreRow"></div>
+    <div id="resultSections"></div>
+    <div class="cta-card">
+      <h3>Issues Found? Happy to Help.</h3>
+      <p>I have 25+ years of experience in Microsoft 365 and cloud technologies — MFA, Conditional Access, Exchange migrations, Entra ID and more. Feel free to get in touch if you'd like to discuss anything.</p>
+      <a class="cta-wa" href="https://wa.me/447947707097" target="_blank">💬 &nbsp;WhatsApp Me</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free tools for IT professionals &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></p>
+</footer>
+
+<script>
+// Load MSAL dynamically to ensure it's ready before use
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+window.addEventListener('load', async function() {
+  try {
+    // Only show loading spinner if returning from Microsoft redirect
+    if (window.location.search.includes('code=') || window.location.hash.includes('code=')) {
+      document.getElementById('connectBtn').disabled = true;
+      document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Completing sign-in…';
+    }
+
+    let msalLoaded = false;
+    // Try primary CDN
+    try {
+      await loadScript('https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js');
+      msalLoaded = true;
+    } catch(e1) {
+      console.warn('Primary CDN failed:', e1);
+    }
+    // Try fallback CDN
+    if (!msalLoaded) {
+      try {
+        await loadScript('https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js');
+        msalLoaded = true;
+      } catch(e2) {
+        console.warn('Fallback CDN failed:', e2);
+      }
+    }
+    // Try unpkg as last resort
+    if (!msalLoaded) {
+      await loadScript('https://unpkg.com/@azure/msal-browser@2.38.3/lib/msal-browser.min.js');
+    }
+
+    initApp();
+  } catch(e) {
+    console.error('MSAL load error:', e);
+    const btn = document.getElementById('connectBtn');
+    btn.disabled = false;
+    btn.innerHTML = '🔐 Sign in with Microsoft 365';
+    document.getElementById('errorCard').style.display = 'block';
+    document.getElementById('errorMsg').textContent = 'Could not load Microsoft auth library. Please check your internet connection and try refreshing the page.';
+  }
+});
+
+function initApp() {
+const CLIENT_ID = 'f34c0e03-f125-4bf8-bf23-568005216a70';
+const AUTHORITY = 'https://login.microsoftonline.com/common';
+const GRAPH     = 'https://graph.microsoft.com/v1.0';
+const SCOPES    = ['User.Read','User.Read.All','Directory.Read.All',
+  'UserAuthenticationMethod.Read.All','AuditLog.Read.All','SecurityEvents.Read.All',
+  'Policy.Read.All','Reports.Read.All','Sites.Read.All',
+  'DeviceManagementManagedDevices.Read.All','MailboxSettings.Read'];
+
+const msalInstance = new msal.PublicClientApplication({
+  auth: {
+    clientId: CLIENT_ID, authority: AUTHORITY,
+    redirectUri: 'https://salmanittools.co.uk/m365-scan-test.html',
+    navigateToLoginRequestUrl: false,
+  },
+  cache: { cacheLocation: 'sessionStorage', storeAuthStateInCookie: true }
+});
+
+let accessToken = null, currentAccount = null;
+
+async function signIn() {
+  try {
+    document.getElementById('connectBtn').disabled = true;
+    document.getElementById('connectBtn').innerHTML = '<span class="spinner"></span> Redirecting…';
+    await msalInstance.loginRedirect({ scopes: SCOPES, prompt: 'select_account',
+      redirectUri: 'https://salmanittools.co.uk/m365-scan-test.html' });
+  } catch(e) {
+    console.error('signIn:', e);
+    document.getElementById('connectBtn').disabled = false;
+    document.getElementById('connectBtn').innerHTML = '🔐 Sign in with Microsoft 365';
+    showError('Sign-in failed: ' + (e.errorCode || e.message));
+  }
+}
+
+async function getToken() {
+  try {
+    const r = await msalInstance.acquireTokenSilent({ scopes: SCOPES, account: currentAccount });
+    accessToken = r.accessToken;
+    console.log('Token scopes granted:', r.scopes);
+    return accessToken;
+  } catch(e) {
+    await msalInstance.acquireTokenRedirect({ scopes: SCOPES, account: currentAccount,
+      redirectUri: 'https://salmanittools.co.uk/m365-scan-test.html' });
+  }
+}
+
+function signOut() {
+  msalInstance.logoutRedirect({ account: currentAccount,
+    postLogoutRedirectUri: 'https://salmanittools.co.uk/m365-scan-test.html' });
+}
+
+function onSignedIn() {
+  document.getElementById('connectCard').style.display = 'none';
+  document.getElementById('statusBar').style.display = 'flex';
+  document.getElementById('statusUser').textContent = currentAccount.name || currentAccount.username;
+  document.getElementById('statusTenant').textContent = currentAccount.username;
+  document.getElementById('scanBtn').style.display = 'block';
+}
+
+// Called directly from initApp since load already fired by then
+async function handleAuth() {
+  try {
+    console.log('handleAuth: hash=', window.location.hash, 'search=', window.location.search);
+    const result = await msalInstance.handleRedirectPromise();
+    console.log('handleRedirectPromise result:', result);
+    if (result && result.account) {
+      currentAccount = result.account;
+      accessToken    = result.accessToken;
+      console.log('Signed in:', currentAccount.username);
+      onSignedIn(); return;
+    }
+    const accounts = msalInstance.getAllAccounts();
+    console.log('Existing accounts:', accounts.length);
+    if (accounts.length > 0) { currentAccount = accounts[0]; onSignedIn(); }
+  } catch(e) {
+    console.error('handleAuth error:', e);
+    showError('Error: ' + (e.errorCode || e.message));
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+async function graph(ep, token) {
+  const r = await fetch(GRAPH + ep, { headers: { Authorization:'Bearer '+token, ConsistencyLevel:'eventual' } });
+  if (!r.ok) throw new Error(ep + ': ' + r.status);
+  return r.json();
+}
+async function graphSafe(ep, token) {
+  try { return await graph(ep, token); } catch(e) { console.warn('Graph:', ep, e.message); return null; }
+}
+
+function showError(msg) {
+  document.getElementById('errorCard').style.display = 'block';
+  document.getElementById('errorMsg').textContent = msg;
+  document.getElementById('progressWrap').style.display = 'none';
+}
+
+const STEPS = ['Fetching users & licenses','Checking MFA status','Checking admin roles',
+  'Checking Conditional Access','Fetching risky sign-ins','Getting Secure Score',
+  'Checking SharePoint','Fetching devices','Checking mail forwarding','Building report'];
+
+function initProgress() {
+  document.getElementById('progressSteps').innerHTML = STEPS.map((s,i) =>
+    `<div class="progress-step" id="step-${i}"><span class="step-icon">○</span>${s}</div>`).join('');
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('resultsWrap').style.display = 'none';
+  document.getElementById('errorCard').style.display = 'none';
+}
+function stepActive(i) {
+  const el = document.getElementById('step-'+i);
+  if (el) { el.classList.add('active'); el.querySelector('.step-icon').innerHTML = '<span class="spinner" style="width:12px;height:12px;margin:0"></span>'; }
+}
+function stepDone(i) {
+  const el = document.getElementById('step-'+i);
+  if (el) { el.classList.remove('active'); el.classList.add('done'); el.querySelector('.step-icon').textContent = '✅'; }
+  document.getElementById('progressBar').style.width = ((i+1)/STEPS.length*100)+'%';
+}
+
+function row(k,v,cls='') {
+  return `<div class="res-row"><span class="res-key">${k}</span><span class="res-val ${cls}">${v}</span></div>`;
+}
+function badge(t,type) { return `<span class="badge badge-${type}">${t}</span>`; }
+
+function addScoreCard(icon,val,label,color) {
+  const d = document.createElement('div'); d.className = 'score-card';
+  d.innerHTML = `<div class="sc-icon">${icon}</div><div class="sc-val" style="color:${color}">${val}</div><div class="sc-lbl">${label}</div>`;
+  document.getElementById('scoreRow').appendChild(d);
+}
+
+function addSection(icon,title,badgeTxt,badgeType,html) {
+  const w = document.createElement('div'); w.className = 'result-section';
+  w.innerHTML = `<div class="result-section-hdr" onclick="toggleSection(this)">
+    <div class="result-section-hdr-left">
+      <span class="result-section-icon">${icon}</span>
+      <span class="result-section-title">${title}</span>
+      <span class="result-section-badge badge-${badgeType}">${badgeTxt}</span>
+    </div>
+    <span class="section-arrow">▾</span>
+  </div>
+  <div class="result-section-body">${html}</div>`;
+  document.getElementById('resultSections').appendChild(w);
+}
+
+function toggleSection(hdr) {
+  hdr.nextElementSibling.classList.toggle('open');
+  hdr.querySelector('.section-arrow').classList.toggle('open');
+}
+
+// ── License map ───────────────────────────────────────────────────────────────
+function friendlyLicense(sku) {
+  const m = {
+    'O365_BUSINESS_ESSENTIALS':'M365 Business Basic','O365_BUSINESS_PREMIUM':'M365 Business Standard',
+    'SPB':'M365 Business Premium','ENTERPRISEPACK':'Office 365 E3','ENTERPRISEPREMIUM':'Office 365 E5',
+    'SPE_E3':'M365 E3','SPE_E5':'M365 E5','EXCHANGESTANDARD':'Exchange Online P1',
+    'EXCHANGEENTERPRISE':'Exchange Online P2','EMS':'EMS E3','EMSPREMIUM':'EMS E5',
+    'AAD_PREMIUM':'Azure AD Premium P1','AAD_PREMIUM_P2':'Azure AD Premium P2',
+    'INTUNE_A':'Intune','POWER_BI_PRO':'Power BI Pro','POWER_BI_STANDARD':'Power BI Free',
+    'WIN10_PRO_ENT_SUB':'Win 10/11 Enterprise E3',
+  };
+  return m[sku] || sku.replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+}
+
+// ── Main scan ─────────────────────────────────────────────────────────────────
+async function runScan() {
+  document.getElementById('scanBtn').disabled = true;
+  document.getElementById('scanBtn').textContent = '⏳ Scanning…';
+  document.getElementById('resultSections').innerHTML = '';
+  document.getElementById('scoreRow').innerHTML = '';
+  initProgress();
+
+  try {
+    const token = await getToken();
+    let issues = 0;
+    window._scanData = {};
+
+    // 0 — Users
+    stepActive(0);
+    const [orgData, usersData, skuData] = await Promise.all([
+      graphSafe('/organization', token),
+      graphSafe('/users?$select=id,displayName,userPrincipalName,accountEnabled,assignedLicenses,userType,createdDateTime,jobTitle,department,mail&$top=999&$count=true', token),
+      graphSafe('/subscribedSkus', token),
+    ]);
+    const orgName = orgData?.value?.[0]?.displayName || currentAccount.username.split('@')[1];
+    document.getElementById('resultsTenant').textContent = orgName;
+    const skuMap = {};
+    (skuData?.value||[]).forEach(s => { skuMap[s.skuId] = friendlyLicense(s.skuPartNumber); });
+    const users = usersData?.value || [];
+    const enabledUsers   = users.filter(u => u.accountEnabled && u.userType !== 'Guest');
+    const guestUsers     = users.filter(u => u.userType === 'Guest');
+    const disabledUsers  = users.filter(u => !u.accountEnabled);
+    const licensedUsers  = users.filter(u => u.assignedLicenses?.length > 0);
+    const unlicensedEnabled = enabledUsers.filter(u => !u.assignedLicenses?.length);
+    window._scanData = { orgName, users, skuMap, scanDate: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) };
+    stepDone(0);
+
+    // 1 — MFA
+    stepActive(1);
+    let mfaEnabled=0, mfaDisabled=0, mfaUsers=[];
+    const mfaSample = enabledUsers.slice(0,20);
+    await Promise.all(mfaSample.map(async u => {
+      const m = await graphSafe('/users/'+u.id+'/authentication/methods', token);
+      const hasMfa = m?.value?.some(x => x['@odata.type'] !== '#microsoft.graph.passwordAuthenticationMethod');
+      if (hasMfa) mfaEnabled++; else { mfaDisabled++; mfaUsers.push(u.displayName||u.userPrincipalName); }
+    }));
+    const mfaScore = mfaEnabled+mfaDisabled > 0 ? Math.round(mfaEnabled/(mfaEnabled+mfaDisabled)*100) : 0;
+    if (mfaDisabled > 0) issues++;
+    let mfaHtml = row('Users Checked', mfaEnabled+mfaDisabled+' (sample)')
+      + row('MFA Enabled', mfaEnabled, 'good') + row('MFA Disabled', mfaDisabled, mfaDisabled===0?'good':'bad')
+      + row('Coverage', mfaScore+'%', mfaScore>=90?'good':mfaScore>=50?'warn':'bad');
+    if (mfaUsers.length) mfaHtml += row('No MFA', mfaUsers.slice(0,5).join(', ')+(mfaUsers.length>5?` +${mfaUsers.length-5} more`:''), 'bad');
+    window._scanData.mfaScore = mfaScore;
+    stepDone(1);
+
+    // 2 — Admin roles
+    stepActive(2);
+    const rolesData = await graphSafe('/directoryRoles?$expand=members', token);
+    const roles = rolesData?.value||[];
+    const globalAdmins = roles.find(r=>r.displayName==='Global Administrator')?.members||[];
+    let adminHtml = row('Global Admins', globalAdmins.length, globalAdmins.length<=2?'good':globalAdmins.length<=5?'warn':'bad');
+    if (globalAdmins.length) adminHtml += row('Global Admin Accounts', globalAdmins.map(a=>a.displayName||a.userPrincipalName).join(', '));
+    ['Privileged Role Administrator','Security Administrator','Exchange Administrator'].forEach(name => {
+      const r = roles.find(x=>x.displayName===name);
+      if (r?.members?.length) adminHtml += row(name, r.members.map(m=>m.displayName||m.userPrincipalName).join(', '));
+    });
+    if (globalAdmins.length > 5) issues++;
+    stepDone(2);
+
+    // 3 — Conditional Access
+    stepActive(3);
+    const caData = await graphSafe('/identity/conditionalAccessPolicies', token);
+    console.log('CA policies raw response:', caData);
+    const caPolicies = caData?.value||[];
+    const caEnabled = caPolicies.filter(p=>p.state==='enabled');
+    const mfaPolicy = caPolicies.find(p=>p.grantControls?.builtInControls?.includes('mfa')&&p.state==='enabled');
+    window._scanData.caPolicies = caPolicies;
+    let caHtml = row('Total Policies', caPolicies.length, caPolicies.length>0?'good':'bad')
+      + row('Enabled', caEnabled.length, caEnabled.length>0?'good':'bad')
+      + row('MFA Policy', mfaPolicy?'✅ '+mfaPolicy.displayName:'❌ No MFA enforcement policy', mfaPolicy?'good':'bad');
+    if (caPolicies.length) {
+      caHtml += `<div style="margin-top:14px;margin-bottom:6px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">All Policies — click to explain</div>`;
+      caPolicies.forEach((p, i) => {
+        const stateLabel = p.state === 'enabled' ? badge('Enabled','green') : p.state === 'disabled' ? badge('Disabled','red') : badge('Report-Only','amber');
+        caHtml += `<div class="ca-policy-row" onclick="explainCAPolicy(${i})">
+          <span style="flex:1">${p.displayName}</span>
+          ${stateLabel}
+          <span style="color:var(--cyan);font-size:0.8rem;margin-left:8px">🔍 Explain</span>
+        </div>`;
+      });
+    }
+    if (!caPolicies.length) issues++;
+    stepDone(3);
+
+    // 4 — Risky sign-ins
+    stepActive(4);
+    const riskyData = await graphSafe('/riskDetections?$top=20&$orderby=detectedDateTime desc', token);
+    const risky = riskyData?.value||[];
+    const highRisk = risky.filter(r=>r.riskLevel==='high');
+    let riskyHtml = row('Detections', risky.length, risky.length===0?'good':'bad')
+      + row('High Risk', highRisk.length, highRisk.length===0?'good':'bad')
+      + row('Medium Risk', risky.filter(r=>r.riskLevel==='medium').length, 'warn');
+    risky.slice(0,5).forEach(r => {
+      riskyHtml += row(r.userDisplayName||r.userPrincipalName,
+        badge(r.riskLevel, r.riskLevel==='high'?'red':'amber')+' '+r.riskEventType+' — '+r.ipAddress+' ('+new Date(r.detectedDateTime).toLocaleDateString()+')');
+    });
+    if (highRisk.length) issues++;
+    stepDone(4);
+
+    // 5 — Secure Score
+    stepActive(5);
+    const ssData = await graphSafe('/security/secureScores?$top=1', token);
+    const ss = ssData?.value?.[0];
+    const ssPct = ss ? Math.round(ss.currentScore/ss.maxScore*100) : null;
+    let ssHtml = ss
+      ? row('Score', Math.round(ss.currentScore)+' / '+Math.round(ss.maxScore), ssPct>=70?'good':ssPct>=40?'warn':'bad')
+        + row('Percentage', ssPct+'%', ssPct>=70?'good':ssPct>=40?'warn':'bad')
+        + row('Last Updated', ss.createdDateTime?new Date(ss.createdDateTime).toLocaleDateString():'—')
+      : row('Secure Score', 'Not available — needs additional permissions','warn');
+    if (ssPct !== null && ssPct < 40) issues++;
+    stepDone(5);
+
+    // 6 — SharePoint
+    stepActive(6);
+    const spData = await graphSafe('/sites/root?$select=displayName,webUrl', token);
+    let spHtml = spData
+      ? row('SharePoint', '✅ Connected','good') + row('Site', spData.displayName||'—') + row('URL', spData.webUrl||'—')
+      : row('SharePoint', 'Not available','warn');
+    stepDone(6);
+
+    // 7 — Devices
+    stepActive(7);
+    const devData = await graphSafe('/deviceManagement/managedDevices?$top=999&$select=deviceName,operatingSystem,complianceState,lastSyncDateTime,userDisplayName', token);
+    const devs = devData?.value||[];
+    const nonCompliant = devs.filter(d=>d.complianceState==='noncompliant');
+    let devHtml = row('Total Devices', devs.length)
+      + row('Compliant', devs.filter(d=>d.complianceState==='compliant').length, 'good')
+      + row('Non-Compliant', nonCompliant.length, nonCompliant.length===0?'good':'bad');
+    if (nonCompliant.length) {
+      devHtml += '<table class="user-table" style="margin-top:10px"><tr><th>Device</th><th>OS</th><th>User</th><th>Status</th></tr>';
+      nonCompliant.slice(0,10).forEach(d => {
+        devHtml += `<tr><td>${d.deviceName||'—'}</td><td>${d.operatingSystem||'—'}</td><td>${d.userDisplayName||'—'}</td><td>${badge('Non-Compliant','red')}</td></tr>`;
+      });
+      devHtml += '</table>';
+      issues++;
+    }
+    if (!devs.length) devHtml = row('Devices','No Intune devices found','warn');
+    stepDone(7);
+
+    // 8 — Mail forwarding
+    stepActive(8);
+    const fwdData = await graphSafe('/users?$filter=assignedLicenses/$count ne 0&$count=true&$select=displayName,userPrincipalName,mailboxSettings&$top=50', token);
+    const extFwds = (fwdData?.value||[]).filter(u => {
+      const addr = u.mailboxSettings?.forwardingSmtpAddress;
+      return addr && !addr.includes(currentAccount.username.split('@')[1]);
+    });
+    let fwdHtml = extFwds.length
+      ? row('External Forwards', '⚠️ '+extFwds.length+' mailbox(es) forwarding externally','bad')
+      : row('External Forwarding','✅ None detected','good');
+    extFwds.forEach(u => { fwdHtml += row(u.displayName||u.userPrincipalName, u.mailboxSettings.forwardingSmtpAddress,'warn'); });
+    if (extFwds.length) issues++;
+    stepDone(8);
+
+    // 9 — Build report
+    stepActive(9);
+
+    // Score cards
+    addScoreCard('👥', users.length, 'Total Users', 'var(--white)');
+    addScoreCard('🔐', mfaScore+'%', 'MFA Coverage', mfaScore>=90?'var(--green)':mfaScore>=50?'var(--warning)':'var(--danger)');
+    addScoreCard('📊', ssPct!==null?ssPct+'%':'—', 'Secure Score', ssPct>=70?'var(--green)':ssPct>=40?'var(--warning)':'var(--danger)');
+    addScoreCard('⚠️', issues, 'Issues Found', issues===0?'var(--green)':issues<=2?'var(--warning)':'var(--danger)');
+    addScoreCard('🔒', caPolicies.length, 'CA Policies', caPolicies.length>0?'var(--green)':'var(--danger)');
+    addScoreCard('💻', devs.length, 'Devices', 'var(--cyan)');
+
+    // Users table
+    let usersHtml = row('Total', users.length) + row('Enabled', enabledUsers.length,'good')
+      + row('Guests', guestUsers.length, guestUsers.length===0?'good':'warn')
+      + row('Disabled', disabledUsers.length) + row('Licensed', licensedUsers.length)
+      + row('Unlicensed (enabled)', unlicensedEnabled.length, unlicensedEnabled.length===0?'good':'warn');
+    usersHtml += '<div style="margin-top:16px;overflow-x:auto"><table class="user-table">'
+      + '<tr><th>#</th><th>Name</th><th>Email</th><th>Job Title</th><th>Department</th><th>Licenses</th><th>Type</th><th>Status</th></tr>';
+    users.slice(0,200).forEach((u,i) => {
+      const lics = (u.assignedLicenses||[]).map(l=>skuMap[l.skuId]||l.skuId).join(', ')||'—';
+      usersHtml += `<tr><td style="color:var(--muted)">${i+1}</td><td style="font-weight:600">${u.displayName||'—'}</td>
+        <td style="color:var(--muted);font-size:0.78rem">${u.userPrincipalName||'—'}</td>
+        <td>${u.jobTitle||'—'}</td><td>${u.department||'—'}</td>
+        <td style="color:var(--green);font-size:0.78rem">${lics}</td>
+        <td>${u.userType==='Guest'?badge('Guest','blue'):badge('Member','grey')}</td>
+        <td>${u.accountEnabled?badge('Enabled','green'):badge('Disabled','red')}</td></tr>`;
+    });
+    usersHtml += '</table></div>';
+    if (users.length>200) usersHtml += `<div style="font-size:0.78rem;color:var(--muted);margin-top:6px">Showing first 200 of ${users.length} users</div>`;
+
+    addSection('👥','Users & Licenses',users.length+' users','info', usersHtml);
+    addSection('🔐','MFA Status', mfaDisabled===0?'✅ All enabled':'⚠️ '+mfaDisabled+' without MFA', mfaDisabled===0?'ok':'bad', mfaHtml);
+    addSection('👑','Admin Roles', globalAdmins.length+' Global Admins', globalAdmins.length<=2?'ok':globalAdmins.length<=5?'warn':'bad', adminHtml);
+    addSection('🔒','Conditional Access', caEnabled.length>0?caEnabled.length+' active':'❌ None', caEnabled.length>0?'ok':'bad', caHtml);
+    addSection('⚠️','Risky Sign-ins', risky.length===0?'✅ None':'⚠️ '+risky.length+' detected', risky.length===0?'ok':highRisk.length?'bad':'warn', riskyHtml);
+    addSection('📊','Secure Score', ssPct!==null?ssPct+'%':'N/A', ssPct>=70?'ok':ssPct>=40?'warn':'bad', ssHtml);
+    addSection('📁','SharePoint', spData?'✅ Connected':'⚠️ N/A', spData?'ok':'warn', spHtml);
+    addSection('💻','Devices (Intune)', devs.length===0?'No devices':nonCompliant.length===0?'✅ Compliant':'⚠️ '+nonCompliant.length+' issues', nonCompliant.length===0?'ok':'bad', devHtml);
+    addSection('📧','Mail Forwarding', extFwds.length===0?'✅ None':'⚠️ '+extFwds.length, extFwds.length===0?'ok':'bad', fwdHtml);
+
+    // Auto-open bad sections
+    document.querySelectorAll('.result-section').forEach(s => {
+      const b = s.querySelector('.result-section-badge');
+      if (b && (b.classList.contains('badge-bad')||b.classList.contains('badge-warn'))) {
+        s.querySelector('.result-section-body').classList.add('open');
+        s.querySelector('.section-arrow').classList.add('open');
+      }
+    });
+
+    stepDone(9);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('resultsWrap').style.display = 'block';
+
+  } catch(e) {
+    console.error('Scan error:', e);
+    showError('Scan failed: ' + (e.message||e));
+  }
+  document.getElementById('scanBtn').disabled = false;
+  document.getElementById('scanBtn').textContent = '🔍  Run Full Security Scan';
+}
+
+// ── CA Policy Explainer ───────────────────────────────────────────────────────
+const APP_NAMES = {
+  'All': 'All cloud apps',
+  '00000002-0000-0ff1-ce00-000000000000': 'Office 365 Exchange Online',
+  '00000003-0000-0ff1-ce00-000000000000': 'Office 365 SharePoint Online',
+  '00000004-0000-0ff1-ce00-000000000000': 'Skype for Business / Teams',
+  'Office365': 'Office 365',
+};
+const PLATFORM_NAMES = {
+  'all': 'All platforms', 'android': 'Android', 'iOS': 'iOS', 'windows': 'Windows',
+  'windowsPhone': 'Windows Phone', 'macOS': 'macOS', 'linux': 'Linux',
+};
+const CLIENT_APP_NAMES = {
+  'all': 'All client apps', 'browser': 'Web browsers',
+  'mobileAppsAndDesktopClients': 'Mobile apps and desktop clients',
+  'exchangeActiveSync': 'Exchange ActiveSync clients', 'other': 'Other clients (legacy auth)',
+};
+const CONTROL_NAMES = {
+  'mfa': 'Multi-Factor Authentication (MFA)',
+  'compliantDevice': 'Device marked as compliant',
+  'domainJoinedDevice': 'Hybrid Azure AD joined device',
+  'approvedApplication': 'Approved client app',
+  'compliantApplication': 'App protection policy',
+  'passwordChange': 'Password change',
+  'block': 'Block access',
+};
+const LOCATION_NAMES = { 'All': 'Any location', 'AllTrusted': 'All trusted locations' };
+const RISK_NAMES = { 'low':'Low','medium':'Medium','high':'High','none':'No risk','unknownFutureValue':'Unknown' };
+
+function mapList(arr, dict) {
+  if (!arr || !arr.length) return [];
+  return arr.map(x => dict[x] || x);
+}
+function pill(text, type='') { return `<span class="pill ${type}">${text}</span>`; }
+function caRow(key, val) {
+  return `<div class="res-row"><span class="res-key">${key}</span><span class="res-val">${val}</span></div>`;
+}
+function caSection(title, html) {
+  return `<div class="ca-detail-section"><h4>${title}</h4>${html}</div>`;
+}
+
+function explainCAPolicy(idx) {
+  const p = window._scanData.caPolicies[idx];
+  if (!p) return;
+
+  document.getElementById('caModalTitle').textContent = p.displayName || 'Unnamed Policy';
+  const stateMap = {
+    'enabled':{label:'✅ Enabled',cls:'good'},
+    'disabled':{label:'⛔ Disabled',cls:'bad'},
+    'enabledForReportingButNotEnforced':{label:'📊 Report-Only',cls:'warn'},
+  };
+  const st = stateMap[p.state] || {label:p.state,cls:''};
+  document.getElementById('caModalState').innerHTML = `<span class="res-val ${st.cls}">${st.label}</span>`;
+
+  const c = p.conditions || {}, gc = p.grantControls || {}, sc = p.sessionControls || {};
+
+  // Summary
+  let summary = '';
+  const users = c.users || {};
+  const incUsers = users.includeUsers || [];
+  const excUsers = users.excludeUsers || [];
+  const excGroups = users.excludeGroups || [];
+  const excRoles = users.excludeRoles || [];
+
+  if (incUsers.includes('All')) summary += 'This policy applies to <strong>all users</strong>';
+  else if (incUsers.length) summary += `This policy applies to <strong>${incUsers.length} specific user(s)/group(s)</strong>`;
+  else summary += 'This policy has <strong>no users specified</strong>';
+
+  const exclusions = [];
+  if (excUsers.includes('GuestsOrExternalUsers')) exclusions.push('guest/external users');
+  if (excGroups.length) exclusions.push(`${excGroups.length} excluded group(s)`);
+  if (excRoles.length) exclusions.push(`${excRoles.length} excluded admin role(s)`);
+  const otherExc = excUsers.filter(u=>u!=='GuestsOrExternalUsers');
+  if (otherExc.length) exclusions.push(`${otherExc.length} excluded user(s)`);
+  if (exclusions.length) summary += `, <strong>except for ${exclusions.join(', ')}</strong>`;
+  summary += '. ';
+
+  const apps = c.applications || {};
+  const incApps = apps.includeApplications || [];
+  if (incApps.includes('All')) summary += 'It applies to <strong>all cloud applications</strong>';
+  else if (incApps.length) summary += `It applies to <strong>${incApps.length} specific application(s)</strong>`;
+  summary += '. ';
+
+  const controls = gc.builtInControls || [];
+  if (controls.includes('block')) {
+    summary += `<strong style="color:var(--danger)">Access is BLOCKED</strong> for users matching these conditions. `;
+  } else if (controls.length) {
+    const op = gc.operator === 'AND' ? 'ALL of the following' : 'at least ONE of the following';
+    const names = controls.map(c => CONTROL_NAMES[c] || c);
+    summary += `When matched, users must satisfy <strong>${op}</strong>: <strong>${names.join(', ')}</strong>. `;
+  }
+
+  if (sc.signInFrequency?.isEnabled) {
+    summary += `Users must re-authenticate every <strong>${sc.signInFrequency.value} ${sc.signInFrequency.type}</strong>. `;
+  }
+  if (sc.persistentBrowser?.isEnabled) {
+    summary += sc.persistentBrowser.mode === 'never'
+      ? 'Browser sessions are <strong>not persisted</strong> (no "stay signed in"). '
+      : 'Browser sessions <strong>are persisted</strong> across restarts. ';
+  }
+
+  document.getElementById('caModalSummary').innerHTML = summary;
+
+  // Details
+  let html = '';
+
+  let usersHtml = '';
+  usersHtml += caRow('Include Users', incUsers.includes('All') ? pill('All users','cyan') : incUsers.length ? incUsers.map(u=>pill(u)).join('') : '<span style="color:var(--muted)">None</span>');
+  if (excUsers.length) usersHtml += caRow('Exclude Users', excUsers.map(u => u==='GuestsOrExternalUsers'?pill('Guests/External users','warn'):pill(u,'warn')).join(''));
+  if (excGroups.length) usersHtml += caRow('Exclude Groups', excGroups.map(g=>pill(g,'warn')).join(''));
+  if (excRoles.length) usersHtml += caRow('Exclude Roles', excRoles.map(r=>pill(r,'warn')).join(''));
+  if (users.includeGroups?.length) usersHtml += caRow('Include Groups', users.includeGroups.map(g=>pill(g)).join(''));
+  html += caSection('👥 Users & Groups', usersHtml);
+
+  let appsHtml = '';
+  if (incApps.includes('All')) appsHtml += caRow('Include Apps', pill('All cloud apps','cyan'));
+  else if (incApps.length) appsHtml += caRow('Include Apps', incApps.map(a=>pill(APP_NAMES[a]||a)).join(''));
+  if (apps.excludeApplications?.length) appsHtml += caRow('Exclude Apps', apps.excludeApplications.map(a=>pill(APP_NAMES[a]||a,'warn')).join(''));
+  if (appsHtml) html += caSection('☁️ Applications', appsHtml);
+
+  let condHtml = '';
+  if (c.platforms?.includePlatforms?.length) condHtml += caRow('Platforms', mapList(c.platforms.includePlatforms,PLATFORM_NAMES).map(p=>pill(p)).join(''));
+  if (c.platforms?.excludePlatforms?.length) condHtml += caRow('Exclude Platforms', mapList(c.platforms.excludePlatforms,PLATFORM_NAMES).map(p=>pill(p,'warn')).join(''));
+  if (c.locations?.includeLocations?.length) condHtml += caRow('Locations', mapList(c.locations.includeLocations,LOCATION_NAMES).map(l=>pill(l)).join(''));
+  if (c.locations?.excludeLocations?.length) condHtml += caRow('Exclude Locations', mapList(c.locations.excludeLocations,LOCATION_NAMES).map(l=>pill(l,'warn')).join(''));
+  if (c.clientAppTypes?.length) condHtml += caRow('Client App Types', mapList(c.clientAppTypes,CLIENT_APP_NAMES).map(t=>pill(t)).join(''));
+  if (c.signInRiskLevels?.length) condHtml += caRow('Sign-in Risk', mapList(c.signInRiskLevels,RISK_NAMES).map(r=>pill(r,'red')).join(''));
+  if (c.userRiskLevels?.length) condHtml += caRow('User Risk', mapList(c.userRiskLevels,RISK_NAMES).map(r=>pill(r,'red')).join(''));
+  if (condHtml) html += caSection('🎯 Conditions', condHtml);
+
+  let grantHtml = '';
+  if (controls.length) {
+    grantHtml += caRow('Operator', gc.operator==='AND'?pill('AND — must satisfy ALL','warn'):pill('OR — satisfy ANY ONE','cyan'));
+    grantHtml += caRow('Required Controls', controls.map(ctrl => ctrl==='block'?pill(CONTROL_NAMES[ctrl]||ctrl,'red'):pill(CONTROL_NAMES[ctrl]||ctrl)).join(''));
+  } else {
+    grantHtml = caRow('Grant Controls', '<span style="color:var(--muted)">None specified</span>');
+  }
+  html += caSection('🔐 Grant Controls', grantHtml);
+
+  let sessionHtml = '';
+  if (sc.signInFrequency?.isEnabled) sessionHtml += caRow('Sign-in Frequency', pill(`Every ${sc.signInFrequency.value} ${sc.signInFrequency.type}`));
+  if (sc.persistentBrowser?.isEnabled) sessionHtml += caRow('Persistent Browser', pill(sc.persistentBrowser.mode==='never'?'Never (no stay signed in)':'Always'));
+  if (sc.applicationEnforcedRestrictions?.isEnabled) sessionHtml += caRow('App Enforced Restrictions', pill('Enabled'));
+  if (sessionHtml) html += caSection('⏱️ Session Controls', sessionHtml);
+
+  document.getElementById('caModalDetails').innerHTML = html;
+  document.getElementById('caModalOverlay').classList.add('open');
+}
+
+function closeCAModal() {
+  document.getElementById('caModalOverlay').classList.remove('open');
+}
+
+// ── PDF Export ────────────────────────────────────────────────────────────────
+async function exportPDF() {
+  const btns = document.querySelectorAll('.rescan-btn');
+  btns.forEach(b => b.disabled = true);
+  const data = window._scanData || {};
+  const org  = data.orgName || 'M365 Tenant';
+  const date = data.scanDate || new Date().toLocaleDateString('en-GB');
+  const users = data.users || [];
+  const skuMap = data.skuMap || {};
+
+  const scoreCards = [...document.querySelectorAll('.score-card')].map(c => ({
+    icon: c.querySelector('.sc-icon')?.textContent||'',
+    val:  c.querySelector('.sc-val')?.textContent||'',
+    lbl:  c.querySelector('.sc-lbl')?.textContent||'',
+    col:  c.querySelector('.sc-val')?.style.color||'#1a2b45',
+  }));
+
+  const sections = [...document.querySelectorAll('.result-section')].map(s => ({
+    icon:      s.querySelector('.result-section-icon')?.textContent||'',
+    title:     s.querySelector('.result-section-title')?.textContent||'',
+    badge:     s.querySelector('.result-section-badge')?.textContent||'',
+    badgeCls:  s.querySelector('.result-section-badge')?.className||'',
+    rows:      [...s.querySelectorAll('.res-row')].map(r => ({
+      key: r.querySelector('.res-key')?.textContent||'',
+      val: r.querySelector('.res-val')?.textContent||'',
+      cls: r.querySelector('.res-val')?.className||'',
+    })),
+  }));
+
+  const colFix = c => c.replace('var(--green)','#00c468').replace('var(--warning)','#d97706')
+    .replace('var(--danger)','#dc2626').replace('var(--white)','#1a2b45').replace('var(--cyan)','#0284c7');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>M365 Security Report — ${org}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#1a2b45;font-size:11pt}
+.cover{background:linear-gradient(135deg,#1E3A5F,#0F1C35);color:white;padding:60px 50px}
+.cover-logo{font-size:13pt;font-weight:700;color:#00E87A;letter-spacing:2px;margin-bottom:28px}
+.cover-title{font-size:26pt;font-weight:700;margin-bottom:8px}
+.cover-sub{font-size:12pt;color:rgba(255,255,255,0.65);margin-bottom:28px}
+.cover-meta{display:flex;gap:36px}
+.cml label{font-size:8pt;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);display:block;margin-bottom:3px}
+.cml span{font-size:11pt;font-weight:600}
+.body{padding:36px 50px}
+.scores{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:28px}
+.sc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 8px;text-align:center}
+.sc .v{font-size:17pt;font-weight:700;margin-bottom:2px}
+.sc .l{font-size:7pt;text-transform:uppercase;letter-spacing:.5px;color:#6b7280}
+h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bottom:2px solid #00E87A}
+.sec{margin-bottom:18px;page-break-inside:avoid}
+.sec-hdr{display:flex;align-items:center;gap:8px;background:#f0f4f8;padding:9px 12px;border-radius:6px;margin-bottom:6px}
+.sec-title{font-size:11pt;font-weight:700;color:#1e3a5f;flex:1}
+.sec-badge{font-size:8pt;font-weight:700;padding:2px 7px;border-radius:4px}
+.ok{background:#dcfce7;color:#166534}.warn{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}.info{background:#dbeafe;color:#1e40af}
+.rrow{display:flex;padding:5px 12px;border-bottom:1px solid #f1f5f9}
+.rk{font-size:8pt;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;width:140px;flex-shrink:0}
+.rv{font-size:9pt;flex:1}
+.rv.good{color:#166534}.rv.warn{color:#92400e}.rv.bad{color:#991b1b}
+.ut{width:100%;border-collapse:collapse;font-size:8pt}
+.ut th{background:#1e3a5f;color:white;padding:6px 8px;text-align:left;font-size:7.5pt;text-transform:uppercase}
+.ut td{padding:5px 8px;border-bottom:1px solid #f1f5f9}
+.ut tr:nth-child(even) td{background:#f8fafc}
+.lb{background:#dcfce7;color:#166534;padding:1px 5px;border-radius:3px;font-size:7pt;font-weight:600;margin:1px;display:inline-block}
+.pg{page-break-before:always}
+.footer{background:#f8fafc;border-top:2px solid #00E87A;padding:16px 50px;display:flex;justify-content:space-between;margin-top:28px}
+.fl{font-size:11pt;font-weight:700;color:#1e3a5f}
+.fn{font-size:8pt;color:#6b7280}
+</style>
+</head><body>
+<div class="cover">
+  <div class="cover-logo">⚡ Salman IT Tools</div>
+  <div class="cover-title">M365 Security Report</div>
+  <div class="cover-sub">Microsoft 365 Tenant Security Assessment</div>
+  <div class="cover-meta">
+    <div class="cml"><label>Organisation</label><span>${org}</span></div>
+    <div class="cml"><label>Report Date</label><span>${date}</span></div>
+    <div class="cml"><label>Total Users</label><span>${users.length}</span></div>
+    <div class="cml"><label>Prepared By</label><span>Salman Tariq · Microsoft 365 & Cloud Infrastructure Expert</span></div>
+  </div>
+</div>
+<div class="body">
+  <h2>Executive Summary</h2>
+  <div class="scores">${scoreCards.map(s=>`<div class="sc"><div class="v" style="color:${colFix(s.col)}">${s.val}</div><div class="l">${s.lbl}</div></div>`).join('')}</div>
+  <h2>Security Findings</h2>
+  ${sections.filter(s=>!s.title.includes('Users')).map(s=>{
+    const bc = s.badgeCls.includes('bad')?'bad':s.badgeCls.includes('warn')?'warn':s.badgeCls.includes('ok')?'ok':'info';
+    return `<div class="sec"><div class="sec-hdr"><span>${s.icon}</span><span class="sec-title">${s.title}</span><span class="sec-badge ${bc}">${s.badge}</span></div>
+    ${s.rows.map(r=>{const c=r.cls.includes('good')?'good':r.cls.includes('warn')?'warn':r.cls.includes('bad')?'bad':'';return`<div class="rrow"><span class="rk">${r.key}</span><span class="rv ${c}">${r.val}</span></div>`}).join('')}</div>`;
+  }).join('')}
+  <div class="pg"></div>
+  <h2>User Directory with Licenses</h2>
+  <table class="ut"><tr><th>#</th><th>Name</th><th>Email</th><th>Job Title</th><th>Department</th><th>Licenses</th><th>Type</th><th>Status</th></tr>
+  ${users.slice(0,500).map((u,i)=>{
+    const lics=(u.assignedLicenses||[]).map(l=>skuMap[l.skuId]||l.skuId);
+    return `<tr><td style="color:#9ca3af">${i+1}</td><td style="font-weight:600">${u.displayName||'—'}</td>
+    <td style="color:#6b7280;font-size:7.5pt">${u.userPrincipalName||'—'}</td>
+    <td>${u.jobTitle||'—'}</td><td>${u.department||'—'}</td>
+    <td>${lics.length?lics.map(l=>`<span class="lb">${l}</span>`).join(''):'<span style="color:#9ca3af">Unlicensed</span>'}</td>
+    <td>${u.userType==='Guest'?'Guest':'Member'}</td>
+    <td>${u.accountEnabled?'✓ Enabled':'✗ Disabled'}</td></tr>`;
+  }).join('')}</table>
+</div>
+<div class="footer">
+  <div class="fl">⚡ Salman IT Tools</div>
+  <div class="fn">salmanittools.co.uk · ${date}</div>
+  <div class="fn">Read-only access used · No changes made to tenant</div>
+</div>
+</body></html>`;
+
+  const win = window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => { setTimeout(() => { win.print(); btns.forEach(b=>b.disabled=false); }, 800); };
+}
+// Expose to global scope for HTML onclick handlers
+window.signIn        = signIn;
+window.signOut       = signOut;
+window.runScan       = runScan;
+window.exportPDF     = exportPDF;
+window.toggleSection = toggleSection;
+window.explainCAPolicy = explainCAPolicy;
+window.closeCAModal    = closeCAModal;
+
+// Enable the connect button now that everything is ready
+const btn = document.getElementById('connectBtn');
+if (btn) {
+  btn.disabled = false;
+  btn.innerHTML = '🔐 &nbsp;Sign in with Microsoft 365';
+}
+
+// Handle auth redirect or existing session
+handleAuth();
+
+} // end initApp
+</script>
+
+<!-- CA Policy Explainer Modal -->
+<div class="ca-modal-overlay" id="caModalOverlay" onclick="if(event.target===this)closeCAModal()">
+  <div class="ca-modal">
+    <button class="ca-modal-close" onclick="closeCAModal()">✕</button>
+    <h3 id="caModalTitle">Policy Name</h3>
+    <span id="caModalState"></span>
+    <div class="ca-summary" id="caModalSummary"></div>
+    <div id="caModalDetails"></div>
+  </div>
+</div>
+
+<a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="white"><path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 10L4 44l10.3-2.7C17.1 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.8 30.1 8 27.1 8 24 8 15.2 15.2 8 24 8s16 7.2 16 16-7.2 16-16 16zm8.7-11.8c-.5-.2-2.8-1.4-3.2-1.5-.4-.2-.7-.2-1 .2-.3.5-1.1 1.5-1.4 1.8-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.4-.8.2-.3.1-.6 0-.8-.1-.2-1-2.5-1.4-3.4-.4-.9-.8-.7-1-.7h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.5-1.6 3.7s1.6 4.3 1.9 4.6c.2.3 3.2 5 7.8 7 1.1.5 1.9.7 2.6.9 1.1.3 2.1.3 2.9.2.9-.1 2.8-1.1 3.2-2.2.4-1.1.4-2 .3-2.2-.2-.3-.5-.4-1-.6z"/></svg>
+</a>
+<style>
+.wa-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .2s;text-decoration:none}
+.wa-btn:hover{transform:scale(1.1)}
+.wa-btn svg{width:32px;height:32px;position:relative;z-index:1}
+.wa-btn::before{content:'';position:absolute;width:58px;height:58px;border-radius:50%;background:rgba(37,211,102,0.35);animation:wa-pulse 2s ease-out infinite}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+</style>
+</body>
+</html>

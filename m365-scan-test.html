@@ -499,26 +499,42 @@ async function runScan() {
     // 3 — Conditional Access
     stepActive(3);
     const caData = await graphSafe('/identity/conditionalAccess/policies', token);
-    console.log('CA policies raw response:', caData);
     const caPolicies = caData?.value||[];
     const caEnabled = caPolicies.filter(p=>p.state==='enabled');
     const mfaPolicy = caPolicies.find(p=>p.grantControls?.builtInControls?.includes('mfa')&&p.state==='enabled');
     window._scanData.caPolicies = caPolicies;
+
+    // Run findings analysis on all policies
+    const caFindings = analyzeCAPolicies(caPolicies);
+    window._scanData.caFindings = caFindings;
+    const critCount = caFindings.filter(f=>f.severity==='critical').length;
+    const highCount = caFindings.filter(f=>f.severity==='high').length;
+
     let caHtml = row('Total Policies', caPolicies.length, caPolicies.length>0?'good':'bad')
       + row('Enabled', caEnabled.length, caEnabled.length>0?'good':'bad')
-      + row('MFA Policy', mfaPolicy?'✅ '+mfaPolicy.displayName:'❌ No MFA enforcement policy', mfaPolicy?'good':'bad');
+      + row('MFA Policy', mfaPolicy?'✅ '+mfaPolicy.displayName:'❌ No MFA enforcement policy', mfaPolicy?'good':'bad')
+      + row('Findings', `${caFindings.length} total — <span style="color:var(--danger)">${critCount} critical</span>, <span style="color:var(--warning)">${highCount} high</span>`, caFindings.length>0?'warn':'good');
+
     if (caPolicies.length) {
-      caHtml += `<div style="margin-top:14px;margin-bottom:6px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">All Policies — click to explain</div>`;
+      caHtml += `<div style="margin-top:14px;margin-bottom:6px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">All Policies — click to view details &amp; findings</div>`;
       caPolicies.forEach((p, i) => {
         const stateLabel = p.state === 'enabled' ? badge('Enabled','green') : p.state === 'disabled' ? badge('Disabled','red') : badge('Report-Only','amber');
+        const pFindings = caFindings.filter(f => f.policyIndex === i);
+        const pCrit = pFindings.filter(f=>f.severity==='critical').length;
+        const pHigh = pFindings.filter(f=>f.severity==='high').length;
+        let findingsBadge = '';
+        if (pCrit) findingsBadge = `<span class="pill red" style="margin-left:6px">⚠ ${pCrit} critical</span>`;
+        else if (pHigh) findingsBadge = `<span class="pill warn" style="margin-left:6px">⚠ ${pHigh} high</span>`;
+        else if (pFindings.length) findingsBadge = `<span class="pill" style="margin-left:6px">${pFindings.length} findings</span>`;
         caHtml += `<div class="ca-policy-row" onclick="explainCAPolicy(${i})">
           <span style="flex:1">${p.displayName}</span>
-          ${stateLabel}
-          <span style="color:var(--cyan);font-size:0.8rem;margin-left:8px">🔍 Explain</span>
+          ${stateLabel}${findingsBadge}
+          <span style="color:var(--cyan);font-size:0.8rem;margin-left:8px">🔍 View</span>
         </div>`;
       });
     }
     if (!caPolicies.length) issues++;
+    if (critCount) issues += critCount;
     stepDone(3);
 
     // 4 — Risky sign-ins
@@ -629,6 +645,52 @@ async function runScan() {
     addSection('🔐','MFA Status', mfaDisabled===0?'✅ All enabled':'⚠️ '+mfaDisabled+' without MFA', mfaDisabled===0?'ok':'bad', mfaHtml);
     addSection('👑','Admin Roles', globalAdmins.length+' Global Admins', globalAdmins.length<=2?'ok':globalAdmins.length<=5?'warn':'bad', adminHtml);
     addSection('🔒','Conditional Access', caEnabled.length>0?caEnabled.length+' active':'❌ None', caEnabled.length>0?'ok':'bad', caHtml);
+
+    // CA Findings overview — global/tenant-wide findings + summary
+    if (caFindings.length) {
+      const globalFindings = caFindings.filter(f => f.policyIndex === -1);
+      const perPolicyFindings = caFindings.filter(f => f.policyIndex !== -1);
+      let findingsHtml = '';
+
+      // Severity summary row
+      const sevCounts = { critical:0, high:0, medium:0, low:0 };
+      caFindings.forEach(f => sevCounts[f.severity]++);
+      findingsHtml += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        ${sevCounts.critical ? `<span class="pill red">🔴 ${sevCounts.critical} Critical</span>` : ''}
+        ${sevCounts.high ? `<span class="pill warn">🟠 ${sevCounts.high} High</span>` : ''}
+        ${sevCounts.medium ? `<span class="pill warn">🟡 ${sevCounts.medium} Medium</span>` : ''}
+        ${sevCounts.low ? `<span class="pill cyan">🔵 ${sevCounts.low} Low</span>` : ''}
+      </div>`;
+
+      if (globalFindings.length) {
+        findingsHtml += `<div style="margin-bottom:6px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Tenant-Wide Findings</div>`;
+        globalFindings.sort((a,b)=>SEVERITY_ORDER[a.severity]-SEVERITY_ORDER[b.severity]).forEach(f => {
+          const sb = SEVERITY_BADGE[f.severity];
+          findingsHtml += `<div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="pill ${sb.cls}">${sb.label}</span><strong style="font-size:0.9rem">${f.title}</strong></div>
+            <div style="font-size:0.82rem;color:var(--muted);line-height:1.6">${f.detail}</div>
+          </div>`;
+        });
+      }
+
+      if (perPolicyFindings.length) {
+        findingsHtml += `<div style="margin:14px 0 6px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Policy-Specific Findings (click a policy above for full details)</div>`;
+        perPolicyFindings.sort((a,b)=>SEVERITY_ORDER[a.severity]-SEVERITY_ORDER[b.severity]).slice(0,15).forEach(f => {
+          const sb = SEVERITY_BADGE[f.severity];
+          const pname = caPolicies[f.policyIndex]?.displayName || 'Unknown policy';
+          findingsHtml += `<div class="ca-policy-row" onclick="explainCAPolicy(${f.policyIndex})" style="display:block;cursor:pointer">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="pill ${sb.cls}">${sb.label}</span><strong style="font-size:0.9rem">${f.title}</strong></div>
+            <div style="font-size:0.78rem;color:var(--muted)">${pname}</div>
+          </div>`;
+        });
+        if (perPolicyFindings.length > 15) {
+          findingsHtml += `<div style="font-size:0.78rem;color:var(--muted);margin-top:6px">+ ${perPolicyFindings.length - 15} more findings — click individual policies above to view</div>`;
+        }
+      }
+
+      addSection('🔍','CA Best-Practice Findings', `${caFindings.length} issue${caFindings.length!==1?'s':''}`, critCount?'bad':highCount?'warn':'ok', findingsHtml);
+    }
+
     addSection('⚠️','Risky Sign-ins', risky.length===0?'✅ None':'⚠️ '+risky.length+' detected', risky.length===0?'ok':highRisk.length?'bad':'warn', riskyHtml);
     addSection('📊','Secure Score', ssPct!==null?ssPct+'%':'N/A', ssPct>=70?'ok':ssPct>=40?'warn':'bad', ssHtml);
     addSection('📁','SharePoint', spData?'✅ Connected':'⚠️ N/A', spData?'ok':'warn', spHtml);
@@ -655,6 +717,167 @@ async function runScan() {
   document.getElementById('scanBtn').disabled = false;
   document.getElementById('scanBtn').textContent = '🔍  Run Full Security Scan';
 }
+
+// ── CA Policy Findings Engine ───────────────────────────────────────────────
+// Analyzes CA policies for common best-practice issues and misconfigurations.
+// Returns array of { policyIndex, severity, title, detail }
+function analyzeCAPolicies(policies) {
+  const findings = [];
+  const enabled = policies.filter(p => p.state === 'enabled');
+
+  policies.forEach((p, i) => {
+    const c  = p.conditions || {};
+    const gc = p.grantControls || {};
+    const users = c.users || {};
+    const apps  = c.applications || {};
+    const incUsers = users.includeUsers || [];
+    const excUsers = users.excludeUsers || [];
+    const excGroups = users.excludeGroups || [];
+    const excRoles  = users.excludeRoles || [];
+    const incApps = apps.includeApplications || [];
+    const controls = gc.builtInControls || [];
+    const isBlock = controls.includes('block');
+    const isBroadUsers = incUsers.includes('All');
+    const isBroadApps  = incApps.includes('All');
+    const hasExclusions = excUsers.length || excGroups.length || excRoles.length;
+
+    if (p.state !== 'enabled') return; // Only analyze enabled policies for most findings
+
+    // 1. CRITICAL — Broad block policy with no exclusions (break-glass risk)
+    if (isBlock && isBroadUsers && !hasExclusions) {
+      findings.push({
+        policyIndex: i, severity: 'critical',
+        title: 'No exclusions on a broad block policy',
+        detail: `"${p.displayName}" blocks access for All Users with no exclusions. If misconfigured, this could lock out ALL users including admins and break-glass accounts. Always exclude at least one emergency access account.`
+      });
+    }
+
+    // 2. CRITICAL — Broad MFA/grant policy with no exclusions at all (break-glass)
+    if (!isBlock && isBroadUsers && controls.length && !hasExclusions) {
+      findings.push({
+        policyIndex: i, severity: 'critical',
+        title: 'Break-glass account risk — no user exclusions',
+        detail: `"${p.displayName}" targets All Users with enforcement controls but has no user exclusions. If this policy is misconfigured or there's an outage with the required control (e.g. MFA service down), ALL users including admins could be locked out. Exclude at least one emergency access (break-glass) account.`
+      });
+    }
+
+    // 3. HIGH — All apps included with exclusions (legacy auth bypass risk)
+    if (isBroadApps && apps.excludeApplications?.length) {
+      findings.push({
+        policyIndex: i, severity: 'high',
+        title: `${apps.excludeApplications.length} app(s) excluded from this policy`,
+        detail: `This policy excludes ${apps.excludeApplications.length} application(s) from "All cloud apps". Each excluded app bypasses this policy's controls entirely. Review whether these exclusions are still needed.`
+      });
+    }
+
+    // 4. HIGH — Report-only policies that look ready (informational nudge handled separately)
+
+    // 5. MEDIUM — Policy with no session controls and sign-in frequency not set, but grants persistent access
+    if (controls.includes('mfa') && !p.sessionControls?.signInFrequency?.isEnabled) {
+      findings.push({
+        policyIndex: i, severity: 'low',
+        title: 'No sign-in frequency configured',
+        detail: `"${p.displayName}" requires MFA but does not set a sign-in frequency. Consider configuring re-authentication intervals for sensitive scenarios (e.g. every 4-12 hours) to reduce the window of a compromised session.`
+      });
+    }
+
+    // 6. MEDIUM — Legacy authentication not blocked anywhere
+    // (checked globally below)
+
+    // 7. MEDIUM — Policy excludes guests/external users from a security control
+    if (controls.length && !isBlock && excUsers.includes('GuestsOrExternalUsers')) {
+      findings.push({
+        policyIndex: i, severity: 'medium',
+        title: 'Guests/external users excluded from security control',
+        detail: `"${p.displayName}" excludes guest and external users from its requirements (${controls.map(c=>CONTROL_NAMES[c]||c).join(', ')}). Confirm this is intentional — external accounts often need the same protections as internal users.`
+      });
+    }
+
+    // 8. HIGH — Risk-based policy with low severity grant
+    if ((c.signInRiskLevels?.length || c.userRiskLevels?.length) && !controls.includes('block') && !controls.includes('mfa')) {
+      findings.push({
+        policyIndex: i, severity: 'high',
+        title: 'Risk-based policy without strong control',
+        detail: `"${p.displayName}" targets risky sign-ins/users but doesn't require MFA or block access. Consider requiring MFA or blocking access for medium/high risk sign-ins.`
+      });
+    }
+
+    // 9. LOW — Persistent browser session allowed alongside MFA on unmanaged devices
+    if (controls.includes('mfa') && p.sessionControls?.persistentBrowser?.isEnabled && p.sessionControls.persistentBrowser.mode !== 'never') {
+      findings.push({
+        policyIndex: i, severity: 'low',
+        title: 'Persistent browser sessions allowed',
+        detail: `"${p.displayName}" allows "stay signed in" on browser sessions. On shared or unmanaged devices this can leave sessions open after the user leaves. Consider setting this to "Never".`
+      });
+    }
+
+    // 10. MEDIUM — No platform restriction on a sensitive policy
+    if (controls.includes('compliantDevice') || controls.includes('domainJoinedDevice')) {
+      if (!c.platforms?.includePlatforms?.length) {
+        findings.push({
+          policyIndex: i, severity: 'low',
+          title: 'Device compliance required but no platform filter',
+          detail: `"${p.displayName}" requires device compliance/domain join but doesn't restrict by platform. Ensure this works as expected across all platforms in your environment (mobile, desktop, etc.)`
+        });
+      }
+    }
+  });
+
+  // ── Global / tenant-wide checks ─────────────────────────────────────────
+  const hasLegacyAuthBlock = enabled.some(p => {
+    const types = p.conditions?.clientAppTypes || [];
+    return p.grantControls?.builtInControls?.includes('block') && types.includes('exchangeActiveSync') && types.includes('other');
+  });
+  if (!hasLegacyAuthBlock) {
+    findings.push({
+      policyIndex: -1, severity: 'critical',
+      title: 'No policy blocks legacy authentication',
+      detail: 'Legacy authentication protocols (IMAP, POP3, SMTP AUTH, older Office clients) do not support modern auth like MFA and are a common attack vector. No enabled policy was found that blocks legacy auth client app types ("Exchange ActiveSync" + "Other clients"). Consider creating one.'
+    });
+  }
+
+  const anyMfaPolicy = enabled.some(p => p.grantControls?.builtInControls?.includes('mfa'));
+  if (!anyMfaPolicy) {
+    findings.push({
+      policyIndex: -1, severity: 'critical',
+      title: 'No policy enforces MFA anywhere',
+      detail: 'No enabled Conditional Access policy requires MFA. This is one of the highest-impact security controls — without it, password compromise alone can lead to account takeover.'
+    });
+  }
+
+  // Check break-glass accounts exist as exclusions anywhere
+  const allExclusionGroups = new Set();
+  enabled.forEach(p => (p.conditions?.users?.excludeGroups||[]).forEach(g=>allExclusionGroups.add(g)));
+  const allExclusionUsers = new Set();
+  enabled.forEach(p => (p.conditions?.users?.excludeUsers||[]).forEach(u=>allExclusionUsers.add(u)));
+  if (allExclusionGroups.size === 0 && allExclusionUsers.size === 0) {
+    findings.push({
+      policyIndex: -1, severity: 'high',
+      title: 'No break-glass/emergency access accounts detected',
+      detail: 'No Conditional Access policy excludes any user or group — meaning no break-glass (emergency access) accounts appear to be configured. Microsoft recommends at least 2 cloud-only emergency access accounts excluded from all CA policies, with strong unique credentials stored securely offline.'
+    });
+  }
+
+  // Too many policies disabled
+  const disabledCount = policies.filter(p=>p.state==='disabled').length;
+  if (disabledCount > 0 && policies.length > 0) {
+    findings.push({
+      policyIndex: -1, severity: 'low',
+      title: `${disabledCount} policy(ies) disabled`,
+      detail: `${disabledCount} Conditional Access policy(ies) are disabled. Review whether these should be enabled, set to report-only, or removed to reduce clutter.`
+    });
+  }
+
+  return findings;
+}
+
+const SEVERITY_ORDER = { critical: 0, high: 1, medium: 2, low: 3 };
+const SEVERITY_BADGE = {
+  critical: { label:'🔴 Critical', cls:'red' },
+  high:     { label:'🟠 High', cls:'warn' },
+  medium:   { label:'🟡 Medium', cls:'warn' },
+  low:      { label:'🔵 Low', cls:'cyan' },
+};
 
 // ── CA Policy Explainer ───────────────────────────────────────────────────────
 const APP_NAMES = {
@@ -800,6 +1023,20 @@ function explainCAPolicy(idx) {
   if (sc.persistentBrowser?.isEnabled) sessionHtml += caRow('Persistent Browser', pill(sc.persistentBrowser.mode==='never'?'Never (no stay signed in)':'Always'));
   if (sc.applicationEnforcedRestrictions?.isEnabled) sessionHtml += caRow('App Enforced Restrictions', pill('Enabled'));
   if (sessionHtml) html += caSection('⏱️ Session Controls', sessionHtml);
+
+  // Findings for this specific policy
+  const myFindings = (window._scanData.caFindings || []).filter(f => f.policyIndex === idx);
+  if (myFindings.length) {
+    let findHtml = '';
+    myFindings.sort((a,b)=>SEVERITY_ORDER[a.severity]-SEVERITY_ORDER[b.severity]).forEach(f => {
+      const sb = SEVERITY_BADGE[f.severity];
+      findHtml += `<div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="pill ${sb.cls}">${sb.label}</span><strong style="font-size:0.9rem">${f.title}</strong></div>
+        <div style="font-size:0.82rem;color:var(--muted);line-height:1.6">${f.detail}</div>
+      </div>`;
+    });
+    html += caSection(`🔍 Findings (${myFindings.length})`, findHtml);
+  }
 
   document.getElementById('caModalDetails').innerHTML = html;
   document.getElementById('caModalOverlay').classList.add('open');

@@ -192,6 +192,7 @@ footer a{color:var(--green);text-decoration:none}
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="rescan-btn" onclick="exportPDF()">📄 Export PDF</button>
+        <button class="rescan-btn" onclick="exportCAPDF()">🔒 Export CA Report</button>
         <button class="rescan-btn" onclick="runScan()">🔄 Re-scan</button>
       </div>
     </div>
@@ -1142,7 +1143,7 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
   <div class="scores">${scoreCards.map(s=>`<div class="sc"><div class="v" style="color:${colFix(s.col)}">${s.val}</div><div class="l">${s.lbl}</div></div>`).join('')}</div>
   <h2>Security Findings</h2>
   ${sections.filter(s=>!s.title.includes('Users') && !s.title.includes('CA Best-Practice Findings')).map(s=>{
-    const bc = s.badgeCls.includes('bad')?'bad':s.badgeCls.includes('warn')?'warn':s.badgeCls.includes('ok')?'ok':'info';
+    const bc = s.badgeCls.includes('badge-bad')?'bad':s.badgeCls.includes('badge-warn')?'warn':s.badgeCls.includes('badge-ok')?'ok':'info';
     return `<div class="sec"><div class="sec-hdr"><span>${s.icon}</span><span class="sec-title">${s.title}</span><span class="sec-badge ${bc}">${s.badge}</span></div>
     ${s.rows.map(r=>{const c=r.cls.includes('good')?'good':r.cls.includes('warn')?'warn':r.cls.includes('bad')?'bad':'';return`<div class="rrow"><span class="rk">${r.key}</span><span class="rv ${c}">${r.val}</span></div>`}).join('')}</div>`;
   }).join('')}
@@ -1189,11 +1190,175 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
   win.document.close();
   win.onload = () => { setTimeout(() => { win.print(); btns.forEach(b=>b.disabled=false); }, 800); };
 }
+// ── Standalone Conditional Access Best-Practice Report ─────────────────────────
+async function exportCAPDF() {
+  const btns = document.querySelectorAll('.rescan-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const data = window._scanData || {};
+  const org  = data.orgName || 'M365 Tenant';
+  const date = data.scanDate || new Date().toLocaleDateString('en-GB');
+  const policies = data.caPolicies || [];
+  const findings = data.caFindings || [];
+
+  const enabled  = policies.filter(p=>p.state==='enabled');
+  const disabled = policies.filter(p=>p.state==='disabled');
+  const reportOnly = policies.filter(p=>p.state==='enabledForReportingButNotEnforced');
+
+  const sevCounts = { critical:0, high:0, medium:0, low:0 };
+  findings.forEach(f => sevCounts[f.severity]++);
+
+  const sevLabel = { critical:'CRITICAL', high:'HIGH', medium:'MEDIUM', low:'LOW' };
+  const sevColor = { critical:'#dc2626', high:'#d97706', medium:'#d97706', low:'#0284c7' };
+  const sevOrder = { critical:0, high:1, medium:2, low:3 };
+
+  const stateLabel = (s) => s==='enabled' ? '<span class="st st-ok">Enabled</span>'
+    : s==='disabled' ? '<span class="st st-bad">Disabled</span>'
+    : '<span class="st st-warn">Report-Only</span>';
+
+  // Build full policy detail HTML for each policy
+  function policyDetailHtml(p, idx) {
+    const c = p.conditions || {}, gc = p.grantControls || {}, sc = p.sessionControls || {};
+    const users = c.users || {};
+    const incUsers = users.includeUsers || [];
+    const excUsers = users.excludeUsers || [];
+    const excGroups = users.excludeGroups || [];
+    const apps = c.applications || {};
+    const incApps = apps.includeApplications || [];
+    const controls = gc.builtInControls || [];
+
+    let rows = '';
+    rows += `<div class="prow"><span class="pk">Include Users</span><span class="pv">${incUsers.includes('All')?'All users':incUsers.length?incUsers.length+' specific user(s)/group(s)':'None'}</span></div>`;
+    if (excUsers.length || excGroups.length) {
+      const exc = [];
+      if (excUsers.includes('GuestsOrExternalUsers')) exc.push('Guests/External users');
+      if (excGroups.length) exc.push(excGroups.length+' group(s)');
+      const otherU = excUsers.filter(u=>u!=='GuestsOrExternalUsers');
+      if (otherU.length) exc.push(otherU.length+' user(s)');
+      rows += `<div class="prow"><span class="pk">Exclusions</span><span class="pv">${exc.join(', ')}</span></div>`;
+    } else {
+      rows += `<div class="prow"><span class="pk">Exclusions</span><span class="pv" style="color:#dc2626">None</span></div>`;
+    }
+    rows += `<div class="prow"><span class="pk">Applications</span><span class="pv">${incApps.includes('All')?'All cloud apps':incApps.length+' specific app(s)'}${apps.excludeApplications?.length?' ('+apps.excludeApplications.length+' excluded)':''}</span></div>`;
+    if (c.clientAppTypes?.length) rows += `<div class="prow"><span class="pk">Client Apps</span><span class="pv">${mapList(c.clientAppTypes,CLIENT_APP_NAMES).join(', ')}</span></div>`;
+    if (c.platforms?.includePlatforms?.length) rows += `<div class="prow"><span class="pk">Platforms</span><span class="pv">${mapList(c.platforms.includePlatforms,PLATFORM_NAMES).join(', ')}</span></div>`;
+    if (c.signInRiskLevels?.length) rows += `<div class="prow"><span class="pk">Sign-in Risk</span><span class="pv">${mapList(c.signInRiskLevels,RISK_NAMES).join(', ')}</span></div>`;
+    if (c.userRiskLevels?.length) rows += `<div class="prow"><span class="pk">User Risk</span><span class="pv">${mapList(c.userRiskLevels,RISK_NAMES).join(', ')}</span></div>`;
+    rows += `<div class="prow"><span class="pk">Grant Controls</span><span class="pv">${controls.length?(gc.operator==='AND'?'ALL of: ':'ANY of: ')+controls.map(c=>CONTROL_NAMES[c]||c).join(', '):'None'}</span></div>`;
+    if (sc.signInFrequency?.isEnabled) rows += `<div class="prow"><span class="pk">Sign-in Frequency</span><span class="pv">Every ${sc.signInFrequency.value} ${sc.signInFrequency.type}</span></div>`;
+    if (sc.persistentBrowser?.isEnabled) rows += `<div class="prow"><span class="pk">Persistent Browser</span><span class="pv">${sc.persistentBrowser.mode==='never'?'Never':'Always'}</span></div>`;
+
+    // Findings for this policy
+    const myFindings = findings.filter(f=>f.policyIndex===idx).sort((a,b)=>sevOrder[a.severity]-sevOrder[b.severity]);
+    let findHtml = '';
+    if (myFindings.length) {
+      findHtml = `<div class="pol-findings">` + myFindings.map(f =>
+        `<div class="finding"><div class="finding-hdr"><span class="finding-sev" style="background:${sevColor[f.severity]}">${sevLabel[f.severity]}</span><span class="finding-title">${f.title}</span></div><div class="finding-detail">${f.detail}</div></div>`
+      ).join('') + `</div>`;
+    }
+
+    return `<div class="policy-card">
+      <div class="policy-hdr"><span class="policy-name">${p.displayName||'Unnamed Policy'}</span>${stateLabel(p.state)}</div>
+      <div class="policy-body">${rows}</div>
+      ${findHtml}
+    </div>`;
+  }
+
+  const globalFindings = findings.filter(f=>f.policyIndex===-1).sort((a,b)=>sevOrder[a.severity]-sevOrder[b.severity]);
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Conditional Access Report — ${org}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#1a2b45;font-size:11pt}
+.cover{background:linear-gradient(135deg,#1E3A5F,#0F1C35);color:white;padding:60px 50px}
+.cover-logo{font-size:13pt;font-weight:700;color:#00E87A;letter-spacing:2px;margin-bottom:28px}
+.cover-title{font-size:26pt;font-weight:700;margin-bottom:8px}
+.cover-sub{font-size:12pt;color:rgba(255,255,255,0.65);margin-bottom:28px}
+.cover-meta{display:flex;gap:36px;flex-wrap:wrap}
+.cml label{font-size:8pt;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);display:block;margin-bottom:3px}
+.cml span{font-size:11pt;font-weight:600}
+.body{padding:36px 50px}
+.scores{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:28px}
+.sc{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 8px;text-align:center}
+.sc .v{font-size:17pt;font-weight:700;margin-bottom:2px}
+.sc .l{font-size:7pt;text-transform:uppercase;letter-spacing:.5px;color:#6b7280}
+h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bottom:2px solid #00E87A}
+.finding{border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;margin-bottom:10px;page-break-inside:avoid}
+.finding-hdr{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.finding-sev{font-size:7.5pt;font-weight:700;color:white;padding:2px 8px;border-radius:4px;letter-spacing:.5px}
+.finding-title{font-size:9.5pt;font-weight:700;color:#1e3a5f}
+.finding-detail{font-size:8.5pt;color:#374151;line-height:1.6}
+.pg{page-break-before:always}
+.policy-card{border:1px solid #e2e8f0;border-radius:8px;margin-bottom:14px;page-break-inside:avoid;overflow:hidden}
+.policy-hdr{display:flex;align-items:center;justify-content:space-between;background:#f0f4f8;padding:10px 14px}
+.policy-name{font-size:11pt;font-weight:700;color:#1e3a5f}
+.st{font-size:7.5pt;font-weight:700;padding:2px 9px;border-radius:4px;letter-spacing:.5px}
+.st-ok{background:#dcfce7;color:#166534}.st-bad{background:#fee2e2;color:#991b1b}.st-warn{background:#fef3c7;color:#92400e}
+.policy-body{padding:10px 14px}
+.prow{display:flex;padding:4px 0;border-bottom:1px solid #f1f5f9;font-size:8.5pt}
+.pk{font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;width:140px;flex-shrink:0;font-size:7.5pt}
+.pv{flex:1;color:#374151}
+.pol-findings{padding:0 14px 12px}
+.summary-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 20px;margin-bottom:20px;font-size:9.5pt;line-height:1.8;color:#1a2b45}
+.footer{background:#f8fafc;border-top:2px solid #00E87A;padding:16px 50px;display:flex;justify-content:space-between;margin-top:28px}
+.fl{font-size:11pt;font-weight:700;color:#1e3a5f}
+.fn{font-size:8pt;color:#6b7280}
+</style>
+</head><body>
+<div class="cover">
+  <div class="cover-logo">⚡ Salman IT Tools</div>
+  <div class="cover-title">Conditional Access Report</div>
+  <div class="cover-sub">Best Practice Review &amp; Findings</div>
+  <div class="cover-meta">
+    <div class="cml"><label>Organisation</label><span>${org}</span></div>
+    <div class="cml"><label>Report Date</label><span>${date}</span></div>
+    <div class="cml"><label>Total Policies</label><span>${policies.length}</span></div>
+    <div class="cml"><label>Prepared By</label><span>Salman Tariq · Microsoft 365 & Cloud Infrastructure Expert</span></div>
+  </div>
+</div>
+<div class="body">
+  <h2>Summary</h2>
+  <div class="scores">
+    <div class="sc"><div class="v">${policies.length}</div><div class="l">Total Policies</div></div>
+    <div class="sc"><div class="v" style="color:#166534">${enabled.length}</div><div class="l">Enabled</div></div>
+    <div class="sc"><div class="v" style="color:#92400e">${reportOnly.length}</div><div class="l">Report-Only</div></div>
+    <div class="sc"><div class="v" style="color:#991b1b">${disabled.length}</div><div class="l">Disabled</div></div>
+    <div class="sc"><div class="v" style="color:#dc2626">${sevCounts.critical}</div><div class="l">Critical Findings</div></div>
+    <div class="sc"><div class="v" style="color:#d97706">${sevCounts.high}</div><div class="l">High Findings</div></div>
+  </div>
+  <div class="summary-box">
+    This report reviews <strong>${policies.length} Conditional Access policies</strong> (${enabled.length} enabled, ${reportOnly.length} report-only, ${disabled.length} disabled) against Microsoft best practices.
+    <strong>${findings.length} finding(s)</strong> were identified — ${sevCounts.critical} critical, ${sevCounts.high} high, ${sevCounts.medium} medium and ${sevCounts.low} low severity.
+    ${sevCounts.critical>0 ? 'Critical findings should be addressed as a priority, as they may indicate gaps that could lead to account lockout or bypass of security controls.' : 'No critical findings were identified — overall posture is good. Review medium/low findings for further hardening opportunities.'}
+  </div>
+  ${globalFindings.length ? `
+  <h2>Tenant-Wide Findings</h2>
+  ${globalFindings.map(f => `<div class="finding"><div class="finding-hdr"><span class="finding-sev" style="background:${sevColor[f.severity]}">${sevLabel[f.severity]}</span><span class="finding-title">${f.title}</span></div><div class="finding-detail">${f.detail}</div></div>`).join('')}
+  ` : ''}
+  <div class="pg"></div>
+  <h2>Policy Details &amp; Findings (${policies.length})</h2>
+  ${policies.map((p,idx) => policyDetailHtml(p, idx)).join('')}
+</div>
+<div class="footer">
+  <div class="fl">⚡ Salman IT Tools</div>
+  <div class="fn">salmanittools.co.uk · ${date}</div>
+  <div class="fn">Read-only access used · No changes made to tenant</div>
+</div>
+</body></html>`;
+
+  const win = window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => { setTimeout(() => { win.print(); btns.forEach(b=>b.disabled=false); }, 800); };
+}
+
 // Expose to global scope for HTML onclick handlers
 window.signIn        = signIn;
 window.signOut       = signOut;
 window.runScan       = runScan;
 window.exportPDF     = exportPDF;
+window.exportCAPDF   = exportCAPDF;
 window.toggleSection = toggleSection;
 window.explainCAPolicy = explainCAPolicy;
 window.closeCAModal    = closeCAModal;

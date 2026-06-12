@@ -1075,6 +1075,10 @@ async function exportPDF() {
     })),
   }));
 
+  // CA Findings — pulled directly from scan data (not DOM, since it uses custom markup)
+  const caFindingsData = window._scanData.caFindings || [];
+  const caPoliciesData = window._scanData.caPolicies || [];
+
   const colFix = c => c.replace('var(--green)','#00c468').replace('var(--warning)','#d97706')
     .replace('var(--danger)','#dc2626').replace('var(--white)','#1a2b45').replace('var(--cyan)','#0284c7');
 
@@ -1110,6 +1114,12 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
 .ut td{padding:5px 8px;border-bottom:1px solid #f1f5f9}
 .ut tr:nth-child(even) td{background:#f8fafc}
 .lb{background:#dcfce7;color:#166534;padding:1px 5px;border-radius:3px;font-size:7pt;font-weight:600;margin:1px;display:inline-block}
+.finding{border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;margin-bottom:10px;page-break-inside:avoid}
+.finding-hdr{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.finding-sev{font-size:7.5pt;font-weight:700;color:white;padding:2px 8px;border-radius:4px;letter-spacing:.5px}
+.finding-title{font-size:9.5pt;font-weight:700;color:#1e3a5f}
+.finding-policy{font-size:8pt;color:#6b7280;margin-bottom:5px}
+.finding-detail{font-size:8.5pt;color:#374151;line-height:1.6}
 .pg{page-break-before:always}
 .footer{background:#f8fafc;border-top:2px solid #00E87A;padding:16px 50px;display:flex;justify-content:space-between;margin-top:28px}
 .fl{font-size:11pt;font-weight:700;color:#1e3a5f}
@@ -1131,11 +1141,29 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
   <h2>Executive Summary</h2>
   <div class="scores">${scoreCards.map(s=>`<div class="sc"><div class="v" style="color:${colFix(s.col)}">${s.val}</div><div class="l">${s.lbl}</div></div>`).join('')}</div>
   <h2>Security Findings</h2>
-  ${sections.filter(s=>!s.title.includes('Users')).map(s=>{
+  ${sections.filter(s=>!s.title.includes('Users') && !s.title.includes('CA Best-Practice Findings')).map(s=>{
     const bc = s.badgeCls.includes('bad')?'bad':s.badgeCls.includes('warn')?'warn':s.badgeCls.includes('ok')?'ok':'info';
     return `<div class="sec"><div class="sec-hdr"><span>${s.icon}</span><span class="sec-title">${s.title}</span><span class="sec-badge ${bc}">${s.badge}</span></div>
     ${s.rows.map(r=>{const c=r.cls.includes('good')?'good':r.cls.includes('warn')?'warn':r.cls.includes('bad')?'bad':'';return`<div class="rrow"><span class="rk">${r.key}</span><span class="rv ${c}">${r.val}</span></div>`}).join('')}</div>`;
   }).join('')}
+  ${caFindingsData.length ? `
+  <div class="pg"></div>
+  <h2>Conditional Access — Best Practice Findings</h2>
+  <p style="font-size:9pt;color:#6b7280;margin-bottom:14px">${caFindingsData.length} finding(s) identified across ${caPoliciesData.length} Conditional Access policy(ies).</p>
+  ${(() => {
+    const sevLabel = { critical:'CRITICAL', high:'HIGH', medium:'MEDIUM', low:'LOW' };
+    const sevColor = { critical:'#dc2626', high:'#d97706', medium:'#d97706', low:'#0284c7' };
+    const sorted = [...caFindingsData].sort((a,b)=>({critical:0,high:1,medium:2,low:3}[a.severity]-{critical:0,high:1,medium:2,low:3}[b.severity]));
+    return sorted.map(f => {
+      const pname = f.policyIndex >= 0 ? (caPoliciesData[f.policyIndex]?.displayName || 'Unknown policy') : 'Tenant-wide';
+      return `<div class="finding">
+        <div class="finding-hdr"><span class="finding-sev" style="background:${sevColor[f.severity]}">${sevLabel[f.severity]}</span><span class="finding-title">${f.title}</span></div>
+        <div class="finding-policy">Policy: ${pname}</div>
+        <div class="finding-detail">${f.detail}</div>
+      </div>`;
+    }).join('');
+  })()}
+  ` : ''}
   <div class="pg"></div>
   <h2>User Directory with Licenses</h2>
   <table class="ut"><tr><th>#</th><th>Name</th><th>Email</th><th>Job Title</th><th>Department</th><th>Licenses</th><th>Type</th><th>Status</th></tr>

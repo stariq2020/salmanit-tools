@@ -199,12 +199,30 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info -->
   <div class="info-section">
     <div class="page-eyebrow">How It Works</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">100% Private — Nothing Leaves Your Device</h2>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">100% Private — Nothing Leaves Your Device</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:24px">
+      This tool uses your browser's built-in Canvas API to resize and re-encode images directly on your device. Drop one or more JPG, PNG or WebP files,
+      adjust the quality slider to control the balance between file size and image quality, and optionally set a maximum width to resize larger images down.
+      The compressed result appears instantly, showing the new file size and percentage saved compared to the original — so you can fine-tune the settings
+      before downloading.
+    </p>
     <div class="info-grid">
       <div class="info-card"><div class="ico">🔒</div><h4>No Uploads</h4><p>Your images never leave your device. Compression happens entirely in your browser using the Canvas API.</p></div>
       <div class="info-card"><div class="ico">⚡</div><h4>Instant</h4><p>No waiting for server processing. Images are compressed in milliseconds on your own hardware.</p></div>
       <div class="info-card"><div class="ico">📦</div><h4>Batch Processing</h4><p>Drop multiple images at once and compress them all in one go. Download individually or all at once.</p></div>
       <div class="info-card"><div class="ico">🎛️</div><h4>Full Control</h4><p>Adjust quality from 10% to 95%, choose output format, and set a maximum width for resizing.</p></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="info-section">
+    <div class="page-eyebrow">FAQ</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
+    <div class="info-grid" style="grid-template-columns:1fr">
+      <div class="info-card"><h4>Will compression reduce image quality?</h4><p>At higher quality settings (70-90%), the difference is usually imperceptible while file size drops significantly. Lower settings (below 50%) trade more visible quality for smaller files — useful for thumbnails or web backgrounds.</p></div>
+      <div class="info-card"><h4>What's the best format for my images?</h4><p>JPEG works best for photos with lots of colour variation. PNG is better for graphics, logos, or images with transparency. WebP often gives the smallest file size while maintaining quality, and is supported by all modern browsers.</p></div>
+      <div class="info-card"><h4>Is there a file size or quantity limit?</h4><p>No artificial limit is imposed by this tool — the only constraint is your device's available memory when processing very large batches.</p></div>
+      <div class="info-card"><h4>Why would I resize using max width?</h4><p>Many websites don't need full-resolution images. Setting a max width (e.g. 1920px) reduces both dimensions and file size together, which is ideal for web use where large originals are unnecessary.</p></div>
     </div>
   </div>
 </div>

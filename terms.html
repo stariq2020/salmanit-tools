@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — SalmanIT Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #080D14;
+  --deep:   #0B1120;
+  --green:  #00E87A;
+  --white:  #F0F6FF;
+  --muted:  #5A6A85;
+  --card:   #0E1A2E;
+  --border: rgba(255,255,255,0.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--ink);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 68px;
+  background: rgba(8,13,20,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem; letter-spacing: .08em;
+  color: var(--white); text-decoration: none;
+}
+.nav-logo .dot { color: var(--green); }
+.nav-back {
+  font-size: 0.88rem; font-weight: 500;
+  color: var(--muted); text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+  transition: color .2s;
+}
+.nav-back:hover { color: var(--green); }
+
+/* CONTENT */
+.page-wrap {
+  max-width: 760px; margin: 0 auto;
+  padding: 120px 24px 80px;
+}
+
+.page-eyebrow {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .18em;
+  color: var(--green); margin-bottom: 14px;
+}
+
+.page-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  letter-spacing: .04em; line-height: 1;
+  color: var(--white); margin-bottom: 12px;
+}
+
+.page-date {
+  font-size: 0.82rem; color: var(--muted);
+  margin-bottom: 56px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section {
+  margin-bottom: 44px;
+}
+
+.section h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; letter-spacing: .06em;
+  color: var(--green); margin-bottom: 14px;
+}
+
+.section p, .section li {
+  font-size: 0.92rem; color: rgba(240,246,255,0.65);
+  line-height: 1.85;
+}
+
+.section ul {
+  list-style: none; margin-top: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.section ul li {
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.section ul li::before {
+  content: '→';
+  color: var(--green); font-size: 0.8rem;
+  flex-shrink: 0; margin-top: 3px;
+}
+
+.highlight-box {
+  background: rgba(0,232,122,0.05);
+  border: 1px solid rgba(0,232,122,0.15);
+  border-radius: 12px; padding: 20px 24px;
+  margin: 16px 0;
+}
+.highlight-box p {
+  color: rgba(240,246,255,0.75) !important;
+}
+
+.contact-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px 32px;
+  margin-top: 48px;
+}
+.contact-box h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: .06em;
+  color: var(--white); margin-bottom: 10px;
+}
+.contact-box p {
+  font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+}
+.contact-box a { color: var(--green); text-decoration: none; }
+.contact-box a:hover { text-decoration: underline; }
+
+/* FOOTER */
+footer {
+  background: var(--deep);
+  border-top: 1px solid var(--border);
+  padding: 32px 24px; text-align: center;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; letter-spacing: .08em;
+  color: var(--white);
+}
+.footer-logo .dot { color: var(--green); }
+footer p { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+footer a { color: var(--green); text-decoration: none; }
+
+@media (max-width: 640px) {
+  nav { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ SALMANIT<span class="dot">.</span>TOOLS</a>
+  <a class="nav-back" href="index.html">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="page-eyebrow">Legal</div>
+  <h1 class="page-title">Terms of Service</h1>
+  <p class="page-date">Last updated: 14 June 2026 &nbsp;·&nbsp; SalmanIT Tools</p>
+
+  <div class="section">
+    <h2>Overview</h2>
+    <p>These Terms of Service ("Terms") govern your use of <strong>salmanittools.co.uk</strong> ("the Site"), operated by Salman Tariq trading as SalmanIT Tools ("we", "us", "our"). By accessing or using the Site, downloading any of our software, or using any of our online tools, you agree to be bound by these Terms.</p>
+    <p style="margin-top:12px">If you do not agree with any part of these Terms, please do not use the Site or its tools.</p>
+  </div>
+
+  <div class="section">
+    <h2>Use of the Site and Tools</h2>
+    <p>The Site provides free Windows utility software for download, along with browser-based online tools including but not limited to a QR code generator, password generator, image compressor, Conditional Access policy explainer, network diagnostics, and a Microsoft 365 security scanner.</p>
+    <ul style="margin-top:14px">
+      <li>All tools are provided <strong>free of charge</strong> for personal and commercial use.</li>
+      <li>You may use the tools and download the software for any lawful purpose.</li>
+      <li>You must not attempt to reverse-engineer, resell, or redistribute the downloadable software as your own product without attribution.</li>
+      <li>You must not use the Site or its tools for any unlawful purpose, or in a way that could damage, disable, or impair the Site.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>No Warranty</h2>
+    <p>The Site, its tools, and downloadable software are provided <strong>"as is" and "as available"</strong> without warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+    <p style="margin-top:12px">While every effort is made to ensure our tools function correctly and our Windows utilities perform safe, well-documented operations, we do not guarantee that the Site or any tool will be error-free, uninterrupted, or compatible with every system configuration.</p>
+  </div>
+
+  <div class="section">
+    <h2>Limitation of Liability</h2>
+    <p>To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of data, profits, or revenue, arising from your use of (or inability to use) the Site, its tools, or any downloaded software — even if we have been advised of the possibility of such damages.</p>
+    <p style="margin-top:12px">For the Microsoft 365 Security Scanner specifically: this tool requests read-only permissions via Microsoft's official OAuth flow and does not modify your tenant configuration in any way. However, you remain responsible for reviewing and managing the permissions granted to any third-party application registered in your Microsoft Entra ID, and for revoking access when no longer needed.</p>
+  </div>
+
+  <div class="section">
+    <h2>Third-Party Services</h2>
+    <p>Some tools rely on third-party services to function:</p>
+    <ul style="margin-top:14px">
+      <li>The <strong>Microsoft 365 Security Scanner</strong> uses Microsoft's official authentication (MSAL) and Microsoft Graph API.</li>
+      <li>The <strong>contact form</strong> is processed via Formspree.</li>
+      <li>The Site displays advertisements served by <strong>Google AdSense</strong>, which may use cookies as described in our Privacy Policy.</li>
+    </ul>
+    <p style="margin-top:12px">We are not responsible for the availability, content, or practices of these third-party services. Your use of them is subject to their own terms and privacy policies.</p>
+  </div>
+
+  <div class="section">
+    <h2>Intellectual Property</h2>
+    <p>The Site's design, branding, original written content, and the source code of the tools (except where explicitly open-sourced) are the property of Salman Tariq / SalmanIT Tools. You may use the tools as provided, but you may not copy, reproduce, or republish the Site's design or content without permission.</p>
+  </div>
+
+  <div class="section">
+    <h2>Changes to These Terms</h2>
+    <p>We may update these Terms from time to time. Any changes will be posted on this page with an updated date at the top. Continued use of the Site after changes are posted constitutes acceptance of the revised Terms.</p>
+  </div>
+
+  <div class="section">
+    <h2>Governing Law</h2>
+    <p>These Terms are governed by and construed in accordance with the laws of England and Wales. Any disputes arising from these Terms or your use of the Site shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+  </div>
+
+  <div class="contact-box">
+    <h3>Contact Us</h3>
+    <p>If you have any questions about these Terms of Service, please get in touch:</p>
+    <p style="margin-top:10px">
+      🌐 Website: <a href="https://salmanittools.co.uk">salmanittools.co.uk</a><br>
+      📧 Email: <a href="mailto:info@salmanitservices.com">info@salmanitservices.com</a><br>
+      📍 Location: Crawley, United Kingdom
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ SALMANIT<span class="dot">.</span>TOOLS</div>
+  <p>Free Windows utilities for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+</body>
+</html>

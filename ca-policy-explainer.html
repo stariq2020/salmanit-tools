@@ -169,6 +169,27 @@ footer a{color:var(--green);text-decoration:none}
     <div id="detailSections"></div>
   </div>
 
+  <!-- What is CA -->
+  <div class="info-section">
+    <div class="page-eyebrow">Background</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is Conditional Access?</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:12px">
+      Conditional Access is a feature within Microsoft Entra ID (formerly Azure Active Directory) that lets organisations control how and when users can access cloud applications and resources.
+      Rather than a simple username-and-password check, Conditional Access policies evaluate signals such as who the user is, what application they're accessing, what device and location they're
+      coming from, and the assessed risk level of the sign-in — then apply controls accordingly, such as requiring multi-factor authentication, blocking access entirely, or requiring a compliant device.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:12px">
+      These policies are exported and stored as JSON, which is straightforward for automated systems but difficult for humans to read at a glance — especially when reviewing dozens of policies
+      during a security audit or trying to understand why access was granted or denied in a particular scenario. Each policy can combine multiple conditions (users, groups, applications, locations,
+      device platforms, risk levels) with multiple grant and session controls, and the JSON structure doesn't make these relationships obvious.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px">
+      This tool takes that raw JSON and translates it into a plain English summary — explaining who the policy applies to, what exclusions exist, which applications are in scope, and exactly what's
+      required for access to be granted. It's particularly useful for IT administrators documenting their tenant's security configuration, MSPs reviewing client environments, or anyone preparing
+      for a Conditional Access audit or Microsoft Secure Score review.
+    </p>
+  </div>
+
   <!-- Info -->
   <div class="info-section">
     <div class="page-eyebrow">Why This Helps</div>
@@ -178,6 +199,18 @@ footer a{color:var(--green);text-decoration:none}
       <div class="info-card"><div class="ico">⚡</div><h4>Instant</h4><p>Paste and click — get a plain English explanation in milliseconds. No waiting, no signup.</p></div>
       <div class="info-card"><div class="ico">📊</div><h4>Audit Friendly</h4><p>Great for documenting policies, security reviews, or explaining configurations to non-technical stakeholders.</p></div>
       <div class="info-card"><div class="ico">🎯</div><h4>Catches Gaps</h4><p>Quickly spot if a policy has no exclusions, applies to all apps, or is set to report-only mode.</p></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="info-section">
+    <div class="page-eyebrow">FAQ</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
+    <div class="info-grid" style="grid-template-columns:1fr">
+      <div class="info-card"><h4>Do I need admin access to get the policy JSON?</h4><p>Yes, you'll need at least Security Reader or Conditional Access Administrator access in Microsoft Entra ID to view and export Conditional Access policies.</p></div>
+      <div class="info-card"><h4>Does this tool work for all Conditional Access policies?</h4><p>Yes — it handles all standard fields including users, groups, applications, platforms, locations, risk levels, grant controls and session controls. If a field isn't recognised, it's displayed as-is so you don't lose any information.</p></div>
+      <div class="info-card"><h4>Can I use this for documentation or compliance reports?</h4><p>Absolutely. The plain English output is designed to be copied into security documentation, runbooks, or shared with stakeholders who aren't familiar with raw JSON.</p></div>
+      <div class="info-card"><h4>I have many policies to review — is there a faster way?</h4><p>If you're reviewing your own tenant, our <a href="m365-scan.html" style="color:var(--green)">M365 Security Scanner</a> connects directly via Microsoft sign-in and shows all your Conditional Access policies with plain English explanations and best-practice findings automatically — no copy/paste needed.</p></div>
     </div>
   </div>
 </div>

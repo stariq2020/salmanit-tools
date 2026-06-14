@@ -132,6 +132,12 @@ footer a{color:var(--green);text-decoration:none}
 .pill.warn{background:rgba(245,158,11,0.1);color:var(--warning)}
 .pill.cyan{background:rgba(0,200,255,0.1);color:var(--cyan)}
 .pill.red{background:rgba(239,68,68,0.1);color:var(--danger)}
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
+.info-card .ico{font-size:1.6rem;margin-bottom:10px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;color:var(--white);margin-bottom:6px}
+.info-card p{font-size:0.82rem;color:var(--muted);line-height:1.65}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:var(--green)}
@@ -234,6 +240,44 @@ footer a{color:var(--green);text-decoration:none}
       <h3>Issues Found? Happy to Help.</h3>
       <p>I have 25+ years of experience in Microsoft 365 and cloud technologies — MFA, Conditional Access, Exchange migrations, Entra ID and more. Feel free to get in touch if you'd like to discuss anything.</p>
       <a class="cta-wa" href="https://wa.me/447947707097" target="_blank">💬 &nbsp;WhatsApp Me</a>
+    </div>
+  </div>
+
+  <!-- About this tool -->
+  <div class="info-section">
+    <div class="page-eyebrow">About This Tool</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why Run a Microsoft 365 Security Health Check?</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:12px">
+      Most Microsoft 365 tenants accumulate security gaps over time — accounts created without MFA, Conditional Access policies with unintended exclusions, legacy authentication
+      protocols left enabled, mailbox forwarding rules pointing externally, or admin roles assigned more broadly than necessary. Individually these might seem minor, but together
+      they represent the most common entry points used in real-world account takeover and business email compromise attacks.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:12px">
+      This scanner connects to your tenant using Microsoft's official sign-in (the same OAuth flow used by Microsoft's own admin tools) and requests <strong>read-only</strong> permissions —
+      it cannot make any changes to your configuration. Once connected, it checks your users and MFA registration status, admin role assignments, sign-in risk detections, Conditional Access
+      policies (including a full best-practice findings analysis), SharePoint sharing settings, Intune-managed devices, and mailbox forwarding rules — then summarises everything into a
+      single report with clear pass/fail indicators.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">
+      The Conditional Access section goes further than a simple policy list — every policy is analysed against common best practices (such as break-glass account exclusions, legacy
+      authentication blocking, and MFA enforcement coverage) and flagged by severity, with a plain English explanation of what each policy actually does. Both a full security report and
+      a dedicated Conditional Access report can be exported as PDF documents for record-keeping or sharing with stakeholders.
+    </p>
+  </div>
+
+  <!-- What gets checked -->
+  <div class="info-section">
+    <div class="page-eyebrow">Coverage</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">What Gets Checked</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">👤</div><h4>Users &amp; MFA</h4><p>Total users, licensing, and how many have multi-factor authentication registered.</p></div>
+      <div class="info-card"><div class="ico">🛡️</div><h4>Admin Roles</h4><p>Who holds privileged roles like Global Administrator, and whether the count looks excessive.</p></div>
+      <div class="info-card"><div class="ico">⚠️</div><h4>Risky Sign-ins</h4><p>Recent sign-in risk detections from Microsoft Entra ID Protection, if available on your licence.</p></div>
+      <div class="info-card"><div class="ico">🔒</div><h4>Conditional Access</h4><p>Every policy explained in plain English, plus best-practice findings with severity ratings.</p></div>
+      <div class="info-card"><div class="ico">📁</div><h4>SharePoint Sharing</h4><p>Tenant-wide external sharing settings that could expose data to unintended recipients.</p></div>
+      <div class="info-card"><div class="ico">💻</div><h4>Managed Devices</h4><p>Intune-enrolled devices and their compliance status.</p></div>
+      <div class="info-card"><div class="ico">📧</div><h4>Mail Forwarding</h4><p>Mailboxes with external forwarding rules configured — a common data exfiltration technique.</p></div>
+      <div class="info-card"><div class="ico">📊</div><h4>Secure Score</h4><p>Your tenant's Microsoft Secure Score, giving a benchmark against Microsoft's own recommendations.</p></div>
     </div>
   </div>
 </div>

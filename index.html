@@ -1692,6 +1692,20 @@ footer a:hover { text-decoration: underline; }
 </div>
 
 <script>
+  // Auto-open contact modal if arriving via #contact link from another page
+  try {
+    if (window.location.hash === '#contact') {
+      document.addEventListener('DOMContentLoaded', function() {
+        const overlay = document.getElementById('modalOverlay');
+        if (overlay) {
+          overlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      });
+    }
+  } catch(e) { console.warn('Contact modal auto-open failed:', e); }
+
   // ── Particles canvas
   (function() {
     const canvas = document.getElementById('heroCanvas');
@@ -1907,11 +1921,6 @@ footer a:hover { text-decoration: underline; }
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('active');
     document.body.style.overflow = '';
-  }
-  // Auto-open contact modal if arriving via #contact link from another page
-  if (window.location.hash === '#contact') {
-    openModal();
-    history.replaceState(null, '', window.location.pathname);
   }
   function closeModalOutside(e) {
     if (e.target === document.getElementById('modalOverlay')) closeModal();

@@ -1900,13 +1900,18 @@ footer a:hover { text-decoration: underline; }
 
   // ── Modal
   function openModal(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('active');
     document.body.style.overflow = '';
+  }
+  // Auto-open contact modal if arriving via #contact link from another page
+  if (window.location.hash === '#contact') {
+    openModal();
+    history.replaceState(null, '', window.location.pathname);
   }
   function closeModalOutside(e) {
     if (e.target === document.getElementById('modalOverlay')) closeModal();

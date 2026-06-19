@@ -241,6 +241,29 @@ function togglePaste() {
   document.getElementById('pasteArea').classList.toggle('show');
 }
 
+// Try multiple CORS proxies in order, return first successful HTML response
+async function fetchViaProxy(url) {
+  const proxies = [
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+    'https://corsproxy.io/?url=' + encodeURIComponent(url),
+    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
+  ];
+  let lastError = null;
+  for (const proxyUrl of proxies) {
+    try {
+      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
+      if (!res.ok) { lastError = new Error('Fetch failed: ' + res.status); continue; }
+      const html = await res.text();
+      if (!html || html.length < 50) { lastError = new Error('Empty response'); continue; }
+      return html;
+    } catch(e) {
+      lastError = e;
+      continue;
+    }
+  }
+  throw lastError || new Error('All proxies failed');
+}
+
 async function checkWebsite() {
   let url = document.getElementById('urlInput').value.trim();
   if (!url) { showError('Please enter a website URL.'); return; }
@@ -255,17 +278,11 @@ async function checkWebsite() {
   currentUrl = url;
 
   try {
-    // Try via CORS proxy
-    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
-    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
-    const html = await res.text();
-    if (!html || html.length < 50) throw new Error('Empty response');
-
+    const html = await fetchViaProxy(url);
     await runChecks(html, url);
   } catch(e) {
-    console.warn('Auto-fetch failed:', e);
-    showError('Could not fetch this page automatically (some sites block external requests). Please use the "paste HTML source" option below instead — right-click the page, choose "View Page Source", select all, copy, and paste it in.');
+    console.warn('Auto-fetch failed after trying all proxies:', e);
+    showError('Could not fetch this page automatically after trying multiple methods (some sites block external requests). Please use the "paste HTML source" option below instead — right-click the page, choose "View Page Source", select all, copy, and paste it in.');
     document.getElementById('pasteArea').classList.add('show');
   }
 
@@ -430,10 +447,13 @@ async function runChecks(html, url) {
   renderResults(results, url);
 }
 
-function checkUrlExists(url) {
-  return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) })
-    .then(r => r.ok && r.status !== 404)
-    .catch(() => false);
+async function checkUrlExists(url) {
+  try {
+    await fetchViaProxy(url);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function escapeHtml(str) {

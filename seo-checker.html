@@ -148,7 +148,7 @@ footer a{color:var(--green);text-decoration:none}
       <input type="text" class="url-input" id="urlInput" placeholder="https://example.com">
       <button class="check-btn" id="checkBtn" onclick="checkWebsite()">🔍 Check Website</button>
     </div>
-    <div class="input-note">We'll try to fetch your page automatically. If that doesn't work (some sites block external requests), you can paste the page's HTML source instead.</div>
+    <div class="input-note">We'll try to fetch your page automatically using a free proxy service — this occasionally fails due to rate limits, so the "paste HTML" option below is always available as a 100% reliable backup.</div>
     <span class="paste-toggle" onclick="togglePaste()">Or paste HTML source manually →</span>
     <div class="paste-area" id="pasteArea">
       <textarea class="html-input" id="htmlInput" placeholder="Paste the page's HTML source here (right-click the page → View Page Source → Select All → Copy → Paste here)"></textarea>
@@ -211,7 +211,7 @@ footer a{color:var(--green);text-decoration:none}
     <div class="page-eyebrow">FAQ</div>
     <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
     <div class="info-grid" style="grid-template-columns:1fr">
-      <div class="info-card"><h4>Why didn't the automatic check work?</h4><p>Some sites block requests from outside your browser (CORS restrictions) or sit behind protections like Cloudflare. If automatic fetching fails, use the "paste HTML source" option instead — it works for any page.</p></div>
+      <div class="info-card"><h4>Why didn't the automatic check work?</h4><p>Automatic fetching relies on free third-party proxy services to bypass browser security restrictions (CORS). These free services have rate limits and occasional downtime, so automatic fetching can fail even on perfectly normal sites. The "paste HTML source" option always works, regardless of the site.</p></div>
       <div class="info-card"><h4>Does this check backlinks or keyword rankings?</h4><p>No. This tool focuses on on-page and technical basics only. Backlink and ranking data requires paid third-party APIs (Ahrefs, SEMrush, Moz) which this free tool doesn't use.</p></div>
       <div class="info-card"><h4>Is my data stored anywhere?</h4><p>No. The page content is analyzed entirely in your browser and never stored or logged by this site.</p></div>
       <div class="info-card"><h4>What's a good score?</h4><p>80+ indicates solid on-page fundamentals. Scores below 60 usually mean missing basics (title/meta tags, alt text, robots.txt) that are quick wins to fix.</p></div>
@@ -282,7 +282,7 @@ async function checkWebsite() {
     await runChecks(html, url);
   } catch(e) {
     console.warn('Auto-fetch failed after trying all proxies:', e);
-    showError('Could not fetch this page automatically after trying multiple methods (some sites block external requests). Please use the "paste HTML source" option below instead — right-click the page, choose "View Page Source", select all, copy, and paste it in.');
+    showError('Automatic fetching uses free third-party services to bypass browser security restrictions, and they sometimes get rate-limited or temporarily unavailable — this is a known limitation, not a fault with your site. Use the "paste HTML source" option below for a 100% reliable result every time: right-click the page → "View Page Source" → Select All → Copy → Paste it in.');
     document.getElementById('pasteArea').classList.add('show');
   }
 

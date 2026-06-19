@@ -152,7 +152,7 @@ footer a{color:var(--green);text-decoration:none}
     <span class="paste-toggle" onclick="togglePaste()">Or paste HTML source manually →</span>
     <div class="paste-area" id="pasteArea">
       <textarea class="html-input" id="htmlInput" placeholder="Paste the page's HTML source here (right-click the page → View Page Source → Select All → Copy → Paste here)"></textarea>
-      <button class="check-btn" style="margin-top:10px" onclick="checkPastedHtml()">🔍 Analyze Pasted HTML</button>
+      <button class="check-btn" id="pasteCheckBtn" style="margin-top:10px" onclick="checkPastedHtml()">🔍 Analyze Pasted HTML</button>
     </div>
   </div>
 
@@ -280,7 +280,18 @@ async function checkPastedHtml() {
   if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
   currentUrl = url || 'Pasted HTML';
   document.getElementById('errorCard').style.display = 'none';
-  await runChecks(html, currentUrl);
+  document.getElementById('resultWrap').style.display = 'none';
+
+  const btn = document.getElementById('pasteCheckBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Analyzing…';
+
+  try {
+    await runChecks(html, currentUrl);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔍 Analyze Pasted HTML';
+  }
 }
 
 function showError(msg) {

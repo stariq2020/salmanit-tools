@@ -241,27 +241,17 @@ function togglePaste() {
   document.getElementById('pasteArea').classList.toggle('show');
 }
 
-// Try multiple CORS proxies in order, return first successful HTML response
+// Fetch page via our own Netlify serverless function — no rate limits, no third-party dependency
 async function fetchViaProxy(url) {
-  const proxies = [
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-    'https://corsproxy.io/?url=' + encodeURIComponent(url),
-    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
-  ];
-  let lastError = null;
-  for (const proxyUrl of proxies) {
-    try {
-      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
-      if (!res.ok) { lastError = new Error('Fetch failed: ' + res.status); continue; }
-      const html = await res.text();
-      if (!html || html.length < 50) { lastError = new Error('Empty response'); continue; }
-      return html;
-    } catch(e) {
-      lastError = e;
-      continue;
-    }
+  const endpoint = 'https://salmanittools-fetch.netlify.app/.netlify/functions/fetch-page?url=' + encodeURIComponent(url);
+  const res = await fetch(endpoint, { signal: AbortSignal.timeout(12000) });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(err.error || 'Function returned ' + res.status);
   }
-  throw lastError || new Error('All proxies failed');
+  const html = await res.text();
+  if (!html || html.length < 50) throw new Error('Empty response');
+  return html;
 }
 
 async function checkWebsite() {
@@ -449,8 +439,8 @@ async function runChecks(html, url) {
 
 async function checkUrlExists(url) {
   try {
-    await fetchViaProxy(url);
-    return true;
+    const html = await fetchViaProxy(url);
+    return html.length > 0;
   } catch {
     return false;
   }

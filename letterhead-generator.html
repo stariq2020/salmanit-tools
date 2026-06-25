@@ -345,7 +345,19 @@ input[type=color] { background: rgba(255,255,255,0.04) !important; }
 .template-card { background: rgba(255,255,255,0.04) !important; color: var(--site-white) !important; }
 .template-card.active { background: rgba(0,232,122,0.1) !important; color: var(--green) !important; border-color: var(--green) !important; }
 details[open] { background: rgba(255,255,255,0.02) !important; }
-.page-scroll { background: rgba(0,0,0,0.4) !important; }
+.page-scroll { background: #2a3244 !important; }
+/* Scope ALL letterhead page content to light theme */
+#page, #page * {
+  color: #222 !important;
+  background: transparent;
+}
+#page { background: #ffffff !important; }
+#page .lh-footer { color: #555 !important; }
+#page .lh-contact { color: #444 !important; }
+#page .lh-tagline { color: #666 !important; }
+#page .lh-meta { color: #333 !important; }
+#page .lh-body { color: #222 !important; }
+#page .lh-org { color: var(--primary) !important; }
 .btn-secondary { background: rgba(255,255,255,0.08) !important; color: var(--site-white) !important; }
 .btn-secondary:hover { background: rgba(255,255,255,0.14) !important; }
 .btn-primary { background: linear-gradient(135deg,var(--green),var(--green2)) !important; color: #080D14 !important; font-weight:700; }

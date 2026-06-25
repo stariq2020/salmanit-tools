@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letterhead Generator — Salman IT Tools</title>
+<meta name="description" content="Design a professional letterhead with your logo, colours and contact details. Print to PDF or export HTML instantly. Free, private, runs in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+/* ── Site shell ─────────────────────────────────────────────────────────────── */
+:root {
+  --ink:#080D14; --deep:#0B1120; --green:#00E87A; --green2:#00C468;
+  --cyan:#00C8FF; --site-white:#F0F6FF; --site-muted:#5A6A85;
+  --site-card:#0E1A2E; --site-border:rgba(255,255,255,0.07);
+  --danger:#EF4444; --warning:#F59E0B;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Outfit','Segoe UI',Arial,sans-serif;
+  background:var(--ink) !important;
+  color:var(--site-white);
+  overflow-x:hidden;
+  padding:0 !important;
+}
+nav {
+  position:sticky; top:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px; height:64px;
+  background:rgba(8,13,20,0.95); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--site-border);
+}
+.nav-logo { font-family:'Bebas Neue','Arial Black',sans-serif; font-size:1.4rem; letter-spacing:.08em; color:var(--site-white); text-decoration:none; }
+.nav-logo .dot { color:var(--green); }
+.nav-links { display:flex; gap:28px; align-items:center; }
+.nav-links a { font-size:0.88rem; color:var(--site-muted); text-decoration:none; transition:color .2s; }
+.nav-links a:hover { color:var(--site-white); }
+.hamburger { display:none; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px; background:transparent; border:none; cursor:pointer; padding:4px; }
+.hamburger span { display:block; width:22px; height:2px; background:var(--site-white); border-radius:2px; transition:all .3s; }
+.mobile-menu { display:none; position:fixed; top:64px; left:0; right:0; background:rgba(8,13,20,0.98); backdrop-filter:blur(20px); border-bottom:1px solid var(--site-border); flex-direction:column; padding:16px 24px; z-index:499; gap:14px; }
+.mobile-menu.open { display:flex; }
+.mobile-menu a { font-size:0.95rem; color:var(--site-white); text-decoration:none; padding:8px 0; }
+@media(max-width:768px) { .nav-links{display:none} .hamburger{display:flex} }
+
+.page-header {
+  max-width:1400px; margin:0 auto; padding:36px 24px 20px;
+}
+.page-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.18em; color:var(--green); margin-bottom:8px; }
+.page-title { font-family:'Bebas Neue','Arial Black',sans-serif; font-size:clamp(2.4rem,5vw,4rem); line-height:.95; letter-spacing:.03em; color:var(--site-white); margin-bottom:10px; }
+.page-title .acc { background:linear-gradient(135deg,var(--green),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.page-sub { font-size:0.95rem; color:var(--site-muted); line-height:1.7; max-width:600px; }
+
+/* ── Tool wrapper ────────────────────────────────────────────────────────────── */
+.tool-wrapper {
+  max-width:1400px; margin:0 auto; padding:0 24px 60px;
+}
+
+/* ── Override original CSS vars to match dark theme ────────────────────────── */
+
+    :root { /* original vars - overridden below */
+        --primary: #00E87A;
+        --primary-hover: #00C468;
+        --bg: #0B1120;
+        --card-bg: #0E1A2E;
+        --text: #F0F6FF;
+        --muted: #5A6A85;
+        --border: rgba(255,255,255,0.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .layout {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .panel {
+        background: var(--card-bg);
+        padding: 22px;
+        border-radius: 14px;
+        box-shadow: 0 4px 14px -6px rgb(0 0 0 / 0.18);
+        border: 1px solid var(--border);
+    }
+
+    .controls {
+        position: sticky;
+        top: 20px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+        margin: 0 0 0.35rem;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .subtitle {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin: 0 0 1.2rem;
+    }
+
+    details {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+    details[open] { background: #fafbfc; }
+    summary {
+        cursor: pointer;
+        padding: 12px 14px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+        content: "›";
+        font-size: 1.2rem;
+        transition: transform 0.2s;
+        color: var(--primary);
+    }
+    details[open] > summary::before { transform: rotate(90deg); }
+    .section-body { padding: 4px 14px 16px; }
+
+    .form-group { margin-bottom: 0.85rem; }
+    .form-row { display: flex; gap: 10px; }
+    .form-row > .form-group { flex: 1; }
+
+    label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+    }
+
+    input[type=text], input[type=email], input[type=tel], input[type=url],
+    select, textarea {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        font-size: 0.88rem;
+        font-family: inherit;
+        background: #fff;
+        color: var(--text);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    input:focus, select:focus, textarea:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: -1px;
+    }
+
+    input[type=color] {
+        width: 100%;
+        height: 38px;
+        padding: 2px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: #fff;
+        cursor: pointer;
+    }
+    input[type=range] { width: 100%; }
+
+    .swatches { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .swatch {
+        width: 30px; height: 30px; border-radius: 50%;
+        cursor: pointer; border: 2px solid #fff;
+        box-shadow: 0 0 0 1px var(--border);
+    }
+    .swatch:hover { transform: scale(1.1); }
+
+    .toggle-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 0; font-size: 0.85rem; font-weight: 500;
+    }
+    .toggle-row label { margin: 0; color: var(--text); font-weight: 500; }
+
+    .template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .template-card {
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 8px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 0.78rem;
+        font-weight: 600;
+        transition: all 0.15s;
+        background: #fff;
+    }
+    .template-card:hover { border-color: var(--primary); }
+    .template-card.active {
+        border-color: var(--primary);
+        background: #eff6ff;
+        color: var(--primary);
+    }
+    .mini {
+        height: 34px; border-radius: 4px; margin-bottom: 6px;
+        background: #f1f5f9; position: relative; overflow: hidden;
+    }
+    .mini i { position: absolute; display: block; background: currentColor; }
+
+    .range-label { display:flex; justify-content:space-between; }
+    .range-label span { color: var(--primary); font-weight:700; }
+
+    .actions {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        margin-top: 16px;
+    }
+    .btn {
+        border: none; padding: 11px 14px; border-radius: 8px;
+        font-weight: 600; font-size: 0.85rem; cursor: pointer;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+        transition: background 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--primary); color: #fff; grid-column: span 2; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #e2e8f0; color: var(--text); }
+    .btn-secondary:hover { background: #cbd5e1; }
+
+    /* Preview side */
+    .preview-wrap { display: flex; flex-direction: column; gap: 14px; }
+    .preview-toolbar {
+        display: flex; align-items: center; justify-content: space-between;
+        flex-wrap: wrap; gap: 10px;
+    }
+    .preview-toolbar h2 { font-size: 1rem; margin: 0; color: var(--muted); }
+    .zoom-controls { display:flex; align-items:center; gap:8px; font-size:0.82rem; color:var(--muted); }
+
+    .page-scroll {
+        background: #e2e8f0;
+        border-radius: 12px;
+        padding: 30px;
+        overflow: auto;
+        max-height: calc(100vh - 120px);
+        display: flex;
+        justify-content: center;
+    }
+
+    /* The actual letterhead page */
+    #page {
+        background: #fff;
+        box-shadow: 0 10px 40px -10px rgb(0 0 0 / 0.35);
+        width: 794px;            /* A4 @96dpi */
+        min-height: 1123px;
+        padding: 0;
+        transform-origin: top center;
+        color: #222;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    #page.letter { width: 816px; min-height: 1056px; }
+
+    .lh-inner { padding: 60px; flex: 1; display: flex; flex-direction: column; }
+
+    /* Header building blocks (styled inline by JS where dynamic) */
+    .lh-header { display: flex; gap: 20px; align-items: center; }
+    .lh-logo { max-height: 80px; max-width: 200px; object-fit: contain; }
+    .lh-logo-fallback {
+        width: 64px; height: 64px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 1.6rem; color: #fff; flex-shrink: 0;
+    }
+    .lh-org { font-size: 1.7rem; font-weight: 800; line-height: 1.15; margin: 0; }
+    .lh-tagline { font-size: 0.85rem; letter-spacing: 0.04em; opacity: 0.8; margin: 4px 0 0; }
+    .lh-contact { font-size: 0.78rem; line-height: 1.7; opacity: 0.9; }
+    .lh-contact span { display: inline-flex; align-items: center; gap: 5px; }
+
+    .lh-body { margin-top: 40px; font-size: 0.95rem; line-height: 1.7; white-space: pre-wrap; flex: 1; }
+    .lh-meta { font-size: 0.9rem; margin-top: 30px; line-height: 1.8; }
+
+    .lh-footer {
+        margin-top: 40px; padding-top: 14px; font-size: 0.72rem;
+        text-align: center; opacity: 0.85;
+    }
+
+    .watermark {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%) rotate(-35deg);
+        font-size: 7rem; font-weight: 800; opacity: 0.05;
+        pointer-events: none; white-space: nowrap; letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 1000px) {
+        .layout { grid-template-columns: 1fr; }
+        .controls { position: static; max-height: none; }
+    }
+
+    @media print {
+        body { padding: 0; margin: 0; background: #fff; }
+        .controls, .preview-toolbar { display: none !important; }
+        .layout { display: block; }
+        .preview-wrap { gap: 0; }
+        .page-scroll {
+            padding: 0; background: #fff; border-radius: 0;
+            max-height: none; overflow: visible; display: block;
+        }
+        /* Exact one-sheet print. Real dimensions are injected via #printSize
+           so the @page box matches the chosen paper size. overflow:hidden
+           guarantees the content can never spill onto a second sheet. */
+        #page {
+            box-shadow: none !important;
+            transform: none !important;
+            margin: 0 !important;
+            overflow: hidden;
+        }
+    }
+
+
+/* ── Fix elements that hardcode white backgrounds ───────────────────────────── */
+input[type=text], input[type=email], input[type=tel], input[type=url],
+select, textarea {
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--text) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+input[type=color] { background: rgba(255,255,255,0.04) !important; }
+.template-card { background: rgba(255,255,255,0.04) !important; color: var(--site-white) !important; }
+.template-card.active { background: rgba(0,232,122,0.1) !important; color: var(--green) !important; border-color: var(--green) !important; }
+details[open] { background: rgba(255,255,255,0.02) !important; }
+.page-scroll { background: rgba(0,0,0,0.4) !important; }
+.btn-secondary { background: rgba(255,255,255,0.08) !important; color: var(--site-white) !important; }
+.btn-secondary:hover { background: rgba(255,255,255,0.14) !important; }
+.btn-primary { background: linear-gradient(135deg,var(--green),var(--green2)) !important; color: #080D14 !important; font-weight:700; }
+.btn-primary:hover { opacity:.9 !important; }
+.panel { background: var(--site-card) !important; border-color: var(--site-border) !important; }
+h1 { color: var(--green) !important; }
+.preview-toolbar h2 { color: var(--site-muted) !important; }
+.zoom-controls { color: var(--site-muted) !important; }
+.range-label span { color: var(--green) !important; }
+summary::before { color: var(--green) !important; }
+.swatch { border-color: rgba(255,255,255,0.15) !important; box-shadow: 0 0 0 1px rgba(255,255,255,0.1) !important; }
+.mini { background: rgba(255,255,255,0.05) !important; }
+
+site-footer { background:var(--deep); border-top:1px solid var(--site-border); padding:32px 24px; text-align:center; display:block; }
+.footer-logo { font-family:'Bebas Neue','Arial Black',sans-serif; font-size:1.3rem; letter-spacing:.08em; color:var(--site-white); }
+.footer-logo .dot { color:var(--green); }
+.footer-sub { font-size:0.8rem; color:var(--site-muted); margin-top:6px; }
+.footer-sub a { color:var(--green); text-decoration:none; }
+@media(max-width:900px) {
+  .layout { grid-template-columns: 1fr !important; }
+  .controls { position:static !important; max-height:none !important; }
+  nav { padding:0 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <div class="page-eyebrow">Free Online Tool</div>
+  <h1 class="page-title">Letterhead<br><span class="acc">Generator</span></h1>
+  <p class="page-sub">Design a professional letterhead with your logo, colours and contact details. Choose from multiple templates, preview instantly, then print to PDF or export as HTML.</p>
+</div>
+
+<div class="tool-wrapper">
+
+<div class="layout">
+    <!-- ============ CONTROLS ============ -->
+    <div class="panel controls">
+        <h1>✒️ Letterhead Generator</h1>
+        <p class="subtitle">Design a professional letterhead, then print to PDF or export HTML.</p>
+
+        <details open>
+            <summary>Template style</summary>
+            <div class="section-body">
+                <div class="template-grid" id="templateGrid"></div>
+            </div>
+        </details>
+
+        <details open>
+            <summary>Organization</summary>
+            <div class="section-body">
+                <div class="form-group">
+                    <label>Organization name</label>
+                    <input type="text" id="orgName" value="ACME Corporation">
+                </div>
+                <div class="form-group">
+                    <label>Tagline / slogan</label>
+                    <input type="text" id="tagline" value="Innovation Delivered">
+                </div>
+                <div class="form-group">
+                    <label>Logo image</label>
+                    <input type="file" id="logoFile" accept="image/*">
+                </div>
+                <div class="toggle-row">
+                    <label for="logoMono">Tint monogram with brand color</label>
+                    <input type="checkbox" id="logoMono" checked>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Contact details</summary>
+            <div class="section-body">
+                <div class="form-group">
+                    <label>Street address</label>
+                    <input type="text" id="address" value="123 Market Street, Suite 400, San Francisco, CA 94105">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="phone" value="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" value="hello@acme.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Website</label>
+                    <input type="url" id="website" value="www.acme.com">
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Letter content</summary>
+            <div class="section-body">
+                <div class="toggle-row">
+                    <label for="showDate">Show date</label>
+                    <input type="checkbox" id="showDate" checked>
+                </div>
+                <div class="form-group">
+                    <label>Recipient block</label>
+                    <textarea id="recipient" style="min-height:60px">Ms. Jane Doe
+Director of Operations
+Globex Inc.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Body text</label>
+                    <textarea id="bodyText">Dear Ms. Doe,
+
+Thank you for your continued partnership. We are pleased to share the details outlined in the attached proposal and look forward to the next phase of our collaboration.
+
+Please don't hesitate to reach out should you have any questions.</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Sign-off</label>
+                    <input type="text" id="signoff" value="Sincerely,">
+                </div>
+                <div class="form-group">
+                    <label>Signature name &amp; title</label>
+                    <input type="text" id="signName" value="John Smith, CEO">
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Colors</summary>
+            <div class="section-body">
+                <div class="swatches" id="swatches"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Primary</label>
+                        <input type="color" id="colPrimary" value="#2563eb">
+                    </div>
+                    <div class="form-group">
+                        <label>Accent</label>
+                        <input type="color" id="colAccent" value="#0ea5e9">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Text color</label>
+                    <input type="color" id="colText" value="#222222">
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Typography &amp; layout</summary>
+            <div class="section-body">
+                <div class="form-group">
+                    <label>Font family</label>
+                    <select id="fontFamily">
+                        <option value="'Segoe UI', Roboto, Helvetica, Arial, sans-serif">Sans — Modern</option>
+                        <option value="Georgia, 'Times New Roman', serif">Serif — Classic</option>
+                        <option value="'Garamond', Georgia, serif">Serif — Garamond</option>
+                        <option value="'Courier New', monospace">Mono — Typewriter</option>
+                        <option value="'Trebuchet MS', sans-serif">Sans — Trebuchet</option>
+                        <option value="'Palatino Linotype', Palatino, serif">Serif — Palatino</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Header alignment</label>
+                    <select id="headerAlign">
+                        <option value="left">Left</option>
+                        <option value="center">Center</option>
+                        <option value="space-between">Logo left / contact right</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="range-label">Header font size <span id="hsVal">1.7rem</span></label>
+                    <input type="range" id="headerSize" min="1.2" max="2.6" step="0.1" value="1.7">
+                </div>
+                <div class="form-group">
+                    <label>Page size</label>
+                    <select id="pageSize">
+                        <option value="a4">A4</option>
+                        <option value="letter">US Letter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Divider style</label>
+                    <select id="dividerStyle">
+                        <option value="solid">Solid line</option>
+                        <option value="double">Double line</option>
+                        <option value="thick">Thick bar</option>
+                        <option value="dotted">Dotted</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>Extras</summary>
+            <div class="section-body">
+                <div class="toggle-row">
+                    <label for="showFooter">Show footer</label>
+                    <input type="checkbox" id="showFooter" checked>
+                </div>
+                <div class="form-group">
+                    <label>Footer text</label>
+                    <input type="text" id="footerText" value="ACME Corporation · Confidential · www.acme.com">
+                </div>
+                <div class="toggle-row">
+                    <label for="showWatermark">Show watermark</label>
+                    <input type="checkbox" id="showWatermark">
+                </div>
+                <div class="form-group">
+                    <label>Watermark text</label>
+                    <input type="text" id="watermarkText" value="DRAFT">
+                </div>
+                <div class="toggle-row">
+                    <label for="cornerAccent">Corner accent shape</label>
+                    <input type="checkbox" id="cornerAccent" checked>
+                </div>
+            </div>
+        </details>
+
+        <div class="actions">
+            <button class="btn btn-primary" id="printBtn">🖨️ Print / Save PDF</button>
+            <button class="btn btn-secondary" id="exportBtn">⬇️ Export HTML</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reset</button>
+        </div>
+    </div>
+
+    <!-- ============ PREVIEW ============ -->
+    <div class="preview-wrap">
+        <div class="preview-toolbar panel" style="padding:14px 18px;">
+            <h2>Live Preview</h2>
+            <div class="zoom-controls">
+                <span>Zoom</span>
+                <input type="range" id="zoom" min="0.4" max="1" step="0.05" value="0.7" style="width:140px">
+                <span id="zoomVal">70%</span>
+            </div>
+        </div>
+        <div class="page-scroll">
+            <div id="page"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ---------- Templates ---------- */
+const TEMPLATES = {
+    classic:  { name: "Classic",  align: "center",        divider: "solid",  font: "Georgia, 'Times New Roman', serif", banner: false },
+    modern:   { name: "Modern",   align: "space-between", divider: "thick",  font: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", banner: false },
+    band:     { name: "Color Band",align: "left",         divider: "none",   font: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", banner: true },
+    minimal:  { name: "Minimal",  align: "left",          divider: "dotted", font: "'Trebuchet MS', sans-serif", banner: false },
+    corporate:{ name: "Corporate",align: "space-between", divider: "double", font: "'Palatino Linotype', Palatino, serif", banner: false },
+    centered: { name: "Centered", align: "center",        divider: "thick",  font: "'Garamond', Georgia, serif", banner: false }
+};
+
+const SWATCHES = [
+    ["#2563eb","#0ea5e9"], ["#0f172a","#475569"], ["#7c3aed","#a855f7"],
+    ["#dc2626","#f97316"], ["#059669","#10b981"], ["#b45309","#d97706"],
+    ["#be185d","#ec4899"], ["#1e3a8a","#3b82f6"]
+];
+
+const DEFAULTS = {};
+let logoDataUrl = null;
+let currentTemplate = "modern";
+
+/* ---------- Helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => (s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const nl2br = s => esc(s).replace(/\n/g,"<br>");
+
+/* ---------- Build template cards ---------- */
+function buildTemplateCards() {
+    const grid = $("templateGrid");
+    grid.innerHTML = "";
+    Object.entries(TEMPLATES).forEach(([key, t]) => {
+        const card = document.createElement("div");
+        card.className = "template-card" + (key === currentTemplate ? " active" : "");
+        card.dataset.key = key;
+        card.innerHTML = `<div class="mini">${miniArt(key)}</div>${t.name}`;
+        card.onclick = () => applyTemplate(key);
+        grid.appendChild(card);
+    });
+}
+function miniArt(key) {
+    const c = "var(--primary)";
+    switch(key) {
+        case "classic":   return `<i style="left:30%;width:40%;height:5px;top:8px"></i><i style="left:35%;width:30%;height:3px;top:16px;opacity:.5"></i><i style="left:20%;width:60%;height:1px;top:24px"></i>`;
+        case "modern":    return `<i style="left:8px;width:18px;height:18px;top:8px;border-radius:3px"></i><i style="right:8px;width:30%;height:3px;top:10px"></i><i style="right:8px;width:24%;height:3px;top:18px;opacity:.5"></i>`;
+        case "band":      return `<i style="left:0;right:0;width:100%;height:14px;top:0"></i><i style="left:8px;width:40%;height:3px;top:22px;opacity:.4"></i>`;
+        case "minimal":   return `<i style="left:8px;width:35%;height:4px;top:12px"></i><i style="left:8px;right:8px;width:84%;height:1px;top:24px;opacity:.4"></i>`;
+        case "corporate": return `<i style="left:8px;width:16px;height:16px;top:9px;border-radius:50%"></i><i style="right:8px;width:30%;height:3px;top:11px"></i><i style="left:8px;right:8px;width:84%;height:3px;top:26px"></i>`;
+        case "centered":  return `<i style="left:40%;width:20%;height:14px;top:6px;border-radius:3px"></i><i style="left:30%;width:40%;height:3px;top:24px"></i>`;
+    }
+    return "";
+}
+
+function applyTemplate(key) {
+    currentTemplate = key;
+    const t = TEMPLATES[key];
+    $("headerAlign").value = t.align;
+    $("dividerStyle").value = t.divider;
+    $("fontFamily").value = t.font;
+    document.querySelectorAll(".template-card").forEach(c =>
+        c.classList.toggle("active", c.dataset.key === key));
+    render();
+}
+
+/* ---------- Swatches ---------- */
+function buildSwatches() {
+    const wrap = $("swatches");
+    SWATCHES.forEach(([p, a]) => {
+        const sw = document.createElement("div");
+        sw.className = "swatch";
+        sw.style.background = `linear-gradient(135deg, ${p} 50%, ${a} 50%)`;
+        sw.title = p;
+        sw.onclick = () => { $("colPrimary").value = p; $("colAccent").value = a; render(); };
+        wrap.appendChild(sw);
+    });
+}
+
+/* ---------- Divider CSS ---------- */
+function dividerCss(style, color) {
+    switch(style) {
+        case "solid":  return `border-bottom:2px solid ${color};padding-bottom:18px;`;
+        case "double": return `border-bottom:4px double ${color};padding-bottom:18px;`;
+        case "thick":  return `border-bottom:6px solid ${color};padding-bottom:18px;`;
+        case "dotted": return `border-bottom:2px dotted ${color};padding-bottom:18px;`;
+        default:       return `padding-bottom:6px;`;
+    }
+}
+
+/* ---------- Main render ---------- */
+function render() {
+    const v = {
+        org: $("orgName").value,
+        tagline: $("tagline").value,
+        address: $("address").value,
+        phone: $("phone").value,
+        email: $("email").value,
+        website: $("website").value,
+        recipient: $("recipient").value,
+        body: $("bodyText").value,
+        signoff: $("signoff").value,
+        signName: $("signName").value,
+        footer: $("footerText").value,
+        watermark: $("watermarkText").value,
+    };
+    const primary = $("colPrimary").value;
+    const accent = $("colAccent").value;
+    const textCol = $("colText").value;
+    const font = $("fontFamily").value;
+    const align = $("headerAlign").value;
+    const headerSize = $("headerSize").value;
+    const divider = $("dividerStyle").value;
+    const banner = TEMPLATES[currentTemplate].banner;
+
+    $("hsVal").textContent = headerSize + "rem";
+
+    const page = $("page");
+    page.className = $("pageSize").value === "letter" ? "letter" : "";
+    updatePrintStyle();
+    page.style.fontFamily = font;
+    page.style.color = textCol;
+    page.style.setProperty("--primary", primary);
+
+    /* Logo / monogram */
+    let logoHtml;
+    if (logoDataUrl) {
+        logoHtml = `<img src="${logoDataUrl}" class="lh-logo" alt="logo">`;
+    } else {
+        const initials = v.org.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase() || "L";
+        const bg = $("logoMono").checked ? `linear-gradient(135deg, ${primary}, ${accent})` : "#94a3b8";
+        logoHtml = `<div class="lh-logo-fallback" style="background:${bg}">${esc(initials)}</div>`;
+    }
+
+    /* Contact block */
+    const contactBits = [];
+    if (v.address) contactBits.push(`<span>📍 ${esc(v.address)}</span>`);
+    if (v.phone)   contactBits.push(`<span>📞 ${esc(v.phone)}</span>`);
+    if (v.email)   contactBits.push(`<span>✉️ ${esc(v.email)}</span>`);
+    if (v.website) contactBits.push(`<span>🌐 ${esc(v.website)}</span>`);
+    const contactHtml = `<div class="lh-contact">${contactBits.join("<br>")}</div>`;
+
+    const orgBlock = `
+        <div>
+            <p class="lh-org" style="color:${primary};font-size:${headerSize}rem">${esc(v.org)}</p>
+            ${v.tagline ? `<p class="lh-tagline" style="color:${accent}">${esc(v.tagline)}</p>` : ""}
+        </div>`;
+
+    /* Header layout */
+    let headerInner, headerStyle = "";
+    if (align === "center") {
+        headerStyle = "flex-direction:column;text-align:center;";
+        headerInner = `${logoHtml}${orgBlock}${contactHtml}`;
+    } else if (align === "space-between") {
+        headerStyle = "justify-content:space-between;align-items:flex-start;";
+        headerInner = `<div style="display:flex;gap:18px;align-items:center">${logoHtml}${orgBlock}</div>${contactHtml}`;
+    } else {
+        headerInner = `${logoHtml}${orgBlock}`;
+    }
+
+    const dividerStyleCss = dividerCss(divider, primary);
+
+    /* Banner template wraps header in a color bar */
+    let headerWrapStart = `<div class="lh-header" style="${headerStyle}${dividerStyleCss}">`;
+    let headerWrapEnd = `</div>`;
+    let bannerExtra = "";
+    if (banner) {
+        bannerExtra = `<div style="height:14px;background:linear-gradient(90deg,${primary},${accent})"></div>`;
+        headerWrapStart = `<div class="lh-header" style="${headerStyle}padding-bottom:14px;">`;
+    }
+    if (align === "left" && !banner) {
+        // keep contact under header on left layout
+        headerWrapEnd = `${contactHtml}</div>`;
+    }
+
+    /* Meta / date */
+    const today = new Date().toLocaleDateString(undefined, {year:'numeric',month:'long',day:'numeric'});
+    const metaBits = [];
+    if ($("showDate").checked) metaBits.push(esc(today));
+    if (v.recipient) metaBits.push(`<div style="margin-top:14px">${nl2br(v.recipient)}</div>`);
+    const metaHtml = metaBits.length ? `<div class="lh-meta">${metaBits.join("")}</div>` : "";
+
+    /* Body + signature */
+    let bodyHtml = `<div class="lh-body">${nl2br(v.body)}`;
+    if (v.signoff || v.signName) {
+        bodyHtml += `<div style="margin-top:34px">${nl2br(v.signoff)}<div style="height:34px"></div><strong>${nl2br(v.signName)}</strong></div>`;
+    }
+    bodyHtml += `</div>`;
+
+    /* Footer */
+    const footerHtml = $("showFooter").checked && v.footer
+        ? `<div class="lh-footer" style="border-top:1px solid ${primary}">${esc(v.footer)}</div>` : "";
+
+    /* Watermark */
+    const wmHtml = $("showWatermark").checked && v.watermark
+        ? `<div class="watermark" style="color:${primary}">${esc(v.watermark)}</div>` : "";
+
+    /* Corner accent */
+    const cornerHtml = $("cornerAccent").checked
+        ? `<div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 90px 90px 0;border-color:transparent ${accent} transparent transparent;opacity:.85"></div>
+           <div style="position:absolute;bottom:0;left:0;width:0;height:0;border-style:solid;border-width:90px 0 0 90px;border-color:transparent transparent transparent ${primary};opacity:.12"></div>`
+        : "";
+
+    page.innerHTML = `
+        ${cornerHtml}
+        ${wmHtml}
+        ${bannerExtra}
+        <div class="lh-inner">
+            ${headerWrapStart}${headerInner}${headerWrapEnd}
+            ${metaHtml}
+            ${bodyHtml}
+            ${footerHtml}
+        </div>
+    `;
+}
+
+/* ---------- Print page sizing ----------
+   Inject a real @page rule + exact #page dimensions that match the chosen
+   paper. Without this the browser prints onto the printer's default sheet
+   (often US Letter), so an A4-sized page overflows onto a 2nd page. */
+function updatePrintStyle() {
+    const isLetter = $("pageSize").value === "letter";
+    const size = isLetter ? "Letter" : "A4";
+    const w = isLetter ? "216mm" : "210mm";
+    const h = isLetter ? "279mm" : "297mm";
+    $("printSize").textContent =
+        `@media print{` +
+        `@page{size:${size};margin:0;}` +
+        `#page{width:${w} !important;height:${h} !important;min-height:0 !important;}` +
+        `}`;
+}
+
+/* ---------- Zoom ---------- */
+function applyZoom() {
+    const z = parseFloat($("zoom").value);
+    $("page").style.transform = `scale(${z})`;
+    $("zoomVal").textContent = Math.round(z*100) + "%";
+    // collapse whitespace left by scaling
+    const page = $("page");
+    page.style.marginBottom = `-${(1-z)*page.offsetHeight}px`;
+}
+
+/* ---------- Export ---------- */
+function exportHtml() {
+    const clone = $("page").cloneNode(true);
+    clone.style.transform = "none";
+    clone.style.marginBottom = "0";
+    clone.style.boxShadow = "none";
+    const fontFamily = $("page").style.fontFamily;
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Letterhead — ${esc($("orgName").value)}</title>
+<style>
+body{margin:0;display:flex;justify-content:center;background:#fff;font-family:${fontFamily};}
+.lh-inner{padding:60px;}
+.lh-header{display:flex;gap:20px;align-items:center;}
+.lh-logo{max-height:80px;max-width:200px;object-fit:contain;}
+.lh-logo-fallback{width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;color:#fff;flex-shrink:0;}
+.lh-org{font-weight:800;line-height:1.15;margin:0;}
+.lh-tagline{font-size:.85rem;letter-spacing:.04em;opacity:.8;margin:4px 0 0;}
+.lh-contact{font-size:.78rem;line-height:1.7;opacity:.9;}
+.lh-body{margin-top:40px;font-size:.95rem;line-height:1.7;white-space:pre-wrap;}
+.lh-meta{font-size:.9rem;margin-top:30px;line-height:1.8;}
+.lh-footer{margin-top:40px;padding-top:14px;font-size:.72rem;text-align:center;opacity:.85;}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:7rem;font-weight:800;opacity:.05;white-space:nowrap;}
+@page{margin:0;}
+</style></head>${clone.outerHTML}</html>`;
+    const blob = new Blob([html], {type:"text/html"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `letterhead-${$("orgName").value.toLowerCase().replace(/[^a-z0-9]+/g,"-")||"document"}.html`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+/* ---------- Wire up ---------- */
+function init() {
+    buildTemplateCards();
+    buildSwatches();
+
+    // Save defaults for reset
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+        if (el.type === "file") return;
+        DEFAULTS[el.id] = el.type === "checkbox" ? el.checked : el.value;
+    });
+
+    // Re-render on any input
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+        if (el.id === "zoom" || el.type === "file") return;
+        el.addEventListener("input", render);
+        el.addEventListener("change", render);
+    });
+
+    $("logoFile").addEventListener("change", e => {
+        const f = e.target.files[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = ev => { logoDataUrl = ev.target.result; render(); };
+        reader.readAsDataURL(f);
+    });
+
+    $("zoom").addEventListener("input", applyZoom);
+    $("printBtn").addEventListener("click", () => window.print());
+    $("exportBtn").addEventListener("click", exportHtml);
+    $("resetBtn").addEventListener("click", () => {
+        logoDataUrl = null;
+        $("logoFile").value = "";
+        Object.entries(DEFAULTS).forEach(([id, val]) => {
+            const el = $(id);
+            if (!el) return;
+            if (el.type === "checkbox") el.checked = val; else el.value = val;
+        });
+        applyTemplate("modern");
+        render(); applyZoom();
+    });
+
+    applyTemplate("modern");
+    render();
+    applyZoom();
+}
+init();
+</script>
+
+</div>
+
+<site-footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p class="footer-sub">Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</site-footer>
+
+<script>
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+window.addEventListener('scroll', closeMobileMenu);
+</script>
+
+</body>
+</html>

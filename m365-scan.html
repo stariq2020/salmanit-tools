@@ -957,13 +957,67 @@ const SEVERITY_BADGE = {
 };
 
 // ── CA Policy Explainer ───────────────────────────────────────────────────────
+// ── Microsoft built-in role template IDs ─────────────────────────────────────
+const ROLE_GUIDS = {
+  '62e90394-69f5-4237-9190-012177145e10': 'Global Administrator',
+  '194ae4cb-b126-40b2-bd5b-6091b380977d': 'Security Administrator',
+  'f28a1f50-f6e7-4571-818b-6a12f2af6b6c': 'SharePoint Administrator',
+  '29232cdf-9323-42fd-ade2-1d097af3e4de': 'Exchange Administrator',
+  '9b895d92-2cd3-44c7-9d02-a6ac2d5ea5c3': 'Application Administrator',
+  'c4e39bd9-1100-46d3-8c65-fb160da0071f': 'Authentication Administrator',
+  'b0f54661-2d74-4c50-afa3-1ec803f12efe': 'Billing Administrator',
+  '158c047a-c907-4556-b7ef-446551a6b5f7': 'Cloud Application Administrator',
+  'b1be1c3e-b65d-4f19-8427-f6fa0d97feb9': 'Conditional Access Administrator',
+  '729827e3-9c14-49f7-bb1b-9608f156bbb8': 'Helpdesk Administrator',
+  '88d8e3e3-8f55-4a1e-953a-9b9898b8876b': 'Directory Readers',
+  '9360feb5-f418-4baa-8175-e2a00bac4301': 'Directory Writers',
+  '2b745bdf-0803-4d80-aa65-822c4493daac': 'Groups Administrator',
+  '95e79109-95c0-4d8e-aee3-d01accf2d47b': 'Guest Inviter',
+  '45d8d3c5-c802-45c6-b32a-1d70b5e1e86e': 'Identity Governance Administrator',
+  '3a2c62db-5318-420d-8d74-23affee5d9d5': 'Intune Administrator',
+  '4d6ac14f-3453-41d0-bef9-a3e0c569773a': 'License Administrator',
+  'ac16e43d-7b2d-40e0-ac05-243ff356ab5b': 'Message Center Privacy Reader',
+  '790c1fb9-7f7d-4f88-86a1-ef1f95c05c1b': 'Message Center Reader',
+  'cf1c38e5-3621-4004-a7cb-879624dced7c': 'Power Platform Administrator',
+  '7be44c8a-adaf-4e2a-84d6-ab2649e08a13': 'Privileged Authentication Administrator',
+  'e8611ab8-c189-46e8-94e1-60213ab1f814': 'Privileged Role Administrator',
+  '4a5d8f65-41da-4de4-8968-e035b65339cf': 'Reports Reader',
+  'f023fd81-a637-4b56-95fd-791ac0226033': 'Service Support Administrator',
+  'fe930be7-5e62-47db-91af-98c3a49a38b1': 'User Administrator',
+  '17315797-102d-40b4-93e0-432062caca18': 'Compliance Administrator',
+  'e6d1a23a-da11-4be4-9570-befc86d067a7': 'Compliance Data Administrator',
+  '5f2222b1-57c3-48ba-8ad5-d4759f1fde6f': 'Security Operator',
+  '5d6b6bb7-de71-4623-b4af-96380a352509': 'Security Reader',
+  'd29b2b05-8046-44ba-8758-1e26182fcf32': 'Directory Synchronization Accounts',
+  'fdd7a751-b60b-444a-984c-02652fe8fa1c': 'Teams Administrator',
+  'baf37b3a-610e-45da-9e62-d9d1e5e8914b': 'Teams Communications Administrator',
+  'fcf91098-03e3-41a9-b5ba-6f0ec8188a12': 'Teams Communications Support Specialist',
+  '25a516ed-2fa0-40ea-a2d0-12923a21473a': 'Authentication Policy Administrator',
+  'b5a8dcf3-09d5-43a9-a639-8e29ef291470': 'Knowledge Administrator',
+  'GuestsOrExternalUsers': 'Guest and External Users',
+  'All': 'All Users',
+  'None': 'No Users',
+};
+
 const APP_NAMES = {
   'All': 'All cloud apps',
+  'Office365': 'Office 365 (all apps)',
   '00000002-0000-0ff1-ce00-000000000000': 'Office 365 Exchange Online',
   '00000003-0000-0ff1-ce00-000000000000': 'Office 365 SharePoint Online',
   '00000004-0000-0ff1-ce00-000000000000': 'Skype for Business / Teams',
-  'Office365': 'Office 365',
+  '00000006-0000-0ff1-ce00-000000000000': 'Microsoft Office',
+  '00000009-0000-0000-c000-000000000000': 'Power BI',
+  '0000000b-0000-0000-c000-000000000000': 'Microsoft Stream',
+  '797f4846-ba00-4fd7-ba43-dac1f8f63013': 'Windows Azure Service Management API',
+  '1950a258-227b-4e31-a9cf-717495945fc2': 'Microsoft Azure PowerShell',
+  '04b07795-8ddb-461a-bbee-02f9e1bf7b46': 'Microsoft Azure CLI',
+  'd3590ed6-52b3-4102-aeff-aad2292ab01c': 'Microsoft Office (desktop)',
+  'de8bc8b5-d9f9-48b1-a8ad-b748da725064': 'Microsoft Graph Explorer',
+  'eb3d2e01-d746-4012-8872-40c8f2b43498': 'Microsoft Intune',
+  '00000003-0000-0000-c000-000000000000': 'Microsoft Graph',
+  'a0c73c16-a7e3-4564-9a95-2bdf47383716': 'Exchange Online Protection',
 };
+
 const PLATFORM_NAMES = {
   'all': 'All platforms', 'android': 'Android', 'iOS': 'iOS', 'windows': 'Windows',
   'windowsPhone': 'Windows Phone', 'macOS': 'macOS', 'linux': 'Linux',
@@ -985,10 +1039,26 @@ const CONTROL_NAMES = {
 const LOCATION_NAMES = { 'All': 'Any location', 'AllTrusted': 'All trusted locations' };
 const RISK_NAMES = { 'low':'Low','medium':'Medium','high':'High','none':'No risk','unknownFutureValue':'Unknown' };
 
+function resolveGuid(guid, type) {
+  if (!guid) return guid;
+  if (ROLE_GUIDS[guid]) return ROLE_GUIDS[guid];
+  if (APP_NAMES[guid]) return APP_NAMES[guid];
+  if (/^[0-9a-f]{8}-/i.test(guid)) {
+    return `<span title="${guid}" style="cursor:help;border-bottom:1px dashed var(--muted)">${guid.substring(0,8)}… (unknown ID)</span>`;
+  }
+  return guid;
+}
+
+function resolveList(arr, type) {
+  if (!arr || !arr.length) return [];
+  return arr.map(x => resolveGuid(x, type));
+}
+
 function mapList(arr, dict) {
   if (!arr || !arr.length) return [];
-  return arr.map(x => dict[x] || x);
+  return arr.map(x => dict[x] || resolveGuid(x,'app') || x);
 }
+
 function pill(text, type='') { return `<span class="pill ${type}">${text}</span>`; }
 function caRow(key, val) {
   return `<div class="res-row"><span class="res-key">${key}</span><span class="res-val">${val}</span></div>`;
@@ -1063,17 +1133,17 @@ function explainCAPolicy(idx) {
   let html = '';
 
   let usersHtml = '';
-  usersHtml += caRow('Include Users', incUsers.includes('All') ? pill('All users','cyan') : incUsers.length ? incUsers.map(u=>pill(u)).join('') : '<span style="color:var(--muted)">None</span>');
-  if (excUsers.length) usersHtml += caRow('Exclude Users', excUsers.map(u => u==='GuestsOrExternalUsers'?pill('Guests/External users','warn'):pill(u,'warn')).join(''));
-  if (excGroups.length) usersHtml += caRow('Exclude Groups', excGroups.map(g=>pill(g,'warn')).join(''));
-  if (excRoles.length) usersHtml += caRow('Exclude Roles', excRoles.map(r=>pill(r,'warn')).join(''));
+  usersHtml += caRow('Include Users', incUsers.includes('All') ? pill('All users','cyan') : incUsers.length ? resolveList(incUsers,'user').map(u=>pill(u)).join('') : '<span style="color:var(--muted)">None</span>');
+  if (excUsers.length) usersHtml += caRow('Exclude Users', excUsers.map(u => pill(resolveGuid(u,'user'),'warn')).join(''));
+  if (excGroups.length) usersHtml += caRow('Exclude Groups', excGroups.map(g=>pill(resolveGuid(g,'role'),'warn')).join(''));
+  if (excRoles.length) usersHtml += caRow('Exclude Roles', resolveList(excRoles,'role').map(r=>pill(r,'warn')).join(''));
   if (users.includeGroups?.length) usersHtml += caRow('Include Groups', users.includeGroups.map(g=>pill(g)).join(''));
   html += caSection('👥 Users & Groups', usersHtml);
 
   let appsHtml = '';
   if (incApps.includes('All')) appsHtml += caRow('Include Apps', pill('All cloud apps','cyan'));
-  else if (incApps.length) appsHtml += caRow('Include Apps', incApps.map(a=>pill(APP_NAMES[a]||a)).join(''));
-  if (apps.excludeApplications?.length) appsHtml += caRow('Exclude Apps', apps.excludeApplications.map(a=>pill(APP_NAMES[a]||a,'warn')).join(''));
+  else if (incApps.length) appsHtml += caRow('Include Apps', incApps.map(a=>pill(resolveGuid(a,'app'))).join(''));
+  if (apps.excludeApplications?.length) appsHtml += caRow('Exclude Apps', apps.excludeApplications.map(a=>pill(resolveGuid(a,'app'),'warn')).join(''));
   if (appsHtml) html += caSection('☁️ Applications', appsHtml);
 
   let condHtml = '';

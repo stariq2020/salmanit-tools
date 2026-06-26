@@ -1,2125 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salman IT Tools — Free Windows Utilities & Online Tools</title>
-<meta name="description" content="Free IT tools by a Microsoft 365 & Cloud Infrastructure Expert with 25+ years of experience. M365 Security Scanner, Conditional Access Policy Explainer, image compressor, QR generator, password generator, network tools, and Windows utilities — all free, no signup required.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --ink:    #080D14;
-  --deep:   #0B1120;
-  --navy:   #0F1C35;
-  --green:  #00E87A;
-  --green2: #00C468;
-  --cyan:   #00C8FF;
-  --white:  #F0F6FF;
-  --muted:  #5A6A85;
-  --card:   #0E1A2E;
-  --border: rgba(255,255,255,0.07);
-  --glow:   0 0 40px rgba(0,232,122,0.15);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EB Electrical Services - 24/7 Electrical Installation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: #1f2937;
+            background: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-body {
-  font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
-  background: var(--ink);
-  color: var(--white);
-  overflow-x: hidden;
-  cursor: none;
-}
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #003d82 0%, #0052b3 100%);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
 
-/* ── CUSTOM CURSOR ── */
-.cursor {
-  width: 10px; height: 10px;
-  background: var(--green);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-  transition: transform .08s, width .2s, height .2s, background .2s;
-}
-.cursor-ring {
-  width: 36px; height: 36px;
-  border: 1.5px solid rgba(0,232,122,0.5);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: transform .18s ease, width .2s, height .2s;
-}
-body:has(a:hover) .cursor,
-body:has(button:hover) .cursor { width: 18px; height: 18px; background: var(--cyan); }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-/* ── NOISE OVERLAY ── */
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 1000; opacity: .5;
-}
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 68px;
-  background: rgba(8,13,20,0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.5rem; letter-spacing: .08em;
-  color: var(--white); text-decoration: none;
-  display: flex; align-items: center; gap: 10px;
-}
-.nav-logo .dot { color: var(--green); }
-.nav-links { display: flex; align-items: center; gap: 32px; }
-.hamburger { display: none; }
-.mobile-menu { display: none; }
-.nav-links a {
-  color: var(--muted); text-decoration: none;
-  font-size: 0.88rem; font-weight: 500;
-  letter-spacing: .03em;
-  transition: color .2s;
-  cursor: none;
-}
-.nav-links a:hover { color: var(--green); }
-.nav-contact {
-  background: transparent;
-  border: 1px solid rgba(0,232,122,0.4);
-  color: var(--green) !important;
-  padding: 7px 18px; border-radius: 8px;
-  transition: background .2s, border-color .2s !important;
-  cursor: none;
-}
-.nav-contact:hover {
-  background: rgba(0,232,122,0.08) !important;
-  border-color: var(--green) !important;
-  color: var(--green) !important;
-}
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
-  padding: 120px 24px 80px;
-  position: relative; overflow: hidden;
-  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,232,122,0.08) 0%, transparent 70%),
-              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,200,255,0.05) 0%, transparent 60%),
-              var(--ink);
-}
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
 
-.hero-eyebrow,
-.hero h1,
-.hero-sub,
-.hero-cta,
-.hero-stats {
-  position: relative; z-index: 2;
-}
+        .nav-menu a:hover {
+            opacity: 0.7;
+        }
 
-#heroCanvas {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none; z-index: 0;
-  opacity: .85;
-}
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+        }
 
-/* Floating orbs */
-.orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(100px); pointer-events: none;
-  animation: drift 12s ease-in-out infinite alternate;
-}
-.orb-1 { width: 600px; height: 600px; background: rgba(0,232,122,0.06); top: -200px; right: -100px; }
-.orb-2 { width: 400px; height: 400px; background: rgba(0,200,255,0.05); bottom: -100px; left: -80px; animation-delay: -6s; }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
 
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.72rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .18em;
-  color: var(--green);
-  border: 1px solid rgba(0,232,122,0.25);
-  background: rgba(0,232,122,0.06);
-  padding: 7px 18px; border-radius: 999px;
-  margin-bottom: 32px;
-  animation: fadeUp .7s ease both;
-}
-.eyebrow-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--green);
-  animation: pulse 2s infinite;
-}
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
 
-.hero h1 {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: clamp(4rem, 10vw, 9rem);
-  line-height: .95; letter-spacing: .02em;
-  color: var(--white);
-  animation: fadeUp .7s .1s ease both;
-}
-.hero h1 .accent {
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 2px var(--green);
-  text-stroke: 2px var(--green);
-}
-.hero h1 .glow-text {
-  background: linear-gradient(135deg, var(--green), var(--cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
 
-.hero-sub {
-  margin-top: 28px; max-width: 520px;
-  font-size: 1.05rem; font-weight: 300;
-  color: rgba(240,246,255,0.5); line-height: 1.75;
-  animation: fadeUp .7s .2s ease both;
-}
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
 
-.hero-cta {
-  margin-top: 44px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
-  animation: fadeUp .7s .3s ease both;
-}
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--green); color: var(--ink);
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem; font-weight: 700;
-  padding: 14px 28px; border-radius: 10px;
-  text-decoration: none; border: none; cursor: none;
-  letter-spacing: .04em; text-transform: uppercase;
-  transition: transform .2s, box-shadow .2s;
-  box-shadow: 0 0 0 rgba(0,232,122,0);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,232,122,0.35);
-}
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; color: var(--white);
-  font-size: 0.9rem; font-weight: 500;
-  padding: 14px 28px; border-radius: 10px;
-  text-decoration: none; border: 1px solid var(--border);
-  cursor: none; letter-spacing: .03em;
-  transition: border-color .2s, color .2s;
-}
-.btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--green); }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
 
-.hero-stats {
-  margin-top: 72px; display: flex; gap: 0;
-  border: 1px solid var(--border);
-  border-radius: 16px; overflow: hidden;
-  animation: fadeUp .7s .4s ease both;
-  background: rgba(255,255,255,0.02);
-}
-.stat {
-  padding: 20px 36px; text-align: center;
-  border-right: 1px solid var(--border);
-  flex: 1;
-}
-.stat:last-child { border-right: none; }
-.stat-n {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 2.2rem; letter-spacing: .05em;
-  color: var(--green);
-}
-.stat-l { font-size: 0.72rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .08em; }
+            .nav-menu {
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #003d82 0%, #0052b3 100%);
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
 
-/* ── ACCORDIONS ── */
-.accordion-wrap {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.02);
-}
-.accordion-btn {
-  width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 22px;
-  background: transparent;
-  border: none; cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.95rem; font-weight: 600;
-  color: rgba(240,246,255,0.85);
-  text-align: left;
-  transition: background .2s, color .2s;
-  gap: 12px;
-}
-.accordion-btn:hover {
-  background: rgba(255,255,255,0.04);
-  color: var(--green);
-}
-.accordion-btn.open {
-  color: var(--green);
-  border-bottom: 1px solid var(--border);
-}
-.acc-arrow {
-  font-size: 1rem; color: var(--muted);
-  transition: transform .3s;
-  flex-shrink: 0;
-}
-.accordion-btn.open .acc-arrow { transform: rotate(180deg); color: var(--green); }
-.accordion-body {
-  max-height: 0; overflow: hidden;
-  transition: max-height .4s ease, padding .3s ease;
-  padding: 0 22px;
-}
-.accordion-body.open {
-  max-height: 2000px;
-  padding: 24px 22px;
-}
+            .nav-menu.active {
+                max-height: 300px;
+            }
 
-/* ── COLLAPSIBLE TOOL CARDS ── */
-.tc-top {
-  display: flex; gap: 16px; align-items: flex-start;
-  margin-bottom: 16px;
-}
-.tc-actions {
-  display: flex; gap: 10px; align-items: center;
-}
-.tc-details {
-  max-height: 0; overflow: hidden;
-  transition: max-height .4s ease;
-}
-.tc-details.open { max-height: 400px; }
-.tc-divider {
-  height: 1px; background: var(--border);
-  margin: 16px 0;
-}
-.learn-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.85rem; font-weight: 600;
-  padding: 10px 18px; border-radius: 10px;
-  cursor: pointer;
-  transition: border-color .2s, color .2s;
-  display: flex; align-items: center; gap: 6px;
-  white-space: nowrap;
-}
-.learn-btn:hover { border-color: var(--green); color: var(--green); }
-.learn-btn.open { border-color: var(--green); color: var(--green); }
-.learn-arrow { transition: transform .3s; display: inline-block; }
-.learn-btn.open .learn-arrow { transform: rotate(180deg); }
+            .nav-menu a {
+                display: block;
+                padding: 10px 0;
+            }
+        }
 
-/* ── CATEGORY HEADERS ── */
-.cat-header {
-  display: flex; align-items: center; gap: 16px;
-  margin-bottom: 20px; padding: 16px 20px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-.cat-icon { font-size: 1.8rem; }
-.cat-title {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.3rem; letter-spacing: .05em;
-  color: var(--white);
-}
-.cat-sub { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #003d82 0%, #0052b3 50%, #0066cc 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-/* ── FILTER TABS ── */
-.filter-tabs {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  margin-bottom: 36px;
-}
-.filter-btn {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.88rem; font-weight: 600;
-  padding: 9px 20px; border-radius: 999px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted); cursor: pointer;
-  transition: all .2s;
-}
-.filter-btn.active {
-  background: var(--green); color: var(--ink);
-  border-color: var(--green);
-}
-.filter-btn:hover:not(.active) {
-  border-color: rgba(255,255,255,0.2);
-  color: var(--white);
-}
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(100px, -100px);
+        }
 
-/* ── TOOLS ── */
-.tools-section {
-  padding: 100px 24px;
-  max-width: 1120px; margin: 0 auto;
-}
-.label-tag {
-  display: inline-block;
-  font-size: 0.7rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .14em;
-  color: var(--green); margin-bottom: 12px;
-}
-.section-h {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  letter-spacing: .04em; line-height: 1;
-  color: var(--white); margin-bottom: 16px;
-}
-.section-p {
-  font-size: 0.95rem; color: var(--muted);
-  max-width: 480px; line-height: 1.75; margin-bottom: 56px;
-}
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            transform: translate(-50px, 50px);
+        }
 
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 24px;
-}
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
 
-.tool-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px; padding: 36px;
-  position: relative; overflow: hidden;
-  transition: transform .3s, border-color .3s, box-shadow .3s;
-}
-.tool-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--green), transparent);
-  opacity: 0; transition: opacity .3s;
-}
-.tool-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(0,232,122,0.2);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,232,122,0.1);
-}
-.tool-card:hover::before { opacity: 1; }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
 
-/* Corner decoration */
-.tool-card::after {
-  content: '';
-  position: absolute; bottom: -40px; right: -40px;
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,232,122,0.06), transparent 70%);
-  pointer-events: none;
-}
+        .hero p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
 
-.tool-icon-wrap {
-  width: 56px; height: 56px;
-  border-radius: 14px;
-  border: 1px solid rgba(0,232,122,0.2);
-  background: rgba(0,232,122,0.06);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.6rem; margin-bottom: 20px;
-}
-.tool-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.68rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .1em;
-  color: var(--green);
-  background: rgba(0,232,122,0.08);
-  border: 1px solid rgba(0,232,122,0.15);
-  padding: 3px 10px; border-radius: 999px;
-  margin-bottom: 12px;
-}
-.tool-badge.soon { color: var(--muted); background: rgba(90,106,133,0.1); border-color: rgba(90,106,133,0.2); }
-.tool-name {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.8rem; letter-spacing: .04em;
-  color: var(--white); margin-bottom: 10px;
-}
-.tool-desc {
-  font-size: 0.88rem; color: var(--muted);
-  line-height: 1.7; margin-bottom: 22px;
-}
-.tool-feats {
-  list-style: none; margin-bottom: 28px;
-  display: flex; flex-direction: column; gap: 7px;
-}
-.tool-feats li {
-  font-size: 0.82rem; color: rgba(240,246,255,0.65);
-  display: flex; align-items: flex-start; gap: 9px; line-height: 1.4;
-}
-.tool-feats li::before {
-  content: '→';
-  color: var(--green); font-size: 0.75rem;
-  flex-shrink: 0; margin-top: 1px;
-}
-.tool-meta-row {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  margin-bottom: 24px; padding-top: 18px;
-  border-top: 1px solid var(--border);
-}
-.meta-tag {
-  font-size: 0.7rem; color: var(--muted);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  padding: 3px 10px; border-radius: 6px;
-}
+        .rating-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
 
-.dl-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 15px;
-  background: linear-gradient(135deg, var(--green), var(--green2));
-  color: var(--ink); font-family: 'Outfit', sans-serif;
-  font-size: 0.88rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .06em;
-  border: none; border-radius: 12px;
-  text-decoration: none; cursor: none;
-  transition: opacity .2s, transform .15s, box-shadow .2s;
-  position: relative; overflow: hidden;
-}
-.dl-btn::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-  opacity: 0; transition: opacity .2s;
-}
-.dl-btn:hover { opacity: .93; transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,232,122,0.3); }
-.dl-btn:hover::before { opacity: 1; }
-.dl-btn.disabled {
-  background: linear-gradient(135deg, #1E2A3A, #182030);
-  color: var(--muted); cursor: not-allowed;
-  box-shadow: none;
-}
+        .rating-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-.ss-img-wrap {
-  position: relative; overflow: hidden; cursor: pointer;
-}
-.ss-zoom {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,0.5);
-  color: white; font-size: 0.85rem;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity .2s;
-}
-.ss-card:hover .ss-zoom { opacity: 1; }
+        .rating-item .big {
+            font-size: 28px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
 
-/* Remote info box */
-.remote-info-box {
-  margin-top: 32px;
-  background: rgba(0,232,122,0.04);
-  border: 1px solid rgba(0,232,122,0.15);
-  border-radius: 16px; padding: 28px 32px;
-}
-.remote-info-title {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.3rem; letter-spacing: .05em;
-  color: var(--green); margin-bottom: 10px;
-}
-.remote-info-box > p {
-  font-size: 0.88rem; color: var(--muted);
-  line-height: 1.7; margin-bottom: 20px;
-}
-.remote-steps { display: flex; flex-direction: column; gap: 16px; }
-.remote-step {
-  display: flex; gap: 16px; align-items: flex-start;
-}
-.remote-step-num {
-  width: 28px; height: 28px; flex-shrink: 0;
-  background: var(--green); color: var(--ink);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1rem; margin-top: 2px;
-}
-.remote-step div { display: flex; flex-direction: column; gap: 5px; }
-.remote-step strong { font-size: 0.9rem; color: var(--white); }
-.remote-step code {
-  font-family: 'Courier New', monospace;
-  font-size: 0.78rem; color: var(--green);
-  background: rgba(0,232,122,0.07);
-  border: 1px solid rgba(0,232,122,0.15);
-  padding: 5px 10px; border-radius: 6px;
-  word-break: break-all;
-}
-.remote-step span { font-size: 0.82rem; color: var(--muted); }
+        .rating-item .small {
+            font-size: 13px;
+            opacity: 0.85;
+        }
 
-/* Lightbox */
-.lightbox {
-  position: fixed; inset: 0; z-index: 900;
-  background: rgba(0,0,0,0.92);
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px; opacity: 0; pointer-events: none;
-  transition: opacity .25s;
-}
-.lightbox.active { opacity: 1; pointer-events: all; }
-.lightbox-inner {
-  position: relative; max-width: 1100px; width: 100%;
-  transform: scale(0.95); transition: transform .25s;
-}
-.lightbox.active .lightbox-inner { transform: scale(1); }
-.lightbox-inner img {
-  width: 100%; height: auto;
-  border-radius: 12px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-}
-.lightbox-close {
-  position: absolute; top: -16px; right: -16px;
-  width: 36px; height: 36px;
-  background: var(--green); color: var(--ink);
-  border: none; border-radius: 50%;
-  font-size: 1rem; font-weight: 700;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: transform .2s;
-}
-.lightbox-close:hover { transform: scale(1.1); }
-.lightbox-caption {
-  text-align: center; margin-top: 14px;
-  font-size: 0.88rem; color: rgba(255,255,255,0.6);
-}
+        .stars {
+            color: #fbbf24;
+            letter-spacing: 4px;
+            font-size: 18px;
+        }
 
-/* ── SCREENSHOTS ── */
-.screenshots-section {
-  padding: 100px 24px;
-  background: var(--deep);
-  border-top: 1px solid var(--border);
-}
-.screenshots-inner { max-width: 1120px; margin: 0 auto; }
+        .cta-button {
+            display: inline-block;
+            background: #fbbf24;
+            color: #003d82;
+            padding: 16px 45px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid #fbbf24;
+            cursor: pointer;
+            margin: 0 10px;
+        }
 
-.ss-tabs {
-  display: flex; gap: 8px;
-  margin-bottom: 32px; margin-top: 40px;
-}
-.ss-tab {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem; font-weight: 600;
-  padding: 10px 24px; border-radius: 10px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
-  color: var(--muted); cursor: pointer;
-  transition: background .2s, color .2s;
-}
-.ss-tab.active {
-  background: rgba(0,232,122,0.08);
-  color: var(--green);
-  border-color: rgba(0,232,122,0.2);
-}
-.ss-tab:hover:not(.active) {
-  background: rgba(255,255,255,0.06);
-  color: var(--white);
-}
+        .cta-button:hover {
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(251, 191, 36, 0.3);
+        }
 
-.ss-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-.ss-grid-1 {
-  grid-template-columns: minmax(300px, 600px);
-}
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
 
-.ss-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: transform .25s, box-shadow .25s, border-color .25s;
-}
-.ss-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-  border-color: rgba(0,232,122,0.2);
-}
-.ss-card img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-bottom: 1px solid var(--border);
-}
-.ss-caption {
-  padding: 12px 16px;
-  font-size: 0.82rem;
-  color: var(--muted);
-  text-align: center;
-}
+        .cta-button.secondary:hover {
+            background: white;
+            color: #003d82;
+        }
 
-/* ── HOW IT WORKS TABS ── */
-.how-tabs {
-  display: flex; gap: 8px;
-  margin-bottom: 0; margin-top: 40px;
-}
-.how-tab {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem; font-weight: 600;
-  padding: 10px 24px; border-radius: 10px 10px 0 0;
-  border: 1px solid var(--border); border-bottom: none;
-  background: rgba(255,255,255,0.03);
-  color: var(--muted); cursor: pointer;
-  transition: background .2s, color .2s;
-}
-.how-tab.active {
-  background: var(--card);
-  color: var(--green);
-  border-color: rgba(0,232,122,0.2);
-}
-.how-tab:hover:not(.active) {
-  background: rgba(255,255,255,0.06);
-  color: var(--white);
-}
-.how-tab-content {
-  border: 1px solid rgba(0,232,122,0.15);
-  border-radius: 0 12px 12px 12px;
-  overflow: hidden;
-}
+        /* Services Section */
+        .services {
+            padding: 80px 20px;
+            background: #f8fafc;
+        }
 
-/* ── HOW IT WORKS ── */
-.how-section {
-  padding: 100px 24px;
-  background: linear-gradient(180deg, var(--ink) 0%, var(--deep) 100%);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.how-inner { max-width: 1120px; margin: 0 auto; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-.steps-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 20px; overflow: hidden;
-  margin-top: 56px;
-}
-.step {
-  background: var(--card);
-  padding: 36px 28px;
-  position: relative; overflow: hidden;
-  transition: background .2s;
-}
-.step:hover { background: #111E33; }
-.step-num {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 4rem; letter-spacing: .05em;
-  color: rgba(0,232,122,0.1);
-  line-height: 1; margin-bottom: 16px;
-  transition: color .3s;
-}
-.step:hover .step-num { color: rgba(0,232,122,0.2); }
-.step h3 {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.2rem; letter-spacing: .06em;
-  color: var(--white); margin-bottom: 10px;
-}
-.step p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #003d82;
+        }
 
-/* ── ABOUT ── */
-.about-section {
-  padding: 100px 24px;
-  background: var(--deep);
-  border-top: 1px solid var(--border);
-}
-.about-inner { max-width: 860px; margin: 0 auto; }
-.about-card {
-  display: flex; gap: 32px; align-items: flex-start;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 36px; margin-top: 32px;
-}
-@media(max-width:640px){ .about-card { flex-direction: column; gap: 20px; } }
-.about-avatar {
-  width: 72px; height: 72px; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--green), var(--cyan));
-  border-radius: 18px; display: flex; align-items: center;
-  justify-content: center; font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.6rem; letter-spacing: .05em; color: var(--ink);
-}
-.about-content h3 {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif; font-size: 1.8rem;
-  letter-spacing: .04em; color: var(--white); margin-bottom: 4px;
-}
-.about-title {
-  font-size: 0.82rem; font-weight: 600; color: var(--green);
-  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px;
-}
-.about-bio {
-  font-size: 0.9rem; color: var(--muted); line-height: 1.75;
-  margin-bottom: 12px;
-}
-.about-links {
-  display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0 16px;
-}
-.about-link-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: linear-gradient(135deg, var(--green), var(--green2));
-  color: var(--ink); font-family: 'Outfit', sans-serif;
-  font-size: 0.88rem; font-weight: 700; padding: 11px 22px;
-  border-radius: 10px; text-decoration: none; transition: opacity .2s, transform .15s;
-  border: none; cursor: pointer;
-}
-.about-link-btn:hover { opacity: .9; transform: scale(1.02); }
-.about-link-ghost {
-  background: transparent;
-  border: 1px solid var(--border) !important;
-  color: var(--white) !important;
-}
-.about-link-ghost:hover { border-color: var(--green) !important; color: var(--green) !important; }
-.about-note {
-  font-size: 0.8rem; color: var(--muted); font-style: italic;
-}
+        .section-subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 60px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-/* ── FOOTER UPDATED ── */
-footer {
-  background: var(--deep);
-  border-top: 1px solid var(--border);
-  padding: 48px 24px 32px;
-  text-align: center;
-}
-.footer-about { max-width: 680px; margin: 16px auto 24px; }
-.footer-bio {
-  font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px;
-}
-.footer-links {
-  display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
-  font-size: 0.85rem;
-}
-.footer-links a { color: var(--green); text-decoration: none; transition: opacity .2s; }
-.footer-links a:hover { opacity: .75; }
-.footer-copy {
-  font-size: 0.75rem; color: var(--muted); margin-top: 8px;
-}
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
 
-/* ── FAQ ── */
-.faq-section { padding: 100px 24px; max-width: 1120px; margin: 0 auto; }
-.faq-wrap { max-width: 700px; margin-top: 48px; }
-.faq-item {
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
-}
-.faq-q {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 22px 4px; cursor: none;
-  font-size: 0.95rem; font-weight: 600;
-  color: rgba(240,246,255,0.85);
-  transition: color .2s; gap: 16px;
-}
-.faq-q:hover { color: var(--green); }
-.faq-arrow {
-  width: 28px; height: 28px; flex-shrink: 0;
-  border: 1px solid var(--border); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; color: var(--muted);
-  transition: transform .3s, border-color .2s, color .2s;
-}
-.faq-item.open .faq-arrow { transform: rotate(180deg); border-color: var(--green); color: var(--green); }
-.faq-a {
-  font-size: 0.87rem; color: var(--muted); line-height: 1.75;
-  max-height: 0; overflow: hidden;
-  padding: 0 4px;
-  transition: max-height .35s ease, padding .35s ease;
-}
-.faq-item.open .faq-a { max-height: 300px; padding: 0 4px 20px; }
+        .service-card {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid #0052b3;
+        }
 
-/* ── CONTACT MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 800;
-  background: rgba(8,13,20,0.88);
-  backdrop-filter: blur(16px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-  opacity: 0; pointer-events: none;
-  transition: opacity .3s;
-}
-.modal-overlay.active { opacity: 1; pointer-events: all; }
-.modal {
-  background: var(--card);
-  border: 1px solid rgba(0,232,122,0.15);
-  border-radius: 24px; padding: 48px;
-  width: 100%; max-width: 520px;
-  position: relative;
-  transform: translateY(20px) scale(0.97);
-  transition: transform .3s;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,232,122,0.05);
-}
-.modal-overlay.active .modal { transform: translateY(0) scale(1); }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 82, 179, 0.15);
+        }
 
-.modal-close {
-  position: absolute; top: 20px; right: 20px;
-  width: 36px; height: 36px;
-  border: 1px solid var(--border); border-radius: 50%;
-  background: transparent; color: var(--muted);
-  display: flex; align-items: center; justify-content: center;
-  cursor: none; font-size: 1rem;
-  transition: border-color .2s, color .2s;
-}
-.modal-close:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+        .service-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
 
-.modal h2 {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 2.2rem; letter-spacing: .05em;
-  color: var(--white); margin-bottom: 6px;
-}
-.modal p {
-  font-size: 0.88rem; color: var(--muted);
-  line-height: 1.65; margin-bottom: 32px;
-}
-.form-group { margin-bottom: 18px; }
-.form-group label {
-  display: block; font-size: 0.75rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .1em;
-  color: var(--muted); margin-bottom: 8px;
-}
-.form-group input,
-.form-group textarea {
-  width: 100%; background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border); border-radius: 10px;
-  padding: 13px 16px; color: var(--white);
-  font-family: 'Outfit', sans-serif; font-size: 0.9rem;
-  transition: border-color .2s, background .2s;
-  outline: none; resize: none;
-}
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: rgba(0,232,122,0.4);
-  background: rgba(0,232,122,0.03);
-}
-.form-group input::placeholder,
-.form-group textarea::placeholder { color: var(--muted); }
-.form-group textarea { height: 110px; }
+        .service-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #003d82;
+        }
 
-.form-submit {
-  width: 100%; padding: 15px;
-  background: linear-gradient(135deg, var(--green), var(--green2));
-  color: var(--ink); font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .06em;
-  border: none; border-radius: 12px; cursor: none;
-  transition: opacity .2s, transform .15s, box-shadow .2s;
-  margin-top: 8px;
-}
-.form-submit:hover {
-  opacity: .9; transform: scale(1.01);
-  box-shadow: 0 8px 24px rgba(0,232,122,0.3);
-}
-.form-success {
-  text-align: center; padding: 20px 0;
-  display: none;
-}
-.form-success .check {
-  font-size: 3rem; margin-bottom: 12px;
-  animation: popIn .4s ease;
-}
-.form-success h3 {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.8rem; color: var(--green);
-  letter-spacing: .05em; margin-bottom: 8px;
-}
-.form-success p { font-size: 0.88rem; color: var(--muted); }
+        .service-card p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.8;
+        }
 
-/* ── FOOTER ── */
-footer {
-  background: var(--deep);
-  border-top: 1px solid var(--border);
-  padding: 48px 24px;
-  text-align: center;
-}
-.footer-logo {
-  font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 1.6rem; letter-spacing: .08em;
-  color: var(--white); margin-bottom: 12px;
-}
-.footer-logo .dot { color: var(--green); }
-footer p { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
-footer a { color: var(--green); text-decoration: none; }
-footer a:hover { text-decoration: underline; }
+        /* Info Section */
+        .info-section {
+            padding: 80px 20px;
+            background: white;
+        }
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(28px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-@keyframes drift {
-  from { transform: translate(0,0) scale(1); }
-  to   { transform: translate(30px,20px) scale(1.1); }
-}
-@keyframes pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%      { opacity:.4; transform:scale(.7); }
-}
-@keyframes popIn {
-  from { transform:scale(0.5); opacity:0; }
-  to   { transform:scale(1); opacity:1; }
-}
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
 
-.reveal {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
+        .info-card {
+            padding: 30px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border-left: 4px solid #0066cc;
+            text-align: center;
+        }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .mobile-menu { display: flex; }
-  .hamburger {
-    display: flex; flex-direction: column;
-    justify-content: center; gap: 5px;
-    width: 36px; height: 36px;
-    background: transparent; border: none;
-    cursor: pointer; padding: 4px; z-index: 600;
-  }
-  .hamburger span {
-    display: block; width: 22px; height: 2px;
-    background: var(--white); border-radius: 2px;
-    transition: all .3s;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .info-card .label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #0066cc;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-  /* Mobile menu */
-  .mobile-menu {
-    position: fixed; top: 64px; left: 0; right: 0;
-    background: rgba(8,13,20,0.98);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    padding: 16px 24px 24px;
-    gap: 4px; z-index: 499;
-    transform: translateY(-110%);
-    transition: transform .3s ease;
-  }
-  .mobile-menu.open { transform: translateY(0); }
-  .mobile-menu a {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.1rem; font-weight: 600;
-    color: var(--muted); text-decoration: none;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    transition: color .2s;
-  }
-  .mobile-menu a:last-child { border-bottom: none; color: var(--green); }
-  .mobile-menu a:hover { color: var(--green); }
-  .hero-stats { flex-direction: column; gap: 0; border: none; }
-  .stat { border-right: none; border-bottom: 1px solid var(--border); }
-  .modal { padding: 32px 24px; }
-  body { cursor: auto; }
-  .cursor, .cursor-ring { display: none; }
-}
-</style>
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+        .info-card .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #003d82;
+            word-break: break-word;
+        }
+
+        .info-card a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .info-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* CTA Section */
+        .cta-large {
+            background: linear-gradient(135deg, #003d82 0%, #0052b3 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .cta-large h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .cta-large p {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .rating-section {
+                gap: 15px;
+            }
+
+            .rating-item {
+                padding: 15px 20px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-button {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#">⚡ Salman IT<span class="dot">.</span>Tools</a>
-  <div class="nav-links">
-    <a href="#tools">Tools</a>
-    <a href="#faq">FAQ</a>
-    <a href="#about">About</a>
-    <a href="#" class="nav-contact" onclick="openModal(event)">Contact</a>
-  </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#tools" onclick="closeMobileMenu()">Tools</a>
-  <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
-  <a href="#about" onclick="closeMobileMenu()">About</a>
-  <a href="#" onclick="closeMobileMenu();openModal(event)">Contact</a>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <canvas id="heroCanvas"></canvas>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <div class="hero-eyebrow">
-    <span class="eyebrow-dot"></span>
-    Free Tools for Everyone — Built to Make IT Easier
-  </div>
-
-  <h1>
-    TOOLS THAT<br>
-    <span class="glow-text">JUST WORK</span>
-  </h1>
-
-  <p class="hero-sub">Free Windows utilities and online tools built by an IT professional with 25+ years of experience. No signup, no nonsense — just tools that work.</p>
-
-  <div class="hero-cta">
-    <a class="btn-primary" href="#tools">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-        <path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/>
-      </svg>
-      Browse Tools
-    </a>
-    <a class="btn-ghost" href="#faq">Learn More →</a>
-  </div>
-
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-n">11</div>
-      <div class="stat-l">Tools Live</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n">17</div>
-      <div class="stat-l">Checks & Fixes</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n">100%</div>
-      <div class="stat-l">Free</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n">0</div>
-      <div class="stat-l">Install Required</div>
-    </div>
-  </div>
-</section>
-
-<!-- TOOLS -->
-<section id="tools" style="padding:100px 24px; max-width:1120px; margin:0 auto;">
-  <div class="label-tag reveal">Our Tools</div>
-  <h2 class="section-h reveal">All Tools</h2>
-  <p class="section-p reveal">Free tools for everyone — Windows utilities, online tools and more. No signup, no cost.</p>
-
-  <!-- Filter tabs -->
-  <div class="filter-tabs reveal">
-    <button class="filter-btn active" onclick="filterTools(this,'all')">All Tools</button>
-    <button class="filter-btn" onclick="filterTools(this,'m365')">🔒 M365 & Security</button>
-    <button class="filter-btn" onclick="filterTools(this,'email')">📧 Email & Network</button>
-    <button class="filter-btn" onclick="filterTools(this,'utilities')">🛠️ Utilities</button>
-    <button class="filter-btn" onclick="filterTools(this,'windows')">🖥️ Windows PC</button>
-  </div>
-
-  <!-- Category: Windows PC Tools -->
-  <div class="cat-header reveal" data-cat="windows">
-    <span class="cat-icon">🖥️</span>
-    <div>
-      <div class="cat-title">Windows PC Tools</div>
-      <div class="cat-sub">Download and run — no installation required</div>
-    </div>
-  </div>
-
-  <div class="tools-grid" id="grid-windows" data-cat="windows">
-
-    <!-- OneClickFix — collapsible -->
-    <div class="tool-card reveal" data-cat="windows">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">⚡</div>
-        <div style="flex:1">
-          <div class="tool-badge">● v1.7 — Latest</div>
-          <div class="tool-name" style="margin-bottom:6px">OneClickFix</div>
-          <div class="tool-desc">Fix, clean and optimise your Windows PC in one click. 17 automated checks — no tech knowledge needed.</div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#home" class="logo">⚡ EB Electrical</a>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/OneClickFix.exe">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
-          Download .exe
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Clears temp files, browser cache &amp; Recycle Bin</li>
-          <li>Fixes broken registry startup &amp; uninstall entries</li>
-          <li>Flushes DNS &amp; clears Windows Event Logs</li>
-          <li>SSD/HDD detection — handles defrag correctly</li>
-          <li>Windows Update &amp; Defender health check</li>
-          <li>Remote PC fix via WinRM</li>
-          <li>PC Health Score out of 10</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🪟 Win 10/11</span><span class="meta-tag">⚡ No Install</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">🖥️ 64-bit</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ProfileCleaner — collapsible -->
-    <div class="tool-card reveal" data-cat="windows" style="animation-delay:.1s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🗂️</div>
-        <div style="flex:1">
-          <div class="tool-badge">● v2.4 — Latest</div>
-          <div class="tool-name" style="margin-bottom:6px">ProfileCleaner</div>
-          <div class="tool-desc">Safely remove old Windows user profiles to free up disk space. Colour-coded with bulk deletion support.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/ProfileCleaner.exe">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
-          Download .exe
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Lists all profiles with last login date &amp; size</li>
-          <li>Colour coded — green (active), amber (30d+), red (180d+)</li>
-          <li>Filter by inactivity — 30 days, 90 days, 6 months, 1 year</li>
-          <li>Bulk select &amp; delete multiple profiles in one go</li>
-          <li>Confirmation before every deletion</li>
-          <li>Skips current user &amp; system profiles automatically</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🪟 Win 10/11</span><span class="meta-tag">⚡ No Install</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">🖥️ 64-bit</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- NetworkInfo — collapsible -->
-    <div class="tool-card reveal" data-cat="windows" style="animation-delay:.2s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🌐</div>
-        <div style="flex:1">
-          <div class="tool-badge">● v1.0 — Latest</div>
-          <div class="tool-name" style="margin-bottom:6px">NetworkInfo</div>
-          <div class="tool-desc">Full IT network dashboard — adapters, DNS, ping, traceroute, port checker, WiFi info and speed test in one tool.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/NetworkInfo.exe">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
-          Download .exe
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Public IP, default gateway &amp; DNS servers at a glance</li>
-          <li>All network adapters — IPv4, MAC, speed, status</li>
-          <li>WiFi info — SSID, signal, channel, auth type</li>
-          <li>Ping test with bar chart — avg, min, max, packet loss</li>
-          <li>Port checker — HTTP, HTTPS, SSH, RDP, SMB quick buttons</li>
-          <li>DNS lookup — A, AAAA, MX, CNAME, TXT, NS, PTR</li>
-          <li>Traceroute with dark terminal output</li>
-          <li>Download speed test</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🪟 Win 10/11</span><span class="meta-tag">⚡ No Install</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">🖥️ 64-bit</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <div class="win-accordions" data-cat="windows" style="margin-top:24px;display:flex;flex-direction:column;gap:10px">
-
-    <!-- Screenshots accordion -->
-    <div class="accordion-wrap">
-      <button class="accordion-btn" onclick="toggleAccordion(this)">
-        <span>📸 &nbsp;See It In Action — Screenshots</span>
-        <span class="acc-arrow">&#x25BE;</span>
-      </button>
-      <div class="accordion-body">
-        <div class="ss-tabs" style="margin-bottom:20px">
-          <button class="ss-tab active" onclick="switchSsTab(this,'ss-ocf')">&#x26A1; OneClickFix</button>
-          <button class="ss-tab" onclick="switchSsTab(this,'ss-pc')">&#x1F5C2;&#xFE0F; ProfileCleaner</button>
-          <button class="ss-tab" onclick="switchSsTab(this,'ss-ni')">&#x1F310; NetworkInfo</button>
-        </div>
-        <div id="ss-ocf" class="ss-content">
-          <div class="ss-grid">
-            <div class="ss-card" onclick="openLightbox('oneclickfix-screenshot1.jpg','Main Screen')">
-              <div class="ss-img-wrap"><img src="oneclickfix-screenshot1.jpg" alt="OneClickFix main" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Main Screen &#x2014; PC snapshot at a glance</div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>EB Electrical Services</h1>
+            <p>Professional Electrical Installation, Maintenance & Repair — Available 24/7</p>
+            
+            <div class="rating-section">
+                <div class="rating-item">
+                    <span class="big stars">★★★★★</span>
+                    <span class="small">5.0 Rating</span>
+                </div>
+                <div class="rating-item">
+                    <span class="big">67</span>
+                    <span class="small">Trusted Reviews</span>
+                </div>
+                <div class="rating-item">
+                    <span class="big">24/7</span>
+                    <span class="small">Always Available</span>
+                </div>
             </div>
-            <div class="ss-card" onclick="openLightbox('oneclickfix-screenshot2.jpg','Scan Results')">
-              <div class="ss-img-wrap"><img src="oneclickfix-screenshot2.jpg" alt="OneClickFix results" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Scan Results &#x2014; Full fix report with health score</div>
+
+            <div style="margin-top: 30px;">
+                <a href="tel:07376635189" class="cta-button">Call Now</a>
+                <a href="mailto:contact@ebelectrical.com" class="cta-button secondary">Get Quote</a>
             </div>
-            <div class="ss-card" onclick="openLightbox('oneclickfix-screenshot3.jpg','Remote PC Fix')">
-              <div class="ss-img-wrap"><img src="oneclickfix-screenshot3.jpg" alt="OneClickFix remote" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Remote PC Fix &#x2014; Run fixes on any networked machine</div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">What We Do</h2>
+            <p class="section-subtitle">Expert electrical solutions for residential & commercial properties</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3>Installation</h3>
+                    <p>Complete electrical installation services for new builds and renovations, all to the highest standards.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔧</div>
+                    <h3>Maintenance</h3>
+                    <p>Regular maintenance and inspections to keep your electrical systems safe and efficient year-round.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🚨</div>
+                    <h3>Emergency Repair</h3>
+                    <p>Fast response emergency repairs available 24/7 for any electrical issues you encounter.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📋</div>
+                    <h3>Safety Inspections</h3>
+                    <p>Professional electrical safety inspections and certification for peace of mind.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💡</div>
+                    <h3>Upgrades</h3>
+                    <p>Modern electrical upgrades to improve efficiency, safety, and your home's value.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏢</div>
+                    <h3>Commercial</h3>
+                    <p>Comprehensive electrical solutions designed for commercial and industrial properties.</p>
+                </div>
             </div>
-          </div>
         </div>
-        <div id="ss-pc" class="ss-content" style="display:none">
-          <div class="ss-grid ss-grid-1">
-            <div class="ss-card" onclick="openLightbox('profilecleaner-screenshot1.jpg','ProfileCleaner')">
-              <div class="ss-img-wrap"><img src="profilecleaner-screenshot1.jpg" alt="ProfileCleaner" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Profile List &#x2014; All user profiles colour coded by activity</div>
+    </section>
+
+    <!-- About Section -->
+    <section class="info-section" id="about" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+        <div class="container">
+            <h2 class="section-title">About EB Electrical Services</h2>
+            <p class="section-subtitle">Trusted by London's leading homes and businesses</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1000px; margin: 0 auto;">
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; font-weight: 800; color: #0052b3; margin-bottom: 10px;">67+</div>
+                    <p style="font-size: 16px; color: #6b7280;">Happy Customers with 5-star ratings</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; font-weight: 800; color: #0052b3; margin-bottom: 10px;">24/7</div>
+                    <p style="font-size: 16px; color: #6b7280;">Always available for emergencies</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; font-weight: 800; color: #0052b3; margin-bottom: 10px;">SW11</div>
+                    <p style="font-size: 16px; color: #6b7280;">Serving London with excellence</p>
+                </div>
             </div>
-          </div>
-        </div>
-        <div id="ss-ni" class="ss-content" style="display:none">
-          <div class="ss-grid">
-            <div class="ss-card" onclick="openLightbox('networkinfo-screenshot1.jpg','NetworkInfo — full network dashboard')">
-              <div class="ss-img-wrap"><img src="networkinfo-screenshot1.jpg" alt="NetworkInfo dashboard" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Dashboard &#x2014; Public IP, gateway, DNS &amp; adapters</div>
+
+            <div style="max-width: 800px; margin: 60px auto 0; text-align: center; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);">
+                <p style="font-size: 16px; line-height: 1.8; color: #4b5563;">
+                    With over a decade of experience, EB Electrical Services has built a reputation for reliability, professionalism, and customer satisfaction. 
+                    Our certified electricians are committed to delivering exceptional service on every project, whether it's a small repair or a complete installation.
+                </p>
             </div>
-            <div class="ss-card" onclick="openLightbox('networkinfo-screenshot2.jpg','NetworkInfo — ping test and port checker')">
-              <div class="ss-img-wrap"><img src="networkinfo-screenshot2.jpg" alt="NetworkInfo ping" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Ping Test &#x2014; Bar chart with avg, min, max &amp; loss</div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="info-section" id="contact">
+        <div class="container">
+            <div class="cta-large">
+                <h2>Ready to Get Started?</h2>
+                <p>Contact us today for a free consultation. Our team of certified electricians are standing by.</p>
+                <a href="tel:07376635189" class="cta-button">Call 07376 635189</a>
+                <div class="badges">
+                    <div class="badge">✓ LGBTQ+ Friendly</div>
+                    <div class="badge">✓ 24/7 Service</div>
+                    <div class="badge">✓ Certified</div>
+                </div>
             </div>
-            <div class="ss-card" onclick="openLightbox('networkinfo-screenshot3.jpg','NetworkInfo — traceroute and DNS lookup')">
-              <div class="ss-img-wrap"><img src="networkinfo-screenshot3.jpg" alt="NetworkInfo traceroute" loading="lazy"/><div class="ss-zoom">&#x1F50D; Click to enlarge</div></div>
-              <div class="ss-caption">Traceroute &amp; DNS Lookup &#x2014; Full IT diagnostics</div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="label">📍 Location</div>
+                    <div class="value">Flat 2, 105 Meyrick Rd<br>London SW11 2EG</div>
+                </div>
+                <div class="info-card">
+                    <div class="label">📞 Call Us</div>
+                    <div class="value"><a href="tel:07376635189">07376 635189</a></div>
+                </div>
+                <div class="info-card">
+                    <div class="label">🕐 Hours</div>
+                    <div class="value">24/7 Available</div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Remote Setup accordion -->
-    <div class="accordion-wrap">
-      <button class="accordion-btn" onclick="toggleAccordion(this)">
-        <span>&#x1F310; &nbsp;Remote PC Fix &#x2014; How to set it up</span>
-        <span class="acc-arrow">&#x25BE;</span>
-      </button>
-      <div class="accordion-body">
-        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:20px">OneClickFix can connect to any Windows machine on your network and run all 17 fixes remotely.</p>
-        <div class="remote-steps">
-          <div class="remote-step"><div class="remote-step-num">1</div><div><strong>Enable WinRM on the remote PC</strong><code>Enable-PSRemoting -Force</code><span>Run once in PowerShell as Administrator on the remote machine</span></div></div>
-          <div class="remote-step"><div class="remote-step-num">2</div><div><strong>Allow WinRM through the firewall</strong><code>netsh advfirewall firewall add rule name="WinRM" dir=in action=allow protocol=TCP localport=5985</code><span>Only needed if Windows Firewall is blocking port 5985</span></div></div>
-          <div class="remote-step"><div class="remote-step-num">3</div><div><strong>Enter credentials in OneClickFix</strong><code>Computer Name or IP | DOMAIN\username | Password</code><span>Use domain admin credentials</span></div></div>
-          <div class="remote-step"><div class="remote-step-num">4</div><div><strong>Click Run Remote Fix</strong><span>OneClickFix runs all fixes silently and returns full results in 2-3 minutes</span></div></div>
-        </div>
-      </div>
-    </div>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 EB Electrical Services Limited. All rights reserved. | Professional Electrical Solutions</p>
+    </footer>
 
-    <!-- How It Works accordion -->
-    <div class="accordion-wrap">
-      <button class="accordion-btn" onclick="toggleAccordion(this)">
-        <span>&#x1F4CB; &nbsp;How It Works &#x2014; Step by Step</span>
-        <span class="acc-arrow">&#x25BE;</span>
-      </button>
-      <div class="accordion-body">
-        <div class="how-tabs" style="margin-bottom:0">
-          <button class="how-tab active" onclick="switchTab(this,'tab-ocf')">&#x26A1; OneClickFix</button>
-          <button class="how-tab" onclick="switchTab(this,'tab-pc')">&#x1F5C2;&#xFE0F; ProfileCleaner</button>
-          <button class="how-tab" onclick="switchTab(this,'tab-ni')">&#x1F310; NetworkInfo</button>
-        </div>
-        <div id="tab-ocf" class="how-tab-content">
-          <div class="steps-row">
-            <div class="step"><div class="step-num">01</div><h3>Download</h3><p>Click download. A single .exe file saved to your PC. No installer, no bloatware.</p></div>
-            <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and choose "Run as administrator" so it has the permissions it needs.</p></div>
-            <div class="step"><div class="step-num">03</div><h3>Click Fix</h3><p>Hit the big green button. All 17 checks run automatically in one go.</p></div>
-            <div class="step"><div class="step-num">04</div><h3>Review Results</h3><p>See what was fixed, your PC Health Score out of 10, and recommendations.</p></div>
-          </div>
-        </div>
-        <div id="tab-pc" class="how-tab-content" style="display:none">
-          <div class="steps-row">
-            <div class="step"><div class="step-num">01</div><h3>Download</h3><p>Download ProfileCleaner.exe &#x2014; nothing to install. Works on Windows 10 and 11.</p></div>
-            <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and run as administrator. Admin rights needed to read and delete profiles.</p></div>
-            <div class="step"><div class="step-num">03</div><h3>Review Profiles</h3><p>Profiles appear colour coded. Filter to find inactive ones.</p></div>
-            <div class="step"><div class="step-num">04</div><h3>Delete Safely</h3><p>Click Delete. Confirmation appears first &#x2014; your current account is always protected.</p></div>
-          </div>
-        </div>
-        <div id="tab-ni" class="how-tab-content" style="display:none">
-          <div class="steps-row">
-            <div class="step"><div class="step-num">01</div><h3>Download</h3><p>Download NetworkInfo.exe &#x2014; a single file, nothing to install. Works on Windows 10 and 11.</p></div>
-            <div class="step"><div class="step-num">02</div><h3>Run as Admin</h3><p>Right-click and run as administrator. Admin rights needed to read network adapter and WiFi details.</p></div>
-            <div class="step"><div class="step-num">03</div><h3>Auto Scan</h3><p>NetworkInfo scans automatically on launch &#x2014; public IP, adapters, gateway, DNS and WiFi all shown instantly.</p></div>
-            <div class="step"><div class="step-num">04</div><h3>Use the Tools</h3><p>Run ping, traceroute, port checker, DNS lookup and speed test using the interactive panels on the dashboard.</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-    <!-- Category: M365 & Security -->
-  <div class="cat-header reveal" data-cat="m365" style="margin-top:48px">
-    <span class="cat-icon">🔒</span>
-    <div>
-      <div class="cat-title">M365 &amp; Security</div>
-      <div class="cat-sub">Microsoft 365 security tools — scan your tenant, analyse policies, identify risks</div>
-    </div>
-  </div>
-
-  <div class="tools-grid" id="grid-m365" data-cat="m365">
-        <div class="tool-card reveal" data-cat="m365" style="animation-delay:0s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🔐</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">M365 Security Scanner</div>
-          <div class="tool-desc">Connect your Microsoft 365 tenant and get a full security health report — MFA, admin roles, risky sign-ins, Conditional Access and more.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="m365-scan.html" target="_blank" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Scanner
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>MFA status — who has it enabled and who doesn't</li>
-          <li>Admin roles — Global Admins and privileged accounts</li>
-          <li>Conditional Access policies — enforcement check</li>
-          <li>Risky sign-ins — high and medium risk detections</li>
-          <li>Microsoft Secure Score out of 100</li>
-          <li>SharePoint external sharing settings</li>
-          <li>Intune device compliance status</li>
-          <li>External mail forwarding detection</li>
-          <li>Full user list with licenses — export to PDF</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">🔒 Read-Only</span><span class="meta-tag">📄 PDF Export</span><span class="meta-tag">🆓 Free</span>
-        </div>
-      </div>
-    </div>
-
-        <div class="tool-card reveal" data-cat="m365" style="animation-delay:.1s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🛡️</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">CA Policy Explainer</div>
-          <div class="tool-desc">Paste an Entra Conditional Access policy JSON and get a plain English explanation — who it applies to, what it requires, exclusions and more.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="ca-policy-explainer.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Paste raw CA policy JSON from Entra admin center</li>
-          <li>Plain English summary of users, apps, conditions and controls</li>
-          <li>Shows exclusions clearly — guests, groups, admin roles</li>
-          <li>Decodes session controls — sign-in frequency, persistent browser</li>
-          <li>Great for documentation, audits and explaining to stakeholders</li>
-          <li>100% private — nothing leaves your browser</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">🔒 100% Private</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🆓 Free</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Category: Email & Network -->
-  <div class="cat-header reveal" data-cat="email" style="margin-top:48px">
-    <span class="cat-icon">📧</span>
-    <div>
-      <div class="cat-title">Email &amp; Network</div>
-      <div class="cat-sub">Diagnose email deliverability, check DNS records, verify DMARC/SPF/DKIM</div>
-    </div>
-  </div>
-
-  <div class="tools-grid" id="grid-email" data-cat="email">
-    <!-- Email Header Analyzer -->
-    <div class="tool-card reveal" data-cat="email" style="animation-delay:.1s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">📨</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">Email Header Analyzer</div>
-          <div class="tool-desc">Paste raw email headers to trace the full delivery path, check SPF/DKIM/DMARC results, detect suspicious patterns and diagnose deliverability issues.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="email-header-analyzer.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Full hop-by-hop delivery timeline with timestamps and delays</li>
-          <li>SPF, DKIM and DMARC authentication results</li>
-          <li>Spam score parsing (X-Spam headers)</li>
-          <li>From/Return-Path/Reply-To domain mismatch detection</li>
-          <li>Plain English security findings — phishing indicators flagged clearly</li>
-          <li>100% private — headers never leave your browser</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">🔒 100% Private</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🆓 Free</span>
-        </div>
-      </div>
-    </div>
-        <div class="tool-card reveal" data-cat="email" style="animation-delay:0s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🔧</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">Network Tools</div>
-          <div class="tool-desc">IP lookup, DNS queries, geolocation, ping, reverse DNS, DMARC, SPF, DKIM and more — all in your browser.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="network-tools.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Your public IP with city &amp; ISP info</li>
-          <li>IP geolocation — country, region, timezone, ASN</li>
-          <li>DNS lookup — A, AAAA, MX, CNAME, TXT, NS</li>
-          <li>Full DNS scan — all record types at once</li>
-          <li>Email security — MX, SPF, DMARC, DKIM checker</li>
-          <li>Reverse DNS, latency test, multi-host ping</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Category: Utilities -->
-  <div class="cat-header reveal" data-cat="utilities" style="margin-top:48px">
-    <span class="cat-icon">🛠️</span>
-    <div>
-      <div class="cat-title">Utilities</div>
-      <div class="cat-sub">Everyday tools — image compressor, QR codes, passwords, SEO checker and more</div>
-    </div>
-  </div>
-
-  <div class="tools-grid" id="grid-utilities" data-cat="utilities">
-        <div class="tool-card reveal" data-cat="utilities">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">▦</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">QR Code Generator</div>
-          <div class="tool-desc">Create QR codes instantly for URLs, text, email, phone and WiFi. Download as PNG or SVG.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="qr-generator.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Supports URL, text, email, phone &amp; WiFi</li>
-          <li>Custom colours and size</li>
-          <li>Download as PNG or SVG</li>
-          <li>Works entirely in your browser — nothing sent anywhere</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>
-        </div>
-      </div>
-    </div>
-
-        <div class="tool-card reveal" data-cat="utilities" style="animation-delay:.1s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🔐</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">Password Generator</div>
-          <div class="tool-desc">Generate strong, secure passwords instantly. Nothing stored or sent anywhere — 100% browser-based.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="password-generator.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Customisable length up to 64 characters</li>
-          <li>Toggle uppercase, lowercase, numbers &amp; symbols</li>
-          <li>Password strength indicator</li>
-          <li>Generate up to 10 passwords at once</li>
-          <li>Quick presets — Easy, Strong, Very Strong</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🔒 Free</span><span class="meta-tag">📱 Mobile Friendly</span>
-        </div>
-      </div>
-    </div>
-
-        <div class="tool-card reveal" data-cat="utilities" style="animation-delay:.2s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">🖼️</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">Image Compressor</div>
-          <div class="tool-desc">Compress JPG, PNG and WebP images instantly. Nothing uploaded to any server — 100% private, free and unlimited.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="image-compressor.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Compress JPG, PNG and WebP — batch process multiple files</li>
-          <li>Adjustable quality slider — 10% to 95%</li>
-          <li>Convert format — save as JPEG, PNG or WebP</li>
-          <li>Resize by max width — great for web optimisation</li>
-          <li>Download individually or all as a ZIP</li>
-          <li>Nothing uploaded — all processing done in your browser</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">🔒 100% Private</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🆓 Free</span>
-        </div>
-      </div>
-    </div>
-
-        <div class="tool-card reveal" data-cat="utilities" style="animation-delay:.3s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">📈</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">Website Health & SEO Checker</div>
-          <div class="tool-desc">Check title tags, meta descriptions, headings, image alt text, robots.txt and more — get an instant health score with clear findings.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="seo-checker.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Checks title tag and meta description length</li>
-          <li>Verifies heading structure (H1-H6) is logical</li>
-          <li>Flags images missing alt text</li>
-          <li>Checks robots.txt, sitemap.xml, HTTPS and viewport meta</li>
-          <li>Paste HTML manually if automatic fetch is blocked</li>
-          <li>Instant health score out of 100 with clear findings</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">🔒 100% Private</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🆓 Free</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Letterhead Generator -->
-    <div class="tool-card reveal" data-cat="utilities" style="animation-delay:.4s">
-      <div class="tc-top">
-        <div class="tool-icon-wrap" style="flex-shrink:0">✒️</div>
-        <div style="flex:1">
-          <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">Letterhead Generator</div>
-          <div class="tool-desc">Design a professional letterhead with your logo, brand colours and contact details. Multiple templates, live preview, print to PDF or export HTML.</div>
-        </div>
-      </div>
-      <div class="tc-actions">
-        <a class="dl-btn" href="letterhead-generator.html" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Tool
-        </a>
-        <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
-      </div>
-      <div class="tc-details">
-        <div class="tc-divider"></div>
-        <ul class="tool-feats">
-          <li>Multiple templates — Modern, Classic, Minimal, Bold Banner</li>
-          <li>Upload your logo or use auto-generated initials monogram</li>
-          <li>Custom brand colours, fonts, and layout alignment</li>
-          <li>Live preview updates as you type</li>
-          <li>Print directly to PDF or export as HTML file</li>
-          <li>Nothing uploaded — runs entirely in your browser</li>
-        </ul>
-        <div class="tool-meta-row" style="margin-top:12px">
-          <span class="meta-tag">🌐 Online</span><span class="meta-tag">🔒 100% Private</span><span class="meta-tag">⚡ Instant</span><span class="meta-tag">🆓 Free</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <div class="lightbox-inner">
-    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-    <img id="lightboxImg" src="" alt=""/>
-    <div class="lightbox-caption" id="lightboxCaption"></div>
-  </div>
-</div>
-
-<!-- FAQ -->
-<section class="faq-section" id="faq">
-  <div class="label-tag reveal">FAQ</div>
-  <h2 class="section-h reveal">Common Questions</h2>
-  <p class="section-p reveal">Security, privacy and usage questions — everything you need to know before using any of the tools.</p>
-
-  <div class="faq-wrap">
-    <!-- Windows Tools -->
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Is it safe to run the Windows tools on my PC? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Yes. The tools only perform safe, well-known Windows maintenance — clearing temp files, flushing DNS, checking startup entries. They never touch system files or make permanent changes. Source code is available on GitHub for full transparency.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Why does Windows show a security warning? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Windows warns about any .exe that isn't signed by a paid code-signing certificate. This is normal for independent tools. Click "More info" then "Run anyway." The tool is completely safe — and the source code is on GitHub if you want to verify.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Do the Windows tools work on Windows 10 and 11? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Yes, both are fully supported. OneClickFix will also flag if your machine is on Windows 10, which reached End of Support in October 2025.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Do I need to install anything? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">No. Just download and run the .exe file. Nothing is installed on your system. Delete the file when you're done if you prefer.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Do the Windows tools send any data anywhere? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">No. Everything runs locally on your machine. The only external connection is when checking for Windows Updates — which goes directly to Microsoft servers, not ours.</div>
-    </div>
-
-    <!-- M365 Scanner -->
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Is the M365 Security Scanner safe to use? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Yes. The scanner uses Microsoft's official OAuth authentication — the same login flow used by Microsoft's own admin tools. You sign in directly with Microsoft, not through our site. We never see or store your password.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">What permissions does the M365 scanner request? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Read-only permissions only — Users, Directory, MFA methods, Sign-in logs, Conditional Access policies, Secure Score, SharePoint settings and Intune devices. It cannot make any changes to your tenant. You can review and revoke permissions at any time in your Azure AD enterprise applications.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Does the scanner store or send my tenant data anywhere? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">No. The scanner runs entirely in your browser. Data is fetched directly from Microsoft Graph API to your browser and never passes through our servers. Nothing is stored, logged or transmitted anywhere else. Close the tab and the data is gone.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Do I need to be a Global Admin to use the scanner? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">You need an account with sufficient read permissions. Global Admin works, but a Security Reader or Global Reader role is enough for most checks. Some sections like Intune devices may need additional roles assigned.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">How do I revoke the scanner's access after use? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Go to Microsoft Entra ID (Azure AD) → Enterprise Applications → search for "SalmanIT M365 Scanner" → click Delete or Revoke permissions. This immediately removes all access. You can also click Sign Out in the scanner itself which clears the session token.</div>
-    </div>
-
-    <!-- Online Tools -->
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Do the online tools upload my data to a server? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">No. All online tools — including the Image Compressor, QR Generator and Password Generator — run entirely in your browser. Nothing is uploaded or transmitted. Your files and data never leave your device.</div>
-    </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Who built these tools? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Built by Salman Tariq, a Microsoft 365 &amp; Cloud Infrastructure Expert with 25+ years of experience. Specialising in Microsoft 365, Azure, AWS, Google Workspace, cybersecurity and AI — building practical tools and solutions for the modern workplace.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="about-section" id="about">
-  <div class="about-inner">
-    <div class="label-tag reveal">About</div>
-    <h2 class="section-h reveal">Who Built This?</h2>
-
-    <div class="about-card reveal">
-      <div class="about-avatar">ST</div>
-      <div class="about-content">
-        <h3>Salman Tariq</h3>
-        <p class="about-title">Microsoft 365 &amp; Cloud Infrastructure Expert · 25+ Years</p>
-        <p class="about-bio">Hi, I'm Salman — an IT professional who got tired of the same problems slowing people down every day. So I built tools to fix them. 25+ years in the industry, Microsoft 365 obsessed, and still learning something new every week. I work with Azure, Google Workspace, AWS and enterprise infrastructure platforms to support, manage and improve IT systems.</p>
-        <p class="about-bio">My core expertise includes Microsoft 365, Exchange migrations, Microsoft Entra ID (Azure AD), identity and access management, MFA/2FA, Conditional Access, endpoint management and Zero Trust security frameworks — across Azure, AWS and Google Workspace environments.</p>
-        <p class="about-bio">I have a strong and growing focus on AI and AI Agents — particularly in how they can transform IT operations, automate repetitive tasks and improve security. This is where I see the biggest opportunity in the industry right now.</p>
-        <p class="about-bio">The tools on this site are built to solve real-world IT challenges I've encountered throughout my career. They are designed to be practical, lightweight and useful for IT professionals and everyday users.</p>
-        <p class="about-bio">Alongside this, I share technical insights and guides covering Microsoft 365, Windows, cloud technologies, AI and general IT best practices based on hands-on experience.</p>
-        <p class="about-bio" style="color:var(--green);font-style:normal">The focus is simple: practical technology, real-world solutions and continuous learning — especially in AI, cloud and modern security.</p>
-        <div class="about-links">
-          <a href="https://salmantechblogs.co.uk/" target="_blank" class="about-link-btn">
-            📝 &nbsp;Read my Tech Blog
-          </a>
-          <a href="#" onclick="openModal(event)" class="about-link-btn about-link-ghost">
-            ✉️ &nbsp;Get in Touch
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
-
-  <div class="footer-about">
-    <p class="footer-bio">
-      Built by <strong style="color:var(--green)">Salman Tariq</strong> — Microsoft 365 &amp; Cloud Infrastructure Expert with 25+ years of experience. Specialising in Microsoft 365, Azure, AWS, Google Workspace, cybersecurity and AI.
-    </p>
-    <div class="footer-links">
-      <a href="https://salmantechblogs.co.uk/" target="_blank">📝 Tech Blog</a>
-      <a href="#" onclick="openModal(event)">✉️ Get in Touch</a>
-      <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a>
-    </div>
-  </div>
-
-  <p class="footer-copy">© 2026 Salman IT Tools · Free tools, built for the community · Based in Crawley, UK</p>
-</footer>
-
-<!-- CONTACT MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h2>Get In Touch</h2>
-    <p>Have a question or feedback about the tools? Feel free to drop me a message.</p>
-
-    <form id="contactForm" action="https://formspree.io/f/xykvnvpp" method="POST">
-      <div class="form-group">
-        <label>Your Name</label>
-        <input type="text" name="name" placeholder="John Smith" required>
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" name="email" placeholder="john@example.com" required>
-      </div>
-      <div class="form-group">
-        <label>Subject</label>
-        <input type="text" name="subject" placeholder="OneClickFix question…">
-      </div>
-      <div class="form-group">
-        <label>Message</label>
-        <textarea name="message" placeholder="Tell us how we can help…" required></textarea>
-      </div>
-      <button type="submit" class="form-submit">Send Message →</button>
-    </form>
-
-    <div class="form-success" id="formSuccess">
-      <div class="check">✅</div>
-      <h3>Message Sent!</h3>
-      <p>Thanks for reaching out. We'll get back to you shortly.</p>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Auto-open contact modal if arriving via #contact link from another page
-  try {
-    if (window.location.hash === '#contact') {
-      document.addEventListener('DOMContentLoaded', function() {
-        const overlay = document.getElementById('modalOverlay');
-        if (overlay) {
-          overlay.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        }
-        history.replaceState(null, '', window.location.pathname + window.location.search);
-      });
-    }
-  } catch(e) { console.warn('Contact modal auto-open failed:', e); }
-
-  // ── Particles canvas
-  (function() {
-    const canvas = document.getElementById('heroCanvas');
-    const ctx    = canvas.getContext('2d');
-    let W, H, particles, mouse = { x: -9999, y: -9999 };
-
-    const GREEN  = '0,232,122';
-    const CYAN   = '0,200,255';
-    const COUNT  = 40;
-    const DIST   = 120;
-    const SPEED  = 0.4;
-
-    function resize() {
-      W = canvas.width  = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
-    }
-
-    function rand(min, max) { return Math.random() * (max - min) + min; }
-
-    function initParticles() {
-      particles = Array.from({ length: COUNT }, () => ({
-        x:  rand(0, W), y: rand(0, H),
-        vx: rand(-SPEED, SPEED), vy: rand(-SPEED, SPEED),
-        r:  rand(1.2, 2.4),
-        color: Math.random() > 0.75 ? CYAN : GREEN,
-        pulse: rand(0, Math.PI * 2),
-        pulseSpeed: rand(0.01, 0.025),
-      }));
-    }
-
-    let lastTime = 0;
-    function draw(timestamp) {
-      // Cap at 30fps to avoid overloading CPU
-      if (timestamp - lastTime < 33) { requestAnimationFrame(draw); return; }
-      lastTime = timestamp;
-
-      ctx.clearRect(0, 0, W, H);
-
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.x += p.vx; p.y += p.vy;
-        p.pulse += p.pulseSpeed;
-
-        if (p.x < 0 || p.x > W) p.vx *= -1;
-        if (p.y < 0 || p.y > H) p.vy *= -1;
-
-        // Mouse repel
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const md = Math.sqrt(dx*dx + dy*dy);
-        if (md < 100 && md > 0) {
-          p.x += (dx / md) * 1.5;
-          p.y += (dy / md) * 1.5;
+    <script>
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
         }
 
-        const alpha  = 0.5 + 0.4 * Math.sin(p.pulse);
-        const radius = p.r * (1 + 0.3 * Math.sin(p.pulse));
-
-        // Simple dot — no gradient per particle
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color},${alpha})`;
-        ctx.fill();
-
-        // Simple lines — no gradient per line
-        for (let j = i + 1; j < particles.length; j++) {
-          const q  = particles[j];
-          const ex = p.x - q.x;
-          const ey = p.y - q.y;
-          const d  = Math.sqrt(ex*ex + ey*ey);
-          if (d < DIST) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(q.x, q.y);
-            ctx.strokeStyle = `rgba(${p.color},${(1 - d / DIST) * 0.2})`;
-            ctx.lineWidth   = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-
-      requestAnimationFrame(draw);
-    }
-
-    window.addEventListener('resize', () => { resize(); });
-    canvas.closest('.hero').addEventListener('mousemove', e => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    });
-    canvas.closest('.hero').addEventListener('mouseleave', () => {
-      mouse.x = -9999; mouse.y = -9999;
-    });
-
-    resize();
-    initParticles();
-    draw();
-  })();
-
-
-  const cur = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  document.addEventListener('mousemove', e => {
-    cur.style.left  = e.clientX + 'px';
-    cur.style.top   = e.clientY + 'px';
-    ring.style.left = e.clientX + 'px';
-    ring.style.top  = e.clientY + 'px';
-  });
-
-  // ── Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.05 });
-    revealEls.forEach(el => observer.observe(el));
-    // Fallback — show anything already in viewport after short delay
-    setTimeout(() => revealEls.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight) el.classList.add('visible');
-    }), 100);
-  } else {
-    // No IntersectionObserver — show everything immediately
-    revealEls.forEach(el => el.classList.add('visible'));
-  }
-
-  // ── Accordion
-  function toggleAccordion(btn) {
-    const body = btn.nextElementSibling;
-    const isOpen = body.classList.contains('open');
-    body.classList.toggle('open');
-    btn.classList.toggle('open');
-  }
-
-  // ── Collapsible tool details
-  function toggleDetails(btn) {
-    const details = btn.closest('.tool-card').querySelector('.tc-details');
-    const isOpen  = details.classList.contains('open');
-    details.classList.toggle('open');
-    btn.classList.toggle('open');
-    btn.querySelector('.learn-arrow').style.transform = isOpen ? '' : 'rotate(180deg)';
-    btn.childNodes[0].textContent = isOpen ? 'Details ' : 'Hide ';
-  }
-
-  // ── Tool category filter
-  function filterTools(btn, cat) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('[data-cat]').forEach(el => {
-      el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
-    });
-  }
-
-  // ── Mobile menu
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const btn  = document.getElementById('hamburger');
-    menu.classList.toggle('open');
-    btn.classList.toggle('open');
-  }
-  function closeMobileMenu() {
-    document.getElementById('mobileMenu').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-  }
-  // Close on scroll
-  window.addEventListener('scroll', closeMobileMenu);
-
-  // ── Lightbox
-  function openLightbox(src, caption) {
-    document.getElementById('lightboxImg').src = src;
-    document.getElementById('lightboxCaption').textContent = caption;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeLightbox(); closeModal(); }
-  });
-
-  // ── Screenshots tabs
-  function switchSsTab(btn, tabId) {
-    document.querySelectorAll('.ss-tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.ss-content').forEach(t => t.style.display = 'none');
-    btn.classList.add('active');
-    document.getElementById(tabId).style.display = 'block';
-  }
-
-  // ── How It Works tabs
-  function switchTab(btn, tabId) {
-    document.querySelectorAll('.how-tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.how-tab-content').forEach(t => t.style.display = 'none');
-    btn.classList.add('active');
-    document.getElementById(tabId).style.display = 'block';
-  }
-
-  // ── FAQ
-  function toggleFaq(el) {
-    const item = el.closest('.faq-item');
-    const open = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!open) item.classList.add('open');
-  }
-
-  // ── Modal
-  function openModal(e) {
-    if (e) e.preventDefault();
-    document.getElementById('modalOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  function closeModalOutside(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  // ── Contact form via Formspree
-  document.getElementById('contactForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const btn = this.querySelector('.form-submit');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-    try {
-      const res = await fetch(this.action, {
-        method: 'POST',
-        body: new FormData(this),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        this.style.display = 'none';
-        document.getElementById('formSuccess').style.display = 'block';
-      } else {
-        btn.textContent = 'Send Message →';
-        btn.disabled = false;
-        alert('Something went wrong. Please try again.');
-      }
-    } catch {
-      btn.textContent = 'Send Message →';
-      btn.disabled = false;
-      alert('Network error. Please try again.');
-    }
-  });
-</script>
-
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="white">
-    <path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 10L4 44l10.3-2.7C17.1 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.8 30.1 8 27.1 8 24 8 15.2 15.2 8 24 8s16 7.2 16 16-7.2 16-16 16zm8.7-11.8c-.5-.2-2.8-1.4-3.2-1.5-.4-.2-.7-.2-1 .2-.3.5-1.1 1.5-1.4 1.8-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.4-.8.2-.3.1-.6 0-.8-.1-.2-1-2.5-1.4-3.4-.4-.9-.8-.7-1-.7h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.5-1.6 3.7s1.6 4.3 1.9 4.6c.2.3 3.2 5 7.8 7 1.1.5 1.9.7 2.6.9 1.1.3 2.1.3 2.9.2.9-.1 2.8-1.1 3.2-2.2.4-1.1.4-2 .3-2.2-.2-.3-.5-.4-1-.6z"/>
-  </svg>
-</a>
-
-<style>
-.wa-btn {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 999;
-  width: 58px;
-  height: 58px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-  transition: transform .2s, box-shadow .2s;
-  cursor: pointer;
-  text-decoration: none;
-}
-.wa-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 28px rgba(37,211,102,0.55);
-}
-.wa-btn svg {
-  width: 32px;
-  height: 32px;
-  position: relative;
-  z-index: 1;
-}
-.wa-btn::before {
-  content: '';
-  position: absolute;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: rgba(37,211,102,0.35);
-  animation: wa-pulse 2s ease-out infinite;
-}
-@keyframes wa-pulse {
-  0%   { transform: scale(1);   opacity: 1; }
-  100% { transform: scale(1.7); opacity: 0; }
-}
-</style>
-
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.hamburger').classList.remove('active');
+                document.querySelector('.nav-menu').classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>

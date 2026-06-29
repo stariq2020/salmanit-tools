@@ -257,6 +257,47 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 </div>
 
+<!-- Content section -->
+<div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
+  <div style="margin-top:56px">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Why Image Size Matters</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Image Compression — What It Is and When You Need It</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      Images are consistently the largest contributor to slow web pages, bloated email attachments, and SharePoint or OneDrive storage consumption. A photograph taken on a modern smartphone
+      is typically 3-8MB — far larger than necessary for most digital uses. Compressing it to 200-400KB for web use or email attachment purposes reduces file size by 90% or more,
+      often with no visible difference in quality at normal viewing sizes.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      Image compression works by reducing the amount of data needed to represent an image. Lossy compression (used by JPEG and WebP) discards fine detail that the human eye is unlikely
+      to notice — particularly in areas of similar colour or fine texture. Lossless compression (used by PNG) reorganises data more efficiently without discarding anything,
+      resulting in smaller files but less reduction than lossy methods. For photographs, JPEG or WebP at 75-85% quality typically gives the best balance of file size and visual fidelity.
+      For graphics, logos and screenshots with solid colours and text, PNG is usually a better choice as it preserves sharp edges and avoids JPEG compression artefacts.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">
+      This tool compresses images entirely in your browser using the HTML5 Canvas API — nothing is uploaded to any server. You can process multiple images at once and download them
+      individually or as a ZIP file. The quality slider lets you find the right balance between file size and image quality for your specific use case.
+    </p>
+  </div>
+
+  <div style="margin-top:48px">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">What quality setting should I use?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">For web images and email, 70-80% quality gives a good balance — typically reducing file size by 60-80% with minimal visible quality loss at normal screen sizes. For print or professional photography where quality matters more than file size, use 85-90%. Below 60% quality artefacts start to become visible, especially around text and sharp edges.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">JPEG vs WebP — which should I use?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">WebP produces smaller files than JPEG at equivalent quality and is supported by all modern browsers. For web use, WebP is the better choice. For maximum compatibility with older systems, email clients, and software that doesn't support WebP, stick with JPEG. PNG is best for images with text, logos, screenshots, or transparent backgrounds.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Will compressing reduce my image dimensions?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Not unless you use the resize option. Compression reduces file size by encoding the pixel data more efficiently or discarding fine detail, but the output image has the same pixel dimensions as the input. If you need to reduce dimensions (for example, scaling a 4000px wide photo down to 1200px), use the width setting before compressing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
   <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>

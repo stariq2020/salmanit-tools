@@ -262,6 +262,55 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 </div>
 
+  <div class="info-section">
+    <div class="page-eyebrow">Deep Dive</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Are Email Headers and Why Do They Matter?</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      Every email you send or receive carries a set of hidden headers — a detailed technical record of the email's journey from the sender's mail server to your inbox.
+      These headers are invisible in normal email clients but contain critical information: which servers handled the email, when, how long each hop took, and whether the
+      email passed security checks like SPF, DKIM and DMARC. When something goes wrong with email delivery, these headers are the first place any experienced IT professional looks.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      In day-to-day IT support, email header analysis comes up in several common scenarios. A user reports an important email never arrived — the headers show whether it was
+      rejected, quarantined, or delayed at a particular relay. A business is receiving phishing emails claiming to be from a trusted supplier — the headers reveal the true sending
+      IP address and whether SPF authentication passed or failed. An email campaign is landing in spam — the headers show which spam filter scored it and why.
+      Without reading the headers, these problems can take hours to diagnose by guesswork.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      The <strong style="color:var(--white)">Received headers</strong> are the most important for delivery tracing. Each server that handles an email adds its own Received header,
+      stamped with the time. Reading them from bottom to top gives you the complete delivery chain — from the originating server through any relays to the final destination.
+      Unusually long gaps between hops often indicate greylisting (a spam prevention technique that temporarily rejects unknown senders), server queuing issues, or filtering delays.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">
+      The <strong style="color:var(--white)">Authentication-Results header</strong> is added by the receiving mail server and summarises the outcome of SPF, DKIM and DMARC checks.
+      A result of <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:0.82rem">spf=pass dkim=pass dmarc=pass</code> means the email is
+      almost certainly legitimate. Any failure in this chain is a red flag worth investigating — particularly for emails requesting payments, credential changes, or sensitive information.
+    </p>
+  </div>
+
+  <div class="info-section">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Spotting Phishing Emails Through Headers</h3>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      Phishing emails are designed to look legitimate — the From display name might say "Barclays Bank" or "Microsoft Support" but the actual sending infrastructure tells a very different story.
+      Headers can reveal this immediately. Key things to look for: does the envelope sender (Return-Path) match the From address? Does the sending IP address belong to the organisation it claims to be from?
+      Did DKIM pass, and was the DKIM signature from the claimed sending domain? A mismatch between any of these is a strong indicator of spoofing or impersonation.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">
+      The Reply-To header is another common phishing tell. Attackers often set a legitimate-looking From address but a different Reply-To pointing to a mailbox they control.
+      This means the email appears to come from a trusted source, but any reply goes directly to the attacker. This tool flags Reply-To mismatches automatically in the Security Analysis tab.
+    </p>
+  </div>
+
+  <div class="info-section">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="info-card"><h4 style="margin-bottom:6px">Can email headers be forged?</h4><p>Some headers can be forged — particularly the From display name and some of the Received headers added by the sender's own infrastructure. However, headers added by intermediate and receiving servers cannot be forged, which is why the Authentication-Results header (added by the receiving server) is the most trustworthy. SPF, DKIM and DMARC results are based on cryptographic checks that are extremely difficult to fake.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Why does my email show multiple hops?</h4><p>Most emails pass through several servers — the sender's mail client, their outbound mail server, possibly one or more relay servers, and finally the recipient's inbound mail server. Cloud email platforms like Microsoft 365 and Google Workspace add their own processing hops. Each adds a Received header. Three to five hops is completely normal for a modern cloud email journey.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">What does a large delay between hops mean?</h4><p>A significant delay at a particular hop usually means the email was queued or held at that server. Common causes include greylisting (the server temporarily rejected the email to filter spam), rate limiting, spam scoring that put it in a review queue, or simply high server load. Delays of a few minutes are normal. Delays of hours suggest the email hit a spam filter or the server had a problem.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is pasting my email headers safe?</h4><p>Yes — this tool runs entirely in your browser. Your headers are never sent to any server or stored anywhere. The analysis happens locally on your device. That said, avoid pasting headers from emails containing highly sensitive personal or financial information in any public setting.</p></div>
+    </div>
+  </div>
+
 <footer>
   <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
   <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>

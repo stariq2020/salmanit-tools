@@ -347,6 +347,85 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 </div>
 
+<!-- Content section for SEO -->
+<div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
+
+  <div style="margin-top:56px">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Why This Matters</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Network & Email Diagnostics — A Practical Guide</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      Most email deliverability problems and network connectivity issues come down to a handful of root causes that are straightforward to diagnose once you know where to look.
+      Whether an email is landing in spam, a domain change hasn't propagated, or you're trying to verify someone's DNS configuration before a migration, these tools give you
+      the raw data you need without having to install anything or open a terminal.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      After 25 years of managing IT infrastructure for businesses across the UK, the same diagnostic questions come up repeatedly: is SPF set up correctly? Why is email
+      being rejected? What's the MX record pointing to? Has the DNS change gone through yet? This page puts all of those answers in one place.
+    </p>
+  </div>
+
+  <div style="margin-top:48px">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Understanding Email Security Records</h3>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      <strong style="color:var(--white)">SPF (Sender Policy Framework)</strong> is a DNS record that lists which mail servers are authorised to send email on behalf of your domain.
+      When a receiving mail server gets an email claiming to be from your domain, it checks your SPF record to verify the sending server is on the approved list.
+      If it isn't, the email fails SPF — and depending on your DMARC policy, it may be rejected or sent to spam. A common mistake is having multiple SPF records for the same domain,
+      or using too many DNS lookups within a single record (the limit is 10). Both cause silent failures that are hard to trace without the right tools.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      <strong style="color:var(--white)">DKIM (DomainKeys Identified Mail)</strong> works differently — it adds a digital signature to outgoing emails using a private key held by your mail server.
+      The corresponding public key is published in your DNS. Receiving servers verify the signature against the public key to confirm the email hasn't been tampered with in transit
+      and genuinely came from an authorised sender. DKIM is especially important for bulk email senders and platforms like Microsoft 365, Google Workspace, and third-party CRM tools.
+      Each sending platform typically needs its own DKIM selector configured in your DNS.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      <strong style="color:var(--white)">DMARC (Domain-based Message Authentication, Reporting and Conformance)</strong> ties SPF and DKIM together by telling receiving mail servers what to do
+      when an email fails authentication — whether to do nothing (monitor only), quarantine it to spam, or reject it outright. A DMARC policy of <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:0.82rem">p=reject</code>
+      is the gold standard, but many organisations start with <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:0.82rem">p=none</code> (monitoring mode) before tightening the policy once they're confident all legitimate sending sources are covered.
+      Without DMARC, anyone can send email appearing to come from your domain — a technique used in phishing and business email compromise attacks.
+    </p>
+  </div>
+
+  <div style="margin-top:48px">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">DNS Lookups & Propagation</h3>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      The Domain Name System (DNS) is essentially the internet's phone book — translating human-readable domain names into IP addresses and other records that computers use to route traffic.
+      When you change a DNS record (updating MX records for a mail migration, adding an SPF record, or pointing a domain to a new server), the change doesn't take effect immediately.
+      It propagates gradually across DNS resolvers around the world, a process governed by the TTL (Time to Live) value of each record. A TTL of 3600 means resolvers cache the old value
+      for up to an hour before checking for updates. During a migration, lowering your TTL to 300 (5 minutes) before making changes gives you much faster propagation and easier rollback if something goes wrong.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">
+      Common DNS record types you'll encounter in day-to-day IT work include: <strong style="color:var(--white)">A records</strong> (domain to IPv4 address),
+      <strong style="color:var(--white)">AAAA records</strong> (domain to IPv6 address), <strong style="color:var(--white)">MX records</strong> (mail server routing),
+      <strong style="color:var(--white)">CNAME records</strong> (domain aliases), <strong style="color:var(--white)">TXT records</strong> (used for SPF, DKIM, domain verification, and more),
+      and <strong style="color:var(--white)">NS records</strong> (which nameservers are authoritative for a domain). The DNS checker above queries all of these and returns the live results
+      directly from the authoritative nameservers, so you see exactly what the internet sees for any domain.
+    </p>
+  </div>
+
+  <div style="margin-top:48px">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Why is my email going to spam even though SPF passes?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">SPF passing alone isn't enough. If DKIM fails or isn't configured, and DMARC is set to quarantine or reject, the email may still be treated as suspicious. Check all three — SPF, DKIM, and DMARC — together. Also check whether your sending IP or domain has a poor reputation score with major spam filter providers.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">How long does DNS propagation take?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">It depends on the TTL of the record being changed. Most records with a TTL of 3600 (1 hour) will propagate globally within 1-4 hours. Some ISPs and resolvers cache aggressively and can take up to 48 hours in rare cases. Lowering your TTL to 300-600 seconds before a planned change significantly speeds this up.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">What's the difference between an MX record and an A record?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">An A record maps a domain or subdomain to an IP address — used for websites and servers. An MX record (Mail Exchanger) specifies which server handles incoming email for the domain. When someone sends an email to you@yourdomain.com, the sending server looks up the MX record to know where to deliver it.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Can I use this tool to check a competitor's DNS settings?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Yes — DNS records are publicly accessible by design. Any domain's MX, SPF, DMARC, DKIM, and A records can be queried by anyone. This is intentional, as email systems around the world need to look up these records to deliver and authenticate email correctly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
   <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>

@@ -453,121 +453,125 @@ function generateQR() {
   // Generate QR, get module matrix directly for reliable dot drawing
   const ecMap = {L: QRCode.CorrectLevel.L, M: QRCode.CorrectLevel.M, Q: QRCode.CorrectLevel.Q, H: QRCode.CorrectLevel.H};
 
-  // First pass: generate at small fixed size to sample module grid reliably
-  const sampleSize = 500;
-  const sampleDiv = document.createElement('div');
-  document.body.appendChild(sampleDiv);
-  sampleDiv.style.position = 'absolute';
-  sampleDiv.style.left = '-9999px';
+  // Step 1: Generate QR at tiny size so 1 pixel = 1 module
+  const tinyDiv = document.createElement('div');
+  tinyDiv.style.cssText = 'position:absolute;left:-9999px;top:-9999px';
+  document.body.appendChild(tinyDiv);
 
-  new QRCode(sampleDiv, {
-    text: data, width: sampleSize, height: sampleSize,
+  // Use size 10 per module — small enough to be fast, big enough to sample reliably
+  const CELL = 10;
+  const tinyQR = new QRCode(tinyDiv, {
+    text: data,
+    width: CELL * 200, height: CELL * 200,
     colorDark: '#000000', colorLight: '#ffffff',
     correctLevel: ecMap[ecLvl] || QRCode.CorrectLevel.M
   });
 
   setTimeout(() => {
-    const sampleEl = sampleDiv.querySelector('canvas') || sampleDiv.querySelector('img');
-    if (!sampleEl) { document.body.removeChild(sampleDiv); return; }
+    const el = tinyDiv.querySelector('canvas') || tinyDiv.querySelector('img');
+    if (!el) { document.body.removeChild(tinyDiv); return; }
 
-    const getSampleCanvas = (el, cb) => {
-      if (el.tagName === 'CANVAS') { cb(el); return; }
-      const img = new Image();
-      img.onload = () => {
-        const c = document.createElement('canvas');
-        c.width = sampleSize; c.height = sampleSize;
-        c.getContext('2d').drawImage(img, 0, 0, sampleSize, sampleSize);
-        cb(c);
-      };
-      img.src = el.src;
-    };
+    const loadAndProcess = (srcCanvas) => {
+      document.body.removeChild(tinyDiv);
 
-    getSampleCanvas(sampleEl, (sampleCanvas) => {
-      document.body.removeChild(sampleDiv);
+      const w = srcCanvas.width;
+      const tmpCtx = srcCanvas.getContext('2d');
+      const px = tmpCtx.getImageData(0, 0, w, w).data;
 
-      // Detect module count by scanning top-left area
-      const ctx2 = sampleCanvas.getContext('2d');
-      const px = ctx2.getImageData(0, 0, sampleSize, sampleSize).data;
+      // Find actual module count by scanning top edge for transitions
+      // Skip quiet zone — scan at y = CELL*4 (inside finder pattern area)
+      const scanY = Math.floor(CELL * 0.5); // middle of first row
+      let transitions = 0;
+      let lastDark = null;
+      let moduleCount = 0;
+      let inModule = false;
+      let moduleWidth = 0;
+      let widthSamples = [];
 
-      // Find module size by detecting transitions in row 2
-      const scanRow = 2;
-      let transitions = [];
-      let lastDark = px[(scanRow * sampleSize) * 4] < 128;
-      for (let x = 1; x < sampleSize; x++) {
-        const idx = (scanRow * sampleSize + x) * 4;
+      // Find all dark runs
+      let runStart = -1;
+      for (let x = 0; x < w; x++) {
+        const idx = (scanY * w + x) * 4;
         const dark = px[idx] < 128;
-        if (dark !== lastDark) { transitions.push(x); lastDark = dark; }
-      }
-      // Module size = first transition (end of first quiet zone pixel... actually first module)
-      // Better: find first dark run length
-      let firstDarkStart = -1, firstDarkEnd = -1;
-      let inDark = false;
-      for (let x = 0; x < sampleSize; x++) {
-        const idx = (scanRow * sampleSize + x) * 4;
-        const dark = px[idx] < 128;
-        if (dark && !inDark) { firstDarkStart = x; inDark = true; }
-        else if (!dark && inDark) { firstDarkEnd = x; break; }
-      }
-      let moduleSize = (firstDarkEnd > firstDarkStart) ? (firstDarkEnd - firstDarkStart) : Math.round(sampleSize / 25);
-      // Round to nearest integer
-      moduleSize = Math.max(1, Math.round(moduleSize));
-      const numModules = Math.round(sampleSize / moduleSize);
-
-      // Build boolean module grid from sample canvas
-      const grid = [];
-      for (let row = 0; row < numModules; row++) {
-        grid[row] = [];
-        for (let col = 0; col < numModules; col++) {
-          const cx = Math.round(col * moduleSize + moduleSize * 0.5);
-          const cy = Math.round(row * moduleSize + moduleSize * 0.5);
-          const safeX = Math.min(cx, sampleSize - 1);
-          const safeY = Math.min(cy, sampleSize - 1);
-          const idx = (safeY * sampleSize + safeX) * 4;
-          grid[row][col] = px[idx] < 128;
+        if (dark && runStart === -1) runStart = x;
+        else if (!dark && runStart !== -1) {
+          widthSamples.push(x - runStart);
+          runStart = -1;
         }
       }
 
-      // Now draw final output canvas
+      // Module size = most common run width (the finder pattern gives us 7 modules)
+      // Actually simplest: first dark run = 1 module (the quiet zone then first dark pixel)
+      // Better: use median of small runs
+      widthSamples.sort((a,b) => a-b);
+      const cellSize = widthSamples.length > 0 ? widthSamples[0] : CELL;
+      const numModules = Math.round(w / cellSize);
+
+      // Build grid — sample center of each cell
+      const grid = [];
+      for (let r = 0; r < numModules; r++) {
+        grid[r] = [];
+        for (let c = 0; c < numModules; c++) {
+          const cx = Math.round(c * cellSize + cellSize * 0.5);
+          const cy = Math.round(r * cellSize + cellSize * 0.5);
+          const sx = Math.min(cx, w - 1);
+          const sy = Math.min(cy, w - 1);
+          const idx = (sy * w + sx) * 4;
+          grid[r][c] = px[idx] < 128;
+        }
+      }
+
+      // Step 2: Draw final canvas using grid
       const canvas = document.createElement('canvas');
       canvas.width = size; canvas.height = size;
       const ctx = canvas.getContext('2d');
-      const ms = size / numModules; // float module size for final canvas
+      const ms = size / numModules;
 
-      // Background
       ctx.fillStyle = back;
       ctx.fillRect(0, 0, size, size);
       ctx.fillStyle = fore;
 
-      for (let row = 0; row < numModules; row++) {
-        for (let col = 0; col < numModules; col++) {
-          if (grid[row][col]) {
-            const x = col * ms;
-            const y = row * ms;
-            drawDot(ctx, x, y, ms * 0.92, dotStyle);
+      for (let r = 0; r < numModules; r++) {
+        for (let c = 0; c < numModules; c++) {
+          if (grid[r][c]) {
+            drawDot(ctx, c * ms, r * ms, ms * 0.9, dotStyle);
           }
         }
       }
 
-      // Overlay logo
+      // Step 3: Overlay logo if present
       if (logoDataUrl) {
-        const logoSizePct = parseInt(document.getElementById('logoSize').value) / 100;
-        const logoSize2 = size * logoSizePct;
-        const logoX = (size - logoSize2) / 2;
-        const logoY = (size - logoSize2) / 2;
-        const logoImg2 = new Image();
-        logoImg2.onload = () => {
+        const pct = parseInt(document.getElementById('logoSize').value) / 100;
+        const ls = size * pct;
+        const lx = (size - ls) / 2;
+        const ly = (size - ls) / 2;
+        const li = new Image();
+        li.onload = () => {
           ctx.fillStyle = '#ffffff';
-          const pad = logoSize2 * 0.12;
-          roundRect(ctx, logoX - pad, logoY - pad, logoSize2 + pad*2, logoSize2 + pad*2, 8);
-          ctx.drawImage(logoImg2, logoX, logoY, logoSize2, logoSize2);
+          const pad = ls * 0.12;
+          roundRect(ctx, lx - pad, ly - pad, ls + pad*2, ls + pad*2, 8);
+          ctx.drawImage(li, lx, ly, ls, ls);
           showQR(canvas);
         };
-        logoImg2.src = logoDataUrl;
+        li.src = logoDataUrl;
       } else {
         showQR(canvas);
       }
-    });
-  }, 150);
+    };
+
+    if (el.tagName === 'CANVAS') {
+      loadAndProcess(el);
+    } else {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = el.width || 500; c.height = el.height || 500;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        loadAndProcess(c);
+      };
+      img.src = el.src;
+    }
+  }, 200);
 }
 
 function roundRect(ctx, x, y, w, h, r) {

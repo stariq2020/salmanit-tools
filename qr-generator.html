@@ -450,62 +450,105 @@ function generateQR() {
   const output = document.getElementById('qrOutput');
   output.innerHTML = '';
 
-  // Map error correction
+  // Generate QR, get module matrix directly for reliable dot drawing
   const ecMap = {L: QRCode.CorrectLevel.L, M: QRCode.CorrectLevel.M, Q: QRCode.CorrectLevel.Q, H: QRCode.CorrectLevel.H};
 
-  // Generate base QR
-  const qrDiv = document.createElement('div');
-  new QRCode(qrDiv, {text: data, width: size, height: size, colorDark: fore, colorLight: back, correctLevel: ecMap[ecLvl] || QRCode.CorrectLevel.M});
+  // First pass: generate at small fixed size to sample module grid reliably
+  const sampleSize = 500;
+  const sampleDiv = document.createElement('div');
+  document.body.appendChild(sampleDiv);
+  sampleDiv.style.position = 'absolute';
+  sampleDiv.style.left = '-9999px';
 
-  // Wait for QRCode to render then apply styling
+  new QRCode(sampleDiv, {
+    text: data, width: sampleSize, height: sampleSize,
+    colorDark: '#000000', colorLight: '#ffffff',
+    correctLevel: ecMap[ecLvl] || QRCode.CorrectLevel.M
+  });
+
   setTimeout(() => {
-    const img = qrDiv.querySelector('img') || qrDiv.querySelector('canvas');
-    if (!img) return;
+    const sampleEl = sampleDiv.querySelector('canvas') || sampleDiv.querySelector('img');
+    if (!sampleEl) { document.body.removeChild(sampleDiv); return; }
 
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
+    const getSampleCanvas = (el, cb) => {
+      if (el.tagName === 'CANVAS') { cb(el); return; }
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = sampleSize; c.height = sampleSize;
+        c.getContext('2d').drawImage(img, 0, 0, sampleSize, sampleSize);
+        cb(c);
+      };
+      img.src = el.src;
+    };
 
-    const drawBase = (srcCanvas) => {
-      // Apply dot style transformation
-      ctx.clearRect(0, 0, size, size);
+    getSampleCanvas(sampleEl, (sampleCanvas) => {
+      document.body.removeChild(sampleDiv);
+
+      // Detect module count by scanning top-left area
+      const ctx2 = sampleCanvas.getContext('2d');
+      const px = ctx2.getImageData(0, 0, sampleSize, sampleSize).data;
+
+      // Find module size by detecting transitions in row 2
+      const scanRow = 2;
+      let transitions = [];
+      let lastDark = px[(scanRow * sampleSize) * 4] < 128;
+      for (let x = 1; x < sampleSize; x++) {
+        const idx = (scanRow * sampleSize + x) * 4;
+        const dark = px[idx] < 128;
+        if (dark !== lastDark) { transitions.push(x); lastDark = dark; }
+      }
+      // Module size = first transition (end of first quiet zone pixel... actually first module)
+      // Better: find first dark run length
+      let firstDarkStart = -1, firstDarkEnd = -1;
+      let inDark = false;
+      for (let x = 0; x < sampleSize; x++) {
+        const idx = (scanRow * sampleSize + x) * 4;
+        const dark = px[idx] < 128;
+        if (dark && !inDark) { firstDarkStart = x; inDark = true; }
+        else if (!dark && inDark) { firstDarkEnd = x; break; }
+      }
+      let moduleSize = (firstDarkEnd > firstDarkStart) ? (firstDarkEnd - firstDarkStart) : Math.round(sampleSize / 25);
+      // Round to nearest integer
+      moduleSize = Math.max(1, Math.round(moduleSize));
+      const numModules = Math.round(sampleSize / moduleSize);
+
+      // Build boolean module grid from sample canvas
+      const grid = [];
+      for (let row = 0; row < numModules; row++) {
+        grid[row] = [];
+        for (let col = 0; col < numModules; col++) {
+          const cx = Math.round(col * moduleSize + moduleSize * 0.5);
+          const cy = Math.round(row * moduleSize + moduleSize * 0.5);
+          const safeX = Math.min(cx, sampleSize - 1);
+          const safeY = Math.min(cy, sampleSize - 1);
+          const idx = (safeY * sampleSize + safeX) * 4;
+          grid[row][col] = px[idx] < 128;
+        }
+      }
+
+      // Now draw final output canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const ms = size / numModules; // float module size for final canvas
+
+      // Background
       ctx.fillStyle = back;
       ctx.fillRect(0, 0, size, size);
+      ctx.fillStyle = fore;
 
-      if (dotStyle === 'square') {
-        ctx.drawImage(srcCanvas, 0, 0, size, size);
-      } else {
-        // Get pixel data from original QR
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = size; tmpCanvas.height = size;
-        const tmpCtx = tmpCanvas.getContext('2d');
-        tmpCtx.drawImage(srcCanvas, 0, 0, size, size);
-        const imgData = tmpCtx.getImageData(0, 0, size, size);
-        const pixels = imgData.data;
-
-        // Detect module size
-        const moduleSize = detectModuleSize(pixels, size);
-        const modules = Math.round(size / moduleSize);
-
-        ctx.fillStyle = fore;
-        for (let row = 0; row < modules; row++) {
-          for (let col = 0; col < modules; col++) {
-            const px = Math.round(col * moduleSize + moduleSize/2);
-            const py = Math.round(row * moduleSize + moduleSize/2);
-            const idx = (py * size + px) * 4;
-            const isDark = pixels[idx] < 128;
-            if (isDark) {
-              const x = col * moduleSize;
-              const y = row * moduleSize;
-              const ms = moduleSize - 1;
-              drawDot(ctx, x, y, ms, dotStyle);
-            }
+      for (let row = 0; row < numModules; row++) {
+        for (let col = 0; col < numModules; col++) {
+          if (grid[row][col]) {
+            const x = col * ms;
+            const y = row * ms;
+            drawDot(ctx, x, y, ms * 0.92, dotStyle);
           }
         }
       }
 
-      // Overlay logo if present
+      // Overlay logo
       if (logoDataUrl) {
         const logoSizePct = parseInt(document.getElementById('logoSize').value) / 100;
         const logoSize2 = size * logoSizePct;
@@ -513,10 +556,9 @@ function generateQR() {
         const logoY = (size - logoSize2) / 2;
         const logoImg2 = new Image();
         logoImg2.onload = () => {
-          // White background for logo
           ctx.fillStyle = '#ffffff';
-          const pad = logoSize2 * 0.1;
-          roundRect(ctx, logoX - pad, logoY - pad, logoSize2 + pad*2, logoSize2 + pad*2, 6);
+          const pad = logoSize2 * 0.12;
+          roundRect(ctx, logoX - pad, logoY - pad, logoSize2 + pad*2, logoSize2 + pad*2, 8);
           ctx.drawImage(logoImg2, logoX, logoY, logoSize2, logoSize2);
           showQR(canvas);
         };
@@ -524,36 +566,8 @@ function generateQR() {
       } else {
         showQR(canvas);
       }
-    };
-
-    // Handle QRCode library output (img or canvas)
-    if (img.tagName === 'CANVAS') {
-      drawBase(img);
-    } else {
-      const tmpImg = new Image();
-      tmpImg.onload = () => {
-        const tmpC = document.createElement('canvas');
-        tmpC.width = size; tmpC.height = size;
-        tmpC.getContext('2d').drawImage(tmpImg, 0, 0, size, size);
-        drawBase(tmpC);
-      };
-      tmpImg.src = img.src;
-    }
-  }, 100);
-}
-
-function detectModuleSize(pixels, size) {
-  // Scan middle row to find first dark pixel and estimate module size
-  const midY = Math.floor(size / 2);
-  let firstDark = -1, secondLight = -1;
-  for (let x = 0; x < size; x++) {
-    const idx = (midY * size + x) * 4;
-    const dark = pixels[idx] < 128;
-    if (dark && firstDark === -1) firstDark = x;
-    else if (!dark && firstDark !== -1 && secondLight === -1) { secondLight = x; break; }
-  }
-  if (firstDark !== -1 && secondLight !== -1) return secondLight - firstDark;
-  return size / 25; // fallback
+    });
+  }, 150);
 }
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -612,30 +626,11 @@ function downloadPNG() {
 }
 
 function downloadSVG() {
-  // SVG fallback — generate simple SVG from canvas
+  // Export canvas as SVG with embedded image
   if (!window._qrCanvas) return;
   const size = window._qrCanvas.width;
-  const ctx = window._qrCanvas.getContext('2d');
-  const imgData = ctx.getImageData(0, 0, size, size);
-  const pixels = imgData.data;
-  const fore = document.getElementById('clrFore').value;
-  const back = document.getElementById('clrBack').value;
-  const moduleSize = detectModuleSize(pixels, size);
-  const modules = Math.round(size / moduleSize);
-
-  let rects = '';
-  for (let row = 0; row < modules; row++) {
-    for (let col = 0; col < modules; col++) {
-      const px = Math.round(col * moduleSize + moduleSize/2);
-      const py = Math.round(row * moduleSize + moduleSize/2);
-      const idx = (py * size + px) * 4;
-      if (pixels[idx] < 128) {
-        rects += `<rect x="${col}" y="${row}" width="1" height="1"/>`;
-      }
-    }
-  }
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${modules} ${modules}" width="${size}" height="${size}"><rect width="${modules}" height="${modules}" fill="${back}"/><g fill="${fore}">${rects}</g></svg>`;
+  const dataUrl = window._qrCanvas.toDataURL('image/png');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size}" height="${size}"><image href="${dataUrl}" width="${size}" height="${size}"/></svg>`;
   const blob = new Blob([svg], {type:'image/svg+xml'});
   const a = document.createElement('a');
   a.download = 'qrcode.svg';

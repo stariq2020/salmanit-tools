@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Invoice Generator — Salman IT Tools</title>
+<meta name="description" content="Create professional invoices instantly. Add your logo, line items, VAT, payment terms and notes. Download as PDF. Free, no signup, nothing uploaded anywhere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page-header{max-width:1400px;margin:0 auto;padding:40px 24px 20px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:8px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:10px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:0.95rem;color:var(--muted);line-height:1.7;max-width:600px}
+
+.workspace{max-width:1400px;margin:0 auto;padding:20px 24px 80px;display:grid;grid-template-columns:480px 1fr;gap:24px;align-items:start}
+@media(max-width:1100px){.workspace{grid-template-columns:1fr}}
+
+/* Form panel */
+.form-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.form-section{padding:20px 24px;border-bottom:1px solid var(--border)}
+.form-section:last-child{border-bottom:none}
+.section-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-row.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.form-group input,.form-group textarea,.form-group select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none;transition:border-color .2s;resize:none;width:100%}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(0,232,122,0.4)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted)}
+.form-group select{background:#0E1A2E;color:var(--white)}
+.form-group select option{background:#0E1A2E}
+
+/* Logo upload */
+.logo-upload{border:2px dashed var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;margin-bottom:12px}
+.logo-upload:hover{border-color:rgba(0,232,122,0.3)}
+.logo-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.logo-upload p{font-size:0.78rem;color:var(--muted)}
+.logo-thumb{display:none;align-items:center;gap:10px;margin-bottom:10px}
+.logo-thumb img{max-height:40px;max-width:80px;object-fit:contain;background:#fff;border-radius:4px;padding:2px}
+.logo-thumb button{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:var(--danger);padding:3px 8px;border-radius:5px;font-size:0.72rem;cursor:pointer;font-family:'Outfit',sans-serif}
+
+/* Line items */
+.line-items{display:flex;flex-direction:column;gap:8px}
+.line-item{display:grid;grid-template-columns:1fr 60px 80px 28px;gap:6px;align-items:center}
+.line-item input{font-size:0.82rem;padding:7px 10px}
+.add-item-btn{width:100%;margin-top:8px;padding:8px;background:rgba(0,232,122,0.06);border:1px dashed rgba(0,232,122,0.2);border-radius:8px;color:var(--green);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+.add-item-btn:hover{background:rgba(0,232,122,0.1)}
+.remove-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.15);border-radius:6px;color:var(--danger);width:26px;height:26px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Outfit',sans-serif}
+
+/* Colour picker */
+.colour-row{display:flex;align-items:center;gap:10px}
+.colour-row label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.colour-row input[type=color]{width:36px;height:28px;border:1px solid var(--border);border-radius:6px;background:transparent;cursor:pointer;padding:2px}
+
+/* Action buttons */
+.action-row{display:flex;gap:10px;padding:20px 24px}
+.btn-primary{flex:1;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
+.btn-primary:hover{opacity:.9;transform:scale(1.01)}
+.btn-secondary{padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+
+/* Preview panel */
+.preview-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:sticky;top:80px}
+.preview-toolbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)}
+.preview-toolbar span{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.preview-scroll{background:#e8e8e8;padding:24px;min-height:600px;overflow-y:auto}
+
+/* Invoice document */
+#invoiceDoc{background:#fff;max-width:800px;margin:0 auto;padding:48px;font-family:'Outfit',sans-serif;color:#1a1a1a;border-radius:4px;box-shadow:0 4px 24px rgba(0,0,0,0.15);min-height:1000px}
+.inv-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px}
+.inv-logo{max-width:160px;max-height:60px;object-fit:contain}
+.inv-logo-placeholder{font-size:1.4rem;font-weight:700;color:#1a1a1a}
+.inv-title-block{text-align:right}
+.inv-title{font-size:2.2rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.inv-number{font-size:0.85rem;color:#666;margin-top:4px}
+.inv-dates{font-size:0.82rem;color:#555;margin-top:4px;line-height:1.6}
+.inv-parties{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:36px}
+.inv-party-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.inv-party-name{font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.inv-party-detail{font-size:0.8rem;color:#555;line-height:1.7}
+.inv-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.inv-table th{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 12px;text-align:left;border-bottom:2px solid #1a1a1a}
+.inv-table th.right,.inv-table td.right{text-align:right}
+.inv-table td{padding:10px 12px;font-size:0.85rem;border-bottom:1px solid #eee;color:#333}
+.inv-table tr:last-child td{border-bottom:none}
+.inv-totals{display:flex;justify-content:flex-end;margin-bottom:32px}
+.inv-totals-inner{width:240px}
+.inv-total-row{display:flex;justify-content:space-between;font-size:0.85rem;padding:5px 0;color:#444}
+.inv-total-row.grand{font-size:1.1rem;font-weight:800;color:#1a1a1a;border-top:2px solid #1a1a1a;margin-top:4px;padding-top:10px}
+.inv-footer{border-top:1px solid #ddd;padding-top:20px}
+.inv-notes-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;color:#999}
+.inv-notes{font-size:0.82rem;color:#555;line-height:1.7}
+.inv-bank{margin-top:16px}
+.inv-status-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+
+/* Info section */
+.info-section{max-width:1400px;margin:0 auto;padding:0 24px 60px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+
+@media print{
+  body{background:#fff}
+  nav,.page-header,.workspace>div:first-child,.preview-toolbar,.action-row,.info-section,footer{display:none!important}
+  .workspace{display:block;padding:0;margin:0}
+  .preview-panel{border:none;border-radius:0;position:static}
+  .preview-scroll{background:#fff;padding:0}
+  #invoiceDoc{box-shadow:none;border-radius:0;padding:32px;max-width:100%;margin:0}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <div class="page-eyebrow">Free Online Tool</div>
+  <h1 class="page-title">Invoice<br><span class="acc">Generator</span></h1>
+  <p class="page-sub">Create professional invoices with your logo, line items, VAT and payment terms. Download as PDF. Runs entirely in your browser — nothing is uploaded or stored.</p>
+</div>
+
+<div class="workspace">
+  <!-- Left: Form -->
+  <div>
+    <div class="form-panel">
+
+      <!-- Your Details -->
+      <div class="form-section">
+        <div class="section-title">🏢 Your Business</div>
+        <div class="logo-thumb" id="logoThumb">
+          <img id="logoPreviewImg" src="" alt="Logo"/>
+          <button onclick="removeLogo()">Remove</button>
+        </div>
+        <div class="logo-upload" id="logoUpload">
+          <input type="file" id="logoFile" accept="image/*" onchange="handleLogo(this)"/>
+          <p>📎 Click to upload your logo</p>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Business Name</label><input type="text" id="bizName" placeholder="Salman IT Services" oninput="render()"/></div>
+          <div class="form-group"><label>Email</label><input type="email" id="bizEmail" placeholder="hello@example.com" oninput="render()"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group"><label>Address</label><textarea id="bizAddr" rows="2" placeholder="123 High Street, Crawley, RH10 1AA" oninput="render()"></textarea></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone</label><input type="text" id="bizPhone" placeholder="+44 7700 900000" oninput="render()"/></div>
+          <div class="form-group"><label>Website</label><input type="text" id="bizWeb" placeholder="salmanitservices.com" oninput="render()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>VAT Number (optional)</label><input type="text" id="bizVat" placeholder="GB123456789" oninput="render()"/></div>
+          <div class="form-group"><label>Company Reg (optional)</label><input type="text" id="bizReg" placeholder="12345678" oninput="render()"/></div>
+        </div>
+      </div>
+
+      <!-- Client Details -->
+      <div class="form-section">
+        <div class="section-title">👤 Bill To</div>
+        <div class="form-row">
+          <div class="form-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Acme Corporation" oninput="render()"/></div>
+          <div class="form-group"><label>Contact Name</label><input type="text" id="clientContact" placeholder="John Smith" oninput="render()"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group"><label>Client Address</label><textarea id="clientAddr" rows="2" placeholder="456 Business Park, London, EC1A 1BB" oninput="render()"></textarea></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Client Email</label><input type="email" id="clientEmail" placeholder="accounts@acme.com" oninput="render()"/></div>
+          <div class="form-group"><label>Client VAT No. (optional)</label><input type="text" id="clientVat" placeholder="GB987654321" oninput="render()"/></div>
+        </div>
+      </div>
+
+      <!-- Invoice Details -->
+      <div class="form-section">
+        <div class="section-title">📋 Invoice Details</div>
+        <div class="form-row">
+          <div class="form-group"><label>Invoice Number</label><input type="text" id="invNumber" placeholder="INV-001" oninput="render()"/></div>
+          <div class="form-group"><label>PO Number (optional)</label><input type="text" id="poNumber" placeholder="PO-2024-001" oninput="render()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Invoice Date</label><input type="date" id="invDate" oninput="render()"/></div>
+          <div class="form-group"><label>Due Date</label><input type="date" id="dueDate" oninput="render()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Currency</label>
+            <select id="currency" onchange="handleCurrencyChange(this)">
+              <option value="£">£ GBP — British Pound</option>
+              <option value="$">$ USD — US Dollar</option>
+              <option value="€">€ EUR — Euro</option>
+              <option value="$">$ CAD — Canadian Dollar</option>
+              <option value="$">$ AUD — Australian Dollar</option>
+              <option value="د.إ">د.إ AED — UAE Dirham</option>
+              <option value="₹">₹ INR — Indian Rupee</option>
+              <option value="¥">¥ JPY — Japanese Yen</option>
+              <option value="Fr">Fr CHF — Swiss Franc</option>
+              <option value="kr">kr SEK — Swedish Krona</option>
+              <option value="zł">zł PLN — Polish Zloty</option>
+              <option value="R">R ZAR — South African Rand</option>
+              <option value="₦">₦ NGN — Nigerian Naira</option>
+              <option value="PKR">PKR — Pakistani Rupee</option>
+              <option value="custom">✏️ Custom symbol…</option>
+            </select>
+            <input type="text" id="customCurrency" placeholder="Enter symbol e.g. RM" style="display:none;margin-top:6px" maxlength="5" oninput="render()"/>
+          </div>
+          <div class="form-group"><label>Status</label>
+            <select id="invStatus" onchange="render()">
+              <option value="">None</option>
+              <option value="draft">Draft</option>
+              <option value="sent">Sent</option>
+              <option value="paid">Paid</option>
+              <option value="overdue">Overdue</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Items -->
+      <div class="form-section">
+        <div class="section-title">📦 Line Items</div>
+        <div style="display:grid;grid-template-columns:1fr 60px 80px 28px;gap:6px;margin-bottom:6px">
+          <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Description</span>
+          <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Qty</span>
+          <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Unit Price</span>
+          <span></span>
+        </div>
+        <div class="line-items" id="lineItems"></div>
+        <button class="add-item-btn" onclick="addItem()">+ Add Line Item</button>
+      </div>
+
+      <!-- Tax & Totals -->
+      <div class="form-section">
+        <div class="section-title">🧮 Tax & Totals</div>
+        <div class="form-row">
+          <div class="form-group"><label>VAT / Tax Rate (%)</label><input type="number" id="vatRate" value="20" min="0" max="100" oninput="render()"/></div>
+          <div class="form-group"><label>Discount (%)</label><input type="number" id="discount" value="0" min="0" max="100" oninput="render()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Shipping / Delivery (optional)</label><input type="number" id="shipping" value="0" min="0" oninput="render()"/></div>
+          <div class="form-group"><label>Apply VAT to Shipping?</label>
+            <select id="vatShipping" onchange="render()"><option value="yes">Yes</option><option value="no">No</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment & Notes -->
+      <div class="form-section">
+        <div class="section-title">💳 Payment & Notes</div>
+        <div class="form-row full">
+          <div class="form-group"><label>Bank / Payment Details</label><textarea id="bankDetails" rows="3" placeholder="Bank: Lloyds Bank&#10;Sort Code: 30-00-00&#10;Account: 12345678&#10;Ref: INV-001" oninput="render()"></textarea></div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group"><label>Notes / Terms</label><textarea id="notes" rows="3" placeholder="Payment due within 30 days. Thank you for your business." oninput="render()"></textarea></div>
+        </div>
+      </div>
+
+      <!-- Branding -->
+      <div class="form-section">
+        <div class="section-title">🎨 Accent Colour</div>
+        <div class="colour-row">
+          <label>Heading Colour</label>
+          <input type="color" id="accentColor" value="#00E87A" oninput="render()"/>
+          <span style="font-size:0.78rem;color:var(--muted);margin-left:4px">Used for invoice title and table headers</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn-secondary" onclick="clearAll()">🗑️ Clear</button>
+    </div>
+  </div>
+
+  <!-- Right: Preview -->
+  <div class="preview-panel">
+    <div class="preview-toolbar">
+      <span>📄 Live Preview</span>
+      <span style="color:var(--muted);font-size:0.72rem">Updates as you type</span>
+    </div>
+    <div class="preview-scroll">
+      <div id="invoiceDoc">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Info section -->
+<div class="info-section">
+  <div class="page-eyebrow">Features</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Everything You Need to Invoice Professionally</h2>
+  <div class="info-grid">
+    <div class="info-card"><h4>Logo & Branding</h4><p>Upload your business logo and choose an accent colour — the invoice looks like it came from your own accounting software.</p></div>
+    <div class="info-card"><h4>Automatic VAT Calculation</h4><p>Set your VAT or tax rate and it calculates subtotal, tax, discount, shipping and grand total automatically.</p></div>
+    <div class="info-card"><h4>Multiple Currencies</h4><p>GBP, USD, EUR, CAD, AUD, AED, INR, JPY and more — or type your own custom currency symbol if yours isn't in the list.</p></div>
+    <div class="info-card"><h4>PDF Download</h4><p>Click Print / Save as PDF — your browser's print dialog lets you save a properly formatted PDF in seconds.</p></div>
+    <div class="info-card"><h4>Payment Details</h4><p>Add your bank account, sort code, and payment reference so clients have everything they need to pay you.</p></div>
+    <div class="info-card"><h4>100% Private</h4><p>Your invoice data never leaves your device. Nothing is uploaded, stored, or sent to any server.</p></div>
+  </div>
+
+  <div style="margin-top:48px">
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="info-card"><h4 style="margin-bottom:6px">Is this invoice legally valid in the UK?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">The invoice format meets HMRC requirements for VAT invoices — it includes all required fields (business name, address, VAT number, invoice number, date, itemised amounts and VAT). However you should always check with an accountant to ensure your specific invoices comply with your business circumstances.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I save my invoice to edit later?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Currently the tool doesn't save between sessions — everything is in your browser's memory while you have the page open. To save your work, print to PDF or take a screenshot before closing the tab. A save feature is planned for a future update.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">How do I make it look professional when printing?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">When the print dialog opens, make sure "Background graphics" is ticked so your accent colour appears in the PDF. Set margins to "None" or "Minimum" for a cleaner result. The invoice is designed for A4 paper size.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Do I need to register for VAT to use this tool?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">No. If you're not VAT registered, simply set the VAT rate to 0%. The tool works equally well for non-VAT invoices. Only VAT-registered businesses in the UK are required to charge and collect VAT, and must include their VAT registration number on invoices.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+window.addEventListener('scroll', closeMobileMenu);
+
+// Set default dates
+const today = new Date();
+const due = new Date(); due.setDate(due.getDate() + 30);
+document.getElementById('invDate').value = today.toISOString().split('T')[0];
+document.getElementById('dueDate').value = due.toISOString().split('T')[0];
+document.getElementById('invNumber').value = 'INV-001';
+
+let logoDataUrl = null;
+let items = [{desc:'', qty:1, price:0}];
+
+function handleLogo(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    logoDataUrl = e.target.result;
+    document.getElementById('logoPreviewImg').src = logoDataUrl;
+    document.getElementById('logoThumb').style.display = 'flex';
+    document.getElementById('logoUpload').style.display = 'none';
+    render();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeLogo() {
+  logoDataUrl = null;
+  document.getElementById('logoFile').value = '';
+  document.getElementById('logoThumb').style.display = 'none';
+  document.getElementById('logoUpload').style.display = 'block';
+  render();
+}
+
+function addItem() {
+  items.push({desc:'', qty:1, price:0});
+  renderItems();
+  render();
+}
+
+function removeItem(i) {
+  if (items.length === 1) return;
+  items.splice(i, 1);
+  renderItems();
+  render();
+}
+
+function renderItems() {
+  const container = document.getElementById('lineItems');
+  container.innerHTML = '';
+  items.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'line-item';
+    row.innerHTML = `
+      <input type="text" placeholder="Description of service or product" value="${esc(item.desc)}"
+        oninput="items[${i}].desc=this.value;render()"/>
+      <input type="number" placeholder="1" value="${item.qty}" min="0" step="0.01"
+        oninput="items[${i}].qty=parseFloat(this.value)||0;render()"/>
+      <input type="number" placeholder="0.00" value="${item.price}" min="0" step="0.01"
+        oninput="items[${i}].price=parseFloat(this.value)||0;render()"/>
+      <button class="remove-btn" onclick="removeItem(${i})">×</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function g(id) { return document.getElementById(id)?.value || ''; }
+
+function handleCurrencyChange(sel) {
+  const custom = document.getElementById('customCurrency');
+  if (sel.value === 'custom') {
+    custom.style.display = 'block';
+    custom.focus();
+  } else {
+    custom.style.display = 'none';
+  }
+  render();
+}
+
+function getCurrency() {
+  const sel = document.getElementById('currency');
+  if (sel.value === 'custom') {
+    return document.getElementById('customCurrency').value.trim() || '?';
+  }
+  return sel.value || '£';
+}
+
+function fmt(n) {
+  return getCurrency() + n.toFixed(2);
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const parts = d.split('-');
+  if (parts.length !== 3) return d;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function statusBadge(status) {
+  if (!status) return '';
+  const styles = {
+    draft: 'background:#f1f5f9;color:#64748b',
+    sent:  'background:#dbeafe;color:#1d4ed8',
+    paid:  'background:#dcfce7;color:#16a34a',
+    overdue: 'background:#fee2e2;color:#dc2626'
+  };
+  return `<span class="inv-status-badge" style="${styles[status]||''}">${status.toUpperCase()}</span>`;
+}
+
+function render() {
+  const accent = g('accentColor') || '#00E87A';
+  const subtotal = items.reduce((s, it) => s + (it.qty * it.price), 0);
+  const discPct = parseFloat(g('discount')) || 0;
+  const discAmt = subtotal * (discPct / 100);
+  const afterDisc = subtotal - discAmt;
+  const vatRate = parseFloat(g('vatRate')) || 0;
+  const vatAmt = afterDisc * (vatRate / 100);
+  const shipping = parseFloat(g('shipping')) || 0;
+  const vatOnShip = g('vatShipping') === 'yes' ? shipping * (vatRate / 100) : 0;
+  const total = afterDisc + vatAmt + shipping + vatOnShip;
+
+  const bizName = g('bizName') || 'Your Business Name';
+  const logoHtml = logoDataUrl
+    ? `<img class="inv-logo" src="${logoDataUrl}" alt="Logo"/>`
+    : `<div class="inv-logo-placeholder">${esc(bizName)}</div>`;
+
+  const itemRows = items.map(it => {
+    const lineTotal = it.qty * it.price;
+    return `<tr>
+      <td>${esc(it.desc) || '<span style="color:#ccc">—</span>'}</td>
+      <td class="right">${it.qty}</td>
+      <td class="right">${fmt(it.price)}</td>
+      <td class="right">${fmt(lineTotal)}</td>
+    </tr>`;
+  }).join('');
+
+  let totalsHtml = `<div class="inv-total-row"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>`;
+  if (discPct > 0) totalsHtml += `<div class="inv-total-row"><span>Discount (${discPct}%)</span><span>−${fmt(discAmt)}</span></div>`;
+  if (shipping > 0) totalsHtml += `<div class="inv-total-row"><span>Shipping</span><span>${fmt(shipping)}</span></div>`;
+  if (vatRate > 0) totalsHtml += `<div class="inv-total-row"><span>VAT (${vatRate}%)</span><span>${fmt(vatAmt + vatOnShip)}</span></div>`;
+  totalsHtml += `<div class="inv-total-row grand"><span>Total Due</span><span>${fmt(total)}</span></div>`;
+
+  const bizDetails = [g('bizAddr'), g('bizPhone'), g('bizEmail'), g('bizWeb'), g('bizVat') ? 'VAT: ' + g('bizVat') : '', g('bizReg') ? 'Reg: ' + g('bizReg') : ''].filter(Boolean).join('<br>');
+  const clientDetails = [g('clientContact'), g('clientAddr'), g('clientEmail'), g('clientVat') ? 'VAT: ' + g('clientVat') : ''].filter(Boolean).join('<br>');
+
+  const poRow = g('poNumber') ? `<div style="font-size:0.78rem;color:#666">PO: ${esc(g('poNumber'))}</div>` : '';
+  const bankHtml = g('bankDetails') ? `<div class="inv-bank"><div class="inv-notes-label">Payment Details</div><div class="inv-notes" style="white-space:pre-line">${esc(g('bankDetails'))}</div></div>` : '';
+  const notesHtml = g('notes') ? `<div style="margin-top:12px"><div class="inv-notes-label">Notes & Terms</div><div class="inv-notes">${esc(g('notes'))}</div></div>` : '';
+
+  document.getElementById('invoiceDoc').innerHTML = `
+    <div class="inv-header">
+      <div>${logoHtml}</div>
+      <div class="inv-title-block">
+        ${statusBadge(g('invStatus'))}
+        <div class="inv-title" style="color:${accent}">Invoice</div>
+        <div class="inv-number">${esc(g('invNumber')) || 'INV-001'}</div>
+        <div class="inv-dates">
+          ${g('invDate') ? `Issued: ${fmtDate(g('invDate'))}<br>` : ''}
+          ${g('dueDate') ? `Due: ${fmtDate(g('dueDate'))}` : ''}
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-parties">
+      <div>
+        <div class="inv-party-label" style="color:${accent}">From</div>
+        <div class="inv-party-name">${esc(bizName)}</div>
+        <div class="inv-party-detail">${bizDetails}</div>
+      </div>
+      <div>
+        <div class="inv-party-label" style="color:${accent}">Bill To</div>
+        <div class="inv-party-name">${esc(g('clientName')) || 'Client Name'}</div>
+        <div class="inv-party-detail">${clientDetails}</div>
+        ${poRow}
+      </div>
+    </div>
+
+    <table class="inv-table">
+      <thead>
+        <tr style="background:${accent}15">
+          <th style="color:${accent}">Description</th>
+          <th class="right" style="color:${accent}">Qty</th>
+          <th class="right" style="color:${accent}">Unit Price</th>
+          <th class="right" style="color:${accent}">Amount</th>
+        </tr>
+      </thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+
+    <div class="inv-totals">
+      <div class="inv-totals-inner">${totalsHtml}</div>
+    </div>
+
+    <div class="inv-footer">
+      ${bankHtml}
+      ${notesHtml}
+    </div>
+  `;
+}
+
+function clearAll() {
+  if (!confirm('Clear all invoice data?')) return;
+  ['bizName','bizEmail','bizAddr','bizPhone','bizWeb','bizVat','bizReg',
+   'clientName','clientContact','clientAddr','clientEmail','clientVat',
+   'poNumber','bankDetails','notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('invNumber').value = 'INV-001';
+  document.getElementById('vatRate').value = '20';
+  document.getElementById('discount').value = '0';
+  document.getElementById('shipping').value = '0';
+  document.getElementById('invStatus').value = '';
+  const today2 = new Date();
+  const due2 = new Date(); due2.setDate(due2.getDate() + 30);
+  document.getElementById('invDate').value = today2.toISOString().split('T')[0];
+  document.getElementById('dueDate').value = due2.toISOString().split('T')[0];
+  removeLogo();
+  items = [{desc:'', qty:1, price:0}];
+  renderItems();
+  render();
+}
+
+// Init
+renderItems();
+render();
+</script>
+</body>
+</html>

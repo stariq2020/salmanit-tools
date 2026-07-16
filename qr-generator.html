@@ -516,9 +516,7 @@ function generateQR() {
           // White background for logo
           ctx.fillStyle = '#ffffff';
           const pad = logoSize2 * 0.1;
-          ctx.beginPath();
-          ctx.roundRect(logoX - pad, logoY - pad, logoSize2 + pad*2, logoSize2 + pad*2, 6);
-          ctx.fill();
+          roundRect(ctx, logoX - pad, logoY - pad, logoSize2 + pad*2, logoSize2 + pad*2, 6);
           ctx.drawImage(logoImg2, logoX, logoY, logoSize2, logoSize2);
           showQR(canvas);
         };
@@ -558,6 +556,21 @@ function detectModuleSize(pixels, size) {
   return size / 25; // fallback
 }
 
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  ctx.fill();
+}
+
 function drawDot(ctx, x, y, size, style) {
   switch(style) {
     case 'dots':
@@ -566,19 +579,13 @@ function drawDot(ctx, x, y, size, style) {
       ctx.fill();
       break;
     case 'rounded':
-      ctx.beginPath();
-      ctx.roundRect(x, y, size, size, size * 0.3);
-      ctx.fill();
+      roundRect(ctx, x, y, size, size, size * 0.3);
       break;
     case 'classy':
-      ctx.beginPath();
-      ctx.roundRect(x, y, size, size, size * 0.15);
-      ctx.fill();
+      roundRect(ctx, x, y, size, size, size * 0.15);
       break;
     case 'extra-rounded':
-      ctx.beginPath();
-      ctx.roundRect(x, y, size, size, size * 0.45);
-      ctx.fill();
+      roundRect(ctx, x, y, size, size, size * 0.45);
       break;
     default:
       ctx.fillRect(x, y, size, size);

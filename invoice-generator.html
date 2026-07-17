@@ -72,6 +72,9 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .remove-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.15);border-radius:6px;color:var(--danger);width:26px;height:26px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Outfit',sans-serif}
 
 /* Colour picker */
+.tpl-btn{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .2s;padding:0;overflow:hidden;text-align:left}
+.tpl-btn:hover{border-color:rgba(255,255,255,0.2)}
+.tpl-btn.active{border-color:rgba(0,232,122,0.5);background:rgba(0,232,122,0.05)}
 .colour-row{display:flex;align-items:center;gap:10px}
 .colour-row label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .colour-row input[type=color]{width:36px;height:28px;border:1px solid var(--border);border-radius:6px;background:transparent;cursor:pointer;padding:2px}
@@ -130,12 +133,13 @@ footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
 
 @media print{
-  body{background:#fff}
+  @page{margin:0;size:A4}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   nav,.page-header,.workspace>div:first-child,.preview-toolbar,.action-row,.info-section,footer{display:none!important}
   .workspace{display:block;padding:0;margin:0}
-  .preview-panel{border:none;border-radius:0;position:static}
+  .preview-panel{border:none;border-radius:0;position:static;box-shadow:none}
   .preview-scroll{background:#fff;padding:0}
-  #invoiceDoc{box-shadow:none;border-radius:0;padding:32px;max-width:100%;margin:0}
+  #invoiceDoc{box-shadow:none;border-radius:0;padding:24px 32px;max-width:100%;margin:0;min-height:unset}
 }
 </style>
 </head>
@@ -301,11 +305,56 @@ footer a{color:var(--green);text-decoration:none}
 
       <!-- Branding -->
       <div class="form-section">
-        <div class="section-title">🎨 Accent Colour</div>
-        <div class="colour-row">
-          <label>Heading Colour</label>
+        <div class="section-title">🎨 Design & Style</div>
+
+        <!-- Templates -->
+        <div class="form-group" style="margin-bottom:16px">
+          <label>Template</label>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px">
+            <button class="tpl-btn active" onclick="setTemplate(this,'modern')" title="Modern">
+              <div style="background:#00E87A;height:6px;border-radius:2px 2px 0 0"></div>
+              <div style="padding:4px 6px;font-size:0.6rem;color:var(--muted);font-weight:700">MODERN</div>
+            </button>
+            <button class="tpl-btn" onclick="setTemplate(this,'classic')" title="Classic">
+              <div style="background:#1a1a1a;height:6px;border-radius:2px 2px 0 0"></div>
+              <div style="padding:4px 6px;font-size:0.6rem;color:var(--muted);font-weight:700">CLASSIC</div>
+            </button>
+            <button class="tpl-btn" onclick="setTemplate(this,'minimal')" title="Minimal">
+              <div style="background:#e5e5e5;height:6px;border-radius:2px 2px 0 0"></div>
+              <div style="padding:4px 6px;font-size:0.6rem;color:var(--muted);font-weight:700">MINIMAL</div>
+            </button>
+            <button class="tpl-btn" onclick="setTemplate(this,'bold')" title="Bold">
+              <div style="background:#111;height:14px;border-radius:2px 2px 0 0;display:flex;align-items:center;justify-content:center"><span style="font-size:0.5rem;color:#fff;font-weight:900">INV</span></div>
+              <div style="padding:2px 6px;font-size:0.6rem;color:var(--muted);font-weight:700">BOLD</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="colour-row" style="margin-bottom:12px">
+          <label>Accent Colour</label>
           <input type="color" id="accentColor" value="#00E87A" oninput="render()"/>
-          <span style="font-size:0.78rem;color:var(--muted);margin-left:4px">Used for invoice title and table headers</span>
+          <label style="margin-left:12px">Text Colour</label>
+          <input type="color" id="textColor" value="#1a1a1a" oninput="render()"/>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Font</label>
+            <select id="invFont" onchange="render()">
+              <option value="'Outfit',sans-serif">Outfit (Modern)</option>
+              <option value="Georgia,serif">Georgia (Classic)</option>
+              <option value="Arial,sans-serif">Arial (Clean)</option>
+              <option value="'Times New Roman',serif">Times New Roman</option>
+              <option value="'Courier New',monospace">Courier New (Retro)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Font Size</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+              <input type="range" id="fontSize" min="11" max="16" value="13" step="1" oninput="document.getElementById('fontSizeVal').textContent=this.value+'px';render()" style="flex:1;accent-color:var(--green)"/>
+              <span id="fontSizeVal" style="font-size:0.8rem;color:var(--green);font-weight:700;min-width:32px">13px</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -431,6 +480,15 @@ function renderItems() {
 
 function g(id) { return document.getElementById(id)?.value || ''; }
 
+let currentTemplate = 'modern';
+
+function setTemplate(btn, tpl) {
+  currentTemplate = tpl;
+  document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
 function handleCurrencyChange(sel) {
   const custom = document.getElementById('customCurrency');
   if (sel.value === 'custom') {
@@ -480,6 +538,11 @@ function statusBadge(status) {
 
 function render() {
   const accent = g('accentColor') || '#00E87A';
+  const textCol = g('textColor') || '#1a1a1a';
+  const font = g('invFont') || "'Outfit',sans-serif";
+  const fontSize = document.getElementById('fontSize')?.value || '13';
+  const tpl = currentTemplate;
+
   const subtotal = items.reduce((s, it) => s + (it.qty * it.price), 0);
   const discPct = parseFloat(g('discount')) || 0;
   const discAmt = subtotal * (discPct / 100);
@@ -493,82 +556,79 @@ function render() {
   const bizName = g('bizName') || 'Your Business Name';
   const logoHtml = logoDataUrl
     ? `<img class="inv-logo" src="${logoDataUrl}" alt="Logo"/>`
-    : `<div class="inv-logo-placeholder">${esc(bizName)}</div>`;
+    : `<div class="inv-logo-placeholder" style="font-family:${font}">${esc(bizName)}</div>`;
 
   const itemRows = items.map(it => {
     const lineTotal = it.qty * it.price;
-    return `<tr>
-      <td>${esc(it.desc) || '<span style="color:#ccc">—</span>'}</td>
-      <td class="right">${it.qty}</td>
-      <td class="right">${fmt(it.price)}</td>
-      <td class="right">${fmt(lineTotal)}</td>
-    </tr>`;
+    return `<tr><td>${esc(it.desc) || '<span style="color:#ccc">—</span>'}</td><td class="right">${it.qty}</td><td class="right">${fmt(it.price)}</td><td class="right">${fmt(lineTotal)}</td></tr>`;
   }).join('');
 
   let totalsHtml = `<div class="inv-total-row"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>`;
   if (discPct > 0) totalsHtml += `<div class="inv-total-row"><span>Discount (${discPct}%)</span><span>−${fmt(discAmt)}</span></div>`;
   if (shipping > 0) totalsHtml += `<div class="inv-total-row"><span>Shipping</span><span>${fmt(shipping)}</span></div>`;
   if (vatRate > 0) totalsHtml += `<div class="inv-total-row"><span>VAT (${vatRate}%)</span><span>${fmt(vatAmt + vatOnShip)}</span></div>`;
-  totalsHtml += `<div class="inv-total-row grand"><span>Total Due</span><span>${fmt(total)}</span></div>`;
+  totalsHtml += `<div class="inv-total-row grand" style="border-top:2px solid ${textCol}"><span>Total Due</span><span>${fmt(total)}</span></div>`;
 
-  const bizDetails = [g('bizAddr'), g('bizPhone'), g('bizEmail'), g('bizWeb'), g('bizVat') ? 'VAT: ' + g('bizVat') : '', g('bizReg') ? 'Reg: ' + g('bizReg') : ''].filter(Boolean).join('<br>');
-  const clientDetails = [g('clientContact'), g('clientAddr'), g('clientEmail'), g('clientVat') ? 'VAT: ' + g('clientVat') : ''].filter(Boolean).join('<br>');
-
+  const bizDetails = [g('bizAddr'), g('bizPhone'), g('bizEmail'), g('bizWeb'), g('bizVat') ? 'VAT: '+g('bizVat') : '', g('bizReg') ? 'Reg: '+g('bizReg') : ''].filter(Boolean).join('<br>');
+  const clientDetails = [g('clientContact'), g('clientAddr'), g('clientEmail'), g('clientVat') ? 'VAT: '+g('clientVat') : ''].filter(Boolean).join('<br>');
   const poRow = g('poNumber') ? `<div style="font-size:0.78rem;color:#666">PO: ${esc(g('poNumber'))}</div>` : '';
   const bankHtml = g('bankDetails') ? `<div class="inv-bank"><div class="inv-notes-label">Payment Details</div><div class="inv-notes" style="white-space:pre-line">${esc(g('bankDetails'))}</div></div>` : '';
   const notesHtml = g('notes') ? `<div style="margin-top:12px"><div class="inv-notes-label">Notes & Terms</div><div class="inv-notes">${esc(g('notes'))}</div></div>` : '';
 
-  document.getElementById('invoiceDoc').innerHTML = `
-    <div class="inv-header">
-      <div>${logoHtml}</div>
-      <div class="inv-title-block">
-        ${statusBadge(g('invStatus'))}
-        <div class="inv-title" style="color:${accent}">Invoice</div>
-        <div class="inv-number">${esc(g('invNumber')) || 'INV-001'}</div>
-        <div class="inv-dates">
-          ${g('invDate') ? `Issued: ${fmtDate(g('invDate'))}<br>` : ''}
-          ${g('dueDate') ? `Due: ${fmtDate(g('dueDate'))}` : ''}
-        </div>
-      </div>
-    </div>
+  const thStyle = tpl === 'minimal'
+    ? `color:#999;border-bottom:1px solid #ddd;background:transparent`
+    : `background:${accent}20;color:${accent}`;
 
-    <div class="inv-parties">
-      <div>
-        <div class="inv-party-label" style="color:${accent}">From</div>
-        <div class="inv-party-name">${esc(bizName)}</div>
-        <div class="inv-party-detail">${bizDetails}</div>
+  let headerHtml = '';
+  if (tpl === 'bold') {
+    headerHtml = `
+      <div style="background:${textCol};color:#fff;padding:24px 32px;margin:-48px -48px 28px -48px;display:flex;justify-content:space-between;align-items:center">
+        <div>${logoDataUrl ? `<img class="inv-logo" src="${logoDataUrl}" alt="Logo" style="filter:brightness(0) invert(1)"/>` : `<div style="font-size:1.2rem;font-weight:800">${esc(bizName)}</div>`}</div>
+        <div style="text-align:right">${statusBadge(g('invStatus'))}<div style="font-size:1.8rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:${accent}">Invoice</div><div style="font-size:0.8rem;opacity:.8">${esc(g('invNumber')||'INV-001')}</div><div style="font-size:0.75rem;opacity:.65">${g('invDate')?'Issued: '+fmtDate(g('invDate')):''} ${g('dueDate')?'· Due: '+fmtDate(g('dueDate')):''}</div></div>
       </div>
-      <div>
-        <div class="inv-party-label" style="color:${accent}">Bill To</div>
-        <div class="inv-party-name">${esc(g('clientName')) || 'Client Name'}</div>
-        <div class="inv-party-detail">${clientDetails}</div>
-        ${poRow}
+      <div class="inv-parties"><div><div class="inv-party-label" style="color:${accent}">From</div><div class="inv-party-name">${esc(bizName)}</div><div class="inv-party-detail">${bizDetails}</div></div><div><div class="inv-party-label" style="color:${accent}">Bill To</div><div class="inv-party-name">${esc(g('clientName')||'Client Name')}</div><div class="inv-party-detail">${clientDetails}</div>${poRow}</div></div>`;
+  } else if (tpl === 'classic') {
+    headerHtml = `
+      <div style="text-align:center;border-bottom:3px double ${textCol};padding-bottom:18px;margin-bottom:20px">
+        ${logoHtml}<div style="font-size:1.6rem;font-weight:800;margin-top:6px">${esc(bizName)}</div>
+        <div style="font-size:0.78rem;color:#666;margin-top:3px">${[g('bizAddr'),g('bizPhone'),g('bizEmail')].filter(Boolean).join(' · ')}</div>
       </div>
-    </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:20px">
+        <div><div class="inv-party-label">Bill To</div><div class="inv-party-name">${esc(g('clientName')||'Client Name')}</div><div class="inv-party-detail">${clientDetails}</div>${poRow}</div>
+        <div style="text-align:right">${statusBadge(g('invStatus'))}<div style="font-size:1.4rem;font-weight:800;text-transform:uppercase">Invoice</div><div style="font-size:0.8rem;color:#555">${esc(g('invNumber')||'INV-001')}</div><div style="font-size:0.75rem;color:#666">${g('invDate')?'Date: '+fmtDate(g('invDate')):''}${g('dueDate')?'<br>Due: '+fmtDate(g('dueDate')):''}</div></div>
+      </div>`;
+  } else if (tpl === 'minimal') {
+    headerHtml = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #ddd;padding-bottom:18px;margin-bottom:24px">
+        <div>${logoHtml}</div>
+        <div style="text-align:right">${statusBadge(g('invStatus'))}<div style="font-size:1.3rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:#888">Invoice</div><div style="font-size:0.8rem;color:#999">${esc(g('invNumber')||'INV-001')}</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:24px">
+        <div><div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#aaa;margin-bottom:5px">From</div><div style="font-weight:600">${esc(bizName)}</div><div style="font-size:0.78rem;color:#777;line-height:1.7">${bizDetails}</div></div>
+        <div><div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#aaa;margin-bottom:5px">Bill To</div><div style="font-weight:600">${esc(g('clientName')||'Client Name')}</div><div style="font-size:0.78rem;color:#777;line-height:1.7">${clientDetails}</div>${poRow}</div>
+        <div><div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#aaa;margin-bottom:5px">Details</div><div style="font-size:0.78rem;color:#777;line-height:1.7">${g('invDate')?'Issued: '+fmtDate(g('invDate'))+'<br>':''}${g('dueDate')?'Due: '+fmtDate(g('dueDate')):''}</div></div>
+      </div>`;
+  } else {
+    headerHtml = `
+      <div class="inv-header"><div>${logoHtml}</div>
+        <div class="inv-title-block">${statusBadge(g('invStatus'))}<div class="inv-title" style="color:${accent}">Invoice</div><div class="inv-number">${esc(g('invNumber')||'INV-001')}</div><div class="inv-dates">${g('invDate')?'Issued: '+fmtDate(g('invDate'))+'<br>':''}${g('dueDate')?'Due: '+fmtDate(g('dueDate')):''}</div></div>
+      </div>
+      <div class="inv-parties">
+        <div><div class="inv-party-label" style="color:${accent}">From</div><div class="inv-party-name">${esc(bizName)}</div><div class="inv-party-detail">${bizDetails}</div></div>
+        <div><div class="inv-party-label" style="color:${accent}">Bill To</div><div class="inv-party-name">${esc(g('clientName')||'Client Name')}</div><div class="inv-party-detail">${clientDetails}</div>${poRow}</div>
+      </div>`;
+  }
 
-    <table class="inv-table">
-      <thead>
-        <tr style="background:${accent}15">
-          <th style="color:${accent}">Description</th>
-          <th class="right" style="color:${accent}">Qty</th>
-          <th class="right" style="color:${accent}">Unit Price</th>
-          <th class="right" style="color:${accent}">Amount</th>
-        </tr>
-      </thead>
+  const doc = document.getElementById('invoiceDoc');
+  doc.style.cssText = `background:#fff;max-width:800px;margin:0 auto;padding:48px;color:${textCol};border-radius:4px;box-shadow:0 4px 24px rgba(0,0,0,0.15);min-height:900px;font-family:${font};font-size:${fontSize}px`;
+  doc.innerHTML = headerHtml + `
+    <table class="inv-table" style="font-family:${font}">
+      <thead><tr><th style="${thStyle}">Description</th><th class="right" style="${thStyle}">Qty</th><th class="right" style="${thStyle}">Unit Price</th><th class="right" style="${thStyle}">Amount</th></tr></thead>
       <tbody>${itemRows}</tbody>
     </table>
-
-    <div class="inv-totals">
-      <div class="inv-totals-inner">${totalsHtml}</div>
-    </div>
-
-    <div class="inv-footer">
-      ${bankHtml}
-      ${notesHtml}
-    </div>
-  `;
+    <div class="inv-totals"><div class="inv-totals-inner">${totalsHtml}</div></div>
+    <div class="inv-footer">${bankHtml}${notesHtml}</div>`;
 }
-
 function clearAll() {
   if (!confirm('Clear all invoice data?')) return;
   ['bizName','bizEmail','bizAddr','bizPhone','bizWeb','bizVat','bizReg',

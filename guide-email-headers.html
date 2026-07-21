@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Read Email Headers When Something Goes Wrong | Salman IT Tools</title>
+<meta name="description" content="Email headers contain the full story of where an email came from, where it went, and why it failed. Here's how to read them without needing a computer science degree.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+.article-wrap{max-width:780px;margin:0 auto;padding:60px 24px 80px}
+.breadcrumb{font-size:0.78rem;color:var(--muted);margin-bottom:24px}
+.breadcrumb a{color:var(--green);text-decoration:none}
+.article-tag{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green);margin-bottom:12px}
+.article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,3.5rem);line-height:1;letter-spacing:.02em;color:var(--white);margin-bottom:16px}
+.article-meta{font-size:0.8rem;color:var(--muted);margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.article-body h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin:36px 0 12px}
+.article-body p{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:16px}
+.article-body ul{margin:0 0 16px 20px}
+.article-body li{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:6px}
+.article-body strong{color:var(--white);font-weight:600}
+.article-body code{background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:4px;font-size:0.82rem;font-family:'Courier New',monospace;color:#00C8FF}
+.callout{background:var(--card);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:16px 20px;margin:24px 0}
+.callout p{margin:0;font-size:0.9rem}
+.tool-cta{background:var(--card);border:1px solid rgba(0,232,122,0.2);border-radius:14px;padding:24px;margin:32px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tool-cta p{font-size:0.88rem;color:var(--muted);margin:0;flex:1}
+.tool-cta a{padding:10px 20px;background:linear-gradient(135deg,var(--green),#00C468);color:#080D14;font-weight:700;font-size:0.85rem;border-radius:8px;text-decoration:none;white-space:nowrap}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.related h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.related-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none;transition:border-color .2s}
+.related-card:hover{border-color:rgba(0,232,122,0.3)}
+.related-card .tag{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px}
+.related-card .title{font-size:0.88rem;font-weight:600;color:var(--white);line-height:1.4}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.article-wrap{padding:40px 16px 60px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="article-wrap">
+  <div class="breadcrumb"><a href="guides.html">← Guides</a></div>
+  <div class="article-tag">🔍 Email Troubleshooting</div>
+  <h1 class="article-title">How to Read Email Headers When Something Goes Wrong</h1>
+  <div class="article-meta">By Salman Tariq &nbsp;·&nbsp; Microsoft 365 & Email Security Specialist &nbsp;·&nbsp; 5 min read</div>
+
+  <div class="article-body">
+
+    <p>When a user reports that an important email never arrived, or a client complains that your email went straight to their junk folder, the first thing any experienced IT professional does is look at the raw email headers. Headers contain the complete technical record of an email's journey — every server it passed through, when, and what authentication checks it passed or failed.</p>
+
+    <p>The problem is that raw headers look like an impenetrable wall of technical text. Once you know what to look for, they're actually quite readable. Here's a practical guide to the parts that actually matter.</p>
+
+    <h2>Where to Find Raw Headers</h2>
+
+    <p>The method varies by email client. In <strong>Outlook desktop</strong>, open the email in its own window, go to File, then Properties — the headers are in the Internet headers box at the bottom. Note that this only works when the email is opened in a full window, not the reading pane. In <strong>Gmail</strong>, open the email, click the three dots in the top-right corner, and select Show original. In <strong>Outlook Web (OWA)</strong>, open the email, click the three dots, then View, then View message details.</p>
+
+    <h2>The Received Headers — Reading the Journey</h2>
+
+    <p>The most important headers for delivery troubleshooting are the <strong>Received</strong> headers. Every server that handles an email adds its own Received header, stamped with the time it was processed. The crucial thing to understand is that these headers are added in reverse order — the most recent one is at the top, and the original one (from the sending server) is at the bottom.</p>
+
+    <p>To trace the delivery path, read from the bottom up. Each Received header tells you which server handed the email to which other server, and at what time. By comparing timestamps between consecutive headers, you can see how long the email spent at each hop. A gap of a few seconds is normal. A gap of several minutes usually indicates the email hit a spam filter or greylisting system. A gap of hours suggests something went wrong — a server queue, a timeout, or a filtering hold.</p>
+
+    <h2>The Authentication-Results Header</h2>
+
+    <p>This is the header that most IT professionals go to first when investigating deliverability issues. It's added by the receiving mail server and summarises the outcome of the three main email authentication checks.</p>
+
+    <p><strong>SPF</strong> (Sender Policy Framework) shows whether the sending server's IP address is authorised to send email for the claimed domain. A result of <code>spf=pass</code> means it is. <code>spf=fail</code> means it isn't — a significant red flag. <code>spf=softfail</code> means the domain owner has flagged it as suspicious but hasn't set a hard fail policy.</p>
+
+    <p><strong>DKIM</strong> (DomainKeys Identified Mail) shows whether the email carries a valid digital signature from the sending domain. <code>dkim=pass</code> means the signature is valid and the email content hasn't been altered in transit. <code>dkim=fail</code> means the signature is invalid or missing.</p>
+
+    <p><strong>DMARC</strong> shows whether the email satisfies the sending domain's overall authentication policy. <code>dmarc=pass</code> means both the domain alignment and at least one of SPF or DKIM passed. <code>dmarc=fail</code> is the most serious finding — it means the email doesn't meet the sending domain's own stated security policy.</p>
+
+    <div class="callout">
+      <p><strong>Quick diagnosis:</strong> If all three show pass, the deliverability issue is almost certainly content-related or IP reputation-related — not authentication. If any show fail, you have a clear starting point for your investigation.</p>
+    </div>
+
+    <h2>Spotting Phishing Through Headers</h2>
+
+    <p>Headers are one of the most reliable ways to identify phishing emails, because while attackers can fake the display name and From address that users see, they can't fake the headers added by intermediate and receiving servers. Key things to look for:</p>
+
+    <ul>
+      <li><strong>Return-Path mismatch:</strong> The Return-Path header shows the actual envelope sender — where bounce messages go. If it doesn't match the From address domain, that's suspicious.</li>
+      <li><strong>Reply-To mismatch:</strong> If the Reply-To address points to a different domain than the From address, replies will go to the attacker, not the claimed sender.</li>
+      <li><strong>Sending IP not matching claimed domain:</strong> If an email claims to be from a major bank but the sending IP traces to a residential ISP in another country, something is wrong.</li>
+      <li><strong>DKIM fail from claimed domain:</strong> A legitimate organisation sending email from their own domain will almost always have DKIM configured. A DKIM fail from a major sender is a serious red flag.</li>
+    </ul>
+
+    <h2>The X-Spam Headers</h2>
+
+    <p>Many mail servers add X-Spam headers showing the spam score assigned to an email. <code>X-Spam-Score</code> shows the numerical score, and <code>X-Spam-Status</code> shows whether it was classified as spam and what threshold it was measured against. A negative score means the email looks clean. A positive score indicates spam characteristics were detected. If the score exceeds the threshold, the email is typically moved to junk automatically.</p>
+
+    <div class="tool-cta">
+      <p>📨 Paste the raw headers from any email into the Email Header Analyzer — it traces the full delivery path, shows authentication results, calculates hop timings, and flags suspicious patterns automatically.</p>
+      <a href="email-header-analyzer.html">Open Email Header Analyzer →</a>
+    </div>
+
+  </div>
+
+  <div class="related">
+    <h3>Related Guides</h3>
+    <div class="related-grid">
+      <a class="related-card" href="guide-email-spam.html"><div class="tag">Email Deliverability</div><div class="title">Why Your Email Is Going to Spam — and How to Fix It</div></a>
+      <a class="related-card" href="guide-m365-security.html"><div class="tag">M365 Security</div><div class="title">The M365 Security Settings Most Small Businesses Get Wrong</div></a>
+      <a class="related-card" href="guide-conditional-access.html"><div class="tag">Conditional Access</div><div class="title">What Conditional Access Actually Does — in Plain English</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="guides.html">Guides</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+</script>
+</body>
+</html>

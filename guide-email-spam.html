@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Email Is Going to Spam — and How to Fix It | Salman IT Tools</title>
+<meta name="description" content="SPF passes but emails still land in junk. Learn the real causes of email deliverability failures — DKIM, DMARC, IP reputation, content scoring — and exactly what to check.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+.article-wrap{max-width:780px;margin:0 auto;padding:60px 24px 80px}
+.breadcrumb{font-size:0.78rem;color:var(--muted);margin-bottom:24px}
+.breadcrumb a{color:var(--green);text-decoration:none}
+.article-tag{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green);margin-bottom:12px}
+.article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,3.5rem);line-height:1;letter-spacing:.02em;color:var(--white);margin-bottom:16px}
+.article-meta{font-size:0.8rem;color:var(--muted);margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.article-body h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin:36px 0 12px}
+.article-body h3{font-size:1rem;font-weight:700;color:var(--white);margin:24px 0 8px}
+.article-body p{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:16px}
+.article-body ul,.article-body ol{margin:0 0 16px 20px}
+.article-body li{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:6px}
+.article-body strong{color:var(--white);font-weight:600}
+.callout{background:var(--card);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:16px 20px;margin:24px 0}
+.callout p{margin:0;font-size:0.9rem}
+.tool-cta{background:var(--card);border:1px solid rgba(0,232,122,0.2);border-radius:14px;padding:24px;margin:32px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tool-cta p{font-size:0.88rem;color:var(--muted);margin:0;flex:1}
+.tool-cta a{padding:10px 20px;background:linear-gradient(135deg,var(--green),#00C468);color:#080D14;font-weight:700;font-size:0.85rem;border-radius:8px;text-decoration:none;white-space:nowrap}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.related h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.related-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none;transition:border-color .2s}
+.related-card:hover{border-color:rgba(0,232,122,0.3)}
+.related-card .tag{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px}
+.related-card .title{font-size:0.88rem;font-weight:600;color:var(--white);line-height:1.4}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.article-wrap{padding:40px 16px 60px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="article-wrap">
+  <div class="breadcrumb"><a href="guides.html">← Guides</a></div>
+  <div class="article-tag">📧 Email Deliverability</div>
+  <h1 class="article-title">Why Your Email Is Going to Spam — and How to Fix It</h1>
+  <div class="article-meta">By Salman Tariq &nbsp;·&nbsp; Microsoft 365 & Email Security Specialist &nbsp;·&nbsp; 5 min read</div>
+
+  <div class="article-body">
+
+    <p>This is one of the most common support calls I handle. A business has set up SPF, thinks everything is fine, and then discovers their emails to certain recipients are consistently landing in junk. Or worse — they're not arriving at all. The frustrating thing is that SPF passing is just one piece of a much bigger picture, and on its own it means very little.</p>
+
+    <p>After dealing with email deliverability issues across hundreds of Microsoft 365 tenants over the years, I've seen the same root causes come up repeatedly. Here's what to actually check.</p>
+
+    <h2>1. SPF Passes But DKIM Isn't Configured</h2>
+
+    <p>This is the most common scenario I see. An IT team sets up SPF correctly — the record lists all the authorised sending IPs — but nobody has configured DKIM. Without a DKIM signature, the email has no cryptographic proof that the content hasn't been tampered with in transit. Modern spam filters, particularly Google's and Microsoft's, weight DKIM heavily. An email that passes SPF but has no DKIM signature gets a lower trust score than one that passes both.</p>
+
+    <p>In Microsoft 365, DKIM is not enabled by default. You have to go into the Defender portal, find the DKIM settings for each domain, and enable it. Once enabled, Microsoft generates two CNAME records you need to add to your DNS. Most people set this up once and forget about it — but if you've added new sending domains since your initial setup, they won't have DKIM configured.</p>
+
+    <h2>2. DMARC Is Missing or Set to p=none</h2>
+
+    <p>SPF and DKIM are the checks. DMARC is the policy that tells receiving mail servers what to do when those checks fail. Without DMARC, a server that receives an email failing SPF and DKIM has no guidance — it makes its own decision, which varies by provider and often results in inconsistent behaviour.</p>
+
+    <p>More importantly, DMARC with <strong>p=none</strong> does nothing to protect your domain from spoofing — it's monitoring mode only. Many organisations set it to p=none when they first configure it and never move it to quarantine or reject. The result is that anyone can send email appearing to come from your domain, and there's nothing stopping receiving servers from delivering it.</p>
+
+    <div class="callout">
+      <p><strong>Quick check:</strong> Use the Network Tools page to look up your domain's DMARC record. If you see <code>p=none</code> or no DMARC record at all, that's something worth addressing. A policy of <code>p=quarantine</code> or <code>p=reject</code> is the target once you're confident all legitimate sending sources are covered.</p>
+    </div>
+
+    <h2>3. Third-Party Senders Not in SPF</h2>
+
+    <p>Most businesses send email from more than one place — their mail server, a CRM like HubSpot or Salesforce, a marketing platform like Mailchimp, an invoicing tool, and so on. Every one of those platforms needs to be listed in your SPF record. If they're not, email they send on your behalf will fail SPF at the recipient's mail server.</p>
+
+    <p>The catch is that SPF has a hard limit of 10 DNS lookups. If your SPF record includes too many includes, it breaks entirely — not gracefully fails, but produces a permerror that causes deliverability problems across the board. I've seen this catch businesses out when they add a new sender platform without realising how close to the limit they already are.</p>
+
+    <h2>4. Sending IP or Domain Reputation</h2>
+
+    <p>Even with perfect SPF, DKIM and DMARC, emails can land in spam if the sending IP address has a poor reputation. This happens most often with shared email infrastructure — if you're on a shared IP range and another customer on that range has been sending spam, your IP reputation suffers by association.</p>
+
+    <p>Microsoft 365 uses dedicated IP ranges for business email, which generally have good reputations, but newly provisioned tenants or those with very low email volumes can sometimes end up on less reputable shared ranges initially. If you're sending from a third-party platform, check whether they offer dedicated IPs — worth the cost for high-volume sending.</p>
+
+    <h2>5. Content and Engagement Signals</h2>
+
+    <p>Spam filters don't just look at authentication — they analyse the email content itself. Links to domains with poor reputations, certain phrases historically associated with spam, high image-to-text ratios, and missing plain text versions of HTML emails all contribute to a higher spam score. If recipients consistently delete your emails without opening them, or mark them as spam, that engagement signal feeds back into how future emails are treated.</p>
+
+    <h2>Where to Start</h2>
+
+    <p>The quickest way to diagnose a deliverability problem is to look at the email headers of a message that landed in spam. The Authentication-Results header shows you exactly what SPF, DKIM and DMARC returned for that specific email. If SPF shows <code>pass</code>, DKIM shows <code>pass</code>, and DMARC shows <code>pass</code>, the issue is likely content or reputation rather than authentication. If any of those show <code>fail</code>, you have a clear starting point.</p>
+
+    <div class="tool-cta">
+      <p>📧 Paste the raw headers from the email that went to spam into the Email Header Analyzer — it'll show you exactly what SPF, DKIM and DMARC returned and flag any suspicious patterns.</p>
+      <a href="email-header-analyzer.html">Open Email Header Analyzer →</a>
+    </div>
+
+    <p>For checking your domain's DNS records — SPF, DKIM, DMARC and MX — without having to open a terminal, the Network Tools page queries them directly and shows you the current live values.</p>
+
+    <div class="tool-cta">
+      <p>🌐 Check your domain's SPF, DKIM, DMARC and MX records instantly — no terminal required.</p>
+      <a href="network-tools.html">Open Network Tools →</a>
+    </div>
+
+  </div>
+
+  <div class="related">
+    <h3>Related Guides</h3>
+    <div class="related-grid">
+      <a class="related-card" href="guide-email-headers.html"><div class="tag">Email Troubleshooting</div><div class="title">How to Read Email Headers When Something Goes Wrong</div></a>
+      <a class="related-card" href="guide-m365-security.html"><div class="tag">M365 Security</div><div class="title">The M365 Security Settings Most Small Businesses Get Wrong</div></a>
+      <a class="related-card" href="guide-conditional-access.html"><div class="tag">Conditional Access</div><div class="title">What Conditional Access Actually Does — in Plain English</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="guides.html">Guides</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+</script>
+</body>
+</html>

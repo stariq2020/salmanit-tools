@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The M365 Security Settings Most Small Businesses Get Wrong | Salman IT Tools</title>
+<meta name="description" content="After auditing hundreds of Microsoft 365 tenants, the same misconfigurations come up repeatedly. Here are the ones that matter most and how to fix them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+.article-wrap{max-width:780px;margin:0 auto;padding:60px 24px 80px}
+.breadcrumb{font-size:0.78rem;color:var(--muted);margin-bottom:24px}
+.breadcrumb a{color:var(--green);text-decoration:none}
+.article-tag{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green);margin-bottom:12px}
+.article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,3.5rem);line-height:1;letter-spacing:.02em;color:var(--white);margin-bottom:16px}
+.article-meta{font-size:0.8rem;color:var(--muted);margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.article-body h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin:36px 0 12px}
+.article-body h3{font-size:1rem;font-weight:700;color:var(--white);margin:24px 0 8px}
+.article-body p{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:16px}
+.article-body ul,.article-body ol{margin:0 0 16px 20px}
+.article-body li{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:6px}
+.article-body strong{color:var(--white);font-weight:600}
+.callout{background:var(--card);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:16px 20px;margin:24px 0}
+.callout p{margin:0;font-size:0.9rem}
+.callout.warn{border-left-color:#F59E0B}
+.tool-cta{background:var(--card);border:1px solid rgba(0,232,122,0.2);border-radius:14px;padding:24px;margin:32px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tool-cta p{font-size:0.88rem;color:var(--muted);margin:0;flex:1}
+.tool-cta a{padding:10px 20px;background:linear-gradient(135deg,var(--green),#00C468);color:#080D14;font-weight:700;font-size:0.85rem;border-radius:8px;text-decoration:none;white-space:nowrap}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.related h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.related-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none;transition:border-color .2s}
+.related-card:hover{border-color:rgba(0,232,122,0.3)}
+.related-card .tag{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px}
+.related-card .title{font-size:0.88rem;font-weight:600;color:var(--white);line-height:1.4}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.article-wrap{padding:40px 16px 60px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="article-wrap">
+  <div class="breadcrumb"><a href="guides.html">← Guides</a></div>
+  <div class="article-tag">🔒 Microsoft 365 Security</div>
+  <h1 class="article-title">The M365 Security Settings Most Small Businesses Get Wrong</h1>
+  <div class="article-meta">By Salman Tariq &nbsp;·&nbsp; Microsoft 365 & Cloud Security Specialist &nbsp;·&nbsp; 6 min read</div>
+
+  <div class="article-body">
+
+    <p>Managing Microsoft 365 tenants for businesses of all sizes, I see the same security gaps come up time and again. Most of them aren't difficult to fix — they're just settings that nobody told the business existed, or that got left at default during initial setup and were never revisited.</p>
+
+    <p>The consequences of getting these wrong range from annoying (email deliverability problems) to serious (account takeover, ransomware, data breach). Here are the ones I flag most consistently in tenant audits.</p>
+
+    <h2>1. MFA Is Not Enforced for All Users</h2>
+
+    <p>Microsoft's own research shows that enabling Multi-Factor Authentication blocks over 99.9% of account compromise attacks. Despite this, I still encounter tenants where MFA is optional, or where it's enforced for most users but not for specific accounts — often shared mailboxes, service accounts, or users who complained loudly enough that an IT admin quietly exempted them.</p>
+
+    <p>The right way to enforce MFA in a modern Microsoft 365 tenant is through <strong>Conditional Access policies</strong>, not the legacy per-user MFA settings. Conditional Access gives you much more control — you can require stronger authentication for admin accounts, require compliant devices for access to sensitive applications, and block access from high-risk locations. If you're still using the legacy per-user MFA toggle in the Microsoft 365 admin centre, it's worth moving to Conditional Access.</p>
+
+    <div class="callout warn">
+      <p><strong>Important:</strong> Before enforcing MFA via Conditional Access, make sure you have at least one break-glass admin account that's excluded from the policy — otherwise a misconfigured policy can lock everyone out of the tenant.</p>
+    </div>
+
+    <h2>2. Legacy Authentication Protocols Are Still Enabled</h2>
+
+    <p>Legacy authentication refers to older protocols like SMTP AUTH, POP3, IMAP, and basic authentication that don't support modern MFA. Even if you've enforced MFA for all users, accounts can still be compromised via legacy authentication because those protocols bypass MFA entirely — an attacker just needs a username and password.</p>
+
+    <p>Microsoft has been blocking basic authentication by default for new tenants since 2022, but many tenants created before that still have it enabled. The fix is a Conditional Access policy that blocks legacy authentication for all users. The only reason not to do this is if you have legacy line-of-business applications that still use basic auth — which is increasingly uncommon but does still exist in some industries.</p>
+
+    <h2>3. Audit Logging Is Not Enabled</h2>
+
+    <p>Microsoft 365 audit logging records user and admin activity across Exchange Online, SharePoint, OneDrive, Teams, and Azure AD. When a security incident happens — and eventually something will — audit logs are what tell you what actually occurred, when, and from where. Without them, you're investigating blind.</p>
+
+    <p>Audit logging is not enabled by default on older tenants. You enable it in the Microsoft Purview compliance portal. Once enabled, logs are retained for 90 days on standard licences and up to 10 years on E5 licences. It should be one of the first things configured in any new tenant.</p>
+
+    <h2>4. External Email Forwarding Is Unrestricted</h2>
+
+    <p>This is one that surprises people. By default in many Microsoft 365 tenants, users can configure their mailbox to automatically forward all incoming email to an external address. This is a significant data loss risk — a compromised account can silently forward every email to an attacker's address for months before anyone notices.</p>
+
+    <p>The fix is a mail flow rule (transport rule) in Exchange Online that blocks or limits external forwarding. Microsoft has introduced an anti-spam policy setting that controls this, but the default configuration in many tenants still allows it. Check your anti-spam outbound policy and set external forwarding to either blocked or supervised forwarding only.</p>
+
+    <h2>5. Admin Accounts Are Used for Day-to-Day Work</h2>
+
+    <p>Global Administrator accounts should be used only when administrator-level access is specifically needed — not as the daily driver account for checking email, browsing the web, or working in Teams. If an admin account is compromised while being used for everyday tasks, the attacker has immediate global admin access to the entire tenant.</p>
+
+    <p>The right approach is separate accounts: a standard user account for day-to-day work, and a dedicated admin account used only when administrative tasks need to be performed. The admin account shouldn't even have a mailbox — it exists purely for admin purposes. This is basic privileged access hygiene but it's still not universal.</p>
+
+    <h2>6. Secure Score Is Being Ignored</h2>
+
+    <p>Microsoft provides a free tool called Secure Score in the Microsoft Defender portal. It evaluates your tenant configuration against a set of security best practices and gives you a score, along with specific recommendations ordered by impact. Most tenants I see have a Secure Score well below 50% — which means there are straightforward improvements available that aren't being made.</p>
+
+    <p>Secure Score isn't perfect — some recommendations won't apply to every business — but it's a genuinely useful starting point for understanding your security posture without needing to know where to look.</p>
+
+    <div class="tool-cta">
+      <p>🔐 Run a security scan of your Microsoft 365 tenant — checks MFA, Conditional Access policies, secure score, sign-in logs, mail forwarding and more.</p>
+      <a href="m365-scan.html">Open M365 Security Scanner →</a>
+    </div>
+
+  </div>
+
+  <div class="related">
+    <h3>Related Guides</h3>
+    <div class="related-grid">
+      <a class="related-card" href="guide-conditional-access.html"><div class="tag">Conditional Access</div><div class="title">What Conditional Access Actually Does — in Plain English</div></a>
+      <a class="related-card" href="guide-email-spam.html"><div class="tag">Email Deliverability</div><div class="title">Why Your Email Is Going to Spam — and How to Fix It</div></a>
+      <a class="related-card" href="guide-email-headers.html"><div class="tag">Email Troubleshooting</div><div class="title">How to Read Email Headers When Something Goes Wrong</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="guides.html">Guides</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+</script>
+</body>
+</html>

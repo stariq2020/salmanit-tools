@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Conditional Access Actually Does — in Plain English | Salman IT Tools</title>
+<meta name="description" content="Conditional Access is one of the most powerful security tools in Microsoft 365, but most organisations either don't use it or have it configured badly. Here's what it does and where to start.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+.article-wrap{max-width:780px;margin:0 auto;padding:60px 24px 80px}
+.breadcrumb{font-size:0.78rem;color:var(--muted);margin-bottom:24px}
+.breadcrumb a{color:var(--green);text-decoration:none}
+.article-tag{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green);margin-bottom:12px}
+.article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,5vw,3.5rem);line-height:1;letter-spacing:.02em;color:var(--white);margin-bottom:16px}
+.article-meta{font-size:0.8rem;color:var(--muted);margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.article-body h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin:36px 0 12px}
+.article-body p{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:16px}
+.article-body ul{margin:0 0 16px 20px}
+.article-body li{font-size:0.95rem;color:var(--muted);line-height:1.85;margin-bottom:6px}
+.article-body strong{color:var(--white);font-weight:600}
+.callout{background:var(--card);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:16px 20px;margin:24px 0}
+.callout p{margin:0;font-size:0.9rem}
+.callout.warn{border-left-color:#F59E0B}
+.tool-cta{background:var(--card);border:1px solid rgba(0,232,122,0.2);border-radius:14px;padding:24px;margin:32px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tool-cta p{font-size:0.88rem;color:var(--muted);margin:0;flex:1}
+.tool-cta a{padding:10px 20px;background:linear-gradient(135deg,var(--green),#00C468);color:#080D14;font-weight:700;font-size:0.85rem;border-radius:8px;text-decoration:none;white-space:nowrap}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.related h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.related-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none;transition:border-color .2s}
+.related-card:hover{border-color:rgba(0,232,122,0.3)}
+.related-card .tag{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px}
+.related-card .title{font-size:0.88rem;font-weight:600;color:var(--white);line-height:1.4}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.article-wrap{padding:40px 16px 60px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="article-wrap">
+  <div class="breadcrumb"><a href="guides.html">← Guides</a></div>
+  <div class="article-tag">🛡️ Conditional Access</div>
+  <h1 class="article-title">What Conditional Access Actually Does — in Plain English</h1>
+  <div class="article-meta">By Salman Tariq &nbsp;·&nbsp; Microsoft 365 & Cloud Security Specialist &nbsp;·&nbsp; 6 min read</div>
+
+  <div class="article-body">
+
+    <p>Conditional Access is one of those Microsoft 365 features that gets mentioned a lot in security conversations but rarely gets explained clearly. Most IT documentation describes it in terms of its technical components — conditions, controls, policies — without really explaining what problem it's solving or why it matters in practice.</p>
+
+    <p>Having configured Conditional Access policies across hundreds of tenants, here's how I explain it to clients.</p>
+
+    <h2>The Basic Idea</h2>
+
+    <p>Traditional network security worked on the assumption that if you're inside the office network, you're trusted. If you're outside, you're not. That model collapsed when cloud services and remote working became the norm — users now access Microsoft 365 from their homes, hotels, airports, personal devices, and everywhere else. The network perimeter essentially disappeared.</p>
+
+    <p>Conditional Access is Microsoft's answer to this. Instead of deciding access based on where you are on the network, it decides access based on a set of conditions evaluated at sign-in time. Think of it as a smart security guard who checks not just your ID card, but also where you're logging in from, what device you're using, what application you're trying to access, and whether anything looks unusual about the attempt. Depending on what they find, they either let you in, ask for additional verification, or block you entirely.</p>
+
+    <h2>What Can It Check?</h2>
+
+    <p>A Conditional Access policy evaluates several things at sign-in:</p>
+
+    <ul>
+      <li><strong>Who is signing in</strong> — specific users, groups, or roles like Global Administrator or Exchange Administrator</li>
+      <li><strong>What application they're accessing</strong> — all apps, specific apps like SharePoint or Exchange, or a custom selection</li>
+      <li><strong>Where they're signing in from</strong> — specific named locations (like your office IP ranges), countries, or any location outside of trusted ones</li>
+      <li><strong>What device they're using</strong> — whether it's compliant with Intune policies, whether it's a domain-joined machine, what operating system it's running</li>
+      <li><strong>What client app they're using</strong> — modern browser, desktop app, or legacy protocols like basic authentication</li>
+      <li><strong>How risky the sign-in looks</strong> — Microsoft's risk scoring flags unusual patterns like impossible travel (logging in from London and then Sydney an hour later) or sign-ins from known malicious IPs</li>
+    </ul>
+
+    <h2>What Can It Do When Conditions Are Met?</h2>
+
+    <p>Based on those conditions, a Conditional Access policy can take one of several actions. It can <strong>grant access</strong> normally with no additional requirements. It can <strong>require MFA</strong> — the user has to pass a second factor before proceeding. It can require the device to be <strong>compliant</strong> (enrolled in Intune and meeting your security policies). It can require a <strong>hybrid Azure AD joined device</strong> — meaning a corporate machine that's domain-joined. Or it can <strong>block access</strong> entirely.</p>
+
+    <p>The power is in combining conditions and controls. For example: require MFA for all users, but require a compliant device for anyone trying to access SharePoint. Block access from countries you don't operate in. Allow access from the office without MFA, but require MFA for remote access. Require stronger authentication (like a hardware key or Windows Hello) for admin accounts.</p>
+
+    <h2>Common Policies Worth Having</h2>
+
+    <p>Most organisations should have at least these baseline policies in place:</p>
+
+    <ul>
+      <li><strong>Require MFA for all users</strong> — the single highest-impact security control available in Microsoft 365</li>
+      <li><strong>Require MFA for all admins</strong> — separate policy with stronger requirements, since admin accounts are the highest-value targets</li>
+      <li><strong>Block legacy authentication</strong> — prevents attackers from bypassing MFA by using older protocols</li>
+      <li><strong>Block access from high-risk sign-ins</strong> — automatically blocks sign-ins that Microsoft's risk scoring flags as likely compromised</li>
+    </ul>
+
+    <div class="callout warn">
+      <p><strong>Before enabling any Conditional Access policy:</strong> Always test in report-only mode first, and make sure you have a break-glass admin account excluded from your policies. A misconfigured policy blocking all admins is a serious situation to recover from.</p>
+    </div>
+
+    <h2>Why Most Organisations Get It Wrong</h2>
+
+    <p>The most common problem I see is organisations that have Conditional Access policies configured but haven't thought carefully about the exclusions. Every policy needs to exclude the break-glass admin account. Policies requiring compliant devices need to account for users who legitimately use personal devices. Policies blocking certain countries need to account for users who travel.</p>
+
+    <p>The second most common problem is having too many overlapping policies that interact in unexpected ways. When multiple policies apply to the same user, all of them have to be satisfied — which can create situations where a user is effectively blocked even though no individual policy was intended to block them.</p>
+
+    <p>The third is policies left in report-only mode long after they should have been enabled. Report-only mode is useful for testing but doesn't actually enforce anything — it just logs what would have happened. I've seen tenants with "require MFA" policies that have been in report-only mode for over a year.</p>
+
+    <div class="tool-cta">
+      <p>🛡️ The CA Policy Explainer lets you paste a raw Conditional Access policy JSON and get a plain English explanation of exactly what it does — who it applies to, what it checks, and what it requires.</p>
+      <a href="ca-policy-explainer.html">Open CA Policy Explainer →</a>
+    </div>
+
+    <div class="tool-cta">
+      <p>🔐 The M365 Security Scanner checks your tenant's Conditional Access policies and flags common gaps — missing MFA enforcement, legacy auth still enabled, admin accounts without stronger requirements.</p>
+      <a href="m365-scan.html">Open M365 Security Scanner →</a>
+    </div>
+
+  </div>
+
+  <div class="related">
+    <h3>Related Guides</h3>
+    <div class="related-grid">
+      <a class="related-card" href="guide-m365-security.html"><div class="tag">M365 Security</div><div class="title">The M365 Security Settings Most Small Businesses Get Wrong</div></a>
+      <a class="related-card" href="guide-email-spam.html"><div class="tag">Email Deliverability</div><div class="title">Why Your Email Is Going to Spam — and How to Fix It</div></a>
+      <a class="related-card" href="guide-email-headers.html"><div class="tag">Email Troubleshooting</div><div class="title">How to Read Email Headers When Something Goes Wrong</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="guides.html">Guides</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+</script>
+</body>
+</html>

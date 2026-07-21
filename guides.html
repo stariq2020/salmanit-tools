@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Guides & Resources — Salman IT Tools</title>
+<meta name="description" content="Practical IT guides from a Microsoft 365 expert with 25 years of experience. Email deliverability, M365 security, Conditional Access, email headers and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+.page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
+.eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:620px;margin-bottom:52px}
+.guides-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.guide-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;text-decoration:none;display:flex;flex-direction:column;gap:14px;transition:border-color .2s,transform .2s}
+.guide-card:hover{border-color:rgba(0,232,122,0.3);transform:translateY(-2px)}
+.guide-tag{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--green)}
+.guide-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.03em;color:var(--white);line-height:1.1}
+.guide-desc{font-size:0.85rem;color:var(--muted);line-height:1.7;flex:1}
+.guide-meta{display:flex;align-items:center;justify-content:space-between;font-size:0.75rem;color:var(--muted)}
+.guide-read{color:var(--green);font-weight:600}
+.about-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-top:56px;display:flex;gap:24px;align-items:flex-start}
+.about-box img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.about-box h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.about-box p{font-size:0.85rem;color:var(--muted);line-height:1.7}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html" class="active">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="eyebrow">Practical IT Knowledge</div>
+  <h1 class="page-title">Guides &<br><span class="acc">Resources</span></h1>
+  <p class="page-sub">Real-world IT guides written from 25 years of hands-on experience managing Microsoft 365, email infrastructure, and cloud security for businesses across the UK. No filler, no theory — just what actually works.</p>
+
+  <div class="guides-grid">
+
+    <a class="guide-card" href="guide-email-spam.html">
+      <div class="guide-tag">📧 Email Deliverability</div>
+      <div class="guide-title">Why Your Email Is Going to Spam — and How to Fix It</div>
+      <p class="guide-desc">SPF passes but emails still land in junk. DKIM is configured but something's still wrong. This guide walks through the real causes of email deliverability failures and exactly what to check.</p>
+      <div class="guide-meta"><span>5 min read</span><span class="guide-read">Read guide →</span></div>
+    </a>
+
+    <a class="guide-card" href="guide-m365-security.html">
+      <div class="guide-tag">🔒 Microsoft 365 Security</div>
+      <div class="guide-title">The M365 Security Settings Most Small Businesses Get Wrong</div>
+      <p class="guide-desc">After auditing hundreds of Microsoft 365 tenants, the same misconfigurations come up repeatedly. Here are the ones that matter most and how to fix them before they become a problem.</p>
+      <div class="guide-meta"><span>6 min read</span><span class="guide-read">Read guide →</span></div>
+    </a>
+
+    <a class="guide-card" href="guide-email-headers.html">
+      <div class="guide-tag">🔍 Email Troubleshooting</div>
+      <div class="guide-title">How to Read Email Headers When Something Goes Wrong</div>
+      <p class="guide-desc">Email headers contain the full story of where an email came from, where it went, and why it might have failed. Here's how to read them without needing a computer science degree.</p>
+      <div class="guide-meta"><span>5 min read</span><span class="guide-read">Read guide →</span></div>
+    </a>
+
+    <a class="guide-card" href="guide-conditional-access.html">
+      <div class="guide-tag">🛡️ Conditional Access</div>
+      <div class="guide-title">What Conditional Access Actually Does — in Plain English</div>
+      <p class="guide-desc">Conditional Access is one of the most powerful security tools in Microsoft 365, but most organisations either don't use it or have it configured badly. Here's what it does and where to start.</p>
+      <div class="guide-meta"><span>6 min read</span><span class="guide-read">Read guide →</span></div>
+    </a>
+
+  </div>
+
+  <div class="about-box">
+    <div>
+      <h3>About the Author</h3>
+      <p>These guides are written by Salman Tariq, a Microsoft 365 and cloud infrastructure specialist with over 25 years of IT experience. Salman works as an MSP engineer managing 500+ client tenants and runs his own consultancy, Salman IT Services, helping SMBs across the UK with cloud migrations, email security, and Microsoft 365 administration. The tools on this site were built to solve real problems encountered in day-to-day IT work.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="guides.html">Guides</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+</script>
+</body>
+</html>

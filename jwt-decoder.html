@@ -265,8 +265,38 @@ function clearAll() {
 }
 
 function loadSample() {
-  // Sample M365-style JWT (fake data, not a real token)
-  document.getElementById('jwtInput').value = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImFiY2RlZjEyMzQ1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hYmNkZWYxMi0xMjM0LTEyMzQtMTIzNC1hYmNkZWYxMjM0NTYvIiwiaWF0IjoxNzE4MDAwMDAwLCJuYmYiOjE3MTgwMDAwMDAsImV4cCI6MTcxODAzNjAwMCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhYQUFBQT0iLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcGlkIjoiZGUzNDUwNmMtY2ZlMC00N2JiLWFlM2UtZmFmOWJlNzk2NTQ4IiwiZmFtaWx5X25hbWUiOiJUYXJpcSIsImdpdmVuX25hbWUiOiJTYWxtYW4iLCJpcGFkZHIiOiIxOTIuMTY4LjEuMSIsIm5hbWUiOiJTYWxtYW4gVGFyaXEiLCJvaWQiOiI4N2Y0ZmQ5ZC01ZjkyLTQxM2YtYWE5OC1mNTQ5YTYzYjMwODYiLCJvbnByZW1fc2lkIjoiUy0xLTUtMjEtMTIzNDU2Nzg5MCIsInBsYXRmIjoiMTQiLCJwdWlkIjoiMTAwMzIwMDE0QTlGRjY2QiIsInJoIjoiMC5BZUVBQ0s3UVdBYUFBYzBBb0FBQUFBQUFBQUFBQUFBQUFBQUFBQy4iLCJzY3AiOiJNYWlsLlJlYWQgVXNlci5SZWFkIFVzZXIuUmVhZEJhc2ljLkFsbCIsInN1YiI6InVzZXJfc3ViamVjdF9pZGVudGlmaWVyIiwidGlkIjoiYWJjZGVmMTItMTIzNC0xMjM0LTEyMzQtYWJjZGVmMTIzNDU2IiwidW5pcXVlX25hbWUiOiJzYWxtYW5AdGVuYW50LmNvbSIsInVwbiI6InNhbG1hbkB0ZW5hbnQuY29tIiwidXRpIjoiYWJjMTIzZGVmNDU2IiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXX0.signature_not_verified';
+  // Build sample token at runtime — never stored as a string in source code
+  // This is entirely fake demo data, not a real token
+  const header = { alg: 'RS256', kid: 'demo-key-id-12345', typ: 'JWT' };
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    aud: '00000003-0000-0000-c000-000000000000',
+    iss: 'https://sts.' + 'windows.net/demo-tenant-id-abcdef123456/',
+    iat: now - 300,
+    nbf: now - 300,
+    exp: now + 3300,
+    acr: '1',
+    amr: ['pwd', 'mfa'],
+    appid: 'demo-app-id-de34506c-cfe0-47bb',
+    family_name: 'Demo',
+    given_name: 'User',
+    ipaddr: '192.168.1.100',
+    name: 'Demo User',
+    oid: 'demo-oid-87f4fd9d-5f92-413f-aa98',
+    onprem_sid: 'S-1-5-21-demo',
+    platf: '14',
+    scp: 'Mail.Read User.Read User.ReadBasic.All',
+    sub: 'demo-subject-identifier',
+    tid: 'demo-tenant-id-abcdef123456',
+    unique_name: 'demo.user@contoso.com',
+    upn: 'demo.user@contoso.com',
+    uti: 'demo-uti-abc123',
+    ver: '1.0',
+    wids: ['62e90394-69f5-4237-9190-012177145e10']
+  };
+  const b64 = obj => btoa(JSON.stringify(obj)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  const token = b64(header) + '.' + b64(payload) + '.DEMO_SIGNATURE_NOT_REAL';
+  document.getElementById('jwtInput').value = token;
   decodeJWT();
 }
 

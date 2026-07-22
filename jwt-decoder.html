@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JWT Decoder — Salman IT Tools</title>
+<meta name="description" content="Paste a JSON Web Token and instantly decode the header, payload and claims. See expiry time, user details, roles, scopes and tenant information. Free, private, runs in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--mono:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
+.eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
+
+/* Input */
+.input-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.input-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;display:block}
+.jwt-input{width:100%;min-height:120px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px;color:var(--white);font-family:var(--mono);font-size:0.78rem;line-height:1.6;resize:vertical;outline:none;transition:border-color .2s;word-break:break-all}
+.jwt-input:focus{border-color:rgba(0,232,122,0.4)}
+.jwt-input::placeholder{color:var(--muted)}
+.btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.decode-btn{padding:13px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
+.decode-btn:hover{opacity:.9;transform:scale(1.01)}
+.sample-btn{padding:13px 18px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
+.sample-btn:hover{background:rgba(0,200,255,0.12)}
+.clear-btn{padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
+.clear-btn:hover{color:var(--white)}
+
+/* Error */
+.error-card{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:none}
+.error-card p{font-size:0.88rem;color:var(--danger)}
+
+/* Results */
+.result-wrap{display:none}
+
+/* Status bar */
+.status-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.status-badge{font-size:0.75rem;font-weight:700;padding:5px 14px;border-radius:20px}
+.badge-valid{background:rgba(0,232,122,0.12);color:var(--green)}
+.badge-expired{background:rgba(239,68,68,0.12);color:var(--danger)}
+.badge-warning{background:rgba(245,158,11,0.12);color:var(--warning)}
+.badge-info{background:rgba(0,200,255,0.1);color:var(--cyan)}
+
+/* Section cards */
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.section-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;user-select:none}
+.section-header:hover{background:rgba(255,255,255,0.02)}
+.section-icon{font-size:1.1rem}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white)}
+.section-arrow{margin-left:auto;color:var(--muted);transition:transform .2s;font-size:0.9rem}
+.section-body{padding:20px}
+
+/* Claims table */
+.claims-table{width:100%;border-collapse:collapse}
+.claims-table tr{border-bottom:1px solid var(--border)}
+.claims-table tr:last-child{border-bottom:none}
+.claims-table td{padding:10px 12px;vertical-align:top}
+.claim-key{font-family:var(--mono);font-size:0.78rem;color:var(--cyan);white-space:nowrap;width:140px}
+.claim-label{font-size:0.72rem;color:var(--muted);display:block;margin-top:2px}
+.claim-val{font-family:var(--mono);font-size:0.82rem;color:var(--white);word-break:break-all}
+.claim-val.highlight{color:var(--green);font-weight:600}
+.claim-val.danger{color:var(--danger)}
+.claim-val.warn{color:var(--warning)}
+
+/* Raw section */
+.raw-pre{font-family:var(--mono);font-size:0.78rem;color:var(--muted);line-height:1.7;white-space:pre-wrap;word-break:break-all;background:rgba(255,255,255,0.02);border-radius:8px;padding:14px;overflow-x:auto}
+
+/* Encoded parts */
+.parts-wrap{display:flex;flex-direction:column;gap:8px}
+.part-row{border-radius:8px;padding:10px 14px}
+.part-header-color{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15)}
+.part-payload-color{background:rgba(0,232,122,0.06);border:1px solid rgba(0,232,122,0.15)}
+.part-sig-color{background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.15)}
+.part-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.part-header-color .part-label{color:#EF4444}
+.part-payload-color .part-label{color:var(--green)}
+.part-sig-color .part-label{color:var(--cyan)}
+.part-val{font-family:var(--mono);font-size:0.72rem;color:var(--muted);word-break:break-all;line-height:1.6}
+
+/* Info section */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.claim-key{width:100px}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="eyebrow">M365 &amp; Security Tools</div>
+  <h1 class="page-title">JWT<br><span class="acc">Decoder</span></h1>
+  <p class="page-sub">Paste a JSON Web Token to instantly decode the header, payload and all claims — expiry time, user details, roles, scopes, tenant ID and more. Runs entirely in your browser, nothing sent anywhere.</p>
+
+  <div class="input-card">
+    <label class="input-label">Paste JWT Token</label>
+    <textarea class="jwt-input" id="jwtInput" placeholder="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cG4iOiJ1c2VyQGV4YW1wbGUuY29tIn0.signature"></textarea>
+    <div class="btn-row">
+      <button class="decode-btn" onclick="decodeJWT()">🔍 Decode Token</button>
+      <button class="sample-btn" onclick="loadSample()">📋 Load Sample</button>
+      <button class="clear-btn" onclick="clearAll()">🗑️ Clear</button>
+    </div>
+  </div>
+
+  <div class="error-card" id="errorCard"><p id="errorMsg"></p></div>
+
+  <div class="result-wrap" id="resultWrap">
+
+    <!-- Status bar -->
+    <div class="status-bar" id="statusBar"></div>
+
+    <!-- Token Claims -->
+    <div class="section-card">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-icon">📋</span>
+        <span class="section-title">Token Claims</span>
+        <span class="section-arrow">▾</span>
+      </div>
+      <div class="section-body">
+        <table class="claims-table" id="claimsTable"></table>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="section-card">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-icon">🔴</span>
+        <span class="section-title">Header</span>
+        <span class="section-arrow">▾</span>
+      </div>
+      <div class="section-body">
+        <pre class="raw-pre" id="headerPre"></pre>
+      </div>
+    </div>
+
+    <!-- Payload -->
+    <div class="section-card">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-icon">🟢</span>
+        <span class="section-title">Payload (Raw JSON)</span>
+        <span class="section-arrow">▾</span>
+      </div>
+      <div class="section-body">
+        <pre class="raw-pre" id="payloadPre"></pre>
+      </div>
+    </div>
+
+    <!-- Encoded parts -->
+    <div class="section-card">
+      <div class="section-header" onclick="toggleSection(this)">
+        <span class="section-icon">🔵</span>
+        <span class="section-title">Encoded Parts</span>
+        <span class="section-arrow">▾</span>
+      </div>
+      <div class="section-body">
+        <div class="parts-wrap" id="partsWrap"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Info section -->
+  <div class="info-section">
+    <div class="eyebrow">What Is a JWT?</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">JSON Web Tokens Explained</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">A JSON Web Token (JWT) is a compact, self-contained way of securely transmitting information between parties. They are widely used in modern authentication — when you sign into Microsoft 365, Azure, an API, or any OAuth-based system, a JWT is issued to prove your identity and permissions. The token contains claims — statements about the user such as their email, roles, tenant ID, and when the token expires.</p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:32px">A JWT has three parts separated by dots: the header (algorithm and token type), the payload (the actual claims), and the signature (cryptographic proof). The header and payload are base64url encoded — not encrypted, just encoded — which means anyone can read the contents. The signature is what prevents tampering.</p>
+
+    <div class="info-grid">
+      <div class="info-card"><h4>Common M365 Claims</h4><p>upn (user principal name), oid (object ID), tid (tenant ID), roles, scp (scopes), iss (issuer), aud (audience), exp (expiry), iat (issued at).</p></div>
+      <div class="info-card"><h4>Where You See JWTs</h4><p>OAuth access tokens, Microsoft Graph API calls, Azure AD authentication, Conditional Access token inspection, API debugging, SSO troubleshooting.</p></div>
+      <div class="info-card"><h4>Are JWTs Secure?</h4><p>The payload is readable by anyone — never put sensitive secrets in a JWT. Security comes from the signature: only the issuer can create a valid signed token, so the claims can be trusted.</p></div>
+      <div class="info-card"><h4>100% Private</h4><p>Decoding happens entirely in your browser. Your token is never sent to any server. This is important — JWT tokens are credentials and should be treated with care.</p></div>
+    </div>
+
+    <div style="margin-top:48px">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="info-card"><h4 style="margin-bottom:6px">How do I get a JWT token from Microsoft 365?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">The easiest way is via the Microsoft Graph Explorer at graph.microsoft.com — sign in, click the Access token tab, and copy the token. You can also capture tokens using browser DevTools (Network tab) while authenticated in the Azure portal or M365 admin centre.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">What does the exp claim mean?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">exp is the expiry time, stored as a Unix timestamp (seconds since 1 January 1970). This tool converts it to a readable date and time, and flags the token as expired if the current time is past the exp value. Most Microsoft 365 access tokens expire after 1 hour.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">What's the difference between access tokens and ID tokens?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Access tokens are used to call APIs — they contain scopes (scp) defining what the caller is allowed to do. ID tokens are used to authenticate a user — they contain identity information like name and email. Both are JWTs in Microsoft's implementation.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">Is it safe to paste a JWT into this tool?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Yes — decoding happens entirely in your browser using JavaScript. Nothing is sent to any server. That said, treat access tokens like passwords — don't share them in public, and be aware they grant access to whatever scopes they contain until they expire.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+window.addEventListener('scroll', closeMobileMenu);
+
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.section-arrow');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? 'rotate(-90deg)' : '';
+}
+
+function showError(msg) {
+  document.getElementById('errorCard').style.display = 'block';
+  document.getElementById('errorMsg').textContent = msg;
+  document.getElementById('resultWrap').style.display = 'none';
+}
+
+function clearAll() {
+  document.getElementById('jwtInput').value = '';
+  document.getElementById('errorCard').style.display = 'none';
+  document.getElementById('resultWrap').style.display = 'none';
+}
+
+function loadSample() {
+  // Sample M365-style JWT (fake data, not a real token)
+  document.getElementById('jwtInput').value = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImFiY2RlZjEyMzQ1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9hYmNkZWYxMi0xMjM0LTEyMzQtMTIzNC1hYmNkZWYxMjM0NTYvIiwiaWF0IjoxNzE4MDAwMDAwLCJuYmYiOjE3MTgwMDAwMDAsImV4cCI6MTcxODAzNjAwMCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhYQUFBQT0iLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcGlkIjoiZGUzNDUwNmMtY2ZlMC00N2JiLWFlM2UtZmFmOWJlNzk2NTQ4IiwiZmFtaWx5X25hbWUiOiJUYXJpcSIsImdpdmVuX25hbWUiOiJTYWxtYW4iLCJpcGFkZHIiOiIxOTIuMTY4LjEuMSIsIm5hbWUiOiJTYWxtYW4gVGFyaXEiLCJvaWQiOiI4N2Y0ZmQ5ZC01ZjkyLTQxM2YtYWE5OC1mNTQ5YTYzYjMwODYiLCJvbnByZW1fc2lkIjoiUy0xLTUtMjEtMTIzNDU2Nzg5MCIsInBsYXRmIjoiMTQiLCJwdWlkIjoiMTAwMzIwMDE0QTlGRjY2QiIsInJoIjoiMC5BZUVBQ0s3UVdBYUFBYzBBb0FBQUFBQUFBQUFBQUFBQUFBQUFBQy4iLCJzY3AiOiJNYWlsLlJlYWQgVXNlci5SZWFkIFVzZXIuUmVhZEJhc2ljLkFsbCIsInN1YiI6InVzZXJfc3ViamVjdF9pZGVudGlmaWVyIiwidGlkIjoiYWJjZGVmMTItMTIzNC0xMjM0LTEyMzQtYWJjZGVmMTIzNDU2IiwidW5pcXVlX25hbWUiOiJzYWxtYW5AdGVuYW50LmNvbSIsInVwbiI6InNhbG1hbkB0ZW5hbnQuY29tIiwidXRpIjoiYWJjMTIzZGVmNDU2IiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXX0.signature_not_verified';
+  decodeJWT();
+}
+
+function b64urlDecode(str) {
+  // Add padding
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  try {
+    return atob(str);
+  } catch(e) {
+    throw new Error('Invalid base64url encoding');
+  }
+}
+
+function parseJWTPart(str) {
+  const decoded = b64urlDecode(str);
+  return JSON.parse(decoded);
+}
+
+function fmtTimestamp(ts) {
+  if (!ts) return null;
+  const d = new Date(ts * 1000);
+  return d.toLocaleString('en-GB', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});
+}
+
+function isExpired(exp) {
+  if (!exp) return false;
+  return Date.now() / 1000 > exp;
+}
+
+// Well-known claim descriptions
+const CLAIM_INFO = {
+  iss: { label: 'Issuer', desc: 'Who issued the token' },
+  sub: { label: 'Subject', desc: 'Unique identifier for the user' },
+  aud: { label: 'Audience', desc: 'Who the token is intended for' },
+  exp: { label: 'Expiry', desc: 'When the token expires' },
+  nbf: { label: 'Not Before', desc: 'Token not valid before this time' },
+  iat: { label: 'Issued At', desc: 'When the token was issued' },
+  jti: { label: 'JWT ID', desc: 'Unique identifier for this token' },
+  upn: { label: 'User Principal Name', desc: 'User\'s login name (email)' },
+  name: { label: 'Display Name', desc: 'User\'s full display name' },
+  given_name: { label: 'First Name', desc: 'User\'s first name' },
+  family_name: { label: 'Last Name', desc: 'User\'s last name' },
+  email: { label: 'Email', desc: 'User\'s email address' },
+  unique_name: { label: 'Unique Name', desc: 'User\'s unique login name' },
+  oid: { label: 'Object ID', desc: 'User\'s unique object ID in Azure AD' },
+  tid: { label: 'Tenant ID', desc: 'Azure AD tenant the token belongs to' },
+  scp: { label: 'Scopes', desc: 'Permissions granted to this token' },
+  roles: { label: 'App Roles', desc: 'Application roles assigned to the user' },
+  wids: { label: 'Directory Roles', desc: 'Azure AD directory role IDs' },
+  amr: { label: 'Auth Methods', desc: 'How the user authenticated (pwd, mfa, etc.)' },
+  acr: { label: 'Auth Context', desc: 'Authentication context class reference' },
+  appid: { label: 'App ID', desc: 'Client application ID that requested the token' },
+  azp: { label: 'Authorised Party', desc: 'Client that the token was issued to' },
+  ipaddr: { label: 'IP Address', desc: 'IP address of the client at sign-in' },
+  ver: { label: 'Token Version', desc: 'Version of the token format' },
+  nonce: { label: 'Nonce', desc: 'Value used to prevent replay attacks' },
+  platf: { label: 'Platform', desc: 'Platform the client is running on' },
+  puid: { label: 'PUID', desc: 'Microsoft account identifier' },
+  onprem_sid: { label: 'On-Prem SID', desc: 'On-premises Active Directory security identifier' },
+  alg: { label: 'Algorithm', desc: 'Signing algorithm used' },
+  typ: { label: 'Token Type', desc: 'Type of token (JWT)' },
+  kid: { label: 'Key ID', desc: 'Identifier of the key used to sign the token' },
+};
+
+// Known directory role GUIDs
+const DIR_ROLES = {
+  '62e90394-69f5-4237-9190-012177145e10': 'Global Administrator',
+  '194ae4cb-b126-40b2-bd5b-6091b380977d': 'Security Administrator',
+  'b1be1c3e-b65d-4f19-8427-f6fa0d97feb9': 'Conditional Access Administrator',
+  'e8611ab8-c189-46e8-94e1-60213ab1f814': 'Privileged Role Administrator',
+  '729827e3-9c14-49f7-bb1b-9608f156bbb8': 'Helpdesk Administrator',
+  'fe930be7-5e62-47db-91af-98c3a49a38b1': 'User Administrator',
+  '29232cdf-9323-42fd-ade2-1d097af3e4de': 'Exchange Administrator',
+  'f28a1f50-f6e7-4571-818b-6a12f2af6b6c': 'SharePoint Administrator',
+  '69091246-20e8-4a56-aa4d-066075b2a7a8': 'Teams Administrator',
+  '3a2c62db-5318-420d-8d74-23affee5d9d5': 'Intune Administrator',
+  '5d6b6bb7-de71-4623-b4af-96380a352509': 'Security Reader',
+  '4a5d8f65-41da-4de4-8968-e035b65339cf': 'Reports Reader',
+};
+
+function resolveWids(wids) {
+  if (!Array.isArray(wids)) return String(wids);
+  return wids.map(w => DIR_ROLES[w] ? `${DIR_ROLES[w]} (${w.substring(0,8)}…)` : w).join(', ');
+}
+
+function formatClaimValue(key, val) {
+  if ((key === 'exp' || key === 'iat' || key === 'nbf') && typeof val === 'number') {
+    const dateStr = fmtTimestamp(val);
+    const expired = key === 'exp' && isExpired(val);
+    const cls = expired ? 'danger' : (key === 'exp' ? 'highlight' : '');
+    return `<span class="claim-val ${cls}">${val} <span style="font-size:0.75rem;opacity:.7">(${dateStr}${expired ? ' — EXPIRED' : ''})</span></span>`;
+  }
+  if (key === 'wids' && Array.isArray(val)) {
+    return `<span class="claim-val highlight">${escHtml(resolveWids(val))}</span>`;
+  }
+  if (key === 'scp' && typeof val === 'string') {
+    const scopes = val.split(' ').map(s => `<span style="background:rgba(0,200,255,0.1);color:var(--cyan);padding:1px 6px;border-radius:4px;font-size:0.75rem;margin:1px;display:inline-block">${escHtml(s)}</span>`).join(' ');
+    return `<span class="claim-val">${scopes}</span>`;
+  }
+  if (key === 'amr' && Array.isArray(val)) {
+    const amrNames = {'pwd':'Password','mfa':'MFA','rsa':'RSA','otp':'OTP','fed':'Federated','wia':'Windows Integrated','ngcmfa':'Windows Hello MFA'};
+    return `<span class="claim-val highlight">${val.map(a => amrNames[a] || a).join(', ')}</span>`;
+  }
+  if (Array.isArray(val)) {
+    return `<span class="claim-val">${escHtml(val.join(', '))}</span>`;
+  }
+  const str = typeof val === 'object' ? JSON.stringify(val) : String(val);
+  const cls = (key === 'upn' || key === 'name' || key === 'email' || key === 'unique_name') ? 'highlight' : '';
+  return `<span class="claim-val ${cls}">${escHtml(str)}</span>`;
+}
+
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+function decodeJWT() {
+  const raw = document.getElementById('jwtInput').value.trim();
+  if (!raw) { showError('Please paste a JWT token first.'); return; }
+
+  document.getElementById('errorCard').style.display = 'none';
+
+  const parts = raw.split('.');
+  if (parts.length !== 3) {
+    showError(`Invalid JWT format. A valid JWT has exactly 3 parts separated by dots — found ${parts.length} part${parts.length !== 1 ? 's' : ''}.`);
+    return;
+  }
+
+  let header, payload;
+  try { header = parseJWTPart(parts[0]); } catch(e) { showError('Could not decode the JWT header: ' + e.message); return; }
+  try { payload = parseJWTPart(parts[1]); } catch(e) { showError('Could not decode the JWT payload: ' + e.message); return; }
+
+  // Status bar
+  const badges = [];
+  const expired = isExpired(payload.exp);
+  if (expired) {
+    badges.push(`<span class="status-badge badge-expired">⚠️ Token Expired</span>`);
+  } else if (payload.exp) {
+    badges.push(`<span class="status-badge badge-valid">✅ Token Valid</span>`);
+  }
+  if (header.alg) badges.push(`<span class="status-badge badge-info">Algorithm: ${escHtml(header.alg)}</span>`);
+  if (payload.tid) badges.push(`<span class="status-badge badge-info">Tenant: ${escHtml(payload.tid.substring(0,8))}…</span>`);
+  if (payload.upn || payload.unique_name) badges.push(`<span class="status-badge badge-info">User: ${escHtml(payload.upn || payload.unique_name)}</span>`);
+  if (payload.wids?.includes('62e90394-69f5-4237-9190-012177145e10')) {
+    badges.push(`<span class="status-badge badge-warning">⚠️ Global Admin Token</span>`);
+  }
+  document.getElementById('statusBar').innerHTML = badges.join('');
+
+  // Claims table — merge header + payload, known claims first
+  const allClaims = {...header, ...payload};
+  const knownOrder = ['upn','unique_name','name','given_name','family_name','email','oid','tid','iss','aud','exp','iat','nbf','scp','roles','wids','amr','acr','appid','azp','ipaddr','ver','alg','typ','kid'];
+  const sortedKeys = [...new Set([...knownOrder.filter(k => k in allClaims), ...Object.keys(allClaims).filter(k => !knownOrder.includes(k))])];
+
+  let tableHtml = '';
+  sortedKeys.forEach(key => {
+    const info = CLAIM_INFO[key];
+    const labelHtml = info ? `<span class="claim-label">${info.label} — ${info.desc}</span>` : '';
+    tableHtml += `<tr>
+      <td class="claim-key">${escHtml(key)}${labelHtml}</td>
+      <td>${formatClaimValue(key, allClaims[key])}</td>
+    </tr>`;
+  });
+  document.getElementById('claimsTable').innerHTML = tableHtml;
+
+  // Raw JSON sections
+  document.getElementById('headerPre').textContent = JSON.stringify(header, null, 2);
+  document.getElementById('payloadPre').textContent = JSON.stringify(payload, null, 2);
+
+  // Encoded parts
+  document.getElementById('partsWrap').innerHTML = `
+    <div class="part-row part-header-color">
+      <div class="part-label">Header (red)</div>
+      <div class="part-val">${escHtml(parts[0])}</div>
+    </div>
+    <div class="part-row part-payload-color">
+      <div class="part-label">Payload (green)</div>
+      <div class="part-val">${escHtml(parts[1])}</div>
+    </div>
+    <div class="part-row part-sig-color">
+      <div class="part-label">Signature (blue) — not verified</div>
+      <div class="part-val">${escHtml(parts[2])}</div>
+    </div>`;
+
+  document.getElementById('resultWrap').style.display = 'block';
+  document.getElementById('resultWrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>

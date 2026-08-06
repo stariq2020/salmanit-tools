@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subnet Calculator — Salman IT Tools</title>
+<meta name="description" content="Free online subnet calculator. Enter an IP address and CIDR prefix to instantly get network address, broadcast, usable host range, subnet mask, wildcard mask and total hosts. IPv4 and CIDR supported.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--mono:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
+.eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
+
+/* Input area */
+.input-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
+.input-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.input-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:180px}
+.input-group label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.ip-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--white);font-family:var(--mono);font-size:1rem;outline:none;transition:border-color .2s;width:100%}
+.ip-input:focus{border-color:rgba(0,232,122,0.4)}
+.ip-input::placeholder{color:var(--muted)}
+.slash{font-family:var(--mono);font-size:1.4rem;color:var(--muted);padding-bottom:12px;flex-shrink:0}
+.cidr-input{width:80px;text-align:center;flex:none}
+.calc-btn{padding:12px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;flex-shrink:0;height:48px}
+.calc-btn:hover{opacity:.9;transform:scale(1.01)}
+
+/* Quick CIDR buttons */
+.quick-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.quick-label{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);align-self:center}
+.quick-btn{padding:5px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:0.78rem;cursor:pointer;transition:all .2s}
+.quick-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+
+/* Error */
+.error-card{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:none}
+.error-card p{font-size:0.88rem;color:var(--danger)}
+
+/* Results */
+.result-wrap{display:none}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:20px}
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.result-card.highlight{border-color:rgba(0,232,122,0.3);background:rgba(0,232,122,0.04)}
+.result-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px}
+.result-val{font-family:var(--mono);font-size:1.1rem;font-weight:600;color:var(--white);word-break:break-all}
+.result-val.accent{color:var(--green)}
+.result-sub{font-size:0.72rem;color:var(--muted);margin-top:4px}
+
+/* Binary visual */
+.binary-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;overflow-x:auto}
+.binary-card h4{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:12px}
+.binary-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:nowrap}
+.binary-row-label{font-size:0.72rem;color:var(--muted);width:120px;flex-shrink:0}
+.binary-bits{display:flex;gap:2px}
+.bit-group{display:flex;gap:2px;margin-right:4px}
+.bit{width:16px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.65rem;font-weight:700}
+.bit.net{background:rgba(0,232,122,0.2);color:var(--green)}
+.bit.host{background:rgba(255,255,255,0.06);color:var(--muted)}
+
+/* Subnet split */
+.split-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+.split-card h4{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:14px}
+.split-controls{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.split-controls label{font-size:0.78rem;color:var(--muted)}
+.split-controls select{background:#0E1A2E;border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none}
+.subnets-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:0.78rem}
+.subnets-table th{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.subnets-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--white)}
+.subnets-table tr:last-child td{border-bottom:none}
+.subnets-table tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* Info */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
+
+/* Common subnets reference */
+.ref-table{width:100%;border-collapse:collapse;margin-top:16px}
+.ref-table th{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.ref-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.82rem;color:var(--muted)}
+.ref-table td:first-child{font-family:var(--mono);color:var(--white)}
+.ref-table tr:hover td{background:rgba(255,255,255,0.02)}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.input-row{flex-direction:column}.slash{display:none}.cidr-input{width:100%}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="eyebrow">Network Tools</div>
+  <h1 class="page-title">Subnet<br><span class="acc">Calculator</span></h1>
+  <p class="page-sub">Enter an IP address and CIDR prefix to instantly calculate network address, broadcast address, usable host range, subnet mask, wildcard mask, and total hosts. Includes subnet splitting and binary visualisation.</p>
+
+  <div class="input-card">
+    <div class="input-row">
+      <div class="input-group">
+        <label>IP Address</label>
+        <input class="ip-input" type="text" id="ipInput" placeholder="192.168.1.0" oninput="autoCalc()"/>
+      </div>
+      <div class="slash">/</div>
+      <div class="input-group" style="flex:none">
+        <label>Prefix</label>
+        <input class="ip-input cidr-input" type="number" id="cidrInput" placeholder="24" min="0" max="32" value="24" oninput="autoCalc()"/>
+      </div>
+      <button class="calc-btn" onclick="calculate()">Calculate</button>
+    </div>
+    <div class="quick-row">
+      <span class="quick-label">Quick:</span>
+      <button class="quick-btn" onclick="setQuick('192.168.1.0',24)">/24 — Class C</button>
+      <button class="quick-btn" onclick="setQuick('172.16.0.0',16)">/16 — Class B</button>
+      <button class="quick-btn" onclick="setQuick('10.0.0.0',8)">/8 — Class A</button>
+      <button class="quick-btn" onclick="setQuick('192.168.1.0',28)">/28 — 14 hosts</button>
+      <button class="quick-btn" onclick="setQuick('10.10.10.0',30)">/30 — Point-to-point</button>
+      <button class="quick-btn" onclick="setQuick('172.16.0.0',12)">/12 — RFC1918</button>
+    </div>
+  </div>
+
+  <div class="error-card" id="errorCard"><p id="errorMsg"></p></div>
+
+  <div class="result-wrap" id="resultWrap">
+
+    <!-- Main results -->
+    <div class="result-grid" id="resultGrid"></div>
+
+    <!-- Binary visualisation -->
+    <div class="binary-card" id="binaryCard">
+      <h4>Binary Representation — <span style="color:var(--green)">■</span> Network bits &nbsp; <span style="color:var(--muted)">■</span> Host bits</h4>
+      <div id="binaryRows"></div>
+    </div>
+
+    <!-- Subnet splitter -->
+    <div class="split-card">
+      <h4>Subnet Splitter</h4>
+      <div class="split-controls">
+        <label>Split into subnets of prefix:</label>
+        <select id="splitPrefix" onchange="renderSplit()"></select>
+        <span id="splitInfo" style="font-size:0.78rem;color:var(--muted)"></span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="subnets-table">
+          <thead><tr><th>#</th><th>Network</th><th>First Host</th><th>Last Host</th><th>Broadcast</th><th>Hosts</th></tr></thead>
+          <tbody id="splitBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Reference table -->
+  <div class="info-section">
+    <div class="eyebrow">Quick Reference</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Common Subnet Reference</h2>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px">
+      <table class="ref-table">
+        <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Hosts</th><th>Common Use</th></tr></thead>
+        <tbody>
+          <tr><td>/8</td><td>255.0.0.0</td><td>16,777,214</td><td>RFC1918 — 10.0.0.0/8 large enterprise</td></tr>
+          <tr><td>/12</td><td>255.240.0.0</td><td>1,048,574</td><td>RFC1918 — 172.16.0.0/12</td></tr>
+          <tr><td>/16</td><td>255.255.0.0</td><td>65,534</td><td>RFC1918 — 192.168.0.0/16, campus networks</td></tr>
+          <tr><td>/20</td><td>255.255.240.0</td><td>4,094</td><td>Large office, Azure/AWS VNets</td></tr>
+          <tr><td>/22</td><td>255.255.252.0</td><td>1,022</td><td>Medium office, cloud subnets</td></tr>
+          <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>Typical office LAN — most common</td></tr>
+          <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>Split /24 in half</td></tr>
+          <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>Small department or VLAN</td></tr>
+          <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>Small team or server subnet</td></tr>
+          <tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>Small server group or DMZ</td></tr>
+          <tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>Very small subnet</td></tr>
+          <tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>Point-to-point WAN links</td></tr>
+          <tr><td>/31</td><td>255.255.255.254</td><td>2*</td><td>Point-to-point (RFC3021, no broadcast)</td></tr>
+          <tr><td>/32</td><td>255.255.255.255</td><td>1</td><td>Single host route, loopback</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Understanding Subnetting</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">Subnetting is the process of dividing a larger IP network into smaller, more manageable sub-networks. Every IP address on a network has two parts — the network portion (which identifies which network it belongs to) and the host portion (which identifies the specific device). The CIDR prefix length (the number after the slash) tells you how many bits are used for the network portion.</p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">A /24 network, for example, uses 24 bits for the network and 8 bits for hosts — giving 2⁸ = 256 addresses, minus 2 reserved (network address and broadcast), leaving 254 usable hosts. A /25 splits that in half — two subnets of 126 hosts each. Every time you add one to the prefix, you halve the number of hosts but double the number of subnets you can create.</p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">In cloud environments like Azure and AWS, subnetting is particularly important — VNets and VPCs are defined by CIDR blocks, and subnets within them must be planned carefully to allow room for growth, separate security zones, and efficient routing.</p>
+
+    <div class="info-grid" style="margin-top:28px">
+      <div class="info-card"><h4>Network Address</h4><p>The first address in a subnet — identifies the network itself. Cannot be assigned to a host. All host bits are zero.</p></div>
+      <div class="info-card"><h4>Broadcast Address</h4><p>The last address in a subnet — used to send packets to all hosts on the network. Cannot be assigned to a host. All host bits are one.</p></div>
+      <div class="info-card"><h4>Usable Host Range</h4><p>All addresses between the network address and broadcast address. These can be assigned to devices. Total usable = 2ⁿ − 2 where n is the number of host bits.</p></div>
+      <div class="info-card"><h4>Wildcard Mask</h4><p>The inverse of the subnet mask — used in access control lists (ACLs) and routing protocols like OSPF. Where the subnet mask has 1s, the wildcard mask has 0s, and vice versa.</p></div>
+    </div>
+
+    <div style="margin-top:40px">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="info-card"><h4 style="margin-bottom:6px">What is CIDR notation?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">CIDR (Classless Inter-Domain Routing) notation represents an IP address and its network prefix in one compact form — for example 192.168.1.0/24. The number after the slash tells you how many bits of the address are the network portion. It replaced the older Class A/B/C system and allows much more flexible network sizing.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">Why can't I use all addresses in a subnet?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Two addresses in every subnet are reserved — the first (network address, all host bits zero) identifies the subnet itself, and the last (broadcast address, all host bits one) is used to send messages to all hosts on the subnet. So a /24 has 256 total addresses but only 254 usable for hosts.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">What are the RFC1918 private address ranges?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">RFC1918 defines three private IP ranges not routable on the public internet: 10.0.0.0/8 (16 million addresses, used in large enterprises), 172.16.0.0/12 (1 million addresses), and 192.168.0.0/16 (65,000 addresses, most common in home and small office networks). These are the address ranges you should always use for internal networks.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">What is a /30 subnet used for?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">A /30 gives exactly 2 usable hosts, making it perfect for point-to-point WAN links — for example between two routers. You need one address for each end of the link. Using a larger subnet wastes addresses. A /31 (RFC3021) can also be used for point-to-point links, with no broadcast address, giving 2 usable addresses from just 2 total.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+window.addEventListener('scroll', closeMobileMenu);
+
+let lastResult = null;
+
+function setQuick(ip, cidr) {
+  document.getElementById('ipInput').value = ip;
+  document.getElementById('cidrInput').value = cidr;
+  calculate();
+}
+
+function autoCalc() {
+  const ip = document.getElementById('ipInput').value.trim();
+  const cidr = parseInt(document.getElementById('cidrInput').value);
+  if (ip && !isNaN(cidr) && cidr >= 0 && cidr <= 32) {
+    const parts = ip.split('.');
+    if (parts.length === 4 && parts.every(p => !isNaN(p) && parseInt(p) >= 0 && parseInt(p) <= 255)) {
+      calculate();
+    }
+  }
+}
+
+function parseIP(str) {
+  const parts = str.trim().split('.');
+  if (parts.length !== 4) throw new Error('Invalid IP address — must have 4 octets (e.g. 192.168.1.0)');
+  const nums = parts.map(p => {
+    const n = parseInt(p);
+    if (isNaN(n) || n < 0 || n > 255) throw new Error(`Invalid octet "${p}" — each must be 0-255`);
+    return n;
+  });
+  return (nums[0] << 24) | (nums[1] << 16) | (nums[2] << 8) | nums[3];
+}
+
+function ipToStr(n) {
+  n = n >>> 0;
+  return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.');
+}
+
+function ipToBin(n) {
+  return (n >>> 0).toString(2).padStart(32, '0');
+}
+
+function fmtNum(n) {
+  return n.toLocaleString('en-GB');
+}
+
+function showError(msg) {
+  document.getElementById('errorCard').style.display = 'block';
+  document.getElementById('errorMsg').textContent = msg;
+  document.getElementById('resultWrap').style.display = 'none';
+}
+
+function calculate() {
+  const ipStr = document.getElementById('ipInput').value.trim();
+  const cidrStr = document.getElementById('cidrInput').value.trim();
+
+  document.getElementById('errorCard').style.display = 'none';
+
+  if (!ipStr) { showError('Please enter an IP address.'); return; }
+  if (cidrStr === '') { showError('Please enter a CIDR prefix (0–32).'); return; }
+
+  let ip, cidr;
+  try { ip = parseIP(ipStr); } catch(e) { showError(e.message); return; }
+
+  cidr = parseInt(cidrStr);
+  if (isNaN(cidr) || cidr < 0 || cidr > 32) { showError('CIDR prefix must be between 0 and 32.'); return; }
+
+  // Calculate
+  const maskBits = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0;
+  const wildcardBits = (~maskBits) >>> 0;
+  const network = (ip & maskBits) >>> 0;
+  const broadcast = (network | wildcardBits) >>> 0;
+  const firstHost = cidr === 32 ? network : (network + 1) >>> 0;
+  const lastHost  = cidr === 32 ? network : cidr === 31 ? broadcast : (broadcast - 1) >>> 0;
+  const totalAddresses = cidr === 32 ? 1 : cidr === 31 ? 2 : Math.pow(2, 32 - cidr);
+  const usableHosts = cidr === 32 ? 1 : cidr === 31 ? 2 : totalAddresses - 2;
+
+  // Class detection
+  const firstOctet = (ip >>> 24) & 255;
+  let ipClass = '';
+  if (firstOctet < 128) ipClass = 'Class A';
+  else if (firstOctet < 192) ipClass = 'Class B';
+  else if (firstOctet < 224) ipClass = 'Class C';
+  else if (firstOctet < 240) ipClass = 'Class D (Multicast)';
+  else ipClass = 'Class E (Reserved)';
+
+  // Private check
+  let privateRange = '';
+  const n = network;
+  if ((n >>> 24) === 10) privateRange = 'RFC1918 private (10.0.0.0/8)';
+  else if ((n >>> 20) === (172 << 4 | 1)) privateRange = 'RFC1918 private (172.16.0.0/12)';
+  else if ((n >>> 16) === (192 << 8 | 168)) privateRange = 'RFC1918 private (192.168.0.0/16)';
+  else if ((n >>> 24) === 127) privateRange = 'Loopback (127.0.0.0/8)';
+  else if ((n >>> 24) === 169 && ((n >>> 16) & 255) === 254) privateRange = 'Link-local (169.254.0.0/16)';
+  else privateRange = 'Public (routable)';
+
+  lastResult = { ip, cidr, maskBits, wildcardBits, network, broadcast, firstHost, lastHost, totalAddresses, usableHosts };
+
+  // Render results
+  const results = [
+    { label: 'IP Address', val: ipToStr(ip), sub: `${ipClass} · ${privateRange}`, highlight: true },
+    { label: 'Network Address', val: `${ipToStr(network)}/${cidr}`, sub: 'First address in subnet' },
+    { label: 'Subnet Mask', val: ipToStr(maskBits), sub: `CIDR /${cidr}` },
+    { label: 'Wildcard Mask', val: ipToStr(wildcardBits), sub: 'Inverse of subnet mask' },
+    { label: 'Broadcast Address', val: ipToStr(broadcast), sub: 'Last address in subnet' },
+    { label: 'First Usable Host', val: cidr >= 31 ? ipToStr(network) : ipToStr(firstHost), sub: cidr === 32 ? 'Host route' : cidr === 31 ? 'RFC3021 point-to-point' : '' },
+    { label: 'Last Usable Host', val: cidr >= 31 ? ipToStr(broadcast) : ipToStr(lastHost), sub: '' },
+    { label: 'Usable Hosts', val: fmtNum(usableHosts), sub: `${fmtNum(totalAddresses)} total addresses`, highlight: true },
+  ];
+
+  document.getElementById('resultGrid').innerHTML = results.map(r => `
+    <div class="result-card${r.highlight ? ' highlight' : ''}">
+      <div class="result-label">${r.label}</div>
+      <div class="result-val${r.highlight ? ' accent' : ''}">${r.val}</div>
+      ${r.sub ? `<div class="result-sub">${r.sub}</div>` : ''}
+    </div>`).join('');
+
+  // Binary visualisation
+  const binIP   = ipToBin(ip);
+  const binMask = ipToBin(maskBits);
+  const binNet  = ipToBin(network);
+  const binBC   = ipToBin(broadcast);
+
+  function renderBits(label, binStr) {
+    const groups = [0,8,16,24].map(start => {
+      return `<div class="bit-group">${binStr.slice(start, start+8).split('').map((b, i) => {
+        const isNet = (start + i) < cidr;
+        return `<div class="bit ${isNet ? 'net' : 'host'}">${b}</div>`;
+      }).join('')}</div>`;
+    }).join('');
+    return `<div class="binary-row"><span class="binary-row-label">${label}</span><div class="binary-bits">${groups}</div></div>`;
+  }
+
+  document.getElementById('binaryRows').innerHTML =
+    renderBits('IP Address', binIP) +
+    renderBits('Subnet Mask', binMask) +
+    renderBits('Network', binNet) +
+    renderBits('Broadcast', binBC);
+
+  // Subnet splitter dropdown
+  const splitSel = document.getElementById('splitPrefix');
+  splitSel.innerHTML = '';
+  for (let p = cidr + 1; p <= 30; p++) {
+    const count = Math.pow(2, p - cidr);
+    const hosts = Math.pow(2, 32 - p) - 2;
+    if (count > 1024) break;
+    const opt = document.createElement('option');
+    opt.value = p;
+    opt.textContent = `/${p} — ${fmtNum(Math.floor(count))} subnets, ${fmtNum(Math.floor(hosts))} hosts each`;
+    splitSel.appendChild(opt);
+  }
+
+  renderSplit();
+  document.getElementById('resultWrap').style.display = 'block';
+  document.getElementById('resultWrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderSplit() {
+  if (!lastResult) return;
+  const {network, cidr} = lastResult;
+  const splitCidr = parseInt(document.getElementById('splitPrefix').value);
+  if (isNaN(splitCidr) || splitCidr <= cidr) return;
+
+  const count = Math.pow(2, splitCidr - cidr);
+  const subSize = Math.pow(2, 32 - splitCidr);
+  const hosts = subSize - 2;
+
+  document.getElementById('splitInfo').textContent =
+    `${fmtNum(count)} subnets × ${fmtNum(hosts)} usable hosts`;
+
+  const maxShow = Math.min(count, 64);
+  let rows = '';
+  for (let i = 0; i < maxShow; i++) {
+    const subNet   = (network + i * subSize) >>> 0;
+    const subBC    = (subNet + subSize - 1) >>> 0;
+    const subFirst = (subNet + 1) >>> 0;
+    const subLast  = (subBC - 1) >>> 0;
+    rows += `<tr>
+      <td>${i + 1}</td>
+      <td>${ipToStr(subNet)}/${splitCidr}</td>
+      <td>${splitCidr === 32 ? '—' : ipToStr(subFirst)}</td>
+      <td>${splitCidr === 32 ? '—' : ipToStr(subLast)}</td>
+      <td>${ipToStr(subBC)}</td>
+      <td>${fmtNum(Math.max(0, hosts))}</td>
+    </tr>`;
+  }
+  if (count > maxShow) {
+    rows += `<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:12px">… and ${fmtNum(count - maxShow)} more subnets</td></tr>`;
+  }
+  document.getElementById('splitBody').innerHTML = rows;
+}
+
+// Load default on start
+window.addEventListener('load', () => {
+  document.getElementById('ipInput').value = '192.168.1.0';
+  document.getElementById('cidrInput').value = '24';
+  calculate();
+});
+</script>
+</body>
+</html>

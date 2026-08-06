@@ -244,13 +244,110 @@ function toggleMobileMenu(){document.getElementById('mobileMenu').classList.togg
 function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
 window.addEventListener('scroll', closeMobileMenu);
 
-const NETLIFY = 'https://salmanittools-fetch.netlify.app/.netlify/functions/dns-propagation';
+const DOH_RESOLVERS = [
+  { name: 'Google DNS',       url: 'https://dns.google/resolve',                          location: '🇺🇸 Google (US)',         headers: {} },
+  { name: 'Cloudflare',       url: 'https://cloudflare-dns.com/dns-query',                location: '🇺🇸 Cloudflare (US)',     headers: { 'Accept': 'application/dns-json' } },
+  { name: 'Cloudflare Family',url: 'https://family.cloudflare-dns.com/dns-query',         location: '🇺🇸 Cloudflare Family',   headers: { 'Accept': 'application/dns-json' } },
+  { name: 'Quad9',            url: 'https://dns.quad9.net:5053/dns-query',                location: '🇨🇭 Quad9 (EU)',          headers: { 'Accept': 'application/dns-json' } },
+  { name: 'AdGuard DNS',      url: 'https://dns.adguard-dns.com/resolve',                 location: '🇨🇾 AdGuard (Cyprus)',    headers: {} },
+  { name: 'DNS.SB',           url: 'https://doh.dns.sb/dns-query',                        location: '🌐 DNS.SB (Global)',      headers: { 'Accept': 'application/dns-json' } },
+  { name: 'OpenDNS',          url: 'https://doh.opendns.com/dns-query',                   location: '🇺🇸 OpenDNS (US)',        headers: { 'Accept': 'application/dns-json' } },
+  { name: 'NextDNS',          url: 'https://dns.nextdns.io/dns-query',                    location: '🌐 NextDNS (Global)',     headers: { 'Accept': 'application/dns-json' } },
+  { name: 'AliDNS',           url: 'https://dns.alidns.com/resolve',                      location: '🇨🇳 AliDNS (China)',      headers: {} },
+  { name: 'Comodo Secure',    url: 'https://doh.comodo.com/dns-query',                    location: '🇺🇸 Comodo (US)',         headers: { 'Accept': 'application/dns-json' } },
+  { name: '360 DNS',          url: 'https://doh.360.cn/dns-query',                        location: '🇨🇳 360 DNS (China)',     headers: { 'Accept': 'application/dns-json' } },
+  { name: 'Mullvad DNS',      url: 'https://doh.mullvad.net/dns-query',                   location: '🇸🇪 Mullvad (Sweden)',    headers: { 'Accept': 'application/dns-json' } },
+];
+
+const TYPE_NUM = { A:1, NS:2, CNAME:5, SOA:6, MX:15, TXT:16, AAAA:28, CAA:257 };
+
+async function queryResolver(resolver, domain, type) {
+  const start = Date.now();
+  try {
+    const url = `${resolver.url}?name=${encodeURIComponent(domain)}&type=${type}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(url, {
+      headers: { 'Accept': 'application/json', ...resolver.headers },
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    const ms = Date.now() - start;
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    if (data.Status !== 0 && data.Status !== undefined) {
+      const errMap = { 1:'Format Error', 2:'Server Failure', 3:'Not found', 4:'Not implemented', 5:'Refused' };
+      return { name: resolver.name, location: resolver.location, status: 'error', error: errMap[data.Status] || `DNS Error ${data.Status}`, ms };
+    }
+
+    const answers = (data.Answer || []);
+    const typeNum = TYPE_NUM[type] || 1;
+    let values = answers.filter(a => a.type === typeNum).map(a => {
+      let d = String(a.data || '').trim();
+      if (type === 'TXT') d = d.replace(/^"|"$/g, '').replace(/""/g, '');
+      return d;
+    }).filter(Boolean);
+
+    if (values.length === 0 && answers.length > 0) {
+      values = answers.map(a => String(a.data || '').trim()).filter(Boolean);
+    }
+
+    if (values.length === 0) return { name: resolver.name, location: resolver.location, status: 'error', error: 'No records', ms };
+    return { name: resolver.name, location: resolver.location, status: 'ok', values, ms, ttl: answers[0]?.TTL };
+  } catch(e) {
+    const ms = Date.now() - start;
+    return { name: resolver.name, location: resolver.location, status: 'error', error: e.name === 'AbortError' ? 'Timeout' : (e.message || 'Error'), ms };
+  }
+}
+
+async function checkPropagation() {
+  const domain = document.getElementById('domainInput').value.trim().replace(/^https?:\/\//,'').replace(/\/.*/,'');
+  const type = document.getElementById('recordType').value;
+
+  if (!domain) { showError('Please enter a domain name.'); return; }
+
+  document.getElementById('errorCard').style.display = 'none';
+  document.getElementById('summaryBar').style.display = 'none';
+  document.getElementById('consistencyBar').style.display = 'none';
+  document.getElementById('resultsCard').style.display = 'none';
+
+  const btn = document.getElementById('checkBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Checking…';
+
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  progressWrap.style.display = 'block';
+  progressFill.style.width = '0%';
+  progressLabel.textContent = `Querying ${type} records for ${domain} across ${DOH_RESOLVERS.length} resolvers…`;
+
+  let prog = 0;
+  const progInterval = setInterval(() => {
+    prog = Math.min(prog + 4, 85);
+    progressFill.style.width = prog + '%';
+  }, 150);
+
+  try {
+    const results = await Promise.all(DOH_RESOLVERS.map(r => queryResolver(r, domain, type)));
+    clearInterval(progInterval);
+    progressFill.style.width = '100%';
+    setTimeout(() => { progressWrap.style.display = 'none'; }, 400);
+    renderResults({ domain, type, results });
+  } catch(e) {
+    clearInterval(progInterval);
+    progressWrap.style.display = 'none';
+    showError('Something went wrong. Please try again.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🌐 Check Now';
+}
 
 function setType(type) {
   document.getElementById('recordType').value = type;
-  document.querySelectorAll('.type-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent === type);
-  });
+  setActiveType();
 }
 
 function setActiveType() {
@@ -265,57 +362,6 @@ function showError(msg) {
   document.getElementById('errorMsg').textContent = msg;
 }
 
-async function checkPropagation() {
-  const domain = document.getElementById('domainInput').value.trim().replace(/^https?:\/\//,'').replace(/\/.*/,'');
-  const type = document.getElementById('recordType').value;
-
-  if (!domain) { showError('Please enter a domain name.'); return; }
-
-  // Reset UI
-  document.getElementById('errorCard').style.display = 'none';
-  document.getElementById('summaryBar').style.display = 'none';
-  document.getElementById('consistencyBar').style.display = 'none';
-  document.getElementById('resultsCard').style.display = 'none';
-
-  const btn = document.getElementById('checkBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Checking…';
-
-  // Show progress
-  const progressWrap = document.getElementById('progressWrap');
-  const progressFill = document.getElementById('progressFill');
-  const progressLabel = document.getElementById('progressLabel');
-  progressWrap.style.display = 'block';
-  progressFill.style.width = '0%';
-  progressLabel.textContent = `Querying ${type} records for ${domain} across 16 resolvers…`;
-
-  // Animate progress
-  let prog = 0;
-  const progInterval = setInterval(() => {
-    prog = Math.min(prog + 3, 85);
-    progressFill.style.width = prog + '%';
-  }, 200);
-
-  try {
-    const res = await fetch(`${NETLIFY}?domain=${encodeURIComponent(domain)}&type=${type}`);
-    const data = await res.json();
-
-    clearInterval(progInterval);
-    progressFill.style.width = '100%';
-    setTimeout(() => { progressWrap.style.display = 'none'; }, 400);
-
-    if (data.error) { showError(data.error); btn.disabled = false; btn.textContent = '🌐 Check Now'; return; }
-
-    renderResults(data);
-  } catch(e) {
-    clearInterval(progInterval);
-    progressWrap.style.display = 'none';
-    showError('Could not reach the DNS checking service. Please try again in a moment.');
-  }
-
-  btn.disabled = false;
-  btn.textContent = '🌐 Check Now';
-}
 
 function renderResults(data) {
   const { results } = data;

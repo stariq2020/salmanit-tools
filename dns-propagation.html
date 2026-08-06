@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNS Propagation Checker — Salman IT Tools</title>
+<meta name="description" content="Check if your DNS changes have propagated globally. Query A, AAAA, MX, TXT, NS, CNAME and SOA records across 16 DNS resolvers worldwide instantly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--mono:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
+.eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
+
+/* Input */
+.input-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.input-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.input-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:200px}
+.input-group label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.domain-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--white);font-family:var(--mono);font-size:0.95rem;outline:none;transition:border-color .2s;width:100%}
+.domain-input:focus{border-color:rgba(0,232,122,0.4)}
+.domain-input::placeholder{color:var(--muted)}
+.type-select{background:#0E1A2E;border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;min-width:120px}
+.type-select option{background:#0E1A2E}
+.check-btn{padding:12px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;height:48px;white-space:nowrap}
+.check-btn:hover{opacity:.9;transform:scale(1.01)}
+.check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Type quick buttons */
+.type-row{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.type-btn{padding:4px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .2s}
+.type-btn:hover,.type-btn.active{background:rgba(0,232,122,0.1);border-color:rgba(0,232,122,0.3);color:var(--green)}
+
+/* Error */
+.error-card{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:none}
+.error-card p{font-size:0.88rem;color:var(--danger)}
+
+/* Summary bar */
+.summary-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;display:none}
+.summary-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;text-align:center;flex:1;min-width:120px}
+.summary-stat .sv{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--white)}
+.summary-stat .sv.green{color:var(--green)}
+.summary-stat .sv.red{color:var(--danger)}
+.summary-stat .sv.warn{color:var(--warning)}
+.summary-stat .sl{font-size:0.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:2px}
+
+/* Progress */
+.progress-wrap{display:none;margin-bottom:20px}
+.progress-label{font-size:0.78rem;color:var(--muted);margin-bottom:6px}
+.progress-bar{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:2px;transition:width .3s;width:0%}
+
+/* Results table */
+.results-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:none}
+.results-header{display:grid;grid-template-columns:180px 120px 1fr 60px;gap:0;padding:10px 16px;border-bottom:1px solid var(--border)}
+.results-header span{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.result-row{display:grid;grid-template-columns:180px 120px 1fr 60px;gap:0;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center;transition:background .15s}
+.result-row:last-child{border-bottom:none}
+.result-row:hover{background:rgba(255,255,255,0.02)}
+.result-row.loading{opacity:.5}
+.resolver-name{font-size:0.82rem;color:var(--white);font-weight:500}
+.resolver-loc{font-size:0.72rem;color:var(--muted)}
+.status-badge{font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;width:fit-content}
+.status-ok{background:rgba(0,232,122,0.1);color:var(--green)}
+.status-err{background:rgba(239,68,68,0.1);color:var(--danger)}
+.status-loading{background:rgba(255,255,255,0.06);color:var(--muted)}
+.result-values{font-family:var(--mono);font-size:0.75rem;color:var(--muted);line-height:1.6;word-break:break-all}
+.result-values .val{color:var(--white)}
+.result-ms{font-family:var(--mono);font-size:0.72rem;color:var(--muted);text-align:right}
+
+/* Consistency indicator */
+.consistency-bar{display:none;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.consistency-bar h4{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+.unique-vals{display:flex;flex-direction:column;gap:8px}
+.unique-val{background:rgba(255,255,255,0.03);border-radius:8px;padding:10px 14px}
+.unique-val .uv-resolvers{font-size:0.7rem;color:var(--muted);margin-top:3px}
+.unique-val .uv-record{font-family:var(--mono);font-size:0.8rem;color:var(--white)}
+
+/* Info */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){
+  nav{padding:0 20px}.page{padding:40px 16px 60px}
+  .results-header,.result-row{grid-template-columns:1fr 80px}
+  .results-header span:nth-child(2),.results-header span:nth-child(4),
+  .result-row>*:nth-child(2),.result-row>*:nth-child(4){display:none}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="guides.html" onclick="closeMobileMenu()">Guides</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="eyebrow">IT Tools</div>
+  <h1 class="page-title">DNS Propagation<br><span class="acc">Checker</span></h1>
+  <p class="page-sub">Check if your DNS changes have spread globally. Query A, AAAA, MX, TXT, NS, CNAME and SOA records across 16 DNS resolvers worldwide and see exactly which ones have picked up your changes.</p>
+
+  <div class="input-card">
+    <div class="input-row">
+      <div class="input-group">
+        <label>Domain Name</label>
+        <input class="domain-input" type="text" id="domainInput" placeholder="salmanittools.co.uk" onkeydown="if(event.key==='Enter')checkPropagation()"/>
+      </div>
+      <div class="input-group" style="flex:none">
+        <label>Record Type</label>
+        <select class="type-select" id="recordType" onchange="setActiveType()">
+          <option value="A">A</option>
+          <option value="AAAA">AAAA</option>
+          <option value="MX">MX</option>
+          <option value="TXT">TXT</option>
+          <option value="NS">NS</option>
+          <option value="CNAME">CNAME</option>
+          <option value="SOA">SOA</option>
+        </select>
+      </div>
+      <button class="check-btn" id="checkBtn" onclick="checkPropagation()">🌐 Check Now</button>
+    </div>
+    <div class="type-row" id="typeRow">
+      <span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);align-self:center">Quick:</span>
+      <button class="type-btn active" onclick="setType('A')">A</button>
+      <button class="type-btn" onclick="setType('AAAA')">AAAA</button>
+      <button class="type-btn" onclick="setType('MX')">MX</button>
+      <button class="type-btn" onclick="setType('TXT')">TXT</button>
+      <button class="type-btn" onclick="setType('NS')">NS</button>
+      <button class="type-btn" onclick="setType('CNAME')">CNAME</button>
+      <button class="type-btn" onclick="setType('SOA')">SOA</button>
+    </div>
+  </div>
+
+  <div class="error-card" id="errorCard"><p id="errorMsg"></p></div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label" id="progressLabel">Querying DNS resolvers…</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-bar" id="summaryBar">
+    <div class="summary-stat"><div class="sv green" id="sumOk">0</div><div class="sl">Propagated</div></div>
+    <div class="summary-stat"><div class="sv red" id="sumErr">0</div><div class="sl">Not Found</div></div>
+    <div class="summary-stat"><div class="sv warn" id="sumTotal">0</div><div class="sl">Resolvers Checked</div></div>
+    <div class="summary-stat"><div class="sv" id="sumPct" style="color:var(--cyan)">0%</div><div class="sl">Propagated</div></div>
+  </div>
+
+  <!-- Consistency -->
+  <div class="consistency-bar" id="consistencyBar">
+    <h4>📊 Values Seen Across Resolvers</h4>
+    <div class="unique-vals" id="uniqueVals"></div>
+  </div>
+
+  <!-- Results table -->
+  <div class="results-card" id="resultsCard">
+    <div class="results-header">
+      <span>Resolver</span>
+      <span>Location</span>
+      <span>Result</span>
+      <span>Speed</span>
+    </div>
+    <div id="resultsBody"></div>
+  </div>
+
+  <!-- Info section -->
+  <div class="info-section">
+    <div class="eyebrow">About DNS Propagation</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why DNS Changes Take Time</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">When you change a DNS record — updating MX records for a mail migration, pointing a domain to a new server, adding an SPF record — the change doesn't take effect everywhere instantly. DNS resolvers around the world cache records for a period defined by the TTL (Time to Live) value. Until that TTL expires, resolvers serve the old cached value rather than looking up the new one.</p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:32px">A TTL of 3600 means resolvers may cache the old value for up to an hour. During a planned migration, lowering your TTL to 300 (5 minutes) a day or two beforehand significantly speeds up propagation and makes rollback easier if something goes wrong. After the migration is complete, you can raise the TTL again for better performance.</p>
+
+    <div class="info-grid">
+      <div class="info-card"><h4>What Is TTL?</h4><p>Time to Live — how long (in seconds) a DNS resolver caches a record before checking for updates. Lower TTL = faster propagation, higher TTL = better performance.</p></div>
+      <div class="info-card"><h4>How Long Does It Take?</h4><p>Typically 0–48 hours, depending on the TTL. With a TTL of 300, most resolvers update within 5–10 minutes. With 86400 (24 hours), it can take up to 48 hours globally.</p></div>
+      <div class="info-card"><h4>Why Different Results?</h4><p>Different resolvers cache at different times. One resolver may have updated while another still serves the old value — which is exactly what this tool shows.</p></div>
+      <div class="info-card"><h4>16 Global Resolvers</h4><p>We query Google, Cloudflare, OpenDNS, Quad9, Verisign, and resolvers across the US, Europe and Asia to give a realistic global picture of propagation status.</p></div>
+    </div>
+
+    <div style="margin-top:40px">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="info-card"><h4 style="margin-bottom:6px">My DNS change shows on some resolvers but not others — is that normal?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Completely normal and expected. This is propagation in progress — resolvers that have passed their TTL expiry have fetched the new value, while others are still serving the cached old value. Wait for the TTL period to expire on the remaining resolvers and they'll catch up.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">Why lower TTL before making DNS changes?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">If you lower TTL to 300 (5 minutes) 24–48 hours before making a change, all resolvers will be refreshing frequently by the time you make the change. The new value then propagates globally within minutes instead of hours. Once the change is stable, raise the TTL back to 3600 or higher for better resolver performance.</p></div>
+        <div class="info-card"><h4 style="margin-bottom:6px">What do I check when migrating email to Microsoft 365?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Check MX records to confirm all resolvers are pointing to Microsoft's mail servers. Also check TXT records to verify SPF has propagated. After migration, use the Network Tools page to verify DKIM and DMARC are correctly configured alongside the new MX.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script>
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+window.addEventListener('scroll', closeMobileMenu);
+
+const NETLIFY = 'https://salmanittools-fetch.netlify.app/.netlify/functions/dns-propagation';
+
+function setType(type) {
+  document.getElementById('recordType').value = type;
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === type);
+  });
+}
+
+function setActiveType() {
+  const type = document.getElementById('recordType').value;
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === type);
+  });
+}
+
+function showError(msg) {
+  document.getElementById('errorCard').style.display = 'block';
+  document.getElementById('errorMsg').textContent = msg;
+}
+
+async function checkPropagation() {
+  const domain = document.getElementById('domainInput').value.trim().replace(/^https?:\/\//,'').replace(/\/.*/,'');
+  const type = document.getElementById('recordType').value;
+
+  if (!domain) { showError('Please enter a domain name.'); return; }
+
+  // Reset UI
+  document.getElementById('errorCard').style.display = 'none';
+  document.getElementById('summaryBar').style.display = 'none';
+  document.getElementById('consistencyBar').style.display = 'none';
+  document.getElementById('resultsCard').style.display = 'none';
+
+  const btn = document.getElementById('checkBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Checking…';
+
+  // Show progress
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  progressWrap.style.display = 'block';
+  progressFill.style.width = '0%';
+  progressLabel.textContent = `Querying ${type} records for ${domain} across 16 resolvers…`;
+
+  // Animate progress
+  let prog = 0;
+  const progInterval = setInterval(() => {
+    prog = Math.min(prog + 3, 85);
+    progressFill.style.width = prog + '%';
+  }, 200);
+
+  try {
+    const res = await fetch(`${NETLIFY}?domain=${encodeURIComponent(domain)}&type=${type}`);
+    const data = await res.json();
+
+    clearInterval(progInterval);
+    progressFill.style.width = '100%';
+    setTimeout(() => { progressWrap.style.display = 'none'; }, 400);
+
+    if (data.error) { showError(data.error); btn.disabled = false; btn.textContent = '🌐 Check Now'; return; }
+
+    renderResults(data);
+  } catch(e) {
+    clearInterval(progInterval);
+    progressWrap.style.display = 'none';
+    showError('Could not reach the DNS checking service. Please try again in a moment.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🌐 Check Now';
+}
+
+function renderResults(data) {
+  const { results } = data;
+  const ok    = results.filter(r => r.status === 'ok');
+  const err   = results.filter(r => r.status === 'error');
+  const total = results.length;
+  const pct   = Math.round((ok.length / total) * 100);
+
+  // Summary
+  document.getElementById('sumOk').textContent = ok.length;
+  document.getElementById('sumErr').textContent = err.length;
+  document.getElementById('sumTotal').textContent = total;
+  document.getElementById('sumPct').textContent = pct + '%';
+  document.getElementById('summaryBar').style.display = 'flex';
+
+  // Consistency — group by value
+  if (ok.length > 0) {
+    const valueMap = {};
+    ok.forEach(r => {
+      const key = r.values.sort().join('\n');
+      if (!valueMap[key]) valueMap[key] = { values: r.values, resolvers: [] };
+      valueMap[key].resolvers.push(r.name);
+    });
+    const unique = Object.values(valueMap);
+    const consistencyEl = document.getElementById('consistencyBar');
+    const uniqueValsEl = document.getElementById('uniqueVals');
+
+    if (unique.length > 1) {
+      uniqueValsEl.innerHTML = unique.map((u, i) => `
+        <div class="unique-val" style="border-left:3px solid ${i===0?'var(--green)':'var(--warning)'}">
+          <div class="uv-record">${u.values.map(v => escHtml(v)).join('<br>')}</div>
+          <div class="uv-resolvers">${u.resolvers.length} resolver${u.resolvers.length!==1?'s':''}: ${u.resolvers.join(', ')}</div>
+        </div>`).join('');
+      consistencyEl.style.display = 'block';
+    } else {
+      uniqueValsEl.innerHTML = `<div class="unique-val" style="border-left:3px solid var(--green)">
+        <div class="uv-record">${unique[0].values.map(v => escHtml(v)).join('<br>')}</div>
+        <div class="uv-resolvers" style="color:var(--green)">✅ All ${ok.length} resolvers agree on this value</div>
+      </div>`;
+      consistencyEl.style.display = 'block';
+    }
+  }
+
+  // Results table
+  const body = document.getElementById('resultsBody');
+  body.innerHTML = results.map(r => {
+    const valHtml = r.status === 'ok'
+      ? r.values.map(v => `<span class="val">${escHtml(v)}</span>`).join('<br>')
+      : `<span style="color:var(--danger)">${escHtml(r.error || 'Error')}</span>`;
+    return `<div class="result-row">
+      <div><div class="resolver-name">${escHtml(r.name)}</div></div>
+      <div><div class="resolver-loc">${r.location}</div></div>
+      <div>
+        <span class="status-badge ${r.status==='ok'?'status-ok':'status-err'}">${r.status==='ok'?'✓ Found':'✗ Not found'}</span>
+        <div class="result-values" style="margin-top:4px">${valHtml}</div>
+      </div>
+      <div class="result-ms">${r.ms}ms</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('resultsCard').style.display = 'block';
+  document.getElementById('summaryBar').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>

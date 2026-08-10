@@ -248,8 +248,8 @@ window.addEventListener('scroll', closeMobileMenu);
 const DOH_RESOLVERS = [
   { name: 'Google DNS (Primary)',   url: 'https://dns.google/resolve',           location: '🇺🇸 Google (US)',         params: {} },
   { name: 'Google DNS (Secondary)', url: 'https://dns.google/resolve',           location: '🇺🇸 Google (US)',         params: { edns_client_subnet: '0.0.0.0/0' } },
-  { name: 'Cloudflare (1.1.1.1)',   url: 'https://cloudflare-dns.com/dns-query', location: '🇺🇸 Cloudflare (US)',     params: {} },
-  { name: 'Cloudflare (1.0.0.1)',   url: 'https://cloudflare-dns.com/dns-query', location: '🇺🇸 Cloudflare (US)',     params: { ct: 'application/dns-json' } },
+  { name: 'Cloudflare (1.1.1.1)',   url: 'https://1.1.1.1/dns-query',            location: '🇺🇸 Cloudflare (US)',     params: {} },
+  { name: 'Cloudflare (1.0.0.1)',   url: 'https://1.0.0.1/dns-query',            location: '🇺🇸 Cloudflare (US)',     params: {} },
   { name: 'Cloudflare Family',      url: 'https://family.cloudflare-dns.com/dns-query', location: '🇺🇸 Cloudflare Family', params: {} },
   { name: 'Cloudflare Security',    url: 'https://security.cloudflare-dns.com/dns-query', location: '🇺🇸 Cloudflare Security', params: {} },
 ];
@@ -282,7 +282,7 @@ async function queryResolver(resolver, domain, type) {
     const url = `${resolver.url}?${params}`;
     const fetchPromise = fetch(url, {
       method: 'GET',
-      headers: { 'Accept': 'application/dns-json, application/json' },
+      headers: { 'Accept': 'application/dns-json' },
       mode: 'cors'
     });
     const timeoutPromise = new Promise((_, reject) =>

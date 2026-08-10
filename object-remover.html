@@ -51,6 +51,14 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .tool-group input[type=range]{accent-color:var(--cyan);cursor:pointer}
 .tool-btns{display:flex;gap:8px;flex-wrap:wrap}
 .editor-hint{font-size:0.85rem;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.mode-row{margin-bottom:14px}
+.mode-toggle{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.ai-key-row{display:none;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.ai-key-row input[type=password]{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none;min-width:220px;flex:1}
+.remember-label{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted);cursor:pointer;white-space:nowrap}
+.remember-label input{accent-color:var(--cyan)}
+.get-key-link{white-space:nowrap;text-decoration:none}
+.ai-note{font-size:0.78rem;color:var(--warning);background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:10px 14px;line-height:1.6;display:none;margin-bottom:14px}
 .canvas-wrap{position:relative;width:100%;line-height:0;border-radius:14px;overflow:hidden;background:#000;touch-action:none;margin-bottom:10px;border:1px solid var(--border)}
 .canvas-wrap canvas{display:block;width:100%;height:auto}
 #maskCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
@@ -176,6 +184,19 @@ footer a{color:var(--green);text-decoration:none}
       </div>
     </div>
 
+    <div class="mode-row" id="modeRow">
+      <div class="mode-toggle">
+        <button class="toggle-btn active" id="modeFreeBtn" onclick="setMode('free')">🔒 Free (Private)</button>
+        <button class="toggle-btn" id="modeAiBtn" onclick="setMode('ai')">✨ Enhanced (AI)</button>
+      </div>
+      <div class="ai-key-row" id="aiKeyRow">
+        <input type="password" id="apiKeyInput" placeholder="Paste your Clipdrop API key">
+        <label class="remember-label"><input type="checkbox" id="rememberKey"> Remember on this device</label>
+        <a href="https://clipdrop.co/apis" target="_blank" class="action-btn get-key-link">Get a free key ↗</a>
+      </div>
+      <p class="ai-note" id="aiNote">✨ Enhanced mode sends this photo to Clipdrop's AI service for much better results on tricky backgrounds — faces, horizons, busy scenes. This is <strong>not private</strong> (the image leaves your device) and uses credits on your own Clipdrop account. <span id="creditsNote"></span></p>
+    </div>
+
     <p class="editor-hint">🖌️ Paint (click-drag, or use your finger on mobile) over the watermark or object you want removed — a rough coat is fine, it doesn't need to be pixel-precise. Then click <strong>Remove</strong> below.</p>
 
     <div class="resize-note" id="resizeNote" style="display:none">ℹ️ This image was automatically resized for performance — the downloaded result will match the resized dimensions.</div>
@@ -218,16 +239,19 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info -->
   <div class="info-section">
     <div class="page-eyebrow">How It Works</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">100% Private — Nothing Leaves Your Device</h2>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Two Modes: Private &amp; Free, or Enhanced with AI</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:24px">
-      This tool uses inpainting — the same technique behind "content-aware fill" — to reconstruct the area you paint over using the surrounding pixels, so the rest of the photo is completely untouched.
-      Everything runs on your own device using your browser's WebAssembly engine; your photo is never uploaded or sent anywhere.
+      <strong>Free mode</strong> uses inpainting — the same technique behind "content-aware fill" — to reconstruct the area you paint over using the surrounding pixels. It runs entirely on your
+      device via your browser's WebAssembly engine, so your photo is never uploaded anywhere. It works well for logos, watermarks and objects on fairly simple backgrounds, but can look hazy or
+      smeared on complex or highly structured backgrounds (horizons, faces, busy scenes).
+      <strong>Enhanced (AI) mode</strong> sends the photo to Clipdrop's AI cleanup service using your own API key for noticeably better results on those tougher cases — this is not private
+      (the image leaves your device) and uses your own Clipdrop credits.
     </p>
     <div class="info-grid">
-      <div class="info-card"><div class="ico">🔒</div><h4>No Uploads</h4><p>Your photo never leaves your device. Processing happens entirely in your browser via WebAssembly.</p></div>
+      <div class="info-card"><div class="ico">🔒</div><h4>Free Mode = No Uploads</h4><p>Your photo never leaves your device in Free mode. Processing happens entirely in your browser via WebAssembly.</p></div>
+      <div class="info-card"><div class="ico">✨</div><h4>Enhanced = Your Own AI Key</h4><p>Paste your own Clipdrop API key for AI-quality removal on tricky backgrounds. Your key is only used in your browser, never stored on this site.</p></div>
       <div class="info-card"><div class="ico">🖌️</div><h4>Paint to Remove</h4><p>Just paint over the object or watermark — no need to be precise, a rough coat covering the area works fine.</p></div>
       <div class="info-card"><div class="ico">🔁</div><h4>Multi-Pass Touch Ups</h4><p>Remove one spot, then keep painting and removing more — great for multiple watermarks or objects in one photo.</p></div>
-      <div class="info-card"><div class="ico">🆓</div><h4>Free, No Limits</h4><p>No sign-up, no watermark added to your result, no limit on how many photos you process.</p></div>
     </div>
   </div>
 
@@ -249,8 +273,9 @@ footer a{color:var(--green);text-decoration:none}
     <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
     <div class="info-grid" style="grid-template-columns:1fr">
       <div class="info-card"><h4>Is it legal to remove a watermark?</h4><p>It depends entirely on whose image it is and what rights you have. Removing a watermark from your own photo, or one you have written permission to edit, is fine. Removing a copyright or stock-photo watermark from an image you don't own or haven't licensed is copyright infringement in most jurisdictions — this tool is intended for the former, not the latter.</p></div>
-      <div class="info-card"><h4>Why does the result look slightly blurred or smudged?</h4><p>Inpainting reconstructs the painted area by blending nearby pixels — it works best on simple or repetitive backgrounds. Complex, highly detailed backgrounds (faces, intricate patterns) are harder to reconstruct convincingly. Try smaller passes or a tighter paint area for better results.</p></div>
-      <div class="info-card"><h4>Does this use AI / send my photo anywhere?</h4><p>No. This uses classic computer-vision inpainting (OpenCV's Telea algorithm) running fully client-side via WebAssembly. Your photo is loaded into your browser's memory and never transmitted to any server.</p></div>
+      <div class="info-card"><h4>Why does the result look slightly blurred, hazy or smudged?</h4><p>That's a Free-mode limitation — inpainting reconstructs the painted area by blending nearby pixels, which works best on simple or repetitive backgrounds. Complex or structured backgrounds (horizons, faces, intricate patterns) are harder to reconstruct convincingly and can come out hazy. Try a tighter paint area, smaller multi-pass touch-ups, or switch to Enhanced (AI) mode for a much cleaner result on these cases.</p></div>
+      <div class="info-card"><h4>Does this use AI / send my photo anywhere?</h4><p>Only if you switch on Enhanced (AI) mode. Free mode uses classic computer-vision inpainting (OpenCV's Telea algorithm) running fully client-side via WebAssembly — your photo never leaves your device. Enhanced mode sends the photo to Clipdrop's AI cleanup API using your own API key, for better results on tougher backgrounds.</p></div>
+      <div class="info-card"><h4>What is Enhanced (AI) mode and do I need an account?</h4><p>It's an optional higher-quality removal mode powered by Clipdrop's Cleanup API. You'll need your own free Clipdrop API key (get one at clipdrop.co/apis — they offer free trial credits, then pay-as-you-go pricing). Your key is only stored in your own browser (and only if you tick "Remember on this device") — it's never sent to or stored on this site, only to Clipdrop directly.</p></div>
       <div class="info-card"><h4>Why did my image get resized?</h4><p>Very large photos are automatically capped at 1800px on the longest side before editing, to keep processing fast and avoid crashing your browser tab. The downloaded result matches this resized dimension.</p></div>
     </div>
   </div>
@@ -297,7 +322,7 @@ footer a{color:var(--green);text-decoration:none}
 </style>
 
 <script>
-const state = { origImg: null, filename: 'photo', resized: false };
+const state = { origImg: null, filename: 'photo', resized: false, mode: 'free' };
 const maskUndoStack = [];
 let isDrawing = false;
 let lastPos = null;
@@ -469,19 +494,49 @@ function ensureOpenCV() {
   return cvReadyPromise;
 }
 
-// ── Remove object ─────────────────────────────────────────────────────────────
-async function removeObject() {
+// ── Mode toggle (Free / Enhanced AI) ────────────────────────────────────────────
+function setMode(mode) {
+  state.mode = mode;
+  document.getElementById('modeFreeBtn').classList.toggle('active', mode === 'free');
+  document.getElementById('modeAiBtn').classList.toggle('active', mode === 'ai');
+  document.getElementById('aiKeyRow').style.display = mode === 'ai' ? 'flex' : 'none';
+  document.getElementById('aiNote').style.display = mode === 'ai' ? 'block' : 'none';
+}
+
+(function restoreKey() {
+  try {
+    const saved = localStorage.getItem('cd_api_key');
+    if (saved) {
+      document.getElementById('apiKeyInput').value = saved;
+      document.getElementById('rememberKey').checked = true;
+    }
+  } catch (e) { /* localStorage unavailable — ignore */ }
+})();
+
+function getPaintedMaskData() {
+  const w = imgCanvas.width, h = imgCanvas.height;
+  const maskData = maskCanvas.getContext('2d').getImageData(0, 0, w, h);
+  let painted = false;
+  for (let i = 3; i < maskData.data.length; i += 4) { if (maskData.data[i] > 10) { painted = true; break; } }
+  return { maskData, painted, w, h };
+}
+
+// ── Remove object (dispatcher) ──────────────────────────────────────────────────
+function removeObject() {
+  const { painted } = getPaintedMaskData();
+  if (!painted) { alert('Paint over the object or watermark you want removed first.'); return; }
+  if (state.mode === 'ai') removeObjectAI();
+  else removeObjectFree();
+}
+
+// ── Free mode — local OpenCV.js inpainting ──────────────────────────────────────
+async function removeObjectFree() {
   const btn = document.getElementById('removeBtn');
   const status = document.getElementById('engineStatus');
   const statusText = document.getElementById('engineStatusText');
   const originalLabel = btn.innerHTML;
 
-  const w = imgCanvas.width, h = imgCanvas.height;
-  const maskCtx = maskCanvas.getContext('2d');
-  const maskData = maskCtx.getImageData(0, 0, w, h);
-  let painted = false;
-  for (let i = 3; i < maskData.data.length; i += 4) { if (maskData.data[i] > 10) { painted = true; break; } }
-  if (!painted) { alert('Paint over the object or watermark you want removed first.'); return; }
+  const { maskData, w, h } = getPaintedMaskData();
 
   btn.disabled = true;
   const wasLoaded = !!(window.cv && typeof window.cv.Mat === 'function');
@@ -519,6 +574,88 @@ async function removeObject() {
   } catch (err) {
     console.error(err);
     alert(err && err.message ? err.message : 'Something went wrong processing the image. Try a smaller image or a smaller painted area.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalLabel;
+    status.style.display = 'none';
+  }
+}
+
+// ── Enhanced mode — Clipdrop Cleanup API (bring-your-own-key) ───────────────────
+async function removeObjectAI() {
+  const btn = document.getElementById('removeBtn');
+  const status = document.getElementById('engineStatus');
+  const statusText = document.getElementById('engineStatusText');
+  const originalLabel = btn.innerHTML;
+
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) { alert('Paste your Clipdrop API key first, or switch to Free mode.'); return; }
+
+  if (document.getElementById('rememberKey').checked) {
+    try { localStorage.setItem('cd_api_key', key); } catch (e) { /* ignore */ }
+  } else {
+    try { localStorage.removeItem('cd_api_key'); } catch (e) { /* ignore */ }
+  }
+
+  const { maskData, w, h } = getPaintedMaskData();
+
+  btn.disabled = true;
+  status.style.display = 'flex';
+  statusText.textContent = 'Sending to Clipdrop AI…';
+  btn.innerHTML = '<span class="spinner"></span> Processing…';
+
+  try {
+    // Build a strict black/white mask — Clipdrop requires 0 = keep, 255 = remove, no grey pixels
+    const bwCanvas = document.createElement('canvas');
+    bwCanvas.width = w; bwCanvas.height = h;
+    const bwCtx = bwCanvas.getContext('2d');
+    const bwData = bwCtx.createImageData(w, h);
+    for (let p = 0, i = 3; i < maskData.data.length; i += 4, p++) {
+      const v = maskData.data[i] > 10 ? 255 : 0;
+      bwData.data[p * 4] = v; bwData.data[p * 4 + 1] = v; bwData.data[p * 4 + 2] = v; bwData.data[p * 4 + 3] = 255;
+    }
+    bwCtx.putImageData(bwData, 0, 0);
+
+    const [imageBlob, maskBlob] = await Promise.all([
+      new Promise(res => imgCanvas.toBlob(res, 'image/png')),
+      new Promise(res => bwCanvas.toBlob(res, 'image/png'))
+    ]);
+
+    const form = new FormData();
+    form.append('image_file', imageBlob, 'image.png');
+    form.append('mask_file', maskBlob, 'mask.png');
+
+    const res = await fetch('https://clipdrop-api.co/cleanup/v1', {
+      method: 'POST',
+      headers: { 'x-api-key': key },
+      body: form
+    });
+
+    if (!res.ok) {
+      let msg = 'Clipdrop request failed (HTTP ' + res.status + ').';
+      if (res.status === 401) msg = 'Invalid Clipdrop API key.';
+      else if (res.status === 402) msg = 'Out of credits on this Clipdrop key.';
+      else if (res.status === 429) msg = 'Rate limited by Clipdrop — wait a moment and try again.';
+      else { try { const j = await res.json(); if (j && j.error) msg = j.error; } catch (e) { /* ignore parse error */ } }
+      throw new Error(msg);
+    }
+
+    const remaining = res.headers.get('x-remaining-credits');
+    document.getElementById('creditsNote').textContent = remaining ? ('Credits remaining: ' + remaining) : '';
+
+    const outBlob = await res.blob();
+    const bitmap = await createImageBitmap(outBlob);
+    resultCanvas.width = w; resultCanvas.height = h;
+    resultCanvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+
+    showResult();
+  } catch (err) {
+    console.error(err);
+    let msg = err && err.message ? err.message : 'Something went wrong.';
+    if (err && err.message === 'Failed to fetch') {
+      msg = "Couldn't reach Clipdrop directly from the browser — this can happen if their API blocks cross-origin requests from websites. Try Free mode instead.";
+    }
+    alert(msg);
   } finally {
     btn.disabled = false;
     btn.innerHTML = originalLabel;

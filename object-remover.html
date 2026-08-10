@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Object &amp; Watermark Remover — Salman IT Tools</title>
+<meta name="description" content="Remove unwanted objects, logos or watermarks from your own photos instantly — right in your browser. Nothing is uploaded to any server. 100% private and free.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.page{max-width:960px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:620px;margin-bottom:24px}
+
+/* Disclaimer */
+.disclaimer{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:12px;padding:14px 18px;font-size:0.82rem;color:var(--white);line-height:1.6;margin-bottom:32px;display:flex;gap:10px;align-items:flex-start}
+.disclaimer .ico{font-size:1.1rem;flex-shrink:0}
+.disclaimer b{color:var(--warning)}
+
+/* Drop zone */
+.drop-zone{border:2px dashed rgba(0,232,122,0.3);border-radius:20px;padding:60px 24px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(0,232,122,0.03);margin-bottom:32px;position:relative}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--green);background:rgba(0,232,122,0.07)}
+.drop-icon{font-size:3rem;margin-bottom:16px}
+.drop-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.drop-sub{font-size:0.88rem;color:var(--muted);margin-bottom:20px}
+.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.drop-btn:hover{opacity:.9;transform:scale(1.02)}
+.drop-formats{font-size:0.75rem;color:var(--muted);margin-top:12px}
+#fileInput{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* Editor */
+.editor-wrap{display:none;margin-bottom:32px}
+.editor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.editor-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.04em;color:var(--white)}
+.action-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.action-btn:hover{background:rgba(255,255,255,0.1)}
+.editor-toolbar{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.tool-group{display:flex;flex-direction:column;gap:6px;min-width:150px}
+.tool-group label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.tool-group input[type=range]{accent-color:var(--cyan);cursor:pointer}
+.tool-btns{display:flex;gap:8px;flex-wrap:wrap}
+.editor-hint{font-size:0.85rem;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.canvas-wrap{position:relative;width:100%;line-height:0;border-radius:14px;overflow:hidden;background:#000;touch-action:none;margin-bottom:10px;border:1px solid var(--border)}
+.canvas-wrap canvas{display:block;width:100%;height:auto}
+#maskCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.brush-cursor{position:absolute;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;z-index:5;box-shadow:0 0 0 1px rgba(0,0,0,0.5)}
+.resize-note{font-size:0.76rem;color:var(--muted);margin-bottom:14px}
+.engine-status{font-size:0.82rem;color:var(--cyan);margin-bottom:12px;display:none;align-items:center;gap:8px}
+.compress-all-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.compress-all-btn:hover{opacity:.9;box-shadow:0 8px 24px rgba(0,232,122,0.3)}
+.compress-all-btn:disabled{opacity:.5;cursor:not-allowed}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,232,122,0.3);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:4px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Result */
+.result-wrap{display:none;margin-top:28px}
+.result-toggle{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:14px;gap:4px}
+.toggle-btn{padding:8px 20px;border:none;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s}
+.toggle-btn.active{background:var(--cyan);color:var(--ink)}
+.result-stage{position:relative;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--border);line-height:0}
+.result-img{width:100%;display:block}
+#afterImg{position:absolute;inset:0;opacity:0;transition:opacity .25s;width:100%;height:100%}
+#afterImg.show{opacity:1}
+.result-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.fmt-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;cursor:pointer;max-width:150px}
+.fmt-select option{background:#0E1A2E}
+
+/* Info cards */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.editor-toolbar{flex-direction:column;align-items:stretch}.tool-group{min-width:0}}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px;z-index:600}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="page-eyebrow">Free Online Tool</div>
+  <h1 class="page-title">Object &amp;<br><span class="acc">Watermark Remover</span></h1>
+  <p class="page-sub">Paint over anything you want gone — a logo, a watermark, a photobomber, a stray object — and remove it while the rest of the photo stays exactly as it was. Runs entirely in your browser, nothing is uploaded anywhere.</p>
+
+  <div class="disclaimer">
+    <span class="ico">⚠️</span>
+    <div><b>Use responsibly:</b> only remove objects or watermarks from your own photos, or images you have permission to edit. Removing a watermark from a stock photo, someone else's artwork, or any image you haven't licensed can be copyright infringement.</div>
+  </div>
+
+  <!-- Hidden file input outside drop zone -->
+  <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
+
+  <!-- Drop zone -->
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-icon">🖼️</div>
+    <div class="drop-title">Drop a Photo Here</div>
+    <div class="drop-sub">or click to browse your files</div>
+    <button class="drop-btn" id="chooseBtn" type="button">
+      📁 &nbsp;Choose Photo
+    </button>
+    <div class="drop-formats">Supports JPG, PNG, WebP · One image at a time · Large images auto-resized for performance</div>
+  </div>
+
+  <!-- Editor -->
+  <div class="editor-wrap" id="editorWrap">
+    <div class="editor-header">
+      <h3>Paint the Area to Remove</h3>
+      <button class="action-btn" onclick="changeImage()">📁 Change Image</button>
+    </div>
+
+    <div class="editor-toolbar">
+      <div class="tool-group">
+        <label>Brush Size</label>
+        <input type="range" id="brushSlider" min="8" max="140" value="35">
+      </div>
+      <div class="tool-group">
+        <label>Blend Radius</label>
+        <input type="range" id="radiusSlider" min="1" max="20" value="6">
+      </div>
+      <div class="tool-btns">
+        <button class="action-btn" onclick="undoMask()">↶ Undo</button>
+        <button class="action-btn" onclick="clearMask()">🗑️ Clear Paint</button>
+        <button class="action-btn" onclick="resetImage()">↺ Reset Image</button>
+      </div>
+    </div>
+
+    <p class="editor-hint">🖌️ Paint (click-drag, or use your finger on mobile) over the watermark or object you want removed — a rough coat is fine, it doesn't need to be pixel-precise. Then click <strong>Remove</strong> below.</p>
+
+    <div class="resize-note" id="resizeNote" style="display:none">ℹ️ This image was automatically resized for performance — the downloaded result will match the resized dimensions.</div>
+
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="imgCanvas"></canvas>
+      <canvas id="maskCanvas"></canvas>
+      <div class="brush-cursor" id="brushCursor"></div>
+    </div>
+
+    <div class="engine-status" id="engineStatus"><span class="spinner"></span><span id="engineStatusText">Loading photo engine…</span></div>
+
+    <button class="compress-all-btn" id="removeBtn" onclick="removeObject()">🧽 Remove Object / Watermark</button>
+
+    <!-- Result -->
+    <div class="result-wrap" id="resultWrap">
+      <div class="result-toggle">
+        <button class="toggle-btn" id="toggleOrig" onclick="setResultView('orig')">Before</button>
+        <button class="toggle-btn active" id="toggleResult" onclick="setResultView('after')">After</button>
+      </div>
+      <div class="result-stage">
+        <img class="result-img" id="beforeImg" alt="Original photo">
+        <img class="result-img show" id="afterImg" alt="Photo with object removed">
+      </div>
+      <div class="result-actions">
+        <button class="action-btn" onclick="continueEditing()">✏️ Touch Up Further</button>
+        <select class="fmt-select" id="dlFormat">
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPEG</option>
+          <option value="image/webp">WebP</option>
+        </select>
+        <button class="drop-btn" onclick="downloadResult()">⬇ Download Result</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden processing canvas -->
+  <canvas id="resultCanvas" style="display:none"></canvas>
+
+  <!-- Info -->
+  <div class="info-section">
+    <div class="page-eyebrow">How It Works</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">100% Private — Nothing Leaves Your Device</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:24px">
+      This tool uses inpainting — the same technique behind "content-aware fill" — to reconstruct the area you paint over using the surrounding pixels, so the rest of the photo is completely untouched.
+      Everything runs on your own device using your browser's WebAssembly engine; your photo is never uploaded or sent anywhere.
+    </p>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🔒</div><h4>No Uploads</h4><p>Your photo never leaves your device. Processing happens entirely in your browser via WebAssembly.</p></div>
+      <div class="info-card"><div class="ico">🖌️</div><h4>Paint to Remove</h4><p>Just paint over the object or watermark — no need to be precise, a rough coat covering the area works fine.</p></div>
+      <div class="info-card"><div class="ico">🔁</div><h4>Multi-Pass Touch Ups</h4><p>Remove one spot, then keep painting and removing more — great for multiple watermarks or objects in one photo.</p></div>
+      <div class="info-card"><div class="ico">🆓</div><h4>Free, No Limits</h4><p>No sign-up, no watermark added to your result, no limit on how many photos you process.</p></div>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="info-section">
+    <div class="page-eyebrow">Tips</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Getting the Best Results</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🎯</div><h4>Cover Fully</h4><p>Make sure your paint fully covers the watermark or object, including any faint edges — a little extra overlap into the background is fine.</p></div>
+      <div class="info-card"><div class="ico">🧩</div><h4>Simple Backgrounds Work Best</h4><p>Removal blends best on plain, textured or repeating backgrounds (sky, grass, walls). Busy, detailed backgrounds may show minor blending artefacts.</p></div>
+      <div class="info-card"><div class="ico">✂️</div><h4>Split Large Objects</h4><p>For big objects, try removing in smaller passes using "Touch Up Further" rather than painting one huge area — it usually blends better.</p></div>
+      <div class="info-card"><div class="ico">🔍</div><h4>Zoom Your Browser</h4><p>For small, precise watermarks, zoom in with your browser (Ctrl/Cmd + "+") before painting for finer brush control.</p></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="info-section">
+    <div class="page-eyebrow">FAQ</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
+    <div class="info-grid" style="grid-template-columns:1fr">
+      <div class="info-card"><h4>Is it legal to remove a watermark?</h4><p>It depends entirely on whose image it is and what rights you have. Removing a watermark from your own photo, or one you have written permission to edit, is fine. Removing a copyright or stock-photo watermark from an image you don't own or haven't licensed is copyright infringement in most jurisdictions — this tool is intended for the former, not the latter.</p></div>
+      <div class="info-card"><h4>Why does the result look slightly blurred or smudged?</h4><p>Inpainting reconstructs the painted area by blending nearby pixels — it works best on simple or repetitive backgrounds. Complex, highly detailed backgrounds (faces, intricate patterns) are harder to reconstruct convincingly. Try smaller passes or a tighter paint area for better results.</p></div>
+      <div class="info-card"><h4>Does this use AI / send my photo anywhere?</h4><p>No. This uses classic computer-vision inpainting (OpenCV's Telea algorithm) running fully client-side via WebAssembly. Your photo is loaded into your browser's memory and never transmitted to any server.</p></div>
+      <div class="info-card"><h4>Why did my image get resized?</h4><p>Very large photos are automatically capped at 1800px on the longest side before editing, to keep processing fast and avoid crashing your browser tab. The downloaded result matches this resized dimension.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Content section -->
+<div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
+  <div style="margin-top:56px">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Object Removal Explained</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is Inpainting, and How Does It Remove Objects Without Touching the Rest of the Photo?</h2>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      Inpainting is a computer-vision technique that reconstructs a masked region of an image by analysing the texture, colour and structure of the pixels surrounding it. Rather than cropping,
+      blurring or covering the area, the algorithm essentially asks "what would likely be here based on everything around it?" and fills the gap accordingly — which is exactly how professional
+      photo editors' "content-aware fill" and "spot healing" tools work under the hood.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
+      This tool uses the Telea inpainting algorithm from OpenCV, running entirely inside your browser via WebAssembly — the same underlying library used in countless professional computer-vision
+      applications. You paint a mask over the region you want gone, and the algorithm works outward from the edges of that mask, propagating nearby colour and texture information inward until
+      the area is filled. Because only the masked pixels are touched, every other pixel in your photo remains byte-for-byte identical to the original.
+    </p>
+    <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">
+      Results are best on simple, repetitive or low-detail backgrounds — skies, walls, grass, water, fabric. Highly detailed or structured backgrounds (faces, text, fine patterns) are inherently
+      harder for any inpainting algorithm to reconstruct convincingly, so for tricky spots it often helps to remove smaller sections at a time using the "Touch Up Further" option, rather than
+      painting one large area in a single pass.
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="white"><path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 10L4 44l10.3-2.7C17.1 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.8 30.1 8 27.1 8 24 8 15.2 15.2 8 24 8s16 7.2 16 16-7.2 16-16 16zm8.7-11.8c-.5-.2-2.8-1.4-3.2-1.5-.4-.2-.7-.2-1 .2-.3.5-1.1 1.5-1.4 1.8-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.4-.8.2-.3.1-.6 0-.8-.1-.2-1-2.5-1.4-3.4-.4-.9-.8-.7-1-.7h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.5-1.6 3.7s1.6 4.3 1.9 4.6c.2.3 3.2 5 7.8 7 1.1.5 1.9.7 2.6.9 1.1.3 2.1.3 2.9.2.9-.1 2.8-1.1 3.2-2.2.4-1.1.4-2 .3-2.2-.2-.3-.5-.4-1-.6z"/></svg>
+</a>
+<style>
+.wa-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .2s;text-decoration:none}
+.wa-btn:hover{transform:scale(1.1)}
+.wa-btn svg{width:32px;height:32px;position:relative;z-index:1}
+.wa-btn::before{content:'';position:absolute;width:58px;height:58px;border-radius:50%;background:rgba(37,211,102,0.35);animation:wa-pulse 2s ease-out infinite}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+</style>
+
+<script>
+const state = { origImg: null, filename: 'photo', resized: false };
+const maskUndoStack = [];
+let isDrawing = false;
+let lastPos = null;
+
+const dropZone   = document.getElementById('dropZone');
+const fileInput  = document.getElementById('fileInput');
+const chooseBtn  = document.getElementById('chooseBtn');
+const editorWrap = document.getElementById('editorWrap');
+const canvasWrap = document.getElementById('canvasWrap');
+const imgCanvas  = document.getElementById('imgCanvas');
+const maskCanvas = document.getElementById('maskCanvas');
+const resultCanvas = document.getElementById('resultCanvas');
+const brushCursor = document.getElementById('brushCursor');
+const brushSlider = document.getElementById('brushSlider');
+const radiusSlider = document.getElementById('radiusSlider');
+
+// ── File input wiring ────────────────────────────────────────────────────────
+chooseBtn.addEventListener('click', e => { e.stopPropagation(); fileInput.click(); });
+dropZone.addEventListener('click', e => { if (e.target !== chooseBtn) fileInput.click(); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  const f = [...e.dataTransfer.files].find(f => f.type.startsWith('image/'));
+  if (f) loadImage(f);
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) loadImage(fileInput.files[0]);
+  fileInput.value = '';
+});
+
+function loadImage(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => setupEditor(img, file.name);
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function setupEditor(img, filename) {
+  state.origImg = img;
+  state.filename = filename.replace(/\.[^.]+$/, '');
+
+  let w = img.naturalWidth, h = img.naturalHeight;
+  const MAX_DIM = 1800;
+  state.resized = Math.max(w, h) > MAX_DIM;
+  if (state.resized) {
+    const scale = MAX_DIM / Math.max(w, h);
+    w = Math.round(w * scale); h = Math.round(h * scale);
+  }
+
+  imgCanvas.width = w; imgCanvas.height = h;
+  maskCanvas.width = w; maskCanvas.height = h;
+  resultCanvas.width = w; resultCanvas.height = h;
+
+  imgCanvas.getContext('2d').clearRect(0, 0, w, h);
+  imgCanvas.getContext('2d').drawImage(img, 0, 0, w, h);
+  maskCanvas.getContext('2d').clearRect(0, 0, w, h);
+
+  maskUndoStack.length = 0;
+  document.getElementById('resizeNote').style.display = state.resized ? 'block' : 'none';
+  document.getElementById('resultWrap').style.display = 'none';
+  document.getElementById('engineStatus').style.display = 'none';
+
+  dropZone.style.display = 'none';
+  editorWrap.style.display = 'block';
+}
+
+function changeImage() {
+  editorWrap.style.display = 'none';
+  dropZone.style.display = 'block';
+}
+
+// ── Mask painting ─────────────────────────────────────────────────────────────
+function getCanvasPos(e) {
+  const rect = maskCanvas.getBoundingClientRect();
+  const scaleX = maskCanvas.width / rect.width;
+  const scaleY = maskCanvas.height / rect.height;
+  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+}
+
+function pushUndoSnapshot() {
+  const ctx = maskCanvas.getContext('2d');
+  maskUndoStack.push(ctx.getImageData(0, 0, maskCanvas.width, maskCanvas.height));
+  if (maskUndoStack.length > 25) maskUndoStack.shift();
+}
+
+maskCanvas.addEventListener('pointerdown', e => {
+  maskCanvas.setPointerCapture(e.pointerId);
+  pushUndoSnapshot();
+  isDrawing = true;
+  lastPos = getCanvasPos(e);
+  strokeTo(lastPos, lastPos);
+});
+maskCanvas.addEventListener('pointermove', e => {
+  const rect = canvasWrap.getBoundingClientRect();
+  brushCursor.style.left = (e.clientX - rect.left) + 'px';
+  brushCursor.style.top  = (e.clientY - rect.top) + 'px';
+  brushCursor.style.width = brushSlider.value + 'px';
+  brushCursor.style.height = brushSlider.value + 'px';
+
+  if (!isDrawing) return;
+  const pos = getCanvasPos(e);
+  strokeTo(lastPos, pos);
+  lastPos = pos;
+});
+function stopDrawing() { isDrawing = false; lastPos = null; }
+maskCanvas.addEventListener('pointerup', stopDrawing);
+maskCanvas.addEventListener('pointercancel', stopDrawing);
+maskCanvas.addEventListener('pointerenter', () => { brushCursor.style.display = 'block'; });
+maskCanvas.addEventListener('pointerleave', () => { brushCursor.style.display = 'none'; stopDrawing(); });
+
+function strokeTo(from, to) {
+  const ctx = maskCanvas.getContext('2d');
+  const rect = maskCanvas.getBoundingClientRect();
+  const scale = maskCanvas.width / rect.width;
+  ctx.strokeStyle = 'rgba(255,60,60,0.55)';
+  ctx.lineWidth = Math.max(2, brushSlider.value * scale);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(from.x, from.y);
+  ctx.lineTo(to.x, to.y);
+  ctx.stroke();
+}
+
+function undoMask() {
+  if (!maskUndoStack.length) return;
+  const snapshot = maskUndoStack.pop();
+  maskCanvas.getContext('2d').putImageData(snapshot, 0, 0);
+}
+
+function clearMask() {
+  pushUndoSnapshot();
+  maskCanvas.getContext('2d').clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+}
+
+function resetImage() {
+  if (!state.origImg) return;
+  const w = imgCanvas.width, h = imgCanvas.height;
+  imgCanvas.getContext('2d').clearRect(0, 0, w, h);
+  imgCanvas.getContext('2d').drawImage(state.origImg, 0, 0, w, h);
+  maskCanvas.getContext('2d').clearRect(0, 0, w, h);
+  maskUndoStack.length = 0;
+  document.getElementById('resultWrap').style.display = 'none';
+}
+
+// ── OpenCV.js lazy load ───────────────────────────────────────────────────────
+let cvReadyPromise = null;
+function ensureOpenCV() {
+  if (cvReadyPromise) return cvReadyPromise;
+  cvReadyPromise = new Promise((resolve, reject) => {
+    if (window.cv && typeof window.cv.Mat === 'function') { resolve(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://docs.opencv.org/4.x/opencv.js';
+    script.onerror = () => { cvReadyPromise = null; reject(new Error('Failed to load the photo engine — check your connection and try again.')); };
+    script.onload = () => {
+      const check = () => {
+        if (window.cv && typeof window.cv.Mat === 'function') resolve();
+        else if (window.cv) window.cv['onRuntimeInitialized'] = resolve;
+        else setTimeout(check, 50);
+      };
+      check();
+    };
+    document.head.appendChild(script);
+  });
+  return cvReadyPromise;
+}
+
+// ── Remove object ─────────────────────────────────────────────────────────────
+async function removeObject() {
+  const btn = document.getElementById('removeBtn');
+  const status = document.getElementById('engineStatus');
+  const statusText = document.getElementById('engineStatusText');
+  const originalLabel = btn.innerHTML;
+
+  const w = imgCanvas.width, h = imgCanvas.height;
+  const maskCtx = maskCanvas.getContext('2d');
+  const maskData = maskCtx.getImageData(0, 0, w, h);
+  let painted = false;
+  for (let i = 3; i < maskData.data.length; i += 4) { if (maskData.data[i] > 10) { painted = true; break; } }
+  if (!painted) { alert('Paint over the object or watermark you want removed first.'); return; }
+
+  btn.disabled = true;
+  const wasLoaded = !!(window.cv && typeof window.cv.Mat === 'function');
+  status.style.display = 'flex';
+  statusText.textContent = wasLoaded ? 'Processing…' : 'Loading photo engine — first run only, ~10MB…';
+  btn.innerHTML = '<span class="spinner"></span> ' + (wasLoaded ? 'Processing…' : 'Loading engine…');
+
+  try {
+    await ensureOpenCV();
+    statusText.textContent = 'Processing…';
+    btn.innerHTML = '<span class="spinner"></span> Processing…';
+    await new Promise(r => setTimeout(r, 30)); // let UI repaint before heavy sync work
+
+    const imgCtx = imgCanvas.getContext('2d');
+    const imgData = imgCtx.getImageData(0, 0, w, h);
+
+    const maskArr = new Uint8Array(w * h);
+    for (let p = 0, i = 3; i < maskData.data.length; i += 4, p++) {
+      maskArr[p] = maskData.data[i] > 10 ? 255 : 0;
+    }
+
+    const src = cv.matFromImageData(imgData);
+    const srcRGB = new cv.Mat();
+    cv.cvtColor(src, srcRGB, cv.COLOR_RGBA2RGB);
+    const maskMat = cv.matFromArray(h, w, cv.CV_8UC1, maskArr);
+    const dst = new cv.Mat();
+    const radius = parseInt(radiusSlider.value) || 6;
+    cv.inpaint(srcRGB, maskMat, dst, radius, cv.INPAINT_TELEA);
+
+    cv.imshow(resultCanvas, dst);
+
+    src.delete(); srcRGB.delete(); maskMat.delete(); dst.delete();
+
+    showResult();
+  } catch (err) {
+    console.error(err);
+    alert(err && err.message ? err.message : 'Something went wrong processing the image. Try a smaller image or a smaller painted area.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalLabel;
+    status.style.display = 'none';
+  }
+}
+
+function showResult() {
+  document.getElementById('beforeImg').src = imgCanvas.toDataURL();
+  document.getElementById('afterImg').src = resultCanvas.toDataURL();
+  document.getElementById('resultWrap').style.display = 'block';
+  setResultView('after');
+  document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function setResultView(which) {
+  document.getElementById('toggleOrig').classList.toggle('active', which === 'orig');
+  document.getElementById('toggleResult').classList.toggle('active', which === 'after');
+  document.getElementById('afterImg').classList.toggle('show', which === 'after');
+}
+
+function continueEditing() {
+  const w = imgCanvas.width, h = imgCanvas.height;
+  imgCanvas.getContext('2d').drawImage(resultCanvas, 0, 0, w, h);
+  maskCanvas.getContext('2d').clearRect(0, 0, w, h);
+  maskUndoStack.length = 0;
+  document.getElementById('resultWrap').style.display = 'none';
+  canvasWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function downloadResult() {
+  const format = document.getElementById('dlFormat').value;
+  const ext = format === 'image/webp' ? '.webp' : format === 'image/jpeg' ? '.jpg' : '.png';
+  resultCanvas.toBlob(blob => {
+    if (!blob) { alert('Could not export the image — try a different format.'); return; }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = state.filename + '_edited' + ext;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }, format, format === 'image/png' ? undefined : 0.92);
+}
+
+// ── Nav ───────────────────────────────────────────────────────────────────────
+function toggleMobileMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+</script>
+</body>
+</html>

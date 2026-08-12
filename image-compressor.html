@@ -244,16 +244,6 @@ footer a{color:var(--green);text-decoration:none}
     </div>
   </div>
 
-  <!-- FAQ -->
-  <div class="info-section">
-    <div class="page-eyebrow">FAQ</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
-    <div class="info-grid" style="grid-template-columns:1fr">
-      <div class="info-card"><h4>Will compression reduce image quality?</h4><p>At higher quality settings (70-90%), the difference is usually imperceptible while file size drops significantly. Lower settings (below 50%) trade more visible quality for smaller files — useful for thumbnails or web backgrounds.</p></div>
-      <div class="info-card"><h4>What's the best format for my images?</h4><p>JPEG works best for photos with lots of colour variation. PNG is better for graphics, logos, or images with transparency. WebP often gives the smallest file size while maintaining quality, and is supported by all modern browsers.</p></div>
-      <div class="info-card"><h4>Is there a file size or quantity limit?</h4><p>No artificial limit is imposed by this tool — the only constraint is your device's available memory when processing very large batches.</p></div>
-      <div class="info-card"><h4>Why would I resize using max width?</h4><p>Many websites don't need full-resolution images. Setting a max width (e.g. 1920px) reduces both dimensions and file size together, which is ideal for web use where large originals are unnecessary.</p></div>
-    </div>
   </div>
 </div>
 
@@ -291,8 +281,12 @@ footer a{color:var(--green);text-decoration:none}
         <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">WebP produces smaller files than JPEG at equivalent quality and is supported by all modern browsers. For web use, WebP is the better choice. For maximum compatibility with older systems, email clients, and software that doesn't support WebP, stick with JPEG. PNG is best for images with text, logos, screenshots, or transparent backgrounds.</p>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
-        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Will compressing reduce my image dimensions?</h4>
-        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Not unless you use the resize option. Compression reduces file size by encoding the pixel data more efficiently or discarding fine detail, but the output image has the same pixel dimensions as the input. If you need to reduce dimensions (for example, scaling a 4000px wide photo down to 1200px), use the width setting before compressing.</p>
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Will compressing reduce my image dimensions, and why would I use the max width option?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Not unless you use the resize option. Compression reduces file size by encoding the pixel data more efficiently or discarding fine detail, but the output image keeps the same pixel dimensions as the input. Many websites don't need full-resolution originals, so setting a max width (e.g. 1920px) reduces both dimensions and file size together — ideal for web use where large source photos are unnecessary. If you need to scale down, for example a 4000px wide photo to 1200px, set the width before compressing.</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Is there a file size or quantity limit?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">No artificial limit is imposed by this tool — the only constraint is your device's available memory when processing very large batches.</p>
       </div>
     </div>
   </div>

@@ -348,11 +348,7 @@ const GRAPH     = 'https://graph.microsoft.com/v1.0';
 const SCOPES    = ['User.Read','User.Read.All','Directory.Read.All',
   'UserAuthenticationMethod.Read.All','AuditLog.Read.All','SecurityEvents.Read.All',
   'Policy.Read.All','Reports.Read.All','Sites.Read.All',
-  'DeviceManagementManagedDevices.Read.All','MailboxSettings.ReadWrite'];
-// NOTE: bumped MailboxSettings.Read -> MailboxSettings.ReadWrite because the
-// messageRules (inbox rules) endpoint requires ReadWrite even just to list rules.
-// Existing users who consented under the old scope will be prompted to
-// re-consent the next time they sign in.
+  'DeviceManagementManagedDevices.Read.All','MailboxSettings.Read'];
 
 const msalInstance = new msal.PublicClientApplication({
   auth: {
@@ -450,7 +446,7 @@ function showError(msg) {
 const STEPS = ['Fetching users & licenses','Checking MFA status','Checking admin roles',
   'Checking Conditional Access','Fetching risky sign-ins','Getting Secure Score',
   'Checking SharePoint','Fetching devices','Checking mail forwarding',
-  'Checking OAuth app grants','Checking inbox rules','Building report'];
+  'Checking OAuth app grants','Building report'];
 
 function initProgress() {
   document.getElementById('progressSteps').innerHTML = STEPS.map((s,i) =>
@@ -720,56 +716,8 @@ async function runScan() {
     if (riskyGrants.some(r => !r.app?.verifiedPublisher?.displayName)) issues++;
     stepDone(9);
 
-    // 10 — Inbox rules (New-InboxRule / forwarding — the classic BEC indicator)
+    // 10 — Build report
     stepActive(10);
-    let ruleChecked = 0, ruleFailed = 0;
-    const ruleResults = await Promise.all(licensedForFwd.map(async u => {
-      try {
-        const r = await graph(`/users/${u.id}/mailFolders/inbox/messageRules`, token);
-        ruleChecked++;
-        return { user: u, rules: r?.value || [] };
-      } catch(e) {
-        ruleFailed++;
-        return { user: u, rules: null, error: e.message };
-      }
-    }));
-    const suspiciousRules = [];
-    ruleResults.forEach(r => {
-      (r.rules||[]).forEach(rule => {
-        const actions = rule.actions || {};
-        const fwd = [...(actions.forwardTo||[]), ...(actions.forwardAsAttachmentTo||[]), ...(actions.redirectTo||[])]
-          .map(x => x.emailAddress?.address).filter(Boolean);
-        if (fwd.length || actions.delete) {
-          const tenantDomain = currentAccount.username.split('@')[1].toLowerCase();
-          const external = fwd.filter(a => !a.toLowerCase().endsWith('@'+tenantDomain));
-          suspiciousRules.push({ user: r.user, rule, fwd, external, deletes: !!actions.delete });
-        }
-      });
-    });
-    let rulesHtml;
-    if (ruleChecked === 0 && ruleFailed > 0) {
-      // Delegated MailboxSettings.ReadWrite may not extend to reading OTHER users'
-      // inbox rules — Graph mail endpoints often restrict this to the signed-in
-      // user's own mailbox regardless of admin role. If every attempt failed,
-      // say so plainly rather than reporting a misleading "0 found".
-      rulesHtml = row('Inbox Rules', '⚠️ Could not read any mailbox\'s inbox rules ('+ruleFailed+' attempted). '
-        + 'This likely means delegated permissions can\'t read other users\' rules from the browser — '
-        + 'that check may need an app-only (application permission) backend instead.', 'warn');
-    } else {
-      rulesHtml = suspiciousRules.length
-        ? row('Suspicious Rules', '⚠️ '+suspiciousRules.length+' rule(s) forwarding or auto-deleting mail','bad')
-        : row('Inbox Rules', '✅ None found (checked '+ruleChecked+' mailbox(es)'+(ruleFailed?', '+ruleFailed+' inaccessible':'')+')','good');
-      suspiciousRules.forEach(r => {
-        const label = (r.external.length ? '🌐 external forward: '+r.external.join(', ') : r.fwd.length ? 'internal forward: '+r.fwd.join(', ') : '')
-          + (r.deletes ? ' · auto-deletes after' : '');
-        rulesHtml += row((r.user.displayName||r.user.userPrincipalName)+' — "'+(r.rule.displayName||'(unnamed rule)')+'"', label, r.external.length?'bad':'warn');
-      });
-    }
-    if (suspiciousRules.some(r=>r.external.length)) issues++;
-    stepDone(10);
-
-    // 11 — Build report
-    stepActive(11);
 
     // Score cards
     addScoreCard('👥', users.length, 'Total Users', 'var(--white)');
@@ -854,7 +802,6 @@ async function runScan() {
     addSection('💻','Devices (Intune)', devs.length===0?'No devices':nonCompliant.length===0?'✅ Compliant':'⚠️ '+nonCompliant.length+' issues', nonCompliant.length===0?'ok':'bad', devHtml);
     addSection('📧','Mail Forwarding', extFwds.length===0?'✅ None':'⚠️ '+extFwds.length, extFwds.length===0?'ok':'bad', fwdHtml);
     addSection('🔑','OAuth App Grants', riskyGrants.length===0?'✅ None':'⚠️ '+riskyGrants.length, riskyGrants.length===0?'ok':'bad', oauthHtml);
-    addSection('📬','Inbox Rules', (ruleChecked===0&&ruleFailed>0)?'⚠️ Unavailable':suspiciousRules.length===0?'✅ None':'⚠️ '+suspiciousRules.length, (ruleChecked===0&&ruleFailed>0)?'warn':suspiciousRules.length===0?'ok':'bad', rulesHtml);
 
     // Auto-open bad sections
     document.querySelectorAll('.result-section').forEach(s => {
@@ -865,7 +812,7 @@ async function runScan() {
       }
     });
 
-    stepDone(11);
+    stepDone(10);
     document.getElementById('progressWrap').style.display = 'none';
     document.getElementById('resultsWrap').style.display = 'block';
 

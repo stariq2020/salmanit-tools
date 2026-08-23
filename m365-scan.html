@@ -348,7 +348,11 @@ const GRAPH     = 'https://graph.microsoft.com/v1.0';
 const SCOPES    = ['User.Read','User.Read.All','Directory.Read.All',
   'UserAuthenticationMethod.Read.All','AuditLog.Read.All','SecurityEvents.Read.All',
   'Policy.Read.All','Reports.Read.All','Sites.Read.All',
-  'DeviceManagementManagedDevices.Read.All','MailboxSettings.Read'];
+  'DeviceManagementManagedDevices.Read.All','MailboxSettings.ReadWrite'];
+// NOTE: bumped MailboxSettings.Read -> MailboxSettings.ReadWrite because the
+// messageRules (inbox rules) endpoint requires ReadWrite even just to list rules.
+// Existing users who consented under the old scope will be prompted to
+// re-consent the next time they sign in.
 
 const msalInstance = new msal.PublicClientApplication({
   auth: {
@@ -445,7 +449,8 @@ function showError(msg) {
 
 const STEPS = ['Fetching users & licenses','Checking MFA status','Checking admin roles',
   'Checking Conditional Access','Fetching risky sign-ins','Getting Secure Score',
-  'Checking SharePoint','Fetching devices','Checking mail forwarding','Building report'];
+  'Checking SharePoint','Fetching devices','Checking mail forwarding',
+  'Checking OAuth app grants','Checking inbox rules','Building report'];
 
 function initProgress() {
   document.getElementById('progressSteps').innerHTML = STEPS.map((s,i) =>
@@ -689,8 +694,82 @@ async function runScan() {
     if (extFwds.length) issues++;
     stepDone(8);
 
-    // 9 — Build report
+    // 9 — OAuth app grants (risky delegated/app permissions consented in the tenant)
     stepActive(9);
+    const grantsData = await graphSafe('/oauth2PermissionGrants?$top=999', token);
+    const grants = grantsData?.value || [];
+    const HIGH_RISK_SCOPES = ['Mail.Read','Mail.ReadWrite','Mail.Send','Mail.Send.Shared',
+      'Files.ReadWrite.All','MailboxSettings.ReadWrite','Directory.ReadWrite.All','Files.Read.All'];
+    const riskyGrants = [];
+    await Promise.all(grants.map(async g => {
+      const scopes = (g.scope||'').trim().split(/\s+/).filter(Boolean);
+      const risky = scopes.filter(s => HIGH_RISK_SCOPES.includes(s));
+      if (risky.length) {
+        const sp = await graphSafe(`/servicePrincipals/${g.clientId}?$select=displayName,appId,publisherName,verifiedPublisher`, token);
+        riskyGrants.push({ grant: g, scopes, risky, app: sp });
+      }
+    }));
+    let oauthHtml = riskyGrants.length
+      ? row('Risky OAuth Grants', '⚠️ '+riskyGrants.length+' app(s) with high-risk mail/file access','bad')
+      : row('OAuth Grants', '✅ No high-risk app permissions detected ('+grants.length+' grants checked)','good');
+    riskyGrants.slice(0,15).forEach(r => {
+      const name = r.app?.displayName || r.grant.clientId;
+      const verified = r.app?.verifiedPublisher?.displayName ? ' · verified: '+r.app.verifiedPublisher.displayName : ' · ⚠️ unverified publisher';
+      oauthHtml += row(name, r.risky.join(', ')+verified, 'warn');
+    });
+    if (riskyGrants.some(r => !r.app?.verifiedPublisher?.displayName)) issues++;
+    stepDone(9);
+
+    // 10 — Inbox rules (New-InboxRule / forwarding — the classic BEC indicator)
+    stepActive(10);
+    let ruleChecked = 0, ruleFailed = 0;
+    const ruleResults = await Promise.all(licensedForFwd.map(async u => {
+      try {
+        const r = await graph(`/users/${u.id}/mailFolders/inbox/messageRules`, token);
+        ruleChecked++;
+        return { user: u, rules: r?.value || [] };
+      } catch(e) {
+        ruleFailed++;
+        return { user: u, rules: null, error: e.message };
+      }
+    }));
+    const suspiciousRules = [];
+    ruleResults.forEach(r => {
+      (r.rules||[]).forEach(rule => {
+        const actions = rule.actions || {};
+        const fwd = [...(actions.forwardTo||[]), ...(actions.forwardAsAttachmentTo||[]), ...(actions.redirectTo||[])]
+          .map(x => x.emailAddress?.address).filter(Boolean);
+        if (fwd.length || actions.delete) {
+          const tenantDomain = currentAccount.username.split('@')[1].toLowerCase();
+          const external = fwd.filter(a => !a.toLowerCase().endsWith('@'+tenantDomain));
+          suspiciousRules.push({ user: r.user, rule, fwd, external, deletes: !!actions.delete });
+        }
+      });
+    });
+    let rulesHtml;
+    if (ruleChecked === 0 && ruleFailed > 0) {
+      // Delegated MailboxSettings.ReadWrite may not extend to reading OTHER users'
+      // inbox rules — Graph mail endpoints often restrict this to the signed-in
+      // user's own mailbox regardless of admin role. If every attempt failed,
+      // say so plainly rather than reporting a misleading "0 found".
+      rulesHtml = row('Inbox Rules', '⚠️ Could not read any mailbox\'s inbox rules ('+ruleFailed+' attempted). '
+        + 'This likely means delegated permissions can\'t read other users\' rules from the browser — '
+        + 'that check may need an app-only (application permission) backend instead.', 'warn');
+    } else {
+      rulesHtml = suspiciousRules.length
+        ? row('Suspicious Rules', '⚠️ '+suspiciousRules.length+' rule(s) forwarding or auto-deleting mail','bad')
+        : row('Inbox Rules', '✅ None found (checked '+ruleChecked+' mailbox(es)'+(ruleFailed?', '+ruleFailed+' inaccessible':'')+')','good');
+      suspiciousRules.forEach(r => {
+        const label = (r.external.length ? '🌐 external forward: '+r.external.join(', ') : r.fwd.length ? 'internal forward: '+r.fwd.join(', ') : '')
+          + (r.deletes ? ' · auto-deletes after' : '');
+        rulesHtml += row((r.user.displayName||r.user.userPrincipalName)+' — "'+(r.rule.displayName||'(unnamed rule)')+'"', label, r.external.length?'bad':'warn');
+      });
+    }
+    if (suspiciousRules.some(r=>r.external.length)) issues++;
+    stepDone(10);
+
+    // 11 — Build report
+    stepActive(11);
 
     // Score cards
     addScoreCard('👥', users.length, 'Total Users', 'var(--white)');
@@ -774,6 +853,8 @@ async function runScan() {
     addSection('📁','SharePoint', spData?'✅ Connected':'⚠️ N/A', spData?'ok':'warn', spHtml);
     addSection('💻','Devices (Intune)', devs.length===0?'No devices':nonCompliant.length===0?'✅ Compliant':'⚠️ '+nonCompliant.length+' issues', nonCompliant.length===0?'ok':'bad', devHtml);
     addSection('📧','Mail Forwarding', extFwds.length===0?'✅ None':'⚠️ '+extFwds.length, extFwds.length===0?'ok':'bad', fwdHtml);
+    addSection('🔑','OAuth App Grants', riskyGrants.length===0?'✅ None':'⚠️ '+riskyGrants.length, riskyGrants.length===0?'ok':'bad', oauthHtml);
+    addSection('📬','Inbox Rules', (ruleChecked===0&&ruleFailed>0)?'⚠️ Unavailable':suspiciousRules.length===0?'✅ None':'⚠️ '+suspiciousRules.length, (ruleChecked===0&&ruleFailed>0)?'warn':suspiciousRules.length===0?'ok':'bad', rulesHtml);
 
     // Auto-open bad sections
     document.querySelectorAll('.result-section').forEach(s => {
@@ -784,7 +865,7 @@ async function runScan() {
       }
     });
 
-    stepDone(9);
+    stepDone(11);
     document.getElementById('progressWrap').style.display = 'none';
     document.getElementById('resultsWrap').style.display = 'block';
 

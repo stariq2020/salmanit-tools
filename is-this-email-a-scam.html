@@ -337,6 +337,7 @@ footer a{color:var(--green);text-decoration:none}
       <div class="meter"><div class="meter-fill" id="meterFill" style="width:0%"></div></div>
       <div class="meter-labels"><span>0 · Low</span><span>20</span><span>40</span><span>70</span><span>100 · High</span></div>
       <div class="clean-note" id="cleanNote" style="display:none"><p><strong>Important:</strong> A clean result does not guarantee that an email is legitimate. The analysis found no obvious phishing indicators in the information provided.</p></div>
+      <div class="clean-note" id="evidenceNote" style="display:none;background:rgba(0,200,255,0.05);border-color:rgba(0,200,255,0.2)"><p style="color:var(--cyan)"><strong>Limited evidence available:</strong> No sender address, links, or authentication headers were found to check — several of our checks could not run, so this score is based on wording alone. Add the email headers or upload the .eml file for a fuller check before trusting a low score here.</p></div>
     </div>
 
     <div class="section-block" id="concernsBlock" style="display:none">
@@ -835,7 +836,7 @@ function gatherEmailData(){
    ============================================================ */
 const BRANDS = [
   {name:'Microsoft', keys:['microsoft','office 365','office365','onedrive','xbox live'], domains:['microsoft.com','live.com','outlook.com','office.com','office365.com','microsoftonline.com','msn.com','windows.com','xbox.com']},
-  {name:'Apple', keys:['apple id','apple inc','icloud','app store'], domains:['apple.com','icloud.com']},
+  {name:'Apple', keys:['apple id','apple inc','icloud','app store'], domains:['apple.com','icloud.com'], softPats:[pat('iPhone',/\biphone\b/i), pat('iPad',/\bipad\b/i), pat('Mac',/\bmac\b/i), pat('MacBook',/\bmacbook\b/i), pat('Apple Watch',/\bapple watch\b/i), pat('AirPods',/\bairpods\b/i)]},
   {name:'Google', keys:['google account','gmail'], domains:['google.com','gmail.com','youtube.com']},
   {name:'Amazon', keys:['amazon'], domains:['amazon.com','amazon.co.uk','amazon.de','amazon.ca','amazon.fr','amazon.es','amazon.it']},
   {name:'PayPal', keys:['paypal'], domains:['paypal.com','paypal.co.uk']},
@@ -875,8 +876,8 @@ const SHORTENERS = ['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','is.gd','buff
 const SUSPICIOUS_TLDS = ['zip','mov','top','xyz','click','link','work','support','country','gq','cf','tk','ml','ga','icu','rest','cam','buzz','fit','quest','cyou','monster','bond','surf','cfd','sbs','loan','win','review','stream','date','faith','accountant','racing','party'];
 function pat(label, re){ return {label, re}; }
 const URGENCY_PHRASES = [
-  pat('act now', /\bact now\b/i), pat('urgent', /\burgent\b/i), pat('immediately', /\bimmediately\b/i),
-  pat('final warning', /final warning/i), pat('account suspended', /account (?:has been |is )?suspended/i),
+  pat('act now', /\bact now\b/i), pat('urgent', /\burgent\b/i), pat('immediate / immediately', /\bimmediate(?:ly)?\b/i),
+  pat('final warning/reminder', /final (?:warning|reminder|notice)/i), pat('account suspended', /account (?:has been |is )?suspended/i),
   pat('account will be closed', /account will be closed/i), pat('account has been limited', /account has been limited/i),
   pat('account has been compromised', /account (?:has been|was) compromised/i), pat('verify now', /verify now/i),
   pat('verify your account', /verify(?:ing)? your account/i), pat('payment required', /payment (?:is )?required/i),
@@ -886,17 +887,25 @@ const URGENCY_PHRASES = [
   pat('refund is waiting', /refund is waiting/i), pat('you have won', /you('?| ha)ve won/i), pat('congratulations', /congratulations/i),
   pat('claim your prize', /claim your prize/i), pat('avoid suspension', /avoid suspension/i),
   pat('unusual activity detected', /unusual (?:sign-?in )?activity/i), pat('unauthorized access', /unauthorized access/i),
+  pat('data/files will be deleted', /(?:will be|being) (?:permanently )?(?:deleted|removed|erased)/i),
+  pat('at risk of deletion', /at (?:immediate )?risk of (?:deletion|being deleted|removal)/i),
+  pat('if no action is taken', /if no action is taken/i), pat('prevent data loss', /prevent (?:data|file) loss/i),
+  pat('secure your account/data', /secure (?:your|my) (?:account|data)/i),
+  pat('deadline date given', /\bby\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b[^.\n]{0,25}\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\b/i),
 ];
 const FINANCIAL_PHRASES = [
   pat('bank transfer', /bank transfer/i), pat('wire transfer', /wire transfer/i), pat('cryptocurrency', /cryptocurrency|crypto wallet/i),
   pat('bitcoin', /\bbitcoin\b/i), pat('gift card', /gift card/i), pat('iTunes card', /itunes card/i), pat('Google Play card', /google play card/i),
-  pat('sort code', /sort code/i), pat('IBAN', /\biban\b/i), pat('update your payment details', /update your (?:payment|bank) details/i),
+  pat('sort code', /sort code/i), pat('IBAN', /\biban\b/i), pat('update your payment details', /update[^.\n]{0,15}(?:payment|bank) (?:information|details|method)/i),
   pat('new bank details', /new bank details/i), pat('change of bank details', /change of bank details/i),
   pat('supplier bank details', /supplier('s)? bank details/i), pat('invoice attached', /invoice (?:is )?attached/i),
   pat('invoice is overdue', /invoice is overdue/i), pat('payroll change', /payroll change/i), pat('tax payment', /tax payment/i),
   pat('tax refund', /tax refund/i), pat('investment opportunity', /investment opportunity/i), pat('guaranteed return', /guaranteed returns?/i),
   pat('double your money', /double your money/i), pat('Western Union', /western union/i), pat('MoneyGram', /moneygram/i),
   pat('send funds', /send funds/i), pat('advance fee', /advance fee/i), pat('processing fee', /processing fee/i),
+  pat('payment method expired', /payment method[^.\n]{0,15}expired/i), pat('card declined', /card[^.\n]{0,15}declined/i),
+  pat('renew your subscription', /renew(?:al)?[^.\n]{0,20}subscription/i), pat('failed to renew', /(?:failed|unable) to renew/i),
+  pat('we attempted to charge/renew', /we (?:attempted|tried) to (?:renew|charge|bill|process)/i),
 ];
 const CREDENTIAL_PHRASES = [
   pat('enter your password', /enter(?:ing)? your password/i), pat('confirm your password', /confirm(?:ing)? your password/i),
@@ -929,6 +938,7 @@ const CATS = {
   ip_sender:{cap:10, label:'IP-based sender address'},
   attachment_risk:{cap:25, label:'Suspicious attachment'},
   lookalike_domain:{cap:18, label:'Lookalike / typosquat domain'},
+  mass_scam_pattern:{cap:14, label:'Mass-scam template patterns'},
 };
 
 /* ============================================================
@@ -946,6 +956,18 @@ function findBrandKeywordInString(str){
   const low = (str||'').toLowerCase();
   const hits=[];
   for(const b of BRANDS){ if(b.keys.some(k=>low.includes(k))) hits.push(b); }
+  return hits;
+}
+/* Some scam emails deliberately avoid a brand's exact name (e.g. "Cloud" instead
+   of "iCloud") to dodge simple keyword filters, while still naming its products.
+   This catches that pattern without relying on the brand name itself. */
+function findSoftBrandMentions(text){
+  const hits = [];
+  BRANDS.forEach(b=>{
+    if(!b.softPats) return;
+    const matched = b.softPats.filter(p=>p.re.test(text)).map(p=>p.label);
+    if(matched.length>=2 && /\bcloud\b/i.test(text)) hits.push({brand:b, matched});
+  });
   return hits;
 }
 function isLookalikeOfBrand(hostname){
@@ -1197,6 +1219,25 @@ function contentFlags(urgencyHits, financialHits, credentialHits, linkCount){
   return flags;
 }
 
+/* Structural patterns common to mass-produced scam/spam templates —
+   individually weak, but meaningful in combination. */
+function analyzeContentPatterns(rawText, urgencyHits, financialHits){
+  const flags = [];
+  if(/^\s*dear\s+(?:user|customer|valued customer|member|account holder|sir\/?madam)\b/im.test(rawText)){
+    flags.push({code:'generic_greeting', sev:'info', cat:'mass_scam_pattern', weight:3, label:'Generic, non-personalised greeting', detail:'The message opens with a generic greeting ("Dear User/Customer") rather than your name. Legitimate account and billing notices are almost always addressed to you personally.'});
+  }
+  if(/\bthe\s+[a-z0-9 ]{2,25}\s+(?:support|security)\s+team\b/i.test(rawText)){
+    flags.push({code:'vague_signoff', sev:'info', cat:'mass_scam_pattern', weight:3, label:'Vague, unverifiable sign-off', detail:'The message is signed by a generic team name rather than a named, verifiable person — common in mass phishing and spam campaigns.'});
+  }
+  if(/unsubscribe/i.test(rawText) && (urgencyHits.length>0 || financialHits.length>0)){
+    flags.push({code:'unsubscribe_threat_combo', sev:'warning', cat:'mass_scam_pattern', weight:8, label:'"Unsubscribe" link alongside an urgent account/payment threat', detail:'This message includes an "unsubscribe" option but frames itself as an urgent security or payment notice. Genuine transactional account or billing alerts don\'t need an unsubscribe link — this combination is more typical of a bulk marketing or spam campaign than a real account notice.'});
+  }
+  if(/\bby\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b[^.\n]{0,25}\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\b/i.test(rawText)){
+    flags.push({code:'deadline_date', sev:'warning', cat:'mass_scam_pattern', weight:5, label:'Specific deadline date used to create urgency', detail:'The message names a specific deadline date to pressure quick action. This is a common urgency tactic — though legitimate renewal reminders can include a date too, so weigh it alongside the other findings here.'});
+  }
+  return flags;
+}
+
 function analyzeAttachments(atts){
   const flags = []; const details = [];
   (atts||[]).forEach(a=>{
@@ -1348,6 +1389,7 @@ function analyzeEmail(){
     const financialHits = scanKeywords(allText, FINANCIAL_PHRASES);
     const credentialHits = scanKeywords(allText, CREDENTIAL_PHRASES);
     flags.push(...contentFlags(urgencyHits, financialHits, credentialHits, urlResults.length));
+    flags.push(...analyzeContentPatterns(allText, urgencyHits, financialHits));
 
     const attInfo = analyzeAttachments(data.attachments||[]);
     flags.push(...attInfo.flags);
@@ -1357,14 +1399,32 @@ function analyzeEmail(){
     const orgInfo = analyzeOrgMatch(brandMentions, fromDomain);
     flags.push(...orgInfo.flags);
 
+    // Brands referenced only indirectly (products named, exact brand name avoided)
+    const softBrandHits = findSoftBrandMentions(allText).filter(h=>!brandMentions.some(b=>b.name===h.brand.name));
+    softBrandHits.forEach(h=>{
+      const legit = fromDomain ? matchBrandByDomain(fromDomain) : null;
+      if(legit && legit.name===h.brand.name) return;
+      flags.push({
+        code:'soft_org_'+h.brand.name, sev:'warning', cat:'org_domain_mismatch', weight:14,
+        label:'Possible impersonation of '+h.brand.name+' (implied, not named directly)',
+        detail:'This message repeatedly references '+h.brand.name+' products ("'+h.matched.join('", "')+'") alongside the word "cloud" without directly naming '+h.brand.name+', and '+(fromDomain?('was sent from @'+fromDomain+', which is not an official '+h.brand.name+' domain'):'no sender address was available in what you pasted to verify this')+'. Avoiding a brand\'s exact name is a known technique used to slip past spam filters and simple keyword checks — treat this as a meaningful signal, not a coincidence.'
+      });
+      orgInfo.rows.push({org: h.brand.name+' (implied)', senderDomain: fromDomain || 'Not available', match:false});
+    });
+
     const scoreInfo = buildScore(flags);
     const bandInfo = bandOf(scoreInfo.total);
     const types = classifyScamTypes({flags, financialHits, credentialHits, brandMentions, rawText: allText});
 
+    const hasSender = !!fromInfo.address;
+    const hasLinks = urlResults.length>0;
+    const hasAuth = !!(authInfo.spf || authInfo.dkim || authInfo.dmarc);
+    const evidenceLimited = !hasSender && !hasLinks && !hasAuth;
+
     renderResults({
       data, fromInfo, subject, replyToInfo, returnPathInfo, toInfo, messageId, dateHdr,
       urlResults, flags, authInfo, scoreInfo, bandInfo, types,
-      urgencyHits, financialHits, credentialHits, attInfo, orgInfo, fromDomain
+      urgencyHits, financialHits, credentialHits, attInfo, orgInfo, fromDomain, evidenceLimited
     });
   }catch(e){
     console.error(e);
@@ -1391,14 +1451,16 @@ function renderResults(r){
   const nonGood = r.flags.filter(f=>f.sev!=='good' && f.weight>0);
   const warnCount = nonGood.length;
   let verdictText;
-  if(r.bandInfo.key==='low') verdictText = warnCount===0 ? '🟢 No obvious scam indicators found' : '🟢 This email looks likely safe';
+  if(r.bandInfo.key==='low' && r.evidenceLimited) verdictText = '🟡 Limited evidence — treat with caution, not as "safe"';
+  else if(r.bandInfo.key==='low') verdictText = warnCount===0 ? '🟢 No obvious scam indicators found' : '🟢 This email looks likely safe';
   else if(r.bandInfo.key==='caution') verdictText = '🟡 A few things about this email deserve a closer look';
   else if(r.bandInfo.key==='suspicious') verdictText = '🟠 This email looks suspicious';
   else verdictText = '🔴 This email looks highly suspicious';
   document.getElementById('verdictLine').textContent = verdictText;
   document.getElementById('warnCount').textContent = warnCount===0 ? 'No warning signs found.' : 'We found '+warnCount+' warning sign'+(warnCount===1?'':'s')+'.';
 
-  document.getElementById('cleanNote').style.display = (r.bandInfo.key==='low') ? 'flex' : 'none';
+  document.getElementById('cleanNote').style.display = (r.bandInfo.key==='low' && !r.evidenceLimited) ? 'flex' : 'none';
+  document.getElementById('evidenceNote').style.display = r.evidenceLimited ? 'flex' : 'none';
 
   // Major concerns — top weighted non-good flags
   const concernsBlock = document.getElementById('concernsBlock');
@@ -1481,6 +1543,13 @@ function buildActions(r){
   const hasLink = r.urlResults.length>0;
   const risky = r.bandInfo.key==='suspicious' || r.bandInfo.key==='high';
 
+  if(r.bandInfo.key==='low' && r.evidenceLimited){
+    return [
+      'We had no sender address, links or headers to check — this result is based on wording alone, so don\'t treat it as a clean bill of health.',
+      'If the message asks you to click a link, log in, pay, or provide personal details, verify it independently before acting.',
+      'For a fuller check, paste the email headers or upload the original .eml file.'
+    ];
+  }
   if(r.bandInfo.key==='low'){
     return [
       'No obvious scam indicators were found, but treat this as guidance, not a guarantee.',

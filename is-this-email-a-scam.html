@@ -605,6 +605,63 @@ function stripInvisible(str){
 function countInvisible(str){
   return ((str||'').match(INVISIBLE_CHAR_RE) || []).length;
 }
+
+/* Letters from other scripts that are visually indistinguishable from
+   Latin letters ("confusables") — the basis of Cyrillic/Greek "swap"
+   attacks on both domain names and body text. Curated to the letters
+   actually abused in real phishing, not the full Unicode confusables
+   table. Used only for MATCHING (keyword/domain comparison), never for
+   anything echoed back to the user, so it can't misrepresent the source. */
+const HOMOGLYPH_MAP = {
+  'а':'a','е':'e','о':'o','р':'p','с':'c','у':'y','х':'x',
+  'і':'i','ѕ':'s','ј':'j','ӏ':'l','ԁ':'d','в':'b','н':'h',
+  'А':'A','В':'B','Е':'E','К':'K','М':'M','Н':'H','О':'O',
+  'Р':'P','С':'C','Т':'T','У':'Y','Х':'X','Ѕ':'S','Ј':'J',
+  'α':'a','ο':'o','ρ':'p','ν':'v','κ':'k','ι':'i',
+  'Α':'A','Β':'B','Ε':'E','Ζ':'Z','Η':'H','Ι':'I','Κ':'K',
+  'Μ':'M','Ν':'N','Ο':'O','Ρ':'P','Τ':'T','Υ':'Y','Χ':'X',
+};
+function normalizeHomoglyphs(str){
+  let out = '';
+  for(const ch of (str||'')) out += HOMOGLYPH_MAP[ch] || ch;
+  return out;
+}
+function countHomoglyphs(str){
+  let n = 0;
+  for(const ch of (str||'')) if(HOMOGLYPH_MAP[ch]) n++;
+  return n;
+}
+/* Collapses letter-spaced obfuscation like "p-a-s-s-w-o-r-d" or "v.e.r.i.f.y"
+   into "password"/"verify" — for MATCHING only, never for display. Plain
+   spaces are deliberately EXCLUDED from the collapsed separator set: a run
+   of single letters separated only by spaces (e.g. "V E R I F Y Y O U R
+   P A S S W O R D") has no reliable way to tell where one obfuscated word
+   ends and the next begins, and collapsing through that ambiguity used to
+   merge adjacent words into one blob and silently break phrase matching.
+   Non-space separators (hyphen/dot/underscore) don't have that ambiguity —
+   a plain space between them still marks a real word boundary. */
+const DESPACE_MATCH_RE = /\b(?:[A-Za-z][.\-_]){3,}[A-Za-z]\b/g;
+function despaceLetters(str){
+  return (str||'').replace(DESPACE_MATCH_RE, m => m.replace(/[.\-_]/g,''));
+}
+// Broader net used only to COUNT the technique as evidence (not to alter
+// text), so space-separated runs like "V E R I F Y" still get flagged.
+const DESPACE_EVIDENCE_RE = /\b(?:[A-Za-z][ .\-_]){3,}[A-Za-z]\b/g;
+function countDespaced(str){
+  return ((str||'').match(DESPACE_EVIDENCE_RE) || []).length;
+}
+/* Full normalization pass used ONLY to build the text that keyword/brand
+   regexes run against — NFKC folds fullwidth-Unicode tricks ("ｖｅｒｉｆｙ"),
+   then homoglyphs and letter-spacing are collapsed on top. */
+function buildMatchText(str){
+  return despaceLetters(normalizeHomoglyphs((str||'').normalize('NFKC')));
+}
+/* Homograph check for a single hostname-ish string (URL authority or an
+   email domain): does normalizing it reveal a real brand domain hiding
+   behind foreign-alphabet or fullwidth look-alike characters? */
+function normalizeHostCandidate(str){
+  return normalizeHomoglyphs((str||'').normalize('NFKC')).toLowerCase();
+}
 function escHtml(str){
   const d = document.createElement('div');
   d.textContent = str == null ? '' : String(str);
@@ -922,6 +979,7 @@ const FINANCIAL_PHRASES = [
   pat('payment method expired', /payment method[^.\n]{0,15}expired/i), pat('card declined', /card[^.\n]{0,15}declined/i),
   pat('renew your subscription', /renew(?:al)?[^.\n]{0,20}subscription/i), pat('failed to renew', /(?:failed|unable) to renew/i),
   pat('we attempted to charge/renew', /we (?:attempted|tried) to (?:renew|charge|bill|process)/i),
+  pat('send/pay a specific amount', /\b(?:send|pay|transfer|wire)\b[^.\n]{0,25}(?:[£$€]\s?\d|\d[\d,]*\s?(?:gbp|usd|eur|pounds?|dollars?|euros?))/i),
 ];
 const CREDENTIAL_PHRASES = [
   pat('enter your password', /enter(?:ing)? your password/i), pat('confirm your password', /confirm(?:ing)? your password/i),
@@ -936,6 +994,16 @@ const CREDENTIAL_PHRASES = [
   pat('passport number', /passport number/i), pat('recovery code', /recovery code/i), pat('security question', /security question/i),
   pat('confirm your identity', /confirm(?:ing)? your identity/i), pat('verify your identity', /verify(?:ing)? your identity/i),
 ];
+/* Secrecy/isolation tactics — classic CEO-fraud / Business Email Compromise
+   social engineering: create unavailability and swear the recipient to
+   secrecy so they can't verify the request with anyone before acting. */
+const SECRECY_PHRASES = [
+  pat('don\'t tell anyone', /don'?t (?:tell|mention this to) anyone/i),
+  pat('keep this confidential', /keep this (?:between us|confidential|quiet|private)/i),
+  pat('can\'t talk right now', /can'?t (?:talk|take calls)(?: right now| now)?|in a meeting and can'?t/i),
+  pat('urgent and confidential', /urgent and confidential/i),
+  pat('handle this discreetly', /handle this (?:discreetly|quietly)/i),
+];
 const DANGEROUS_EXT = ['exe','scr','bat','cmd','js','vbs','ps1','hta','msi','jar','com','pif','wsf','vbe','jse','cpl','msc','reg'];
 const MACRO_EXT = ['docm','xlsm','pptm','dotm','xltm','potm'];
 const ARCHIVE_EXT = ['zip','rar','7z'];
@@ -946,7 +1014,7 @@ const CATS = {
   suspicious_link:{cap:25, label:'Suspicious link'},
   link_mismatch:{cap:20, label:'Link text/destination mismatch'},
   credential_request:{cap:20, label:'Credential request'},
-  financial_request:{cap:18, label:'Financial request'},
+  financial_request:{cap:22, label:'Financial request'},
   urgency:{cap:8, label:'Pressure tactics'},
   replyto_mismatch:{cap:8, label:'Reply-To / Return-Path mismatch'},
   auth_failure:{cap:15, label:'Authentication failed'},
@@ -955,7 +1023,8 @@ const CATS = {
   attachment_risk:{cap:25, label:'Suspicious attachment'},
   lookalike_domain:{cap:18, label:'Lookalike / typosquat domain'},
   mass_scam_pattern:{cap:14, label:'Mass-scam template patterns'},
-  obfuscation:{cap:25, label:'Hidden character obfuscation'},
+  obfuscation:{cap:25, label:'Hidden/disguised text obfuscation'},
+  phone_scam:{cap:15, label:'Phone-based ("callback") scam pattern'},
 };
 
 /* ============================================================
@@ -1097,6 +1166,20 @@ function analyzeUrl(u){
   if(lookalike) flags.push({code:'lookalike', sev:'critical', cat:'lookalike_domain', label:'Possible lookalike domain', weight:18, detail:'The domain "'+hostname+'" closely resembles '+lookalike.official+' ('+lookalike.brand.name+') but is not an exact match — a common typosquatting technique.'});
   if(brandInHost.length && !legitBrand){
     brandInHost.forEach(b=> flags.push({code:'brand_mismatch_'+b.name, sev:'critical', cat:'suspicious_link', label:'Domain does not match '+b.name, weight:20, detail:'This link mentions "'+b.name+'" but the actual domain ('+hostname+') does not belong to '+b.name+'.'}));
+  }
+
+  // IDN homograph check: normalizing fullwidth/Cyrillic/Greek look-alike
+  // characters can reveal a real brand domain hiding behind them.
+  if(!legitBrand && /[^\x00-\x7F]/.test(u.href)){
+    try{
+      const normAuthority = normalizeHostCandidate(u.href.replace(/^[a-z][a-z0-9+.-]*:\/\//i,'').split(/[/?#]/)[0]);
+      const normHost = new URL('https://'+normAuthority).hostname.toLowerCase();
+      const normReg = getRegistrableDomain(normHost);
+      const homoBrand = BRANDS.find(b=>b.domains.includes(normReg));
+      if(homoBrand && normReg !== reg){
+        flags.push({code:'homoglyph_domain', sev:'critical', cat:'lookalike_domain', weight:20, label:'Domain uses look-alike characters to imitate '+homoBrand.name, detail:'This domain uses letters from a different alphabet or width that are visually indistinguishable from Latin letters. Once normalized it reads as an official '+homoBrand.name+' domain, but the actual address is "'+hostname+'" — a technique called an IDN homograph attack.'});
+      }
+    }catch(e){}
   }
 
   if(u.text && u.text !== u.href){
@@ -1255,6 +1338,24 @@ function analyzeContentPatterns(rawText, urgencyHits, financialHits){
   return flags;
 }
 
+/* Phone numbers offered in place of a link — "callback phishing" /
+   telephone-oriented attack delivery. Deliberately conservative: only
+   scored when combined with a brand claim + urgency/financial language
+   and no link, since digit sequences alone (order numbers, dates) are
+   too noisy to score on their own. */
+function extractPhoneNumbers(text){
+  const re = /(?:\+\d{1,3}[\s.-]?)?(?:\(\d{1,5}\)[\s.-]?)?\d{2,5}(?:[\s.-]\d{2,5}){1,4}/g;
+  const out = [];
+  let m;
+  while((m = re.exec(text||''))){
+    const raw = m[0].trim();
+    if(/^\d{4}[\s.-]\d{1,2}[\s.-]\d{1,2}$/.test(raw)) continue; // looks like an ISO date, not a phone number
+    const digits = raw.replace(/\D/g,'');
+    if(digits.length>=9 && digits.length<=15) out.push(raw);
+  }
+  return out;
+}
+
 function analyzeAttachments(atts){
   const flags = []; const details = [];
   (atts||[]).forEach(a=>{
@@ -1286,6 +1387,8 @@ function analyzeAttachments(atts){
         ? 'This is a password-protected archive. Attackers often password-protect malicious files specifically so email security scanners cannot inspect them before you open them.'
         : 'This is a compressed archive. Inspect its contents carefully before opening anything inside — archives are a common way to smuggle malicious files past email scanners.';
       flags.push({code:'att_zip_'+name, sev, cat:'attachment_risk', label:(encrypted?'Password-protected archive: ':'Archive attachment: ')+name, weight, detail:desc});
+    } else if(ext === 'pdf'){
+      flags.push({code:'att_pdf_'+name, sev:'info', cat:null, weight:0, label:'PDF attachment: '+name, detail:'PDFs can contain embedded links or QR codes ("quishing") that aren\'t visible until opened. Inspect the sender and context before opening it, and don\'t scan a QR code from an unexpected PDF.'});
     }
     details.push({name, contentType:a.contentType||'unknown', size:a.approxSize, dangerous: DANGEROUS_EXT.includes(ext), macro: MACRO_EXT.includes(ext), archive: ARCHIVE_EXT.includes(ext), doubleExt});
   });
@@ -1348,7 +1451,7 @@ function classifyScamTypes(ctx){
   if(catSet.has('attachment_risk')) types.push({icon:'🦠', label:'Malware delivery'});
   if(/bank transfer|wire transfer|sort code|iban|new bank details|change of bank details|update your payment/i.test(rawLow)) types.push({icon:'🏦', label:'Payment fraud'});
   if(/invoice/i.test(rawLow) && ctx.financialHits.length) types.push({icon:'🧾', label:'Fake invoice'});
-  if((catSet.has('sender_impersonation') || catSet.has('free_email_business')) && ctx.financialHits.length) types.push({icon:'🏢', label:'Business Email Compromise'});
+  if((catSet.has('sender_impersonation') || catSet.has('free_email_business') || (ctx.secrecyHits&&ctx.secrecyHits.length>0)) && ctx.financialHits.length) types.push({icon:'🏢', label:'Business Email Compromise'});
   if(ctx.brandMentions.some(b=>['DHL','Royal Mail','FedEx','UPS','USPS'].includes(b.name))) types.push({icon:'📦', label:'Delivery scam'});
   if(ctx.brandMentions.some(b=>['HMRC','IRS'].includes(b.name))) types.push({icon:'💷', label:'Tax scam'});
   if(/refund/i.test(rawLow) && (ctx.financialHits.length || catSet.has('suspicious_link'))) types.push({icon:'💸', label:'Refund scam'});
@@ -1357,6 +1460,7 @@ function classifyScamTypes(ctx){
   if(/job offer|work from home|hiring now|recruitment/i.test(rawLow) && (ctx.financialHits.length || ctx.credentialHits.length)) types.push({icon:'💼', label:'Job scam'});
   if(/congratulations|you have won|lottery|claim your prize|selected as a winner/i.test(rawLow)) types.push({icon:'🎉', label:'Prize / lottery scam'});
   if(catSet.has('sender_impersonation') && /verify|confirm your account|sign in|log in/i.test(rawLow) && ctx.credentialHits.length===0) types.push({icon:'🔓', label:'Account takeover attempt'});
+  if(catSet.has('phone_scam')) types.push({icon:'📞', label:'Phone / callback scam'});
   if(!types.length && (catSet.has('sender_impersonation') || catSet.has('org_domain_mismatch') || catSet.has('lookalike_domain'))) types.push({icon:'🕵️', label:'Impersonation'});
   const seen=new Set();
   return types.filter(t=>{ if(seen.has(t.label)) return false; seen.add(t.label); return true; });
@@ -1417,18 +1521,33 @@ function analyzeEmail(){
       const weight = invisibleCount >= 15 ? 25 : invisibleCount >= 8 ? 18 : 10;
       flags.push({code:'invisible_chars', sev:'critical', cat:'obfuscation', weight, label:'Hidden characters used to disguise the text', detail:'This message contains '+invisibleCount+' invisible formatting characters inserted inside words (for example, breaking up brand names or common phrases one letter at a time). This is a technique used almost exclusively to slip text past spam and keyword-based phishing filters — legitimate emails essentially never do this. We removed them before analysing the wording below, which is why the quotes elsewhere read as normal text.'});
     }
+    const rawCombinedText = subject + '\n' + cleanBodyText;
+    const homoglyphCount = countHomoglyphs(rawCombinedText);
+    if(homoglyphCount >= 3){
+      flags.push({code:'homoglyph_text', sev:'critical', cat:'obfuscation', weight: homoglyphCount>=10?20:12, label:'Look-alike foreign-alphabet letters used in the text', detail:'This message uses '+homoglyphCount+' letters from a different alphabet (e.g. Cyrillic or Greek) that are visually indistinguishable from ordinary Latin letters. This is a known technique for slipping text past keyword-based spam filters — we normalized them before analysing the wording below.'});
+    }
+    const despacedCount = countDespaced(rawCombinedText);
+    if(despacedCount >= 1){
+      flags.push({code:'despaced_text', sev:'warning', cat:'obfuscation', weight:10, label:'Letter-spaced text used to break up words', detail:'This message spells out words with unusual spacing or punctuation between individual letters (e.g. "V E R I F Y"), which defeats simple keyword filters while remaining readable to a person. This pattern is uncommon in genuine correspondence.'});
+    }
 
     flags.push(...analyzeSender(fromInfo, replyToInfo, returnPathInfo));
     const authInfo = analyzeAuth(data.headers);
     flags.push(...authInfo.flags);
     flags.push(...consolidateUrlFlags(urlResults));
 
-    const allText = subject + '\n' + cleanBodyText;
+    // Normalized for matching only (NFKC + homoglyphs + letter-despacing) —
+    // display strings elsewhere stay as the invisible-char-stripped text.
+    const allText = buildMatchText(rawCombinedText);
     const urgencyHits = scanKeywords(allText, URGENCY_PHRASES);
     const financialHits = scanKeywords(allText, FINANCIAL_PHRASES);
     const credentialHits = scanKeywords(allText, CREDENTIAL_PHRASES);
+    const secrecyHits = scanKeywords(allText, SECRECY_PHRASES);
     flags.push(...contentFlags(urgencyHits, financialHits, credentialHits, urlResults.length));
     flags.push(...analyzeContentPatterns(allText, urgencyHits, financialHits));
+    if(secrecyHits.length>0 && financialHits.length>0){
+      flags.push({code:'secrecy_financial_combo', sev:'critical', cat:'financial_request', weight:15, label:'Secrecy tactic combined with a financial request', detail:'This message references '+secrecyHits.slice(0,3).join(', ')+' alongside a request involving money. Asking someone to keep a payment request secret or act while you\'re "unreachable" is a classic CEO-fraud / Business Email Compromise tactic — it stops the recipient from verifying the request with anyone before sending money. Always verify unusual payment requests through a separate, trusted channel, even if it means going against an instruction to keep it quiet.'});
+    }
 
     const attInfo = analyzeAttachments(data.attachments||[]);
     flags.push(...attInfo.flags);
@@ -1451,9 +1570,21 @@ function analyzeEmail(){
       orgInfo.rows.push({org: h.brand.name+' (implied)', senderDomain: fromDomain || 'Not available', match:false});
     });
 
+    // Phone number offered instead of a link, alongside a brand claim and
+    // urgency/financial pressure — a "callback"/TOAD scam pattern that
+    // link-focused filters typically miss entirely.
+    const phoneNumbers = extractPhoneNumbers(allText);
+    if(phoneNumbers.length && urlResults.length===0 && brandMentions.length>0 && (urgencyHits.length>0 || financialHits.length>0)){
+      flags.push({code:'callback_scam', sev:'warning', cat:'phone_scam', weight:12, label:'Phone number given instead of a link', detail:'This message asks you to call a phone number rather than click a link. This tactic ("callback phishing") is specifically used to bypass filters that only scan for suspicious links, and lets a scammer socially engineer you directly over the phone. Don\'t call numbers given in an unexpected message — look up the organisation\'s number independently.'});
+    }
+
     const scoreInfo = buildScore(flags);
-    const bandInfo = bandOf(scoreInfo.total);
-    const types = classifyScamTypes({flags, financialHits, credentialHits, brandMentions, rawText: allText});
+    let bandInfo = bandOf(scoreInfo.total);
+    const types = classifyScamTypes({flags, financialHits, credentialHits, secrecyHits, brandMentions, rawText: allText});
+    // Safety net: never show "Likely Safe" in the same breath as a positively
+    // identified scam type — a scored-low-but-classified email is a sign the
+    // category weights need tuning, not something to present as reassuring.
+    if(types.length>0 && bandInfo.key==='low') bandInfo = bandOf(21);
 
     const hasSender = !!fromInfo.address;
     const hasLinks = urlResults.length>0;
@@ -1516,7 +1647,10 @@ function renderResults(r){
   if(r.types.length){
     typesBlock.style.display = 'block';
     document.getElementById('typesRow').innerHTML = r.types.map(t=>'<span class="type-chip">'+t.icon+' '+escHtml(t.label)+'</span>').join('');
-  } else { typesBlock.style.display = 'none'; }
+  } else {
+    typesBlock.style.display = 'none';
+    document.getElementById('typesRow').innerHTML = '';
+  }
 
   // Actions
   document.getElementById('actionList').innerHTML = buildActions(r).map(a=>'<li>'+escHtml(a)+'</li>').join('');

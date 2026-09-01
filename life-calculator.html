@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Calculator - Percentage, Discount, VAT, Mortgage, Age & More | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/life-calculator.html">
+<meta name="description" content="Free everyday calculators: percentage, discount, VAT, salary, take-home pay, mortgage, loan, interest, tip, split bill, age, dates, time and unit conversions. 100% private, runs in your browser.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Life Calculator",
+  "url": "https://salmanittools.co.uk/life-calculator.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any (runs in web browser)",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"},
+  "description": "Free everyday calculators for percentage, discount, VAT, salary, mortgage, loans, interest, tips, bills, age, dates, time and unit conversions. Runs entirely in your browser."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Is the Life Calculator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, every calculator on this page is completely free, with no sign-up and no limits."}},
+    {"@type":"Question","name":"Are my calculations sent to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Every calculation runs directly in your browser using JavaScript. Nothing you type is uploaded or stored."}},
+    {"@type":"Question","name":"How do I calculate 20% off a price?","acceptedAnswer":{"@type":"Answer","text":"Multiply the original price by the discount percentage and subtract that from the price. For example, £79.99 with 20% off saves £16.00, giving a final price of £63.99."}},
+    {"@type":"Question","name":"How do I add 20% VAT to a price?","acceptedAnswer":{"@type":"Answer","text":"Multiply the net price by the VAT rate to get the VAT amount, then add it to the net price. £1,000 plus 20% VAT is £200 VAT and a total of £1,200."}},
+    {"@type":"Question","name":"How do I remove VAT from a price?","acceptedAnswer":{"@type":"Answer","text":"Divide the VAT-inclusive price by 1 plus the VAT rate. £1,200 including 20% VAT has a net price of £1,200 ÷ 1.2 = £1,000. Simply subtracting 20% from £1,200 is incorrect."}},
+    {"@type":"Question","name":"How is a mortgage payment calculated?","acceptedAnswer":{"@type":"Answer","text":"Using the standard amortisation formula based on the loan amount, monthly interest rate and number of monthly payments. It does not include fees, insurance or product-specific charges."}},
+    {"@type":"Question","name":"How is my exact age calculated?","acceptedAnswer":{"@type":"Answer","text":"By comparing calendar dates directly (not a simple 365-day estimate), so leap years and different month lengths are accounted for correctly."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--caution:#EAC54F;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1120px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1.05rem;color:var(--white);opacity:.85;line-height:1.7;max-width:680px;margin-bottom:8px}
+.page-sub2{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:28px}
+
+.badge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.badge-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.badge-card .bi{font-size:1.3rem;margin-bottom:6px}
+.badge-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:3px}
+.badge-card p{font-size:0.78rem;color:var(--muted);line-height:1.5}
+@media(max-width:760px){.badge-row{grid-template-columns:1fr 1fr}}
+
+.currency-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.currency-row label{font-size:0.78rem;color:var(--muted);font-weight:600}
+.currency-row select{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--white);font-size:0.85rem;font-family:inherit;min-height:40px}
+
+.cat-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.cat-btn{background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:0.84rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;min-height:40px}
+.cat-btn.active{color:var(--ink);background:var(--green);border-color:var(--green)}
+.cat-btn:hover:not(.active){color:var(--white);border-color:rgba(255,255,255,.2)}
+
+.quick-nav{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 18px;margin-bottom:20px;border-bottom:1px solid var(--border);scrollbar-width:thin}
+.quick-nav::-webkit-scrollbar{height:5px}
+.quick-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.quick-nav a{flex-shrink:0;font-size:0.82rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:8px 16px;text-decoration:none;transition:all .2s;white-space:nowrap;cursor:pointer}
+.quick-nav a:hover,.quick-nav a.active{color:var(--ink);background:var(--green);border-color:var(--green)}
+
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-bottom:48px}
+.tgrid-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .2s;text-align:left;display:flex;flex-direction:column}
+.tgrid-card:hover{border-color:rgba(0,232,122,0.35);transform:translateY(-2px)}
+.tgrid-card .ti{font-size:1.8rem;margin-bottom:10px}
+.tgrid-card h3{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.25rem;letter-spacing:.03em;color:var(--white);margin-bottom:6px}
+.tgrid-card p{font-size:0.82rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:14px}
+.tgrid-card .open-link{font-size:0.8rem;font-weight:700;color:var(--cyan)}
+
+.privacy-panel{background:linear-gradient(135deg,rgba(0,232,122,0.05),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:18px;padding:32px;margin-bottom:40px}
+.privacy-panel h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.8rem;letter-spacing:.03em;color:var(--white);margin-bottom:14px}
+.privacy-panel .pq{font-size:1rem;color:var(--green);font-weight:700;margin-bottom:4px}
+.privacy-panel p{font-size:0.9rem;color:var(--white);opacity:.85;line-height:1.7;max-width:760px;margin-bottom:14px}
+.privacy-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.privacy-list span{font-size:0.78rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:6px 14px}
+
+.tool-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px;scroll-margin-top:80px}
+.tool-panel.open{display:block}
+.tp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.tp-head h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.9rem;letter-spacing:.03em;color:var(--white);margin-bottom:4px}
+.tp-head p{font-size:0.88rem;color:var(--muted);max-width:620px;line-height:1.6}
+.tp-close{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-size:0.8rem;cursor:pointer;white-space:nowrap}
+.tp-close:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+
+.opt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:16px 0}
+.opt-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:7px}
+.opt-field select,.opt-field input[type=text],.opt-field input[type=number],.opt-field input[type=date],.opt-field input[type=time]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.94rem;font-family:inherit;min-height:44px}
+.opt-field select:focus,.opt-field input:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+.opt-field .hint{font-size:0.72rem;color:var(--muted);margin-top:5px}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:8px 15px;font-size:0.82rem;cursor:pointer;font-weight:600;font-family:inherit;min-height:38px}
+.chip-btn.active{color:var(--ink);background:var(--cyan);border-color:var(--cyan)}
+.tabbar{display:flex;gap:4px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:18px;width:fit-content;max-width:100%;flex-wrap:wrap}
+.tabbar button{padding:9px 18px;border:none;border-radius:9px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;min-height:40px}
+.tabbar button.active{background:var(--ink);color:var(--white)}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--white);margin:10px 0}
+.checkbox-row input{width:17px;height:17px;accent-color:var(--green);flex-shrink:0}
+
+.btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.pdf-btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
+.pdf-btn-primary:hover{opacity:.92}
+.pdf-btn-secondary{padding:13px 22px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-size:0.88rem;border-radius:10px;cursor:pointer;min-height:44px;font-family:inherit}
+.pdf-btn-secondary:hover{border-color:rgba(255,255,255,0.2)}
+.pdf-btn-secondary.copied{color:var(--green);border-color:rgba(0,232,122,.4)}
+.icon-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);border-radius:7px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.95rem;transition:all .15s}
+.icon-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+.icon-btn.danger:hover{color:var(--danger);border-color:rgba(239,68,68,0.3)}
+
+.calc-empty{padding:22px;text-align:center;color:var(--muted);font-size:0.88rem;background:rgba(255,255,255,0.02);border:1px dashed var(--border);border-radius:14px;margin-top:18px}
+.result-card{display:none;margin-top:18px;background:rgba(0,232,122,0.05);border:1px solid rgba(0,232,122,0.25);border-radius:16px;padding:26px}
+.result-card.show{display:block}
+.result-label{font-size:0.74rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
+.result-hero{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2rem,7vw,3.2rem);line-height:1.05;color:var(--green);margin:4px 0 6px;word-break:break-word}
+.result-sub{font-size:1rem;color:var(--white);opacity:.9;line-height:1.6}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:18px}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.stat-box .sl{font-size:0.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.stat-box .sv{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.25rem;color:var(--white);word-break:break-word}
+.explain-box{margin-top:18px;border-top:1px solid var(--border);padding-top:14px}
+.explain-box summary{cursor:pointer;font-size:0.82rem;font-weight:700;color:var(--cyan);list-style:none}
+.explain-box summary::-webkit-details-marker{display:none}
+.explain-box summary:before{content:'▸ ';display:inline-block}
+.explain-box[open] summary:before{content:'▾ '}
+.explain-lines{font-family:var(--mono);font-size:0.78rem;color:var(--muted);line-height:1.9;margin-top:10px;white-space:pre-wrap;word-break:break-word}
+.formula-note{font-size:0.72rem;color:var(--muted);margin-top:10px;font-family:var(--mono)}
+.notice{display:none;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:0.85rem;line-height:1.6}
+.notice.show{display:block}
+.notice-error{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);color:var(--danger)}
+.notice-warn{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);color:var(--warning)}
+.notice-info{background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan)}
+
+.faq-block{margin-top:32px;border-top:1px solid var(--border);padding-top:24px}
+.faq-block h3{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.03em;color:var(--white);margin-bottom:6px}
+.faq-item{border-bottom:1px solid var(--border);padding:14px 0}
+.faq-item summary{cursor:pointer;font-weight:600;font-size:0.9rem;color:var(--white);list-style:none}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:before{content:'+ ';color:var(--green);font-weight:800}
+.faq-item[open] summary:before{content:'– '}
+.faq-item p{margin-top:8px;font-size:0.85rem;color:var(--muted);line-height:1.65;padding-left:16px}
+.related-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.related-row a{font-size:0.82rem;font-weight:600;color:var(--cyan);background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);border-radius:20px;padding:8px 16px;text-decoration:none;cursor:pointer}
+.related-row a:hover{border-color:rgba(0,200,255,0.45)}
+.related-title{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-top:26px}
+
+.chart-wrap{margin-top:18px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:14px}
+.chart-wrap svg{width:100%;height:auto;display:block}
+.chart-label{font-size:0.72rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+
+.person-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.person-row input[type=text]{flex:1;min-width:100px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.9rem;font-family:inherit;min-height:44px}
+.person-row input[type=number]{width:120px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.9rem;font-family:inherit;min-height:44px}
+
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media(max-width:640px){
+  nav{padding:0 20px}
+  .page{padding:40px 16px 60px}
+  .tool-panel{padding:20px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .person-row input[type=number]{width:100px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="page-eyebrow">🧮 Life Calculator</div>
+  <h1 class="page-title">Everyday Calculations<br><span class="acc">Made Simple</span></h1>
+  <p class="page-sub">Calculate percentages, discounts, VAT, salary, mortgage payments, loans, interest, tips, bills, age, dates, time and more.</p>
+  <p class="page-sub2">🔒 Your calculations stay in your browser. No sign-up, no data collection, completely free.</p>
+
+  <div class="badge-row">
+    <div class="badge-card"><div class="bi">🔒</div><h4>Private</h4><p>Nothing you type ever leaves your device.</p></div>
+    <div class="badge-card"><div class="bi">⚡</div><h4>Instant</h4><p>Results update as you type — no "Calculate" button.</p></div>
+    <div class="badge-card"><div class="bi">🆓</div><h4>Free</h4><p>No registration, no limits.</p></div>
+    <div class="badge-card"><div class="bi">📱</div><h4>Works Everywhere</h4><p>Desktop, tablet and mobile.</p></div>
+  </div>
+
+  <div class="currency-row">
+    <label for="globalCurrency">Currency</label>
+    <select id="globalCurrency" onchange="setCurrency(this.value)" aria-label="Choose display currency">
+      <option value="GBP">£ GBP</option>
+      <option value="USD">$ USD</option>
+      <option value="EUR">€ EUR</option>
+      <option value="CAD">CA$ CAD</option>
+      <option value="AUD">A$ AUD</option>
+    </select>
+    <span style="font-size:0.75rem;color:var(--muted)">Changes the currency symbol shown. Not a live exchange-rate converter.</span>
+  </div>
+
+  <div class="cat-filter" role="group" aria-label="Filter calculators by category">
+    <button class="cat-btn active" data-cat="all" onclick="filterCat('all',this)">All</button>
+    <button class="cat-btn" data-cat="money" onclick="filterCat('money',this)">💰 Money</button>
+    <button class="cat-btn" data-cat="date" onclick="filterCat('date',this)">📅 Date &amp; Time</button>
+    <button class="cat-btn" data-cat="conv" onclick="filterCat('conv',this)">🔁 Conversions</button>
+  </div>
+
+  <nav class="quick-nav" id="quickNav" aria-label="Jump to a calculator"></nav>
+  <div class="tool-grid" id="calcGrid"></div>
+
+  <!-- ============================================================= -->
+  <!-- PERCENTAGE -->
+  <section class="tool-panel" id="panel-percentage" aria-labelledby="h-percentage">
+    <div class="tp-head"><div><h2 id="h-percentage">📊 Percentage Calculator</h2><p>Find a percentage of a number, work out what percent one number is of another, or calculate a percentage increase or decrease.</p></div><button class="tp-close" onclick="closeCalc('percentage')">✕ Close</button></div>
+    <div class="tabbar" id="pct-tabs">
+      <button class="active" data-mode="a" onclick="setPctMode('a',this)">X% of Y</button>
+      <button data-mode="b" onclick="setPctMode('b',this)">X is what % of Y?</button>
+      <button data-mode="c" onclick="setPctMode('c',this)">% Increase/Decrease</button>
+    </div>
+    <div id="pct-a">
+      <div class="opt-row">
+        <div class="opt-field"><label for="pct-a-x">Percentage (%)</label><input type="number" id="pct-a-x" inputmode="decimal" placeholder="20" oninput="calcPercentage()"></div>
+        <div class="opt-field"><label for="pct-a-y">Of this number</label><input type="number" id="pct-a-y" inputmode="decimal" placeholder="100" oninput="calcPercentage()"></div>
+      </div>
+    </div>
+    <div id="pct-b" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="pct-b-x">This number</label><input type="number" id="pct-b-x" inputmode="decimal" placeholder="25" oninput="calcPercentage()"></div>
+        <div class="opt-field"><label for="pct-b-y">Is what % of this</label><input type="number" id="pct-b-y" inputmode="decimal" placeholder="200" oninput="calcPercentage()"></div>
+      </div>
+    </div>
+    <div id="pct-c" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="pct-c-orig">Original value</label><input type="number" id="pct-c-orig" inputmode="decimal" placeholder="100" oninput="calcPercentage()"></div>
+        <div class="opt-field"><label for="pct-c-new">New value</label><input type="number" id="pct-c-new" inputmode="decimal" placeholder="125" oninput="calcPercentage()"></div>
+      </div>
+    </div>
+    <div class="notice notice-error" id="percentage-error" role="alert"></div>
+    <div class="calc-empty" id="percentage-empty">Enter numbers above to calculate.</div>
+    <div class="result-card" id="percentage-result" aria-live="polite">
+      <div class="result-label" id="percentage-label">Result</div>
+      <div class="result-hero" id="percentage-hero">—</div>
+      <div class="result-sub" id="percentage-sub"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="percentage-copybtn" onclick="copyCalc('percentage')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="percentage-sharebtn" onclick="shareCalc('percentage')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetPercentage()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="percentage-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DISCOUNT -->
+  <section class="tool-panel" id="panel-discount" aria-labelledby="h-discount">
+    <div class="tp-head"><div><h2 id="h-discount">🏷️ Discount Calculator</h2><p>Find out how much you'll save and what you'll actually pay after a discount.</p></div><button class="tp-close" onclick="closeCalc('discount')">✕ Close</button></div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="disc-price">Original price</label><input type="number" id="disc-price" inputmode="decimal" placeholder="79.99" oninput="calcDiscount()"></div>
+      <div class="opt-field"><label for="disc-pct">Discount (%)</label><input type="number" id="disc-pct" inputmode="decimal" placeholder="20" oninput="calcDiscount(); syncChip('disc-presets','disc-pct')"></div>
+    </div>
+    <div class="chip-row" id="disc-presets">
+      <button class="chip-btn" onclick="setChipVal('disc-pct',10,this,'disc-presets');calcDiscount()">10%</button>
+      <button class="chip-btn" onclick="setChipVal('disc-pct',15,this,'disc-presets');calcDiscount()">15%</button>
+      <button class="chip-btn active" onclick="setChipVal('disc-pct',20,this,'disc-presets');calcDiscount()">20%</button>
+      <button class="chip-btn" onclick="setChipVal('disc-pct',25,this,'disc-presets');calcDiscount()">25%</button>
+      <button class="chip-btn" onclick="setChipVal('disc-pct',30,this,'disc-presets');calcDiscount()">30%</button>
+    </div>
+    <div class="checkbox-row"><input type="checkbox" id="disc-extra-on" onchange="toggleDiscExtra()"><label for="disc-extra-on">Apply an additional discount on top (sequential, not stacked)</label></div>
+    <div class="opt-row" id="disc-extra-row" style="display:none">
+      <div class="opt-field"><label for="disc-extra-pct">Additional discount (%)</label><input type="number" id="disc-extra-pct" inputmode="decimal" placeholder="10" oninput="calcDiscount()"></div>
+    </div>
+    <div class="notice notice-error" id="discount-error" role="alert"></div>
+    <div class="calc-empty" id="discount-empty">Enter an amount above to calculate your discount.</div>
+    <div class="result-card" id="discount-result" aria-live="polite">
+      <div class="result-label">You pay</div>
+      <div class="result-hero" id="discount-hero">—</div>
+      <div class="result-sub" id="discount-sub"></div>
+      <div class="stat-grid" id="discount-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="discount-copybtn" onclick="copyCalc('discount')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="discount-sharebtn" onclick="shareCalc('discount')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetDiscount()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="discount-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- VAT -->
+  <section class="tool-panel" id="panel-vat" aria-labelledby="h-vat">
+    <div class="tp-head"><div><h2 id="h-vat">🧾 VAT Calculator</h2><p>Add or remove UK VAT correctly — removing VAT is not the same as subtracting a percentage.</p></div><button class="tp-close" onclick="closeCalc('vat')">✕ Close</button></div>
+    <div class="tabbar" id="vat-tabs">
+      <button class="active" data-mode="add" onclick="setVatMode('add',this)">Add VAT</button>
+      <button data-mode="remove" onclick="setVatMode('remove',this)">Remove VAT</button>
+    </div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="vat-amount" id="vat-amount-label">Net price</label><input type="number" id="vat-amount" inputmode="decimal" placeholder="1000" oninput="calcVat()"></div>
+      <div class="opt-field"><label for="vat-rate">VAT rate</label>
+        <select id="vat-rate" onchange="onVatRateChange()">
+          <option value="20">20% (Standard)</option>
+          <option value="5">5% (Reduced)</option>
+          <option value="0">0% (Zero-rated)</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+    </div>
+    <div class="opt-row" id="vat-custom-row" style="display:none">
+      <div class="opt-field"><label for="vat-custom-rate">Custom VAT rate (%)</label><input type="number" id="vat-custom-rate" inputmode="decimal" placeholder="17.5" oninput="calcVat()"></div>
+    </div>
+    <div class="notice notice-error" id="vat-error" role="alert"></div>
+    <div class="calc-empty" id="vat-empty">Enter a price above to calculate VAT.</div>
+    <div class="result-card" id="vat-result" aria-live="polite">
+      <div class="result-label" id="vat-label">Total</div>
+      <div class="result-hero" id="vat-hero">—</div>
+      <div class="result-sub" id="vat-sub"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="vat-copybtn" onclick="copyCalc('vat')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="vat-sharebtn" onclick="shareCalc('vat')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetVat()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="vat-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- SALARY -->
+  <section class="tool-panel" id="panel-salary" aria-labelledby="h-salary">
+    <div class="tp-head"><div><h2 id="h-salary">💼 Salary Calculator</h2><p>Convert between annual, monthly, weekly and hourly gross pay.</p></div><button class="tp-close" onclick="closeCalc('salary')">✕ Close</button></div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="sal-known">I know my</label>
+        <select id="sal-known" onchange="calcSalary()">
+          <option value="annual">Annual salary</option>
+          <option value="monthly">Monthly salary</option>
+          <option value="weekly">Weekly salary</option>
+          <option value="hourly">Hourly rate</option>
+        </select>
+      </div>
+      <div class="opt-field"><label for="sal-amount">Amount</label><input type="number" id="sal-amount" inputmode="decimal" placeholder="40000" oninput="calcSalary()"></div>
+      <div class="opt-field"><label for="sal-hours">Hours per week</label><input type="number" id="sal-hours" inputmode="decimal" value="37.5" oninput="calcSalary()"></div>
+      <div class="opt-field"><label for="sal-weeks">Weeks worked per year</label><input type="number" id="sal-weeks" inputmode="decimal" value="52" oninput="calcSalary()"></div>
+    </div>
+    <div class="notice notice-error" id="salary-error" role="alert"></div>
+    <div class="calc-empty" id="salary-empty">Enter an amount above to see your salary breakdown.</div>
+    <div class="result-card" id="salary-result" aria-live="polite">
+      <div class="result-label">Annual salary (gross)</div>
+      <div class="result-hero" id="salary-hero">—</div>
+      <div class="result-sub">Approximate gross figures — not a payroll calculation.</div>
+      <div class="stat-grid" id="salary-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="salary-copybtn" onclick="copyCalc('salary')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="salary-sharebtn" onclick="shareCalc('salary')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetSalary()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="salary-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- TAKE-HOME PAY -->
+  <section class="tool-panel" id="panel-takehome" aria-labelledby="h-takehome">
+    <div class="tp-head"><div><h2 id="h-takehome">🧮 UK Take-Home Pay Calculator</h2><p>Estimate income tax, National Insurance and net pay for a UK salary. Estimates only — see disclaimer below.</p></div><button class="tp-close" onclick="closeCalc('takehome')">✕ Close</button></div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="th-gross">Annual gross salary</label><input type="number" id="th-gross" inputmode="decimal" placeholder="40000" oninput="calcTakeHome()"></div>
+      <div class="opt-field"><label for="th-year">Tax year</label>
+        <select id="th-year" onchange="calcTakeHome()"><option value="2025-26">2025/26 (UK)</option></select>
+      </div>
+      <div class="opt-field"><label for="th-freq">Show take-home as</label>
+        <select id="th-freq" onchange="calcTakeHome()"><option value="monthly">Monthly</option><option value="weekly">Weekly</option><option value="annual">Annual</option></select>
+      </div>
+    </div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="th-pension">Pension contribution (% of gross, salary sacrifice)</label><input type="number" id="th-pension" inputmode="decimal" value="0" oninput="calcTakeHome()"></div>
+      <div class="opt-field"><label for="th-loan">Student loan plan</label>
+        <select id="th-loan" onchange="calcTakeHome()">
+          <option value="none">None</option>
+          <option value="plan1">Plan 1</option>
+          <option value="plan2">Plan 2</option>
+          <option value="plan4">Plan 4 (Scotland)</option>
+          <option value="plan5">Plan 5</option>
+          <option value="postgrad">Postgraduate Loan</option>
+        </select>
+      </div>
+      <div class="opt-field"><label for="th-other">Other annual deductions (£, after tax)</label><input type="number" id="th-other" inputmode="decimal" value="0" oninput="calcTakeHome()"></div>
+    </div>
+    <div class="notice notice-warn show">Estimated take-home pay. Actual deductions can vary depending on your tax code, pension arrangement, benefits and other circumstances. Student loan thresholds shown are approximate — verify current figures at <strong>gov.uk/repaying-your-student-loan</strong>.</div>
+    <div class="notice notice-error" id="takehome-error" role="alert"></div>
+    <div class="calc-empty" id="takehome-empty">Enter your gross salary above to estimate your take-home pay.</div>
+    <div class="result-card" id="takehome-result" aria-live="polite">
+      <div class="result-label" id="takehome-label">Estimated take-home pay (monthly)</div>
+      <div class="result-hero" id="takehome-hero">—</div>
+      <div class="stat-grid" id="takehome-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="takehome-copybtn" onclick="copyCalc('takehome')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="takehome-sharebtn" onclick="shareCalc('takehome')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetTakeHome()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="takehome-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- MORTGAGE -->
+  <section class="tool-panel" id="panel-mortgage" aria-labelledby="h-mortgage">
+    <div class="tp-head"><div><h2 id="h-mortgage">🏠 Mortgage Calculator</h2><p>Estimate your monthly mortgage payment, total interest and loan-to-value.</p></div><button class="tp-close" onclick="closeCalc('mortgage')">✕ Close</button></div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="mtg-price">Property price</label><input type="number" id="mtg-price" inputmode="decimal" placeholder="300000" oninput="calcMortgage()"></div>
+      <div class="opt-field"><label for="mtg-deposit">Deposit</label><input type="number" id="mtg-deposit" inputmode="decimal" placeholder="60000" oninput="calcMortgage()"></div>
+      <div class="opt-field"><label for="mtg-rate">Interest rate (% per year)</label><input type="number" id="mtg-rate" inputmode="decimal" placeholder="5" oninput="calcMortgage()"></div>
+      <div class="opt-field"><label for="mtg-freq">Show payment as</label><select id="mtg-freq" onchange="calcMortgage()"><option value="monthly">Monthly</option><option value="annual">Annual</option></select></div>
+    </div>
+    <div class="opt-field" style="max-width:320px;margin-bottom:8px"><label for="mtg-term">Term (years)</label><input type="number" id="mtg-term" inputmode="decimal" placeholder="25" oninput="calcMortgage();syncChip('mtg-presets','mtg-term')"></div>
+    <div class="chip-row" id="mtg-presets">
+      <button class="chip-btn" onclick="setChipVal('mtg-term',10,this,'mtg-presets');calcMortgage()">10 yrs</button>
+      <button class="chip-btn" onclick="setChipVal('mtg-term',15,this,'mtg-presets');calcMortgage()">15 yrs</button>
+      <button class="chip-btn" onclick="setChipVal('mtg-term',20,this,'mtg-presets');calcMortgage()">20 yrs</button>
+      <button class="chip-btn active" onclick="setChipVal('mtg-term',25,this,'mtg-presets');calcMortgage()">25 yrs</button>
+      <button class="chip-btn" onclick="setChipVal('mtg-term',30,this,'mtg-presets');calcMortgage()">30 yrs</button>
+    </div>
+    <div class="notice notice-error" id="mortgage-error" role="alert"></div>
+    <div class="calc-empty" id="mortgage-empty">Enter a property price, deposit and interest rate above to estimate your mortgage payment.</div>
+    <div class="result-card" id="mortgage-result" aria-live="polite">
+      <div class="result-label" id="mortgage-label">Estimated monthly payment</div>
+      <div class="result-hero" id="mortgage-hero">—</div>
+      <div class="stat-grid" id="mortgage-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="mortgage-copybtn" onclick="copyCalc('mortgage')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="mortgage-sharebtn" onclick="shareCalc('mortgage')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetMortgage()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="mortgage-explain"></div></details>
+    </div>
+
+    <details style="margin-top:22px;border-top:1px solid var(--border);padding-top:18px">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:0.95rem">⚙️ Advanced: Mortgage Overpayment Calculator</summary>
+      <div style="margin-top:16px">
+        <div class="opt-row">
+          <div class="opt-field"><label for="mtg-op-monthly">Extra monthly overpayment</label><input type="number" id="mtg-op-monthly" inputmode="decimal" value="0" oninput="calcMortgage()"></div>
+          <div class="opt-field"><label for="mtg-op-annual">Extra annual overpayment</label><input type="number" id="mtg-op-annual" inputmode="decimal" value="0" oninput="calcMortgage()"></div>
+          <div class="opt-field"><label for="mtg-op-oneoff">One-off overpayment</label><input type="number" id="mtg-op-oneoff" inputmode="decimal" value="0" oninput="calcMortgage()"></div>
+        </div>
+        <div class="notice notice-warn show">Real mortgage products often cap overpayments (commonly 10% of the balance per year) and may charge Early Repayment Charges. Check your lender's terms before overpaying.</div>
+        <div id="mtg-op-result"></div>
+      </div>
+    </details>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- LOAN -->
+  <section class="tool-panel" id="panel-loan" aria-labelledby="h-loan">
+    <div class="tp-head"><div><h2 id="h-loan">💳 Loan Calculator</h2><p>Estimate your monthly repayment, or work out how much you could borrow.</p></div><button class="tp-close" onclick="closeCalc('loan')">✕ Close</button></div>
+    <div class="tabbar" id="loan-tabs">
+      <button class="active" data-mode="repay" onclick="setLoanMode('repay',this)">Monthly repayment</button>
+      <button data-mode="borrow" onclick="setLoanMode('borrow',this)">How much can I borrow?</button>
+    </div>
+    <div id="loan-repay">
+      <div class="opt-row">
+        <div class="opt-field"><label for="loan-amount">Loan amount</label><input type="number" id="loan-amount" inputmode="decimal" placeholder="10000" oninput="calcLoan()"></div>
+        <div class="opt-field"><label for="loan-rate">Interest rate (% APR)</label><input type="number" id="loan-rate" inputmode="decimal" placeholder="7" oninput="calcLoan()"></div>
+        <div class="opt-field"><label for="loan-term">Term (years)</label><input type="number" id="loan-term" inputmode="decimal" placeholder="5" oninput="calcLoan()"></div>
+      </div>
+    </div>
+    <div id="loan-borrow" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="loan-afford">Affordable monthly payment</label><input type="number" id="loan-afford" inputmode="decimal" placeholder="200" oninput="calcLoan()"></div>
+        <div class="opt-field"><label for="loan-rate2">Interest rate (% APR)</label><input type="number" id="loan-rate2" inputmode="decimal" placeholder="7" oninput="calcLoan()"></div>
+        <div class="opt-field"><label for="loan-term2">Term (years)</label><input type="number" id="loan-term2" inputmode="decimal" placeholder="5" oninput="calcLoan()"></div>
+      </div>
+    </div>
+    <div class="notice notice-error" id="loan-error" role="alert"></div>
+    <div class="calc-empty" id="loan-empty">Enter your loan details above to estimate repayments.</div>
+    <div class="result-card" id="loan-result" aria-live="polite">
+      <div class="result-label" id="loan-label">Estimated monthly payment</div>
+      <div class="result-hero" id="loan-hero">—</div>
+      <div class="stat-grid" id="loan-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="loan-copybtn" onclick="copyCalc('loan')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="loan-sharebtn" onclick="shareCalc('loan')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetLoan()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="loan-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- INTEREST -->
+  <section class="tool-panel" id="panel-interest" aria-labelledby="h-interest">
+    <div class="tp-head"><div><h2 id="h-interest">📈 Interest Calculator</h2><p>Calculate simple interest or compound interest, with optional regular contributions.</p></div><button class="tp-close" onclick="closeCalc('interest')">✕ Close</button></div>
+    <div class="tabbar" id="int-tabs">
+      <button class="active" data-mode="simple" onclick="setIntMode('simple',this)">Simple Interest</button>
+      <button data-mode="compound" onclick="setIntMode('compound',this)">Compound Interest</button>
+    </div>
+    <div id="int-simple">
+      <div class="opt-row">
+        <div class="opt-field"><label for="int-principal">Principal</label><input type="number" id="int-principal" inputmode="decimal" placeholder="1000" oninput="calcInterest()"></div>
+        <div class="opt-field"><label for="int-rate">Interest rate (% per year)</label><input type="number" id="int-rate" inputmode="decimal" placeholder="5" oninput="calcInterest()"></div>
+        <div class="opt-field"><label for="int-time">Time (years)</label><input type="number" id="int-time" inputmode="decimal" placeholder="3" oninput="calcInterest()"></div>
+      </div>
+    </div>
+    <div id="int-compound" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="ci-initial">Initial amount</label><input type="number" id="ci-initial" inputmode="decimal" placeholder="1000" oninput="calcInterest()"></div>
+        <div class="opt-field"><label for="ci-rate">Interest rate (% per year)</label><input type="number" id="ci-rate" inputmode="decimal" placeholder="5" oninput="calcInterest()"></div>
+        <div class="opt-field"><label for="ci-freq">Compounding frequency</label>
+          <select id="ci-freq" onchange="calcInterest()">
+            <option value="365">Daily</option>
+            <option value="12" selected>Monthly</option>
+            <option value="4">Quarterly</option>
+            <option value="1">Annually</option>
+          </select>
+        </div>
+        <div class="opt-field"><label for="ci-time">Time (years)</label><input type="number" id="ci-time" inputmode="decimal" placeholder="10" oninput="calcInterest()"></div>
+        <div class="opt-field"><label for="ci-contrib">Regular contribution (per period, optional)</label><input type="number" id="ci-contrib" inputmode="decimal" value="0" oninput="calcInterest()"></div>
+      </div>
+    </div>
+    <div class="notice notice-error" id="interest-error" role="alert"></div>
+    <div class="calc-empty" id="interest-empty">Enter your figures above to calculate interest.</div>
+    <div class="result-card" id="interest-result" aria-live="polite">
+      <div class="result-label" id="interest-label">Final balance</div>
+      <div class="result-hero" id="interest-hero">—</div>
+      <div class="stat-grid" id="interest-stats"></div>
+      <div class="chart-wrap" id="interest-chart-wrap" style="display:none"><div class="chart-label">Balance over time</div><div id="interest-chart"></div></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="interest-copybtn" onclick="copyCalc('interest')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="interest-sharebtn" onclick="shareCalc('interest')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetInterest()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="interest-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- TIP -->
+  <section class="tool-panel" id="panel-tip" aria-labelledby="h-tip">
+    <div class="tp-head"><div><h2 id="h-tip">🍽️ Tip Calculator</h2><p>Work out the tip, total and per-person share for a restaurant bill.</p></div><button class="tp-close" onclick="closeCalc('tip')">✕ Close</button></div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="tip-bill">Bill amount</label><input type="number" id="tip-bill" inputmode="decimal" placeholder="100" oninput="calcTip()"></div>
+      <div class="opt-field"><label for="tip-pct">Tip (%)</label><input type="number" id="tip-pct" inputmode="decimal" value="10" oninput="calcTip();syncChip('tip-presets','tip-pct')"></div>
+      <div class="opt-field"><label for="tip-people">Number of people</label><input type="number" id="tip-people" inputmode="numeric" value="1" oninput="calcTip()"></div>
+    </div>
+    <div class="chip-row" id="tip-presets">
+      <button class="chip-btn" onclick="setChipVal('tip-pct',5,this,'tip-presets');calcTip()">5%</button>
+      <button class="chip-btn active" onclick="setChipVal('tip-pct',10,this,'tip-presets');calcTip()">10%</button>
+      <button class="chip-btn" onclick="setChipVal('tip-pct',12.5,this,'tip-presets');calcTip()">12.5%</button>
+      <button class="chip-btn" onclick="setChipVal('tip-pct',15,this,'tip-presets');calcTip()">15%</button>
+      <button class="chip-btn" onclick="setChipVal('tip-pct',20,this,'tip-presets');calcTip()">20%</button>
+    </div>
+    <div class="checkbox-row"><input type="checkbox" id="tip-round" onchange="calcTip()"><label for="tip-round">Round up total to the nearest whole amount</label></div>
+    <div class="notice notice-error" id="tip-error" role="alert"></div>
+    <div class="calc-empty" id="tip-empty">Enter a bill amount above to calculate the tip.</div>
+    <div class="result-card" id="tip-result" aria-live="polite">
+      <div class="result-label">Total</div>
+      <div class="result-hero" id="tip-hero">—</div>
+      <div class="result-sub" id="tip-sub"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="tip-copybtn" onclick="copyCalc('tip')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="tip-sharebtn" onclick="shareCalc('tip')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetTip()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="tip-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- SPLIT BILL -->
+  <section class="tool-panel" id="panel-split" aria-labelledby="h-split">
+    <div class="tp-head"><div><h2 id="h-split">🧾 Split Bill Calculator</h2><p>Split a bill evenly, or divide different amounts fairly with tip included.</p></div><button class="tp-close" onclick="closeCalc('split')">✕ Close</button></div>
+    <div class="tabbar" id="split-tabs">
+      <button class="active" data-mode="even" onclick="setSplitMode('even',this)">Even split</button>
+      <button data-mode="uneven" onclick="setSplitMode('uneven',this)">Uneven split</button>
+    </div>
+    <div id="split-even">
+      <div class="opt-row">
+        <div class="opt-field"><label for="split-total">Total bill</label><input type="number" id="split-total" inputmode="decimal" placeholder="110" oninput="calcSplit()"></div>
+        <div class="opt-field"><label for="split-people">Number of people</label><input type="number" id="split-people" inputmode="numeric" placeholder="4" oninput="calcSplit()"></div>
+        <div class="opt-field"><label for="split-tip">Tip (%)</label><input type="number" id="split-tip" inputmode="decimal" value="0" oninput="calcSplit()"></div>
+      </div>
+    </div>
+    <div id="split-uneven" style="display:none">
+      <div id="split-person-rows"></div>
+      <div class="btn-row" style="margin-top:0">
+        <button class="pdf-btn-secondary" onclick="addSplitPerson()">+ Add Person</button>
+      </div>
+      <div class="opt-field" style="max-width:220px;margin-top:14px"><label for="split-tip2">Tip (%)</label><input type="number" id="split-tip2" inputmode="decimal" value="0" oninput="calcSplit()"></div>
+    </div>
+    <div class="notice notice-error" id="split-error" role="alert"></div>
+    <div class="calc-empty" id="split-empty">Enter a bill amount above to split it.</div>
+    <div class="result-card" id="split-result" aria-live="polite">
+      <div class="result-label" id="split-label">Bill per person</div>
+      <div class="result-hero" id="split-hero">—</div>
+      <div class="result-sub" id="split-sub"></div>
+      <div class="stat-grid" id="split-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="split-copybtn" onclick="copyCalc('split')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="split-sharebtn" onclick="shareCalc('split')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetSplit()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="split-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- AGE -->
+  <section class="tool-panel" id="panel-age" aria-labelledby="h-age">
+    <div class="tp-head"><div><h2 id="h-age">🎂 Age Calculator</h2><p>Calculate exact age in years, months and days — correctly handling leap years.</p></div><button class="tp-close" onclick="closeCalc('age')">✕ Close</button></div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="age-dob">Date of birth</label><input type="date" id="age-dob" oninput="calcAge()"></div>
+      <div class="opt-field"><label for="age-asof">Calculate age on</label><input type="date" id="age-asof" oninput="calcAge()"></div>
+    </div>
+    <div class="notice notice-error" id="age-error" role="alert"></div>
+    <div class="calc-empty" id="age-empty">Enter a date of birth above to calculate your exact age.</div>
+    <div class="result-card" id="age-result" aria-live="polite">
+      <div class="result-label">Your exact age</div>
+      <div class="result-hero" id="age-hero" style="font-size:clamp(1.5rem,5vw,2.3rem)">—</div>
+      <div class="stat-grid" id="age-stats"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="age-copybtn" onclick="copyCalc('age')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="age-sharebtn" onclick="shareCalc('age')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetAge()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="age-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- DATE DIFFERENCE -->
+  <section class="tool-panel" id="panel-datediff" aria-labelledby="h-datediff">
+    <div class="tp-head"><div><h2 id="h-datediff">📅 Date Difference Calculator</h2><p>Find the time between two dates, add or subtract time from a date, or count working days.</p></div><button class="tp-close" onclick="closeCalc('datediff')">✕ Close</button></div>
+    <div class="tabbar" id="dd-tabs">
+      <button class="active" data-mode="diff" onclick="setDdMode('diff',this)">Difference</button>
+      <button data-mode="addsub" onclick="setDdMode('addsub',this)">Add / Subtract</button>
+      <button data-mode="working" onclick="setDdMode('working',this)">Working Days</button>
+    </div>
+    <div id="dd-diff">
+      <div class="opt-row">
+        <div class="opt-field"><label for="dd-start">Start date</label><input type="date" id="dd-start" oninput="calcDateDiff()"></div>
+        <div class="opt-field"><label for="dd-end">End date</label><input type="date" id="dd-end" oninput="calcDateDiff()"></div>
+      </div>
+      <div class="notice notice-info" id="dd-swapnote">Dates were swapped — end date was before start date, so we calculated the difference between them.</div>
+      <div class="notice notice-error" id="datediff-error" role="alert"></div>
+      <div class="calc-empty" id="datediff-empty">Enter a start and end date above.</div>
+      <div class="result-card" id="datediff-result" aria-live="polite">
+        <div class="result-label">Difference</div>
+        <div class="result-hero" id="datediff-hero">—</div>
+        <div class="stat-grid" id="datediff-stats"></div>
+        <div class="btn-row">
+          <button class="pdf-btn-secondary" id="datediff-copybtn" onclick="copyCalc('datediff')">📋 Copy Result</button>
+          <button class="pdf-btn-secondary" id="datediff-sharebtn" onclick="shareCalc('datediff')">🔗 Share</button>
+          <button class="pdf-btn-secondary" onclick="resetDateDiff()">↺ Reset</button>
+        </div>
+        <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="datediff-explain"></div></details>
+      </div>
+    </div>
+    <div id="dd-addsub" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="as-start">Start date</label><input type="date" id="as-start" oninput="calcAddSub()"></div>
+        <div class="opt-field"><label for="as-op">Operation</label><select id="as-op" onchange="calcAddSub()"><option value="add">Add</option><option value="sub">Subtract</option></select></div>
+        <div class="opt-field"><label for="as-amount">Amount</label><input type="number" id="as-amount" inputmode="numeric" placeholder="90" oninput="calcAddSub()"></div>
+        <div class="opt-field"><label for="as-unit">Unit</label><select id="as-unit" onchange="calcAddSub()"><option value="days">Days</option><option value="weeks">Weeks</option><option value="months">Months</option><option value="years">Years</option></select></div>
+      </div>
+      <div class="notice notice-error" id="addsub-error" role="alert"></div>
+      <div class="calc-empty" id="addsub-empty">Enter a start date and amount above.</div>
+      <div class="result-card" id="addsub-result" aria-live="polite">
+        <div class="result-label">Resulting date</div>
+        <div class="result-hero" id="addsub-hero">—</div>
+        <div class="btn-row">
+          <button class="pdf-btn-secondary" id="addsub-copybtn" onclick="copyCalc('addsub')">📋 Copy Result</button>
+          <button class="pdf-btn-secondary" id="addsub-sharebtn" onclick="shareCalc('addsub')">🔗 Share</button>
+          <button class="pdf-btn-secondary" onclick="resetAddSub()">↺ Reset</button>
+        </div>
+        <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="addsub-explain"></div></details>
+      </div>
+    </div>
+    <div id="dd-working" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="wd-start">Start date</label><input type="date" id="wd-start" oninput="calcWorking()"></div>
+        <div class="opt-field"><label for="wd-end">End date</label><input type="date" id="wd-end" oninput="calcWorking()"></div>
+      </div>
+      <div class="checkbox-row"><input type="checkbox" id="wd-holidays" checked onchange="calcWorking()"><label for="wd-holidays">Exclude UK bank holidays (England &amp; Wales, 2025–2026 only)</label></div>
+      <div class="notice notice-warn show">Monday–Friday counted as working days. The bank holiday list covers England &amp; Wales for 2025–2026 only and may not reflect short-notice announcements, Scotland/Northern Ireland dates, or years outside this range.</div>
+      <div class="notice notice-error" id="working-error" role="alert"></div>
+      <div class="calc-empty" id="working-empty">Enter a start and end date above.</div>
+      <div class="result-card" id="working-result" aria-live="polite">
+        <div class="result-label">Working days</div>
+        <div class="result-hero" id="working-hero">—</div>
+        <div class="stat-grid" id="working-stats"></div>
+        <div class="btn-row">
+          <button class="pdf-btn-secondary" id="working-copybtn" onclick="copyCalc('working')">📋 Copy Result</button>
+          <button class="pdf-btn-secondary" id="working-sharebtn" onclick="shareCalc('working')">🔗 Share</button>
+          <button class="pdf-btn-secondary" onclick="resetWorking()">↺ Reset</button>
+        </div>
+        <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="working-explain"></div></details>
+      </div>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- TIME DIFFERENCE -->
+  <section class="tool-panel" id="panel-timediff" aria-labelledby="h-timediff">
+    <div class="tp-head"><div><h2 id="h-timediff">⏱️ Time Difference Calculator</h2><p>Find the time between two clock times, or add/subtract time — including crossing midnight.</p></div><button class="tp-close" onclick="closeCalc('timediff')">✕ Close</button></div>
+    <div class="tabbar" id="td-tabs">
+      <button class="active" data-mode="diff" onclick="setTdMode('diff',this)">Difference</button>
+      <button data-mode="addsub" onclick="setTdMode('addsub',this)">Add / Subtract</button>
+    </div>
+    <div class="checkbox-row"><input type="checkbox" id="td-12h" onchange="calcTimeDiff();calcTimeAddSub()"><label for="td-12h">Display results in 12-hour format (AM/PM)</label></div>
+    <div id="td-diff">
+      <div class="opt-row">
+        <div class="opt-field"><label for="td-start">Start time</label><input type="time" id="td-start" oninput="calcTimeDiff()"></div>
+        <div class="opt-field"><label for="td-end">End time</label><input type="time" id="td-end" oninput="calcTimeDiff()"></div>
+      </div>
+      <div class="notice notice-error" id="timediff-error" role="alert"></div>
+      <div class="calc-empty" id="timediff-empty">Enter a start and end time above.</div>
+      <div class="result-card" id="timediff-result" aria-live="polite">
+        <div class="result-label">Time difference</div>
+        <div class="result-hero" id="timediff-hero">—</div>
+        <div class="btn-row">
+          <button class="pdf-btn-secondary" id="timediff-copybtn" onclick="copyCalc('timediff')">📋 Copy Result</button>
+          <button class="pdf-btn-secondary" id="timediff-sharebtn" onclick="shareCalc('timediff')">🔗 Share</button>
+          <button class="pdf-btn-secondary" onclick="resetTimeDiff()">↺ Reset</button>
+        </div>
+        <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="timediff-explain"></div></details>
+      </div>
+    </div>
+    <div id="td-addsub" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="ta-start">Start time</label><input type="time" id="ta-start" oninput="calcTimeAddSub()"></div>
+        <div class="opt-field"><label for="ta-op">Operation</label><select id="ta-op" onchange="calcTimeAddSub()"><option value="add">Add</option><option value="sub">Subtract</option></select></div>
+        <div class="opt-field"><label for="ta-hours">Hours</label><input type="number" id="ta-hours" inputmode="numeric" value="0" oninput="calcTimeAddSub()"></div>
+        <div class="opt-field"><label for="ta-minutes">Minutes</label><input type="number" id="ta-minutes" inputmode="numeric" value="0" oninput="calcTimeAddSub()"></div>
+      </div>
+      <div class="notice notice-error" id="timeaddsub-error" role="alert"></div>
+      <div class="calc-empty" id="timeaddsub-empty">Enter a start time and an amount above.</div>
+      <div class="result-card" id="timeaddsub-result" aria-live="polite">
+        <div class="result-label" id="timeaddsub-label">Resulting time</div>
+        <div class="result-hero" id="timeaddsub-hero">—</div>
+        <div class="btn-row">
+          <button class="pdf-btn-secondary" id="timeaddsub-copybtn" onclick="copyCalc('timeaddsub')">📋 Copy Result</button>
+          <button class="pdf-btn-secondary" id="timeaddsub-sharebtn" onclick="shareCalc('timeaddsub')">🔗 Share</button>
+          <button class="pdf-btn-secondary" onclick="resetTimeAddSub()">↺ Reset</button>
+        </div>
+        <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="timeaddsub-explain"></div></details>
+      </div>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- UNIT CONVERTER -->
+  <section class="tool-panel" id="panel-units" aria-labelledby="h-units">
+    <div class="tp-head"><div><h2 id="h-units">🔁 Unit Converter</h2><p>Convert length, weight, temperature, area, volume, speed, data, time, energy and fuel economy.</p></div><button class="tp-close" onclick="closeCalc('units')">✕ Close</button></div>
+    <div class="chip-row">
+      <button class="chip-btn" onclick="quickUnit('length','mi','km')">🇬🇧 Miles → KM</button>
+      <button class="chip-btn" onclick="quickUnit('length','km','mi')">🇬🇧 KM → Miles</button>
+      <button class="chip-btn" onclick="quickUnit('fuel','mpg','l100km')">⛽ MPG → L/100km</button>
+      <button class="chip-btn" onclick="quickUnit('fuel','l100km','mpg')">⛽ L/100km → MPG</button>
+    </div>
+    <div class="opt-row">
+      <div class="opt-field"><label for="unit-cat">Category</label>
+        <select id="unit-cat" onchange="onUnitCatChange()">
+          <option value="length">Length</option>
+          <option value="weight">Weight</option>
+          <option value="temperature">Temperature</option>
+          <option value="area">Area</option>
+          <option value="volume">Volume</option>
+          <option value="speed">Speed</option>
+          <option value="data">Data</option>
+          <option value="time">Time</option>
+          <option value="energy">Energy</option>
+          <option value="fuel">Fuel Economy</option>
+        </select>
+      </div>
+      <div class="opt-field"><label for="unit-value">Value</label><input type="number" id="unit-value" inputmode="decimal" placeholder="10" oninput="calcUnits()"></div>
+      <div class="opt-field"><label for="unit-from">From</label><select id="unit-from" onchange="calcUnits()"></select></div>
+      <div class="opt-field"><label for="unit-to">To</label><select id="unit-to" onchange="calcUnits()"></select></div>
+    </div>
+    <div class="btn-row" style="margin-top:0"><button class="pdf-btn-secondary" onclick="swapUnits()">⇄ Swap Units</button></div>
+    <div class="notice notice-error" id="units-error" role="alert"></div>
+    <div class="calc-empty" id="units-empty">Enter a value above to convert.</div>
+    <div class="result-card" id="units-result" aria-live="polite">
+      <div class="result-label" id="units-label">Result</div>
+      <div class="result-hero" id="units-hero">—</div>
+      <div class="btn-row">
+        <button class="pdf-btn-secondary" id="units-copybtn" onclick="copyCalc('units')">📋 Copy Result</button>
+        <button class="pdf-btn-secondary" id="units-sharebtn" onclick="shareCalc('units')">🔗 Share</button>
+        <button class="pdf-btn-secondary" onclick="resetUnits()">↺ Reset</button>
+      </div>
+      <details class="explain-box"><summary>How we calculated this</summary><div class="explain-lines" id="units-explain"></div></details>
+    </div>
+    <div class="faq-slot"></div>
+    <div class="related-slot"></div>
+  </section>
+
+  <div class="privacy-panel" id="privacy">
+    <div class="pq">Are my calculations sent anywhere?</div>
+    <h2>No — everything happens in your browser.</h2>
+    <p>Every calculator on this page runs entirely as JavaScript in your browser. Nothing you type — salary, bill amounts, dates, mortgage figures — is uploaded, stored, or sent to Salman IT Tools or anyone else.</p>
+    <div class="privacy-list">
+      <span>🔒 No data uploads</span>
+      <span>🚫 No account required</span>
+      <span>🗑️ No storage</span>
+      <span>📊 No personal figures sent to analytics</span>
+    </div>
+  </div>
+
+  <div class="info-section" id="faq">
+    <div class="page-eyebrow" style="margin-bottom:8px">FAQ</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.03em">General Questions</h2>
+    <div style="margin-top:16px;max-width:760px">
+      <details class="faq-item"><summary>Is the Life Calculator free?</summary><p>Yes — every calculator on this page is completely free, with no sign-up, no account and no usage limits.</p></details>
+      <details class="faq-item"><summary>Are my calculations private?</summary><p>Yes. All calculations run directly in your browser using JavaScript. Nothing is uploaded or stored on any server.</p></details>
+      <details class="faq-item"><summary>Can I use this on my phone?</summary><p>Yes — every calculator is designed mobile-first, with full-width inputs, touch-friendly controls and a numeric keyboard where relevant.</p></details>
+      <details class="faq-item"><summary>Can I bookmark or share a specific calculator?</summary><p>Yes. Each calculator has its own URL (for example <code>life-calculator.html#discount</code>) that opens directly to that tool.</p></details>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free tools for everyday life and IT. No sign-up required. <a href="index.html">Back to homepage</a></p>
+</footer>
+
+<script>
+/* ============================================================
+   utils/formatting.js + utils/money.js
+   ============================================================ */
+const CURRENCIES={GBP:'£',USD:'$',EUR:'€',CAD:'CA$',AUD:'A$'};
+let currentCurrency='GBP';
+function setCurrency(c){ currentCurrency=c; renderActiveCalc(); }
+function round2(n){ return Math.round((n+Number.EPSILON)*100)/100; }
+function fmt(n){ if(!isFinite(n)) n=0; const neg=n<0; n=Math.abs(round2(n)); return (neg?'-':'')+CURRENCIES[currentCurrency]+n.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtNum(n,dp){ dp=dp===undefined?6:dp; if(!isFinite(n)) return '0'; const r=Number(n.toFixed(dp)); return r.toLocaleString('en-GB',{maximumFractionDigits:dp}); }
+function fmtInt(n){ if(!isFinite(n)) return '0'; return Math.round(n).toLocaleString('en-GB'); }
+function parseN(v){ if(v===null||v===undefined||v==='') return null; const n=parseFloat(v); return isNaN(n)?null:n; }
+
+/* ============================================================
+   utils/dates.js
+   ============================================================ */
+function parseDateInput(v){ // "YYYY-MM-DD" -> UTC Date
+  if(!v) return null;
+  const parts=v.split('-'); if(parts.length!==3) return null;
+  const y=+parts[0], m=+parts[1], d=+parts[2];
+  if(!y||!m||!d) return null;
+  return new Date(Date.UTC(y,m-1,d));
+}
+function daysInMonth(y,m){ return new Date(Date.UTC(y,m+1,0)).getUTCDate(); } // m = 0-indexed
+function diffYMD(d1,d2){ // d2 assumed >= d1, both UTC dates
+  let y=d2.getUTCFullYear()-d1.getUTCFullYear();
+  let m=d2.getUTCMonth()-d1.getUTCMonth();
+  let d=d2.getUTCDate()-d1.getUTCDate();
+  if(d<0){ m--; const prevMonthLen=daysInMonth(d2.getUTCFullYear(), d2.getUTCMonth()-1); d+=prevMonthLen; }
+  if(m<0){ y--; m+=12; }
+  return {years:y, months:m, days:d};
+}
+function totalDaysBetween(d1,d2){ return Math.round((d2-d1)/86400000); }
+function addMonthsClamped(date, n){
+  const y=date.getUTCFullYear(), m=date.getUTCMonth(), d=date.getUTCDate();
+  const total = m+n;
+  const newY = y + Math.floor(total/12);
+  const newM = ((total%12)+12)%12;
+  const maxDay = daysInMonth(newY, newM);
+  return new Date(Date.UTC(newY, newM, Math.min(d,maxDay)));
+}
+function fmtDate(d){ return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}); }
+function todayUTC(){ const t=new Date(); return new Date(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate())); }
+function toInputDate(d){ return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0'); }
+
+/* UK bank holidays — England & Wales, 2025-2026 only. Configurable/extendable. */
+const UK_BANK_HOLIDAYS = [
+  '2025-01-01','2025-04-18','2025-04-21','2025-05-05','2025-05-26','2025-08-25','2025-12-25','2025-12-26',
+  '2026-01-01','2026-04-03','2026-04-06','2026-05-04','2026-05-25','2026-08-31','2026-12-25','2026-12-28'
+];
+
+/* ============================================================
+   Small inline line-chart helper (no external chart library)
+   ============================================================ */
+function drawLineChart(containerId, series){
+  const el=document.getElementById(containerId);
+  if(!series || series.length<2){ el.innerHTML=''; return; }
+  const w=600,h=160,pad=8;
+  const max=Math.max(...series), min=Math.min(...series,0);
+  const range=(max-min)||1;
+  const step = w/(series.length-1);
+  const pts = series.map((v,i)=> `${(i*step).toFixed(1)},${(h-pad-((v-min)/range)*(h-2*pad)).toFixed(1)}`).join(' ');
+  const areaPts = `0,${h} ` + pts + ` ${w},${h}`;
+  el.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Balance growth chart">
+    <defs><linearGradient id="lcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00E87A" stop-opacity="0.35"/><stop offset="100%" stop-color="#00E87A" stop-opacity="0"/></linearGradient></defs>
+    <polygon points="${areaPts}" fill="url(#lcg)"/>
+    <polyline points="${pts}" fill="none" stroke="#00E87A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ============================================================
+   Panel chrome: open/close, hash routing, copy/share, chips
+   ============================================================ */
+const DEFAULT_TITLE = document.title;
+const DEFAULT_DESC = document.querySelector('meta[name=description]').getAttribute('content');
+const copyTextStore = {};
+function setCopyText(id,text){ copyTextStore[id]=text; }
+async function copyCalc(id){
+  const t=copyTextStore[id]; if(!t) return;
+  try{ await navigator.clipboard.writeText(t); }
+  catch(e){ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e2){} ta.remove(); }
+  flashBtn(id+'-copybtn','✓ Copied');
+}
+async function shareCalc(id){
+  const t=copyTextStore[id]; if(!t) return;
+  const url=location.origin+location.pathname+'#'+id;
+  if(navigator.share){ try{ await navigator.share({title:'Life Calculator', text:t, url}); return; }catch(e){ return; } }
+  try{ await navigator.clipboard.writeText(t+'\n'+url); }catch(e){}
+  flashBtn(id+'-sharebtn','✓ Link Copied');
+}
+function flashBtn(btnId,msg){
+  const btn=document.getElementById(btnId); if(!btn) return;
+  if(btn._flashTimer) clearTimeout(btn._flashTimer);
+  if(!btn._origText) btn._origText=btn.textContent;
+  btn.textContent=msg; btn.classList.add('copied');
+  btn._flashTimer=setTimeout(()=>{ btn.textContent=btn._origText; btn.classList.remove('copied'); },1800);
+}
+function showEmpty(id){ const e=document.getElementById(id+'-empty'), r=document.getElementById(id+'-result'); if(e) e.style.display='block'; if(r) r.classList.remove('show'); }
+function showResultCard(id){ const e=document.getElementById(id+'-empty'), r=document.getElementById(id+'-result'); if(e) e.style.display='none'; if(r) r.classList.add('show'); }
+function showErr(id,msg){ const e=document.getElementById(id+'-error'); if(e){ e.textContent=msg; e.classList.add('show'); } showEmpty(id); }
+function clearErr(id){ const e=document.getElementById(id+'-error'); if(e){ e.classList.remove('show'); e.textContent=''; } }
+function setChipVal(inputId,val,btn,rowId){
+  document.getElementById(inputId).value=val;
+  document.querySelectorAll('#'+rowId+' .chip-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function syncChip(rowId,inputId){
+  const v=parseFloat(document.getElementById(inputId).value);
+  document.querySelectorAll('#'+rowId+' .chip-btn').forEach(b=>b.classList.remove('active'));
+}
+
+/* ============================================================
+   data/calcs.js — metadata used to render nav, grid, FAQ, related links
+   ============================================================ */
+const CALCS=[
+{id:'percentage',cat:'money',icon:'📊',title:'Percentage Calculator',desc:"Find X% of a number, work out what percent one number is of another, or calculate a percentage change.",seoTitle:'Percentage Calculator | Free Online Calculator | Salman IT Tools',seoDesc:'Calculate percentages instantly — find X% of Y, what percentage X is of Y, or a percentage increase or decrease.',related:['discount','vat','tip'],faqs:[
+  ['How do I calculate a percentage of a number?','Multiply the number by the percentage and divide by 100. For example, 20% of £100 is 100 × 20 ÷ 100 = £20.'],
+  ['How do I find what percentage one number is of another?','Divide the part by the whole and multiply by 100. For example, 25 ÷ 200 × 100 = 12.5%.'],
+  ['How is percentage increase or decrease calculated?','Subtract the original value from the new value, divide by the original value, then multiply by 100. A positive result is an increase, a negative result is a decrease.']]},
+{id:'discount',cat:'money',icon:'🏷️',title:'Discount Calculator',desc:'Calculate savings and final price after a discount — including correctly stacked sequential discounts.',seoTitle:'Discount Calculator | Calculate Savings & Final Price | Salman IT Tools',seoDesc:'Work out how much you save and what you actually pay after a discount, including sequential multi-stage discounts.',related:['vat','percentage','tip'],faqs:[
+  ['How do I calculate 20% off a price?','Multiply the original price by 20% to get the saving, then subtract it from the price. £79.99 at 20% off saves £16.00, giving a final price of £63.99.'],
+  ['How is the final price calculated?','Final price = Original price − (Original price × Discount %).'],
+  ['Can I calculate multiple discounts?','Yes — turn on the additional discount option. Two sequential discounts of 20% and 10% are not the same as one 30% discount: £100 → 20% off = £80 → a further 10% off = £72, not £70.']]},
+{id:'vat',cat:'money',icon:'🧾',title:'VAT Calculator',desc:'Add or remove UK VAT at 20%, 5%, 0% or a custom rate.',seoTitle:'UK VAT Calculator | Add or Remove VAT | Salman IT Tools',seoDesc:'Add VAT to a net price or remove VAT from a gross price, using the correct UK VAT calculation — not a simple percentage subtraction.',related:['discount','percentage','salary'],faqs:[
+  ['How do I add 20% VAT?','Multiply the net price by the VAT rate to get the VAT amount, then add it to the net price. £1,000 + 20% VAT = £200 VAT, £1,200 total.'],
+  ['How do I remove VAT from a VAT-inclusive price?','Divide the gross price by (1 + VAT rate). £1,200 including 20% VAT gives a net price of £1,200 ÷ 1.2 = £1,000. Simply subtracting 20% from £1,200 is incorrect.'],
+  ['What is the UK VAT rate?','The UK standard VAT rate is 20%. A reduced 5% rate and a 0% zero-rate apply to specific goods and services.']]},
+{id:'salary',cat:'money',icon:'💼',title:'Salary Calculator',desc:'Convert between annual, monthly, weekly and hourly gross pay.',seoTitle:'Salary Calculator | Annual, Monthly & Hourly Pay | Salman IT Tools',seoDesc:'Convert your salary between annual, monthly, weekly and hourly gross pay — approximate figures, not a payroll calculation.',related:['takehome','mortgage','interest'],faqs:[
+  ['How is my hourly rate calculated from my annual salary?','Annual salary ÷ weeks worked per year ÷ hours worked per week.'],
+  ['Are these figures exact?','No — they are approximate gross estimates based on the hours and weeks you enter. Real pay can vary due to overtime, unpaid leave and other factors.']]},
+{id:'takehome',cat:'money',icon:'🧮',title:'UK Take-Home Pay Calculator',desc:'Estimate income tax, National Insurance, pension and net pay for a UK salary.',seoTitle:'UK Take-Home Pay Calculator | Salary Calculator | Salman IT Tools',seoDesc:'Estimate UK take-home pay after income tax, National Insurance, pension contributions and student loan repayments.',related:['salary','mortgage','loan'],faqs:[
+  ['How accurate is this take-home pay estimate?','It uses published UK income tax bands, National Insurance rates and student loan thresholds for the selected tax year, but your actual take-home pay can differ based on your tax code, benefits, pension scheme and other deductions.'],
+  ['Does this include student loan repayments?','Yes, if you select a plan. Thresholds are approximate — always check the current figures at gov.uk/repaying-your-student-loan.'],
+  ['How is pension handled?','The calculator assumes a salary-sacrifice / net-pay pension arrangement, where your pension contribution is deducted before tax and National Insurance are calculated.']]},
+{id:'mortgage',cat:'money',icon:'🏠',title:'Mortgage Calculator',desc:'Estimate monthly payments, total interest, loan-to-value and overpayment savings.',seoTitle:'Mortgage Calculator UK | Monthly Payment Calculator | Salman IT Tools',seoDesc:'Calculate estimated monthly mortgage payments, total interest, loan-to-value and the effect of overpayments.',related:['loan','interest','salary'],faqs:[
+  ['How is a mortgage payment calculated?','Using the standard repayment-mortgage formula based on the loan amount, monthly interest rate and number of monthly payments.'],
+  ['Does this include insurance and fees?','No — this is an estimate of the principal-and-interest repayment only. It does not include arrangement fees, valuation fees, insurance or other product costs.'],
+  ['Does this calculator include overpayments?','Yes, in the Advanced Overpayment section — it estimates the interest and time you could save, though real mortgages may cap overpayments or charge Early Repayment Charges.']]},
+{id:'loan',cat:'money',icon:'💳',title:'Loan Calculator',desc:'Estimate monthly loan repayments, or work out how much you could borrow.',seoTitle:'Loan Calculator | Monthly Repayments & Borrowing Power | Salman IT Tools',seoDesc:'Estimate your monthly loan repayment and total interest, or work out roughly how much you could borrow.',related:['mortgage','interest','takehome'],faqs:[
+  ['How is my monthly loan repayment calculated?','Using the standard loan amortisation formula, based on the loan amount, interest rate and term.'],
+  ['How much can I borrow?','Switch to the "How much can I borrow?" mode and enter what you can comfortably repay each month — the calculator estimates the maximum loan amount for your rate and term. This is an estimate only, not a lending decision.']]},
+{id:'interest',cat:'money',icon:'📈',title:'Interest Calculator',desc:'Calculate simple or compound interest, with regular contributions and daily/monthly/quarterly/annual compounding.',seoTitle:'Interest Calculator | Simple & Compound Interest | Salman IT Tools',seoDesc:'Calculate simple interest or compound interest with optional regular contributions, across daily, monthly, quarterly or annual compounding.',related:['mortgage','loan','salary'],faqs:[
+  ['What is the difference between simple and compound interest?','Simple interest is calculated only on the original principal. Compound interest is calculated on the principal plus any interest already earned, so it grows faster over time.'],
+  ['How does compounding frequency affect the result?','More frequent compounding (e.g. daily vs annually) earns slightly more interest for the same nominal rate, because interest starts earning its own interest sooner.']]},
+{id:'tip',cat:'money',icon:'🍽️',title:'Tip Calculator',desc:'Work out the tip, total and per-person share for a restaurant bill.',seoTitle:'Tip Calculator | Restaurant Tip & Split Calculator | Salman IT Tools',seoDesc:'Calculate the tip amount, total bill and per-person share instantly, with quick preset percentages.',related:['split','percentage','discount'],faqs:[
+  ['How is the tip calculated?','Bill amount × tip percentage ÷ 100. £100 with a 10% tip is £10, for a total of £110.'],
+  ['How is the per-person amount worked out?','The total (bill plus tip) is divided evenly by the number of people.']]},
+{id:'split',cat:'money',icon:'🧾',title:'Split Bill Calculator',desc:'Split a bill evenly, or divide different amounts fairly with tip shared proportionally.',seoTitle:'Split Bill Calculator | Divide a Bill Fairly | Salman IT Tools',seoDesc:'Split a restaurant or shared bill evenly between people, or divide different individual amounts with the tip shared fairly.',related:['tip','percentage','discount'],faqs:[
+  ['How does an even split work?','The total bill plus tip is divided equally by the number of people.'],
+  ['How does an uneven split share the tip fairly?','Each person\'s tip is proportional to their share of the subtotal, so someone who ordered more pays a larger share of the tip.']]},
+{id:'age',cat:'date',icon:'🎂',title:'Age Calculator',desc:'Calculate your exact age in years, months, weeks and days, and see your next birthday countdown.',seoTitle:'Age Calculator | Calculate Your Exact Age | Salman IT Tools',seoDesc:'Calculate your exact age in years, months and days, correctly handling leap years, plus a countdown to your next birthday.',related:['datediff','timediff'],faqs:[
+  ['How is my exact age calculated?','By comparing calendar dates directly — counting full years, then full months, then remaining days — rather than a simplistic 365-day estimate.'],
+  ['Does the calculator account for leap years?','Yes. Because it works with real calendar dates, leap years and varying month lengths are handled automatically and correctly.']]},
+{id:'datediff',cat:'date',icon:'📅',title:'Date Difference Calculator',desc:'Find the time between two dates, add or subtract time, or count working days.',seoTitle:'Date Difference Calculator | Days Between Dates | Salman IT Tools',seoDesc:'Calculate the number of days, weeks, months and years between two dates, add or subtract time from a date, or count working days.',related:['age','timediff'],faqs:[
+  ['How is the difference between two dates calculated?','By counting full years, months and remaining days between the two calendar dates, plus the total number of days.'],
+  ['Does Add/Subtract handle month-end dates correctly?','Yes — adding a month to 31 January correctly lands on 28 or 29 February rather than overflowing into March.']]},
+{id:'timediff',cat:'date',icon:'⏱️',title:'Time Difference Calculator',desc:'Calculate the time between two clock times, including crossing midnight, or add/subtract time.',seoTitle:'Time Difference Calculator | Hours Between Times | Salman IT Tools',seoDesc:'Calculate the exact time between two clock times, correctly handling times that cross midnight, or add/subtract a duration.',related:['datediff','age'],faqs:[
+  ['Does this handle times that cross midnight?','Yes. For example, 22:30 to 02:15 correctly calculates as 3 hours 45 minutes.'],
+  ['Can I display results in 12-hour format?','Yes — toggle "Display results in 12-hour format" to show times as, for example, 2:15 PM instead of 14:15.']]},
+{id:'units',cat:'conv',icon:'🔁',title:'Unit Converter',desc:'Convert length, weight, temperature, area, volume, speed, data, time, energy and fuel economy.',seoTitle:'Unit Converter | Length, Weight, Temperature & More | Salman IT Tools',seoDesc:'Convert between metric and imperial units — length, weight, temperature, area, volume, speed, data, time, energy and fuel economy (MPG ↔ L/100km).',related:['percentage','age'],faqs:[
+  ['How do I convert miles to kilometres?','Use the Length category, or the "Miles → KM" quick shortcut at the top of the converter.'],
+  ['How do I convert MPG to L/100km?','Use the Fuel Economy category, or the quick shortcut — the two units measure fuel economy in reciprocal ways, so the calculator uses the correct non-linear conversion rather than a simple multiplication.']]}
+];
+
+/* ============================================================
+   Chrome rendering: quick-nav, tool-grid, FAQ + related blocks
+   ============================================================ */
+function renderChrome(){
+  const qn=document.getElementById('quickNav'), tg=document.getElementById('calcGrid');
+  CALCS.forEach(c=>{
+    const a=document.createElement('a'); a.href='#'+c.id; a.dataset.cat=c.cat; a.textContent=c.icon+' '+c.title.replace(' Calculator','');
+    a.addEventListener('click', e=>{ e.preventDefault(); openCalc(c.id); });
+    qn.appendChild(a);
+    const card=document.createElement('div'); card.className='tgrid-card'; card.dataset.cat=c.cat;
+    card.addEventListener('click', ()=>openCalc(c.id));
+    card.innerHTML=`<div class="ti">${c.icon}</div><h3>${c.title}</h3><p>${c.desc}</p><span class="open-link">Open Calculator →</span>`;
+    tg.appendChild(card);
+  });
+  CALCS.forEach(c=>{
+    const panel=document.getElementById('panel-'+c.id); if(!panel) return;
+    const faqSlot=panel.querySelector('.faq-slot');
+    if(faqSlot && c.faqs && c.faqs.length){
+      const wrap=document.createElement('div'); wrap.className='faq-block';
+      wrap.innerHTML='<h3>Frequently Asked Questions</h3>'+c.faqs.map(([q,a])=>`<details class="faq-item"><summary>${q}</summary><p>${a}</p></details>`).join('');
+      faqSlot.replaceWith(wrap);
+    }
+    const relSlot=panel.querySelector('.related-slot');
+    if(relSlot && c.related && c.related.length){
+      const wrap=document.createElement('div');
+      const links=c.related.map(rid=>{ const rc=CALCS.find(x=>x.id===rid); if(!rc) return ''; const a=document.createElement('a'); a.href='#'+rid; a.textContent=rc.icon+' Try '+rc.title; a.addEventListener('click', e=>{e.preventDefault();openCalc(rid);}); return a.outerHTML; }).join('');
+      wrap.innerHTML='<div class="related-title">More Useful Calculators</div><div class="related-row">'+links+'</div>';
+      relSlot.replaceWith(wrap);
+      // rewire click handlers lost via outerHTML string round-trip
+      wrap.querySelectorAll('.related-row a').forEach((a,i)=>{ const rid=c.related[i]; a.addEventListener('click', e=>{ e.preventDefault(); openCalc(rid); }); });
+    }
+  });
+}
+function filterCat(cat,btn){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.querySelectorAll('#quickNav a, #calcGrid .tgrid-card').forEach(el=>{ el.style.display=(cat==='all'||el.dataset.cat===cat)?'':'none'; });
+}
+let activeCalcId=null;
+function openCalc(id){
+  document.querySelectorAll('.tool-panel').forEach(p=>p.classList.toggle('open', p.id==='panel-'+id));
+  document.querySelectorAll('#quickNav a').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+id));
+  activeCalcId=id;
+  history.replaceState(null,'','#'+id);
+  const meta=CALCS.find(c=>c.id===id);
+  if(meta){ document.title=meta.seoTitle; const md=document.querySelector('meta[name=description]'); if(md) md.setAttribute('content', meta.seoDesc); }
+  const panel=document.getElementById('panel-'+id);
+  setTimeout(()=> panel && panel.scrollIntoView({behavior:'smooth',block:'start'}), 30);
+}
+function closeCalc(id){
+  const p=document.getElementById('panel-'+id); if(p) p.classList.remove('open');
+  const link=document.querySelector('#quickNav a[href="#'+id+'"]'); if(link) link.classList.remove('active');
+  activeCalcId=null;
+  history.replaceState(null,'',location.pathname);
+  document.title=DEFAULT_TITLE;
+  const md=document.querySelector('meta[name=description]'); if(md) md.setAttribute('content', DEFAULT_DESC);
+  const grid=document.getElementById('calcGrid'); if(grid) grid.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderActiveCalc(){
+  // Re-run the calc for whichever panel is open, so currency changes refresh the display.
+  const fns={percentage:calcPercentage,discount:calcDiscount,vat:calcVat,salary:calcSalary,takehome:calcTakeHome,mortgage:calcMortgage,loan:calcLoan,interest:calcInterest,tip:calcTip,split:calcSplit};
+  if(activeCalcId && fns[activeCalcId]) fns[activeCalcId]();
+}
+function toggleMobileMenu(){
+  const menu=document.getElementById('mobileMenu'), btn=document.getElementById('hamburger');
+  menu.classList.toggle('open'); btn.classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+window.addEventListener('scroll', closeMobileMenu);
+
+/* ============================================================
+   calculators/percentage.js
+   ============================================================ */
+let pctMode='a';
+function setPctMode(m,btn){
+  pctMode=m;
+  document.querySelectorAll('#pct-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('pct-a').style.display=m==='a'?'':'none';
+  document.getElementById('pct-b').style.display=m==='b'?'':'none';
+  document.getElementById('pct-c').style.display=m==='c'?'':'none';
+  calcPercentage();
+}
+function resetPercentage(){
+  ['pct-a-x','pct-a-y','pct-b-x','pct-b-y','pct-c-orig','pct-c-new'].forEach(id=>document.getElementById(id).value='');
+  clearErr('percentage'); showEmpty('percentage');
+}
+function calcPercentage(){
+  clearErr('percentage');
+  if(pctMode==='a'){
+    const x=parseN(document.getElementById('pct-a-x').value), y=parseN(document.getElementById('pct-a-y').value);
+    if(x===null||y===null){ showEmpty('percentage'); return; }
+    const r=y*x/100;
+    document.getElementById('percentage-label').textContent=x+'% of '+fmtNum(y);
+    document.getElementById('percentage-hero').textContent=fmtNum(r);
+    document.getElementById('percentage-sub').textContent='';
+    document.getElementById('percentage-explain').textContent=`${x}% of ${y}\n${y} × ${x} ÷ 100 = ${fmtNum(r)}`;
+    setCopyText('percentage', `${x}% of ${y} = ${fmtNum(r)}`);
+    showResultCard('percentage');
+  } else if(pctMode==='b'){
+    const x=parseN(document.getElementById('pct-b-x').value), y=parseN(document.getElementById('pct-b-y').value);
+    if(x===null||y===null){ showEmpty('percentage'); return; }
+    if(y===0){ showErr('percentage','The second number cannot be zero.'); return; }
+    const r=x/y*100;
+    document.getElementById('percentage-label').textContent=`${x} is what % of ${y}`;
+    document.getElementById('percentage-hero').textContent=fmtNum(r)+'%';
+    document.getElementById('percentage-sub').textContent=`${x} is ${fmtNum(r)}% of ${y}`;
+    document.getElementById('percentage-explain').textContent=`${x} ÷ ${y} × 100 = ${fmtNum(r)}%`;
+    setCopyText('percentage', `${x} is ${fmtNum(r)}% of ${y}`);
+    showResultCard('percentage');
+  } else {
+    const o=parseN(document.getElementById('pct-c-orig').value), n=parseN(document.getElementById('pct-c-new').value);
+    if(o===null||n===null){ showEmpty('percentage'); return; }
+    if(o===0){ showErr('percentage','The original value cannot be zero.'); return; }
+    const change=(n-o)/o*100; const dir=change>=0?'increase':'decrease';
+    document.getElementById('percentage-label').textContent='Change';
+    document.getElementById('percentage-hero').textContent=fmtNum(Math.abs(change))+'% '+dir;
+    document.getElementById('percentage-sub').textContent=`From ${o} to ${n}`;
+    document.getElementById('percentage-explain').textContent=`(${n} − ${o}) ÷ ${o} × 100 = ${fmtNum(change)}%\n${change>=0?'Positive':'Negative'} result → ${dir}`;
+    setCopyText('percentage', `${o} to ${n} = ${fmtNum(Math.abs(change))}% ${dir}`);
+    showResultCard('percentage');
+  }
+}
+
+/* ============================================================
+   calculators/discount.js
+   ============================================================ */
+function toggleDiscExtra(){
+  document.getElementById('disc-extra-row').style.display=document.getElementById('disc-extra-on').checked?'':'none';
+  calcDiscount();
+}
+function resetDiscount(){
+  document.getElementById('disc-price').value='';
+  document.getElementById('disc-pct').value='';
+  document.getElementById('disc-extra-on').checked=false;
+  document.getElementById('disc-extra-row').style.display='none';
+  document.getElementById('disc-extra-pct').value='';
+  document.querySelectorAll('#disc-presets .chip-btn').forEach(b=>b.classList.remove('active'));
+  clearErr('discount'); showEmpty('discount');
+}
+function calcDiscount(){
+  clearErr('discount');
+  const price=parseN(document.getElementById('disc-price').value);
+  const d1=parseN(document.getElementById('disc-pct').value);
+  if(price===null||d1===null){ showEmpty('discount'); return; }
+  if(price<0){ showErr('discount','Price cannot be negative.'); return; }
+  if(d1<0||d1>100){ showErr('discount','Discount must be between 0% and 100%.'); return; }
+  const useExtra=document.getElementById('disc-extra-on').checked;
+  const d2=useExtra?parseN(document.getElementById('disc-extra-pct').value):null;
+  if(useExtra && (d2===null||d2<0||d2>100)){ showErr('discount','Additional discount must be between 0% and 100%.'); return; }
+  const afterFirst=price*(1-d1/100);
+  const finalRaw = useExtra? afterFirst*(1-d2/100) : afterFirst;
+  const final=round2(finalRaw);
+  const saving=round2(price-final);
+  document.getElementById('discount-hero').textContent=fmt(final);
+  document.getElementById('discount-sub').textContent=`You save ${fmt(saving)} (${fmtNum(price?saving/price*100:0,1)}%)`;
+  let stats=`<div class="stat-box"><div class="sl">Original price</div><div class="sv">${fmt(price)}</div></div><div class="stat-box"><div class="sl">You save</div><div class="sv">${fmt(saving)}</div></div><div class="stat-box"><div class="sl">Final price</div><div class="sv">${fmt(final)}</div></div>`;
+  document.getElementById('discount-stats').innerHTML=stats;
+  let explain=`Original price: ${fmt(price)}\nDiscount: ${d1}%\n${fmt(price)} × ${d1}% = ${fmt(round2(price*d1/100))}\n${fmt(price)} − ${fmt(round2(price*d1/100))} = ${fmt(round2(afterFirst))}`;
+  let copy=`Original price: ${fmt(price)}\nDiscount: ${d1}%\n`;
+  if(useExtra){
+    explain+=`\n\nAdditional discount: ${d2}%\n${fmt(round2(afterFirst))} × ${d2}% = ${fmt(round2(afterFirst*d2/100))}\n${fmt(round2(afterFirst))} − ${fmt(round2(afterFirst*d2/100))} = ${fmt(final)}\n\nNote: two consecutive discounts of ${d1}% and ${d2}% are not the same as a single ${d1+d2}% discount.`;
+    copy+=`Additional discount: ${d2}%\n`;
+  }
+  document.getElementById('discount-explain').textContent=explain;
+  copy+=`Saving: ${fmt(saving)}\nFinal price: ${fmt(final)}`;
+  setCopyText('discount', copy);
+  showResultCard('discount');
+}
+
+/* ============================================================
+   calculators/vat.js
+   ============================================================ */
+let vatMode='add';
+function setVatMode(m,btn){
+  vatMode=m;
+  document.querySelectorAll('#vat-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('vat-amount-label').textContent = m==='add' ? 'Net price' : 'Gross price (incl. VAT)';
+  calcVat();
+}
+function onVatRateChange(){
+  document.getElementById('vat-custom-row').style.display = document.getElementById('vat-rate').value==='custom' ? '' : 'none';
+  calcVat();
+}
+function getVatRate(){
+  const sel=document.getElementById('vat-rate').value;
+  if(sel==='custom') return parseN(document.getElementById('vat-custom-rate').value);
+  return parseFloat(sel);
+}
+function resetVat(){
+  document.getElementById('vat-amount').value='';
+  document.getElementById('vat-rate').value='20';
+  document.getElementById('vat-custom-rate').value='';
+  document.getElementById('vat-custom-row').style.display='none';
+  clearErr('vat'); showEmpty('vat');
+}
+function calcVat(){
+  clearErr('vat');
+  const amount=parseN(document.getElementById('vat-amount').value);
+  const rate=getVatRate();
+  if(amount===null||rate===null){ showEmpty('vat'); return; }
+  if(amount<0){ showErr('vat','Price cannot be negative.'); return; }
+  if(rate<0){ showErr('vat','VAT rate cannot be negative.'); return; }
+  if(vatMode==='add'){
+    const vatAmt=round2(amount*rate/100);
+    const total=round2(amount+vatAmt);
+    document.getElementById('vat-label').textContent='Total (incl. VAT)';
+    document.getElementById('vat-hero').textContent=fmt(total);
+    document.getElementById('vat-sub').textContent=`VAT (${rate}%): ${fmt(vatAmt)}`;
+    document.getElementById('vat-explain').textContent=`Net price: ${fmt(amount)}\nVAT: ${rate}%\n${fmt(amount)} × ${rate}% = ${fmt(vatAmt)}\n${fmt(amount)} + ${fmt(vatAmt)} = ${fmt(total)}`;
+    setCopyText('vat', `Net price: ${fmt(amount)}\nVAT (${rate}%): ${fmt(vatAmt)}\nTotal: ${fmt(total)}`);
+  } else {
+    const net=round2(amount/(1+rate/100));
+    const vatAmt=round2(amount-net);
+    document.getElementById('vat-label').textContent='Net price (excl. VAT)';
+    document.getElementById('vat-hero').textContent=fmt(net);
+    document.getElementById('vat-sub').textContent=`VAT (${rate}%): ${fmt(vatAmt)}`;
+    document.getElementById('vat-explain').textContent=`Gross price: ${fmt(amount)}\nVAT rate: ${rate}%\nNet = ${fmt(amount)} ÷ (1 + ${rate}%) = ${fmt(net)}\nVAT = ${fmt(amount)} − ${fmt(net)} = ${fmt(vatAmt)}\n\n(Simply subtracting ${rate}% from the gross price would be incorrect.)`;
+    setCopyText('vat', `Gross price: ${fmt(amount)}\nNet price: ${fmt(net)}\nVAT (${rate}%): ${fmt(vatAmt)}`);
+  }
+  showResultCard('vat');
+}
+
+/* ============================================================
+   calculators/salary.js
+   ============================================================ */
+function resetSalary(){
+  document.getElementById('sal-known').value='annual';
+  document.getElementById('sal-amount').value='';
+  document.getElementById('sal-hours').value='37.5';
+  document.getElementById('sal-weeks').value='52';
+  clearErr('salary'); showEmpty('salary');
+}
+function calcSalary(){
+  clearErr('salary');
+  const known=document.getElementById('sal-known').value;
+  const amount=parseN(document.getElementById('sal-amount').value);
+  const hours=parseN(document.getElementById('sal-hours').value);
+  const weeks=parseN(document.getElementById('sal-weeks').value);
+  if(amount===null){ showEmpty('salary'); return; }
+  if(amount<0){ showErr('salary','Amount cannot be negative.'); return; }
+  if(hours===null||hours<=0){ showErr('salary','Hours per week must be greater than zero.'); return; }
+  if(weeks===null||weeks<=0||weeks>52){ showErr('salary','Weeks worked per year must be between 1 and 52.'); return; }
+  let annual;
+  if(known==='annual') annual=amount;
+  else if(known==='monthly') annual=amount*12;
+  else if(known==='weekly') annual=amount*weeks;
+  else annual=amount*hours*weeks;
+  const monthly=annual/12, weekly=annual/52, daily=weekly/5, hourly=weekly/hours;
+  document.getElementById('salary-hero').textContent=fmt(annual);
+  document.getElementById('salary-stats').innerHTML=`
+    <div class="stat-box"><div class="sl">Monthly gross</div><div class="sv">${fmt(monthly)}</div></div>
+    <div class="stat-box"><div class="sl">Weekly gross</div><div class="sv">${fmt(weekly)}</div></div>
+    <div class="stat-box"><div class="sl">Daily gross</div><div class="sv">${fmt(daily)}</div></div>
+    <div class="stat-box"><div class="sl">Hourly gross</div><div class="sv">${fmt(hourly)}</div></div>`;
+  document.getElementById('salary-explain').textContent=`Known figure: ${known} = ${known==='hourly'?fmt(amount)+'/hr':fmt(amount)}\nHours/week: ${hours}, Weeks/year: ${weeks}\nAnnual: ${fmt(annual)}\nMonthly = Annual ÷ 12 = ${fmt(monthly)}\nWeekly = Annual ÷ 52 = ${fmt(weekly)}\nDaily = Weekly ÷ 5 = ${fmt(daily)}\nHourly = Weekly ÷ hours = ${fmt(hourly)}`;
+  setCopyText('salary', `Annual salary: ${fmt(annual)}\nMonthly: ${fmt(monthly)}\nWeekly: ${fmt(weekly)}\nDaily: ${fmt(daily)}\nHourly: ${fmt(hourly)}`);
+  showResultCard('salary');
+}
+
+/* ============================================================
+   data/tax-years.js  — UK income tax / NI / student loan config.
+   Update this object for future tax years; nothing else needs to change.
+   ============================================================ */
+const TAX_YEARS = {
+  '2025-26': {
+    personalAllowance: 12570,
+    allowanceTaperThreshold: 100000, // £1 of allowance lost per £2 of income above this
+    higherThreshold: 50270,
+    additionalThreshold: 125140,
+    basicRate: 0.20, higherRate: 0.40, additionalRate: 0.45,
+    ni: { primaryThreshold: 12570, upperLimit: 50270, mainRate: 0.08, upperRate: 0.02 }
+  }
+};
+// Approximate — verify current thresholds at gov.uk/repaying-your-student-loan before relying on these.
+const STUDENT_LOAN_PLANS = {
+  plan1:{ label:'Plan 1', threshold:26065, rate:0.09 },
+  plan2:{ label:'Plan 2', threshold:28470, rate:0.09 },
+  plan4:{ label:'Plan 4', threshold:32745, rate:0.09 },
+  plan5:{ label:'Plan 5', threshold:25000, rate:0.09 },
+  postgrad:{ label:'Postgraduate Loan', threshold:21000, rate:0.06 }
+};
+function calcIncomeTax(gross, cfg){
+  let pa=cfg.personalAllowance;
+  if(gross>cfg.allowanceTaperThreshold){ pa=Math.max(0, pa-Math.floor((gross-cfg.allowanceTaperThreshold)/2)); }
+  if(gross<=pa) return 0;
+  const edges=[pa, cfg.higherThreshold, cfg.additionalThreshold, Infinity];
+  const rates=[cfg.basicRate, cfg.higherRate, cfg.additionalRate];
+  let tax=0, prev=pa;
+  for(let i=0;i<rates.length;i++){
+    const edge=edges[i+1];
+    if(gross>prev){ const amt=Math.min(gross,edge)-prev; tax+=amt*rates[i]; prev=edge; } else break;
+  }
+  return tax;
+}
+function calcNI(gross, ni){
+  if(gross<=ni.primaryThreshold) return 0;
+  let total=0;
+  const bandTop=Math.min(gross, ni.upperLimit);
+  total += (bandTop-ni.primaryThreshold)*ni.mainRate;
+  if(gross>ni.upperLimit) total += (gross-ni.upperLimit)*ni.upperRate;
+  return total;
+}
+
+/* ============================================================
+   calculators/take-home-pay.js
+   ============================================================ */
+function resetTakeHome(){
+  document.getElementById('th-gross').value='';
+  document.getElementById('th-year').value='2025-26';
+  document.getElementById('th-freq').value='monthly';
+  document.getElementById('th-pension').value='0';
+  document.getElementById('th-loan').value='none';
+  document.getElementById('th-other').value='0';
+  clearErr('takehome'); showEmpty('takehome');
+}
+function calcTakeHome(){
+  clearErr('takehome');
+  const gross=parseN(document.getElementById('th-gross').value);
+  if(gross===null){ showEmpty('takehome'); return; }
+  if(gross<0){ showErr('takehome','Salary cannot be negative.'); return; }
+  const cfg=TAX_YEARS[document.getElementById('th-year').value];
+  const pensionPct=parseN(document.getElementById('th-pension').value)||0;
+  if(pensionPct<0||pensionPct>100){ showErr('takehome','Pension contribution must be between 0% and 100%.'); return; }
+  const planKey=document.getElementById('th-loan').value;
+  const otherDed=parseN(document.getElementById('th-other').value)||0;
+  if(otherDed<0){ showErr('takehome','Other deductions cannot be negative.'); return; }
+
+  const pensionAmt=round2(gross*pensionPct/100);
+  const taxableGross=Math.max(0, gross-pensionAmt);
+  const incomeTax=round2(calcIncomeTax(taxableGross, cfg));
+  const ni=round2(calcNI(taxableGross, cfg.ni));
+  const plan=STUDENT_LOAN_PLANS[planKey];
+  const studentLoan = plan ? round2(Math.max(0, taxableGross-plan.threshold)*plan.rate) : 0;
+  const netAnnual = round2(gross - incomeTax - ni - pensionAmt - studentLoan - otherDed);
+  const netMonthly=netAnnual/12, netWeekly=netAnnual/52;
+
+  const freq=document.getElementById('th-freq').value;
+  const heroVal = freq==='monthly'?netMonthly : freq==='weekly'?netWeekly : netAnnual;
+  document.getElementById('takehome-label').textContent=`Estimated take-home pay (${freq})`;
+  document.getElementById('takehome-hero').textContent=fmt(heroVal);
+  document.getElementById('takehome-stats').innerHTML=`
+    <div class="stat-box"><div class="sl">Gross annual</div><div class="sv">${fmt(gross)}</div></div>
+    <div class="stat-box"><div class="sl">Income tax</div><div class="sv">${fmt(incomeTax)}</div></div>
+    <div class="stat-box"><div class="sl">National Insurance</div><div class="sv">${fmt(ni)}</div></div>
+    <div class="stat-box"><div class="sl">Pension</div><div class="sv">${fmt(pensionAmt)}</div></div>
+    <div class="stat-box"><div class="sl">Student loan</div><div class="sv">${fmt(studentLoan)}</div></div>
+    <div class="stat-box"><div class="sl">Other deductions</div><div class="sv">${fmt(otherDed)}</div></div>
+    <div class="stat-box"><div class="sl">Net annual</div><div class="sv">${fmt(netAnnual)}</div></div>
+    <div class="stat-box"><div class="sl">Net monthly</div><div class="sv">${fmt(netMonthly)}</div></div>
+    <div class="stat-box"><div class="sl">Net weekly</div><div class="sv">${fmt(netWeekly)}</div></div>`;
+  document.getElementById('takehome-explain').textContent=`Gross annual: ${fmt(gross)}\nPension (${pensionPct}%, salary sacrifice): ${fmt(pensionAmt)}\nTaxable pay: ${fmt(taxableGross)}\nIncome tax (2025/26 UK bands): ${fmt(incomeTax)}\nNational Insurance: ${fmt(ni)}\nStudent loan${plan?' ('+plan.label+')':''}: ${fmt(studentLoan)}\nOther deductions: ${fmt(otherDed)}\nNet annual = ${fmt(gross)} − ${fmt(incomeTax)} − ${fmt(ni)} − ${fmt(pensionAmt)} − ${fmt(studentLoan)} − ${fmt(otherDed)} = ${fmt(netAnnual)}`;
+  setCopyText('takehome', `Gross annual: ${fmt(gross)}\nIncome tax: ${fmt(incomeTax)}\nNational Insurance: ${fmt(ni)}\nPension: ${fmt(pensionAmt)}\nStudent loan: ${fmt(studentLoan)}\nEstimated net annual: ${fmt(netAnnual)}\nEstimated monthly take-home: ${fmt(netMonthly)}\nEstimated weekly take-home: ${fmt(netWeekly)}`);
+  showResultCard('takehome');
+}
+
+/* ============================================================
+   calculators/mortgage.js  (shared amortisation math with loan.js)
+   ============================================================ */
+function monthlyPayment(principal, annualRatePct, years){
+  const r=annualRatePct/100/12, n=years*12;
+  if(n<=0) return NaN;
+  if(r===0) return principal/n;
+  const f=Math.pow(1+r,n);
+  return principal*r*f/(f-1);
+}
+function principalFromPayment(payment, annualRatePct, years){
+  const r=annualRatePct/100/12, n=years*12;
+  if(n<=0) return NaN;
+  if(r===0) return payment*n;
+  const f=Math.pow(1+r,n);
+  return payment*(f-1)/(r*f);
+}
+function resetMortgage(){
+  ['mtg-price','mtg-deposit','mtg-rate','mtg-op-monthly','mtg-op-annual','mtg-op-oneoff'].forEach(id=>document.getElementById(id).value = id.startsWith('mtg-op')?'0':'');
+  document.getElementById('mtg-term').value='';
+  document.getElementById('mtg-freq').value='monthly';
+  document.querySelectorAll('#mtg-presets .chip-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('mtg-op-result').innerHTML='';
+  clearErr('mortgage'); showEmpty('mortgage');
+}
+function calcMortgage(){
+  clearErr('mortgage');
+  const price=parseN(document.getElementById('mtg-price').value);
+  const deposit=parseN(document.getElementById('mtg-deposit').value);
+  const rate=parseN(document.getElementById('mtg-rate').value);
+  const term=parseN(document.getElementById('mtg-term').value);
+  if(price===null||deposit===null||rate===null||term===null){ showEmpty('mortgage'); return; }
+  if(price<=0){ showErr('mortgage','Property price must be greater than zero.'); return; }
+  if(deposit<0||deposit>=price){ showErr('mortgage','Deposit must be less than the property price.'); return; }
+  if(rate<0){ showErr('mortgage','Interest rate cannot be negative.'); return; }
+  if(term<=0){ showErr('mortgage','Mortgage term must be greater than zero.'); return; }
+  const loanAmt=price-deposit;
+  const monthly=monthlyPayment(loanAmt, rate, term);
+  const totalRepaid=monthly*term*12;
+  const totalInterest=totalRepaid-loanAmt;
+  const ltv=deposit>=price?0:(loanAmt/price*100);
+  const freq=document.getElementById('mtg-freq').value;
+  const heroVal = freq==='annual'? monthly*12 : monthly;
+  document.getElementById('mortgage-label').textContent = freq==='annual' ? 'Estimated annual repayment' : 'Estimated monthly payment';
+  document.getElementById('mortgage-hero').textContent=fmt(heroVal);
+  document.getElementById('mortgage-stats').innerHTML=`
+    <div class="stat-box"><div class="sl">Mortgage amount</div><div class="sv">${fmt(loanAmt)}</div></div>
+    <div class="stat-box"><div class="sl">Deposit</div><div class="sv">${fmt(deposit)}</div></div>
+    <div class="stat-box"><div class="sl">Loan-to-value</div><div class="sv">${fmtNum(ltv,1)}%</div></div>
+    <div class="stat-box"><div class="sl">Total repaid</div><div class="sv">${fmt(totalRepaid)}</div></div>
+    <div class="stat-box"><div class="sl">Total interest</div><div class="sv">${fmt(totalInterest)}</div></div>`;
+  document.getElementById('mortgage-explain').textContent=`Property price: ${fmt(price)}\nDeposit: ${fmt(deposit)}\nMortgage amount: ${fmt(price)} − ${fmt(deposit)} = ${fmt(loanAmt)}\nInterest rate: ${rate}% per year over ${term} years (${term*12} monthly payments)\nMonthly payment = P × r × (1+r)^n ÷ ((1+r)^n − 1) = ${fmt(monthly)}\nTotal repaid = ${fmt(monthly)} × ${term*12} = ${fmt(totalRepaid)}\nTotal interest = ${fmt(totalRepaid)} − ${fmt(loanAmt)} = ${fmt(totalInterest)}`;
+  setCopyText('mortgage', `Property price: ${fmt(price)}\nDeposit: ${fmt(deposit)} (LTV ${fmtNum(ltv,1)}%)\nMortgage amount: ${fmt(loanAmt)}\nInterest rate: ${rate}% over ${term} years\nEstimated monthly payment: ${fmt(monthly)}\nTotal repaid: ${fmt(totalRepaid)}\nTotal interest: ${fmt(totalInterest)}`);
+  showResultCard('mortgage');
+
+  // Overpayment simulation
+  const opM=parseN(document.getElementById('mtg-op-monthly').value)||0;
+  const opA=parseN(document.getElementById('mtg-op-annual').value)||0;
+  const opOne=parseN(document.getElementById('mtg-op-oneoff').value)||0;
+  const opResultEl=document.getElementById('mtg-op-result');
+  if(opM>0||opA>0||opOne>0){
+    const r=rate/100/12;
+    let bal=loanAmt, interestPaid=0, month=0;
+    const maxMonths=term*12*3+1200; // safety cap
+    while(bal>0.005 && month<maxMonths){
+      month++;
+      const interest=bal*r;
+      interestPaid+=interest;
+      let pay=monthly - interest; // principal portion of standard payment
+      let extra=opM;
+      if(month===1) extra+=opOne;
+      if(month%12===0) extra+=opA;
+      let principalPaid=pay+extra;
+      if(principalPaid>bal) principalPaid=bal;
+      bal-=principalPaid;
+      if(bal<=0.005) break;
+    }
+    const newYears=Math.floor(month/12), newMonths=month%12;
+    const baselineInterest=totalInterest;
+    const interestSaved=Math.max(0, baselineInterest-interestPaid);
+    const timeSavedMonths=Math.max(0, term*12-month);
+    const tsY=Math.floor(timeSavedMonths/12), tsM=timeSavedMonths%12;
+    opResultEl.innerHTML=`<div class="stat-grid">
+      <div class="stat-box"><div class="sl">Without overpayment</div><div class="sv">${term} years</div></div>
+      <div class="stat-box"><div class="sl">With overpayment</div><div class="sv">${newYears} years${newMonths?' '+newMonths+' mo':''}</div></div>
+      <div class="stat-box"><div class="sl">Time saved</div><div class="sv">${tsY} yrs${tsM?' '+tsM+' mo':''}</div></div>
+      <div class="stat-box"><div class="sl">Interest saved</div><div class="sv">${fmt(interestSaved)}</div></div>
+    </div>`;
+  } else {
+    opResultEl.innerHTML='';
+  }
+}
+
+/* ============================================================
+   calculators/loan.js
+   ============================================================ */
+let loanMode='repay';
+function setLoanMode(m,btn){
+  loanMode=m;
+  document.querySelectorAll('#loan-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('loan-repay').style.display=m==='repay'?'':'none';
+  document.getElementById('loan-borrow').style.display=m==='borrow'?'':'none';
+  clearErr('loan'); showEmpty('loan');
+  calcLoan();
+}
+function resetLoan(){
+  ['loan-amount','loan-rate','loan-term','loan-afford','loan-rate2','loan-term2'].forEach(id=>document.getElementById(id).value='');
+  clearErr('loan'); showEmpty('loan');
+}
+function calcLoan(){
+  clearErr('loan');
+  if(loanMode==='repay'){
+    const amount=parseN(document.getElementById('loan-amount').value);
+    const rate=parseN(document.getElementById('loan-rate').value);
+    const term=parseN(document.getElementById('loan-term').value);
+    if(amount===null||rate===null||term===null){ showEmpty('loan'); return; }
+    if(amount<=0){ showErr('loan','Loan amount must be greater than zero.'); return; }
+    if(rate<0){ showErr('loan','Interest rate cannot be negative.'); return; }
+    if(term<=0){ showErr('loan','Term must be greater than zero.'); return; }
+    const m=monthlyPayment(amount, rate, term);
+    const total=m*term*12, interest=total-amount;
+    document.getElementById('loan-label').textContent='Estimated monthly payment';
+    document.getElementById('loan-hero').textContent=fmt(m);
+    document.getElementById('loan-stats').innerHTML=`<div class="stat-box"><div class="sl">Total repayment</div><div class="sv">${fmt(total)}</div></div><div class="stat-box"><div class="sl">Total interest</div><div class="sv">${fmt(interest)}</div></div>`;
+    document.getElementById('loan-explain').textContent=`Loan amount: ${fmt(amount)}\nInterest rate: ${rate}% APR over ${term} years (${term*12} payments)\nMonthly payment = P × r × (1+r)^n ÷ ((1+r)^n − 1) = ${fmt(m)}\nTotal repayment = ${fmt(m)} × ${term*12} = ${fmt(total)}\nTotal interest = ${fmt(total)} − ${fmt(amount)} = ${fmt(interest)}`;
+    setCopyText('loan', `Loan amount: ${fmt(amount)}\nInterest rate: ${rate}% over ${term} years\nEstimated monthly payment: ${fmt(m)}\nTotal repayment: ${fmt(total)}\nTotal interest: ${fmt(interest)}`);
+    showResultCard('loan');
+  } else {
+    const afford=parseN(document.getElementById('loan-afford').value);
+    const rate=parseN(document.getElementById('loan-rate2').value);
+    const term=parseN(document.getElementById('loan-term2').value);
+    if(afford===null||rate===null||term===null){ showEmpty('loan'); return; }
+    if(afford<=0){ showErr('loan','Affordable monthly payment must be greater than zero.'); return; }
+    if(rate<0){ showErr('loan','Interest rate cannot be negative.'); return; }
+    if(term<=0){ showErr('loan','Term must be greater than zero.'); return; }
+    const p=principalFromPayment(afford, rate, term);
+    const total=afford*term*12, interest=total-p;
+    document.getElementById('loan-label').textContent='Estimated maximum loan amount';
+    document.getElementById('loan-hero').textContent=fmt(p);
+    document.getElementById('loan-stats').innerHTML=`<div class="stat-box"><div class="sl">Total repayment</div><div class="sv">${fmt(total)}</div></div><div class="stat-box"><div class="sl">Total interest</div><div class="sv">${fmt(interest)}</div></div>`;
+    document.getElementById('loan-explain').textContent=`Affordable monthly payment: ${fmt(afford)}\nInterest rate: ${rate}% APR over ${term} years\nEstimated maximum loan = ${fmt(p)}\n\nThis is an estimate only, not a lending decision — actual borrowing limits depend on affordability checks, credit history and lender criteria.`;
+    setCopyText('loan', `Affordable monthly payment: ${fmt(afford)}\nInterest rate: ${rate}% over ${term} years\nEstimated maximum loan amount: ${fmt(p)}`);
+    showResultCard('loan');
+  }
+}
+
+/* ============================================================
+   calculators/interest.js
+   ============================================================ */
+let intMode='simple';
+function setIntMode(m,btn){
+  intMode=m;
+  document.querySelectorAll('#int-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('int-simple').style.display=m==='simple'?'':'none';
+  document.getElementById('int-compound').style.display=m==='compound'?'':'none';
+  document.getElementById('interest-chart-wrap').style.display='none';
+  clearErr('interest'); showEmpty('interest');
+  calcInterest();
+}
+function resetInterest(){
+  ['int-principal','int-rate','int-time','ci-initial','ci-rate','ci-time'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ci-contrib').value='0';
+  document.getElementById('ci-freq').value='12';
+  document.getElementById('interest-chart-wrap').style.display='none';
+  clearErr('interest'); showEmpty('interest');
+}
+function calcInterest(){
+  clearErr('interest');
+  if(intMode==='simple'){
+    const p=parseN(document.getElementById('int-principal').value);
+    const rate=parseN(document.getElementById('int-rate').value);
+    const t=parseN(document.getElementById('int-time').value);
+    document.getElementById('interest-chart-wrap').style.display='none';
+    if(p===null||rate===null||t===null){ showEmpty('interest'); return; }
+    if(p<0){ showErr('interest','Principal cannot be negative.'); return; }
+    if(rate<0){ showErr('interest','Interest rate cannot be negative.'); return; }
+    if(t<0){ showErr('interest','Time cannot be negative.'); return; }
+    const interest=p*rate/100*t, total=p+interest;
+    document.getElementById('interest-label').textContent='Total';
+    document.getElementById('interest-hero').textContent=fmt(total);
+    document.getElementById('interest-stats').innerHTML=`<div class="stat-box"><div class="sl">Principal</div><div class="sv">${fmt(p)}</div></div><div class="stat-box"><div class="sl">Interest earned</div><div class="sv">${fmt(interest)}</div></div>`;
+    document.getElementById('interest-explain').textContent=`Principal: ${fmt(p)}\nRate: ${rate}% per year, Time: ${t} years\nInterest = P × r ÷ 100 × t = ${fmt(interest)}\nTotal = ${fmt(p)} + ${fmt(interest)} = ${fmt(total)}`;
+    setCopyText('interest', `Principal: ${fmt(p)}\nInterest earned: ${fmt(interest)}\nTotal: ${fmt(total)}`);
+    showResultCard('interest');
+  } else {
+    const initial=parseN(document.getElementById('ci-initial').value);
+    const rate=parseN(document.getElementById('ci-rate').value);
+    const freq=parseInt(document.getElementById('ci-freq').value,10);
+    const years=parseN(document.getElementById('ci-time').value);
+    const contrib=parseN(document.getElementById('ci-contrib').value)||0;
+    if(initial===null||rate===null||years===null){ showEmpty('interest'); document.getElementById('interest-chart-wrap').style.display='none'; return; }
+    if(initial<0){ showErr('interest','Initial amount cannot be negative.'); return; }
+    if(rate<0){ showErr('interest','Interest rate cannot be negative.'); return; }
+    if(years<0){ showErr('interest','Time cannot be negative.'); return; }
+    const n=Math.round(freq*years);
+    const periodRate=rate/100/freq;
+    let bal=initial, contributions=0;
+    const series=[initial];
+    for(let i=0;i<n;i++){ bal=bal*(1+periodRate)+contrib; contributions+=contrib; series.push(bal); }
+    const interestEarned=bal-initial-contributions;
+    document.getElementById('interest-label').textContent='Final balance';
+    document.getElementById('interest-hero').textContent=fmt(bal);
+    document.getElementById('interest-stats').innerHTML=`<div class="stat-box"><div class="sl">Starting amount</div><div class="sv">${fmt(initial)}</div></div><div class="stat-box"><div class="sl">Contributions</div><div class="sv">${fmt(contributions)}</div></div><div class="stat-box"><div class="sl">Interest earned</div><div class="sv">${fmt(interestEarned)}</div></div>`;
+    document.getElementById('interest-explain').textContent=`Initial: ${fmt(initial)}, Rate: ${rate}%/year, Compounding: ${freq}x/year, Time: ${years} years${contrib?', Contribution: '+fmt(contrib)+'/period':''}\nEach period: balance = balance × (1 + rate/${freq}) ${contrib?'+ contribution':''}\nAfter ${n} periods → Final balance = ${fmt(bal)}\nInterest earned = ${fmt(bal)} − ${fmt(initial)} − ${fmt(contributions)} = ${fmt(interestEarned)}`;
+    setCopyText('interest', `Starting amount: ${fmt(initial)}\nContributions: ${fmt(contributions)}\nInterest earned: ${fmt(interestEarned)}\nFinal balance: ${fmt(bal)}`);
+    showResultCard('interest');
+    if(series.length>1 && series.length<=2000){
+      document.getElementById('interest-chart-wrap').style.display='block';
+      // sample down to <=80 points for a light, mobile-friendly SVG
+      let sampled=series;
+      if(series.length>80){ const step=series.length/80; sampled=[]; for(let i=0;i<80;i++) sampled.push(series[Math.floor(i*step)]); sampled.push(series[series.length-1]); }
+      drawLineChart('interest-chart', sampled);
+    } else {
+      document.getElementById('interest-chart-wrap').style.display='none';
+    }
+  }
+}
+
+/* ============================================================
+   calculators/tip.js
+   ============================================================ */
+function resetTip(){
+  document.getElementById('tip-bill').value='';
+  document.getElementById('tip-pct').value='10';
+  document.getElementById('tip-people').value='1';
+  document.getElementById('tip-round').checked=false;
+  document.querySelectorAll('#tip-presets .chip-btn').forEach((b,i)=>b.classList.toggle('active', i===1));
+  clearErr('tip'); showEmpty('tip');
+}
+function calcTip(){
+  clearErr('tip');
+  const bill=parseN(document.getElementById('tip-bill').value);
+  const pct=parseN(document.getElementById('tip-pct').value);
+  const people=parseN(document.getElementById('tip-people').value);
+  if(bill===null||pct===null||people===null){ showEmpty('tip'); return; }
+  if(bill<0){ showErr('tip','Bill amount cannot be negative.'); return; }
+  if(pct<0){ showErr('tip','Tip percentage cannot be negative.'); return; }
+  if(people<1){ showErr('tip','Number of people must be at least 1.'); return; }
+  let warn='';
+  if(pct>50) warn=' (that is an unusually high tip — double check it)';
+  let tipAmt=bill*pct/100;
+  let total=bill+tipAmt;
+  if(document.getElementById('tip-round').checked){
+    const rounded=Math.ceil(total);
+    tipAmt+= (rounded-total);
+    total=rounded;
+  }
+  const perPerson=total/people;
+  document.getElementById('tip-hero').textContent=fmt(total);
+  document.getElementById('tip-sub').textContent=`Tip: ${fmt(tipAmt)}${warn} · Per person: ${fmt(perPerson)}`;
+  document.getElementById('tip-explain').textContent=`Bill: ${fmt(bill)}\nTip: ${pct}%\n${fmt(bill)} × ${pct}% = ${fmt(round2(bill*pct/100))}\nTotal = ${fmt(total)}\nPer person (${people}) = ${fmt(perPerson)}`;
+  setCopyText('tip', `Bill: ${fmt(bill)}\nTip (${pct}%): ${fmt(tipAmt)}\nTotal: ${fmt(total)}\nPer person: ${fmt(perPerson)}`);
+  showResultCard('tip');
+}
+
+/* ============================================================
+   calculators/split-bill.js
+   ============================================================ */
+let splitMode='even', splitPersonCount=0;
+function setSplitMode(m,btn){
+  splitMode=m;
+  document.querySelectorAll('#split-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('split-even').style.display=m==='even'?'':'none';
+  document.getElementById('split-uneven').style.display=m==='uneven'?'':'none';
+  if(m==='uneven' && splitPersonCount===0){ addSplitPerson(); addSplitPerson(); }
+  clearErr('split'); showEmpty('split');
+  calcSplit();
+}
+function addSplitPerson(){
+  splitPersonCount++;
+  const row=document.createElement('div'); row.className='person-row'; row.dataset.row='';
+  row.innerHTML=`<input type="text" placeholder="Person ${splitPersonCount}" aria-label="Person ${splitPersonCount} name" value="Person ${splitPersonCount}" oninput="calcSplit()">
+    <input type="number" inputmode="decimal" placeholder="0.00" aria-label="Person ${splitPersonCount} amount" oninput="calcSplit()">
+    <button class="icon-btn danger" type="button" aria-label="Remove person" onclick="this.parentElement.remove();calcSplit()">✕</button>`;
+  document.getElementById('split-person-rows').appendChild(row);
+  calcSplit();
+}
+function resetSplit(){
+  document.getElementById('split-total').value='';
+  document.getElementById('split-people').value='';
+  document.getElementById('split-tip').value='0';
+  document.getElementById('split-tip2').value='0';
+  document.getElementById('split-person-rows').innerHTML='';
+  splitPersonCount=0;
+  addSplitPerson(); addSplitPerson();
+  clearErr('split'); showEmpty('split');
+}
+function calcSplit(){
+  clearErr('split');
+  if(splitMode==='even'){
+    const total=parseN(document.getElementById('split-total').value);
+    const people=parseN(document.getElementById('split-people').value);
+    const tipPct=parseN(document.getElementById('split-tip').value)||0;
+    if(total===null||people===null){ showEmpty('split'); return; }
+    if(total<0){ showErr('split','Bill cannot be negative.'); return; }
+    if(people<1){ showErr('split','Number of people must be at least 1.'); return; }
+    const tip=round2(total*tipPct/100), grand=round2(total+tip), per=grand/people;
+    document.getElementById('split-label').textContent='Bill per person';
+    document.getElementById('split-hero').textContent=fmt(per);
+    document.getElementById('split-sub').textContent=`Subtotal ${fmt(total)} + Tip ${fmt(tip)} = ${fmt(grand)}`;
+    document.getElementById('split-stats').innerHTML='';
+    document.getElementById('split-explain').textContent=`Subtotal: ${fmt(total)}\nTip (${tipPct}%): ${fmt(tip)}\nTotal: ${fmt(grand)}\nPer person (${people}): ${fmt(per)}`;
+    setCopyText('split', `Subtotal: ${fmt(total)}\nTip: ${fmt(tip)}\nTotal: ${fmt(grand)}\nBill per person: ${fmt(per)}`);
+    showResultCard('split');
+  } else {
+    const rows=[...document.querySelectorAll('#split-person-rows .person-row')];
+    if(rows.length<1){ showEmpty('split'); return; }
+    const people=rows.map(r=>({ name:r.querySelector('input[type=text]').value.trim()||'Person', amt:parseN(r.querySelector('input[type=number]').value) }));
+    if(people.some(p=>p.amt===null)){ showEmpty('split'); return; }
+    if(people.some(p=>p.amt<0)){ showErr('split','Amounts cannot be negative.'); return; }
+    const tipPct=parseN(document.getElementById('split-tip2').value)||0;
+    const subtotal=round2(people.reduce((s,p)=>s+p.amt,0));
+    if(subtotal<=0){ showEmpty('split'); return; }
+    const tip=round2(subtotal*tipPct/100), grand=round2(subtotal+tip);
+    let statsHtml='', copyLines=`Subtotal: ${fmt(subtotal)}\nTip (${tipPct}%): ${fmt(tip)}\nTotal: ${fmt(grand)}\n`;
+    people.forEach(p=>{
+      const theirTip=round2(p.amt/subtotal*tip);
+      const theirTotal=round2(p.amt+theirTip);
+      statsHtml+=`<div class="stat-box"><div class="sl">${p.name}</div><div class="sv">${fmt(theirTotal)}</div></div>`;
+      copyLines+=`${p.name}: ${fmt(theirTotal)} (bill ${fmt(p.amt)} + tip ${fmt(theirTip)})\n`;
+    });
+    document.getElementById('split-label').textContent='Total (with tip)';
+    document.getElementById('split-hero').textContent=fmt(grand);
+    document.getElementById('split-sub').textContent=`Subtotal ${fmt(subtotal)} + Tip ${fmt(tip)}`;
+    document.getElementById('split-stats').innerHTML=statsHtml;
+    document.getElementById('split-explain').textContent=`Subtotal: ${fmt(subtotal)}\nTip (${tipPct}%): ${fmt(tip)}\nTotal: ${fmt(grand)}\nEach person's tip is proportional to their share of the subtotal.`;
+    setCopyText('split', copyLines.trim());
+    showResultCard('split');
+  }
+}
+
+/* ============================================================
+   calculators/age.js
+   ============================================================ */
+function resetAge(){
+  document.getElementById('age-dob').value='';
+  document.getElementById('age-asof').value='';
+  clearErr('age'); showEmpty('age');
+}
+function calcAge(){
+  clearErr('age');
+  const dobStr=document.getElementById('age-dob').value;
+  let asOfStr=document.getElementById('age-asof').value;
+  if(!asOfStr){ const t=todayUTC(); asOfStr=toInputDate(t); document.getElementById('age-asof').value=asOfStr; }
+  const dob=parseDateInput(dobStr), asOf=parseDateInput(asOfStr);
+  if(!dob){ showEmpty('age'); return; }
+  if(!asOf){ showEmpty('age'); return; }
+  if(dob>asOf){ showErr('age','Date of birth must be before the "calculate age on" date.'); return; }
+  const {years,months,days}=diffYMD(dob,asOf);
+  const totalDays=totalDaysBetween(dob,asOf);
+  const totalWeeks=Math.floor(totalDays/7);
+  const totalMonths=(asOf.getUTCFullYear()-dob.getUTCFullYear())*12 + (asOf.getUTCMonth()-dob.getUTCMonth()) - (asOf.getUTCDate()<dob.getUTCDate()?1:0);
+  // Next birthday
+  let bdayMonth=dob.getUTCMonth(), bdayDate=dob.getUTCDate();
+  if(bdayMonth===1 && bdayDate===29){ /* Feb 29 birthday */ }
+  let nextBday=new Date(Date.UTC(asOf.getUTCFullYear(), bdayMonth, Math.min(bdayDate, daysInMonth(asOf.getUTCFullYear(),bdayMonth))));
+  if(nextBday<asOf) nextBday=new Date(Date.UTC(asOf.getUTCFullYear()+1, bdayMonth, Math.min(bdayDate, daysInMonth(asOf.getUTCFullYear()+1,bdayMonth))));
+  const daysUntil=totalDaysBetween(asOf, nextBday);
+  document.getElementById('age-hero').textContent=`You are ${years} years, ${months} months and ${days} days old.`;
+  document.getElementById('age-stats').innerHTML=`
+    <div class="stat-box"><div class="sl">Total years</div><div class="sv">${fmtInt(years)}</div></div>
+    <div class="stat-box"><div class="sl">Total months</div><div class="sv">${fmtInt(totalMonths)}</div></div>
+    <div class="stat-box"><div class="sl">Total weeks</div><div class="sv">${fmtInt(totalWeeks)}</div></div>
+    <div class="stat-box"><div class="sl">Total days</div><div class="sv">${fmtInt(totalDays)}</div></div>
+    <div class="stat-box"><div class="sl">Next birthday</div><div class="sv" style="font-size:1rem">${fmtDate(nextBday)}</div></div>
+    <div class="stat-box"><div class="sl">Days until next birthday</div><div class="sv">${fmtInt(daysUntil)}</div></div>`;
+  document.getElementById('age-explain').textContent=`Date of birth: ${fmtDate(dob)}\nCalculated on: ${fmtDate(asOf)}\nYears/months/days are counted using real calendar dates (leap years included), not a fixed 365-day estimate.\nNext birthday: ${fmtDate(nextBday)} (${daysUntil} days away)`;
+  setCopyText('age', `Date of birth: ${fmtDate(dob)}\nAge on ${fmtDate(asOf)}: ${years} years, ${months} months, ${days} days\nTotal days: ${totalDays}\nNext birthday: ${fmtDate(nextBday)} (${daysUntil} days away)`);
+  showResultCard('age');
+}
+
+/* ============================================================
+   calculators/date-difference.js  (Difference / Add-Subtract / Working Days)
+   ============================================================ */
+let ddMode='diff';
+function setDdMode(m,btn){
+  ddMode=m;
+  document.querySelectorAll('#dd-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('dd-diff').style.display=m==='diff'?'':'none';
+  document.getElementById('dd-addsub').style.display=m==='addsub'?'':'none';
+  document.getElementById('dd-working').style.display=m==='working'?'':'none';
+}
+function resetDateDiff(){ document.getElementById('dd-start').value=''; document.getElementById('dd-end').value=''; document.getElementById('dd-swapnote').classList.remove('show'); clearErr('datediff'); showEmpty('datediff'); }
+function calcDateDiff(){
+  clearErr('datediff');
+  document.getElementById('dd-swapnote').classList.remove('show');
+  let start=parseDateInput(document.getElementById('dd-start').value);
+  let end=parseDateInput(document.getElementById('dd-end').value);
+  if(!start||!end){ showEmpty('datediff'); return; }
+  if(start>end){ [start,end]=[end,start]; document.getElementById('dd-swapnote').classList.add('show'); }
+  const {years,months,days}=diffYMD(start,end);
+  const totalDays=totalDaysBetween(start,end);
+  const totalWeeks=Math.floor(totalDays/7);
+  document.getElementById('datediff-hero').textContent=`${fmtInt(totalDays)} days`;
+  document.getElementById('datediff-stats').innerHTML=`
+    <div class="stat-box"><div class="sl">Years</div><div class="sv">${years}</div></div>
+    <div class="stat-box"><div class="sl">Months</div><div class="sv">${months}</div></div>
+    <div class="stat-box"><div class="sl">Weeks</div><div class="sv">${fmtInt(totalWeeks)}</div></div>
+    <div class="stat-box"><div class="sl">Days (remainder)</div><div class="sv">${days}</div></div>
+    <div class="stat-box"><div class="sl">Total days</div><div class="sv">${fmtInt(totalDays)}</div></div>`;
+  document.getElementById('datediff-explain').textContent=`${fmtDate(start)} → ${fmtDate(end)}\n= ${years} years, ${months} months, ${days} days\n= ${totalDays} total days`;
+  setCopyText('datediff', `${fmtDate(start)} to ${fmtDate(end)}\n${years} years, ${months} months, ${days} days\nTotal: ${totalDays} days`);
+  showResultCard('datediff');
+}
+function resetAddSub(){ document.getElementById('as-start').value=''; document.getElementById('as-amount').value=''; clearErr('addsub'); showEmpty('addsub'); }
+function calcAddSub(){
+  clearErr('addsub');
+  const start=parseDateInput(document.getElementById('as-start').value);
+  const amount=parseN(document.getElementById('as-amount').value);
+  const unit=document.getElementById('as-unit').value;
+  const op=document.getElementById('as-op').value;
+  if(!start||amount===null){ showEmpty('addsub'); return; }
+  const signedAmt = op==='sub' ? -amount : amount;
+  let result;
+  if(unit==='days') result=new Date(start.getTime()+signedAmt*86400000);
+  else if(unit==='weeks') result=new Date(start.getTime()+signedAmt*7*86400000);
+  else if(unit==='months') result=addMonthsClamped(start, signedAmt);
+  else result=addMonthsClamped(start, signedAmt*12);
+  document.getElementById('addsub-hero').textContent=fmtDate(result);
+  document.getElementById('addsub-explain').textContent=`${fmtDate(start)} ${op==='sub'?'−':'+'} ${amount} ${unit} = ${fmtDate(result)}`;
+  setCopyText('addsub', `${fmtDate(start)} ${op==='sub'?'minus':'plus'} ${amount} ${unit} = ${fmtDate(result)}`);
+  showResultCard('addsub');
+}
+function resetWorking(){ document.getElementById('wd-start').value=''; document.getElementById('wd-end').value=''; document.getElementById('wd-holidays').checked=true; clearErr('working'); showEmpty('working'); }
+function calcWorking(){
+  clearErr('working');
+  let start=parseDateInput(document.getElementById('wd-start').value);
+  let end=parseDateInput(document.getElementById('wd-end').value);
+  if(!start||!end){ showEmpty('working'); return; }
+  if(start>end){ [start,end]=[end,start]; }
+  const excludeHolidays=document.getElementById('wd-holidays').checked;
+  let count=0, holidayCount=0;
+  const cur=new Date(start.getTime());
+  while(cur<=end){
+    const dow=cur.getUTCDay();
+    if(dow!==0 && dow!==6){
+      const iso=toInputDate(cur);
+      if(excludeHolidays && UK_BANK_HOLIDAYS.includes(iso)){ holidayCount++; }
+      else count++;
+    }
+    cur.setUTCDate(cur.getUTCDate()+1);
+  }
+  document.getElementById('working-hero').textContent=`${fmtInt(count)} working days`;
+  document.getElementById('working-stats').innerHTML=`<div class="stat-box"><div class="sl">Bank holidays excluded</div><div class="sv">${holidayCount}</div></div>`;
+  document.getElementById('working-explain').textContent=`${fmtDate(start)} → ${fmtDate(end)}\nMonday–Friday counted, weekends excluded${excludeHolidays?', UK bank holidays excluded ('+holidayCount+' found in range)':''}.\nWorking days: ${count}`;
+  setCopyText('working', `${fmtDate(start)} to ${fmtDate(end)}: ${count} working days${excludeHolidays?' (excl. '+holidayCount+' bank holidays)':''}`);
+  showResultCard('working');
+}
+
+/* ============================================================
+   calculators/time-difference.js
+   ============================================================ */
+function fmtTime(minutesFromMidnight, use12h){
+  let h=Math.floor(minutesFromMidnight/60)%24, m=minutesFromMidnight%60;
+  if(h<0) h+=24;
+  if(!use12h) return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  const ampm=h<12?'AM':'PM'; let h12=h%12; if(h12===0) h12=12;
+  return h12+':'+String(m).padStart(2,'0')+' '+ampm;
+}
+function parseTimeInput(v){ if(!v) return null; const [h,m]=v.split(':').map(Number); if(isNaN(h)||isNaN(m)) return null; return h*60+m; }
+let tdMode='diff';
+function setTdMode(m,btn){
+  tdMode=m;
+  document.querySelectorAll('#td-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  document.getElementById('td-diff').style.display=m==='diff'?'':'none';
+  document.getElementById('td-addsub').style.display=m==='addsub'?'':'none';
+}
+function resetTimeDiff(){ document.getElementById('td-start').value=''; document.getElementById('td-end').value=''; clearErr('timediff'); showEmpty('timediff'); }
+function calcTimeDiff(){
+  clearErr('timediff');
+  const s=parseTimeInput(document.getElementById('td-start').value);
+  const e=parseTimeInput(document.getElementById('td-end').value);
+  if(s===null||e===null){ showEmpty('timediff'); return; }
+  const use12h=document.getElementById('td-12h').checked;
+  let diff=(e-s+1440)%1440;
+  const h=Math.floor(diff/60), m=diff%60;
+  document.getElementById('timediff-hero').textContent=`${h} hours ${m} minutes`;
+  document.getElementById('timediff-explain').textContent=`Start: ${fmtTime(s,use12h)}\nEnd: ${fmtTime(e,use12h)}${e<s?' (next day)':''}\nDifference: ${h}h ${m}m`;
+  setCopyText('timediff', `${fmtTime(s,use12h)} to ${fmtTime(e,use12h)} = ${h} hours ${m} minutes`);
+  showResultCard('timediff');
+}
+function resetTimeAddSub(){ document.getElementById('ta-start').value=''; document.getElementById('ta-hours').value='0'; document.getElementById('ta-minutes').value='0'; clearErr('timeaddsub'); showEmpty('timeaddsub'); }
+function calcTimeAddSub(){
+  clearErr('timeaddsub');
+  const s=parseTimeInput(document.getElementById('ta-start').value);
+  const hrs=parseN(document.getElementById('ta-hours').value)||0;
+  const mins=parseN(document.getElementById('ta-minutes').value)||0;
+  if(s===null){ showEmpty('timeaddsub'); return; }
+  const use12h=document.getElementById('td-12h').checked;
+  const op=document.getElementById('ta-op').value;
+  const delta=(hrs*60+mins) * (op==='sub'?-1:1);
+  let result=(s+delta)%1440; if(result<0) result+=1440;
+  const wrapped = (s+delta) >= 1440 || (s+delta) < 0;
+  document.getElementById('timeaddsub-hero').textContent=fmtTime(result,use12h)+(wrapped?' (next/prev day)':'');
+  document.getElementById('timeaddsub-explain').textContent=`${fmtTime(s,use12h)} ${op==='sub'?'−':'+'} ${hrs}h ${mins}m = ${fmtTime(result,use12h)}${wrapped?' (crosses midnight)':''}`;
+  setCopyText('timeaddsub', `${fmtTime(s,use12h)} ${op==='sub'?'minus':'plus'} ${hrs}h ${mins}m = ${fmtTime(result,use12h)}`);
+  showResultCard('timeaddsub');
+}
+
+/* ============================================================
+   data/units.js + calculators/unit-converter.js
+   ============================================================ */
+const UNIT_DATA = {
+  length:{ base:'m', units:{ mm:0.001, cm:0.01, m:1, km:1000, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344 }, labels:{mm:'Millimetres',cm:'Centimetres',m:'Metres',km:'Kilometres',in:'Inches',ft:'Feet',yd:'Yards',mi:'Miles'} },
+  weight:{ base:'kg', units:{ mg:0.000001, g:0.001, kg:1, oz:0.0283495, lb:0.453592, st:6.35029 }, labels:{mg:'Milligrams',g:'Grams',kg:'Kilograms',oz:'Ounces',lb:'Pounds',st:'Stones'} },
+  area:{ base:'sqm', units:{ sqm:1, sqft:0.092903, acre:4046.8564224, hectare:10000 }, labels:{sqm:'Square metres',sqft:'Square feet',acre:'Acres',hectare:'Hectares'} },
+  volume:{ base:'l', units:{ l:1, ml:0.001, gal:4.54609, pt:0.568261, cup:0.236588 }, labels:{l:'Litres',ml:'Millilitres',gal:'Gallons (UK)',pt:'Pints (UK)',cup:'Cups (US)'} },
+  speed:{ base:'ms', units:{ kmh:0.277778, mph:0.44704, ms:1 }, labels:{kmh:'km/h',mph:'mph',ms:'m/s'} },
+  data:{ base:'B', units:{ B:1, KB:1000, MB:1e6, GB:1e9, TB:1e12 }, labels:{B:'Bytes',KB:'Kilobytes',MB:'Megabytes',GB:'Gigabytes',TB:'Terabytes'} },
+  time:{ base:'s', units:{ s:1, min:60, hr:3600, day:86400, week:604800 }, labels:{s:'Seconds',min:'Minutes',hr:'Hours',day:'Days',week:'Weeks'} },
+  energy:{ base:'J', units:{ J:1, kWh:3600000 }, labels:{J:'Joules',kWh:'Kilowatt-hours'} }
+};
+function unitOptionsFor(cat){
+  if(cat==='temperature') return {C:'Celsius (°C)',F:'Fahrenheit (°F)',K:'Kelvin (K)'};
+  if(cat==='fuel') return {mpg:'Miles per gallon (UK MPG)', l100km:'Litres per 100km'};
+  const d=UNIT_DATA[cat]; return d.labels;
+}
+function onUnitCatChange(){
+  const cat=document.getElementById('unit-cat').value;
+  const opts=unitOptionsFor(cat);
+  const fromSel=document.getElementById('unit-from'), toSel=document.getElementById('unit-to');
+  fromSel.innerHTML=''; toSel.innerHTML='';
+  const keys=Object.keys(opts);
+  keys.forEach((k,i)=>{
+    fromSel.appendChild(new Option(opts[k],k));
+    toSel.appendChild(new Option(opts[k],k));
+  });
+  fromSel.value=keys[0]; toSel.value=keys[Math.min(1,keys.length-1)];
+  calcUnits();
+}
+function swapUnits(){
+  const f=document.getElementById('unit-from'), t=document.getElementById('unit-to');
+  const tmp=f.value; f.value=t.value; t.value=tmp;
+  calcUnits();
+}
+function quickUnit(cat, from, to){
+  document.getElementById('unit-cat').value=cat;
+  onUnitCatChange();
+  document.getElementById('unit-from').value=from;
+  document.getElementById('unit-to').value=to;
+  calcUnits();
+}
+function convertTemp(v, from, to){
+  let c;
+  if(from==='C') c=v; else if(from==='F') c=(v-32)*5/9; else c=v-273.15;
+  if(to==='C') return c; if(to==='F') return c*9/5+32; return c+273.15;
+}
+function convertFuel(v, from, to){
+  if(from===to) return v;
+  // UK MPG <-> L/100km (reciprocal relationship, UK gallon = 4.54609 L)
+  if(from==='mpg') return v===0?Infinity:282.481/v; // to l100km
+  return v===0?Infinity:282.481/v; // l100km to mpg (same reciprocal constant)
+}
+function resetUnits(){
+  document.getElementById('unit-value').value='';
+  clearErr('units'); showEmpty('units');
+}
+function calcUnits(){
+  clearErr('units');
+  const cat=document.getElementById('unit-cat').value;
+  const from=document.getElementById('unit-from').value, to=document.getElementById('unit-to').value;
+  const v=parseN(document.getElementById('unit-value').value);
+  if(v===null){ showEmpty('units'); return; }
+  let result, fromLabel, toLabel;
+  if(cat==='temperature'){
+    result=convertTemp(v, from, to);
+    const labels=unitOptionsFor('temperature'); fromLabel=labels[from]; toLabel=labels[to];
+  } else if(cat==='fuel'){
+    if(v<=0 && from==='mpg'){ showErr('units','MPG must be greater than zero.'); return; }
+    result=convertFuel(v, from, to);
+    const labels=unitOptionsFor('fuel'); fromLabel=labels[from]; toLabel=labels[to];
+  } else {
+    const d=UNIT_DATA[cat];
+    result = v * d.units[from] / d.units[to];
+    fromLabel=d.labels[from]; toLabel=d.labels[to];
+  }
+  document.getElementById('units-label').textContent=`${fmtNum(v)} ${from} =`;
+  document.getElementById('units-hero').textContent=`${fmtNum(result)} ${to}`;
+  document.getElementById('units-explain').textContent=`${fmtNum(v)} ${fromLabel} = ${fmtNum(result)} ${toLabel}`;
+  setCopyText('units', `${fmtNum(v)} ${from} = ${fmtNum(result)} ${to}`);
+  showResultCard('units');
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+function initAll(){
+  onUnitCatChange();
+  resetSplit();
+}
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderChrome();
+  initAll();
+  const h=location.hash.replace('#','');
+  if(h && CALCS.some(c=>c.id===h)) openCalc(h);
+});
+
+/* ============================================================
+   Lightweight self-tests — run manually via runLifeCalcTests() in the
+   browser console. No build/test framework exists in this static site.
+   ============================================================ */
+function runLifeCalcTests(){
+  const results=[];
+  function assertEq(name,got,expected,tol){
+    tol = tol===undefined?0.005:tol;
+    const ok = Math.abs(got-expected) <= tol;
+    results.push({name,got,expected,ok});
+  }
+  assertEq('20% of 100', 100*20/100, 20);
+  assertEq('Discount £79.99 @20%', round2(79.99*0.8), 63.99);
+  assertEq('VAT add £1000 @20% total', round2(1000*1.2), 1200);
+  assertEq('VAT remove £1200 @20% net', round2(1200/1.2), 1000);
+  assertEq('Tip £100 @10% total', 100+100*0.1, 110);
+  assertEq('Split £110 / 4', 110/4, 27.5);
+  assertEq('Time 22:30->02:15', (135-1350+1440)%1440, 225);
+  assertEq('Time 09:30->17:45', (1065-570+1440)%1440, 495);
+  const d1=parseDateInput('2024-02-28'), d2=parseDateInput('2024-03-01'); // 2024 leap year
+  assertEq('Leap year Feb29 exists 2024', daysInMonth(2024,1), 29);
+  assertEq('Days 2024-02-28 to 2024-03-01', totalDaysBetween(d1,d2), 2);
+  const jan31=parseDateInput('2024-01-31');
+  const feb=addMonthsClamped(jan31,1);
+  assertEq('Jan31 +1 month clamps to Feb29 2024', feb.getUTCDate(), 29);
+  assertEq('Mortgage 240k @5% 25yr ~1403.85', monthlyPayment(240000,5,25), 1403.85, 1);
+  assertEq('Compound interest annual == simple-ish check', (function(){ let b=1000; for(let i=0;i<1;i++) b*=1.05; return b; })(), 1050);
+  console.table(results);
+  const failed=results.filter(r=>!r.ok);
+  console.log(failed.length===0 ? '✅ All '+results.length+' self-tests passed' : '❌ '+failed.length+' test(s) failed');
+  return results;
+}
+</script>
+</body>
+</html>

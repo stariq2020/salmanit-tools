@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free PDF Toolkit - Merge, Split, Compress & Convert PDFs | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/pdf-toolkit.html">
+<meta name="description" content="Free online PDF tools to merge, split, compress, rotate, convert and organize PDF files. Privacy-first PDF processing directly in your browser — nothing is uploaded.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Are these PDF tools free?","acceptedAnswer":{"@type":"Answer","text":"Yes, every tool in the PDF Toolkit is completely free with no registration, no account and no usage limits."}},
+    {"@type":"Question","name":"Are my PDFs uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Every tool on this page processes your PDF directly in your browser using JavaScript. Your file never leaves your device for the standard tools listed here."}},
+    {"@type":"Question","name":"Is my PDF stored anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. Nothing is saved. Once you close or refresh the page, the file and any results are gone — there is no server-side copy to begin with."}},
+    {"@type":"Question","name":"Can I merge multiple PDFs into one?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the Merge PDF tool to combine any number of PDF files, in any order you choose, into a single document."}},
+    {"@type":"Question","name":"Can I compress a PDF to make it smaller?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Compress PDF tool offers a lossless structural optimisation and an image-based recompression mode for larger size reductions, with realistic before/after size reporting."}},
+    {"@type":"Question","name":"Can I split a PDF into separate files?","acceptedAnswer":{"@type":"Answer","text":"Yes. Split every page into its own file, extract specific pages, or split by page ranges using the Split & Extract tool."}},
+    {"@type":"Question","name":"Can I convert JPG or PNG images to a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Image to PDF tool accepts JPG, PNG and WebP images, with options for page size, orientation, margins and image order."}},
+    {"@type":"Question","name":"Can I convert a PDF to JPG images?","acceptedAnswer":{"@type":"Answer","text":"Yes. The PDF to JPG tool converts every page (or just the ones you choose) into JPG images, bundled into a ZIP file when there's more than one."}},
+    {"@type":"Question","name":"Can I remove or reorder PDF pages?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Organize Pages tool lets you drag pages into a new order, rotate individual pages, and delete unwanted pages, all with a visual thumbnail view."}},
+    {"@type":"Question","name":"Can I rotate PDF pages?","acceptedAnswer":{"@type":"Answer","text":"Yes, rotation is built into the Organize Pages tool — rotate any page 90°, 180° or 270° individually or in bulk."}},
+    {"@type":"Question","name":"Can I password protect a PDF?","acceptedAnswer":{"@type":"Answer","text":"Not yet in this browser-based toolkit — reliable PDF encryption needs more testing before we ship it. It's a planned feature."}},
+    {"@type":"Question","name":"Can I remove PDF metadata?","acceptedAnswer":{"@type":"Answer","text":"Yes. The PDF Metadata tool shows the title, author, creation date and other embedded details, and lets you clear the standard metadata fields before download."}},
+    {"@type":"Question","name":"Can I use the PDF Toolkit on my phone?","acceptedAnswer":{"@type":"Answer","text":"Yes, every tool is designed to work on iPhone, Android, tablets and desktop browsers, with touch-friendly controls for reordering and selecting pages."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--caution:#EAC54F;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1120px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1.05rem;color:var(--white);opacity:.85;line-height:1.7;max-width:680px;margin-bottom:8px}
+.page-sub2{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:28px}
+
+.badge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px}
+.badge-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.badge-card .bi{font-size:1.3rem;margin-bottom:6px}
+.badge-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:3px}
+.badge-card p{font-size:0.78rem;color:var(--muted);line-height:1.5}
+@media(max-width:760px){.badge-row{grid-template-columns:1fr 1fr}}
+
+/* Quick tool nav */
+.quick-nav{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 18px;margin-bottom:28px;border-bottom:1px solid var(--border);scrollbar-width:thin}
+.quick-nav::-webkit-scrollbar{height:5px}
+.quick-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.quick-nav a{flex-shrink:0;font-size:0.82rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:8px 16px;text-decoration:none;transition:all .2s;white-space:nowrap}
+.quick-nav a:hover,.quick-nav a.active{color:var(--ink);background:var(--green);border-color:var(--green)}
+
+/* Tool grid */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-bottom:56px}
+.tgrid-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .2s;text-align:left;display:flex;flex-direction:column;position:relative}
+.tgrid-card:hover{border-color:rgba(0,232,122,0.35);transform:translateY(-2px)}
+.tgrid-card .popular-tag{position:absolute;top:14px;right:14px;font-size:0.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:rgba(0,232,122,0.1);border:1px solid rgba(0,232,122,0.25);border-radius:6px;padding:3px 7px}
+.tgrid-card .ti{font-size:1.8rem;margin-bottom:10px}
+.tgrid-card h3{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.25rem;letter-spacing:.03em;color:var(--white);margin-bottom:6px}
+.tgrid-card p{font-size:0.82rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:14px}
+.tgrid-card .open-link{font-size:0.8rem;font-weight:700;color:var(--cyan)}
+.tgrid-card.soon{opacity:.6;cursor:default}
+.tgrid-card.soon:hover{transform:none;border-color:var(--border)}
+
+/* Privacy section */
+.privacy-panel{background:linear-gradient(135deg,rgba(0,232,122,0.05),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:18px;padding:32px;margin-bottom:56px}
+.privacy-panel h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.8rem;letter-spacing:.03em;color:var(--white);margin-bottom:14px}
+.privacy-panel .pq{font-size:1rem;color:var(--green);font-weight:700;margin-bottom:4px}
+.privacy-panel p{font-size:0.9rem;color:var(--white);opacity:.85;line-height:1.7;max-width:760px;margin-bottom:14px}
+.privacy-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.privacy-list span{font-size:0.78rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:6px 14px}
+
+/* Tool panels */
+.tool-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px;scroll-margin-top:80px}
+.tool-panel.open{display:block}
+.tp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.tp-head h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.9rem;letter-spacing:.03em;color:var(--white);margin-bottom:4px}
+.tp-head p{font-size:0.88rem;color:var(--muted);max-width:620px;line-height:1.6}
+.tp-close{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-size:0.8rem;cursor:pointer;white-space:nowrap}
+.tp-close:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+
+/* Dropzone */
+.dropzone{border:2px dashed var(--border);border-radius:14px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,0.015)}
+.dropzone:hover,.dropzone.dragover{border-color:rgba(0,232,122,0.4);background:rgba(0,232,122,0.03)}
+.dropzone .dz-ico{font-size:2.2rem;margin-bottom:10px}
+.dropzone .dz-main{font-size:1rem;color:var(--white);margin-bottom:4px;font-weight:600}
+.dropzone .dz-sub{font-size:0.8rem;color:var(--muted)}
+.dz-btn{display:inline-block;margin-top:14px;padding:11px 22px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-weight:700;font-size:0.86rem;border-radius:9px}
+
+/* File rows */
+.file-list{display:flex;flex-direction:column;gap:8px;margin:18px 0}
+.file-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+.file-row .fico{font-size:1.2rem;flex-shrink:0}
+.file-row .fmeta{flex:1;min-width:0}
+.file-row .fname{font-size:0.86rem;color:var(--white);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-row .fsub{font-size:0.74rem;color:var(--muted)}
+.file-row .fbtns{display:flex;gap:6px;flex-shrink:0}
+.icon-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;transition:all .15s}
+.icon-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+.icon-btn.danger:hover{color:var(--danger);border-color:rgba(239,68,68,0.3)}
+
+/* Options */
+.opt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:16px 0}
+.opt-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:7px}
+.opt-field select,.opt-field input[type=text],.opt-field input[type=number]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit}
+.opt-field select:focus,.opt-field input:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+.opt-field input[type=range]{width:100%;accent-color:var(--green)}
+.radio-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0}
+.radio-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .15s}
+.radio-card.active{border-color:var(--green);background:rgba(0,232,122,0.06)}
+.radio-card h5{font-size:0.92rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.radio-card p{font-size:0.76rem;color:var(--muted);line-height:1.5}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:7px 14px;font-size:0.8rem;cursor:pointer;font-weight:600}
+.chip-btn.active{color:var(--ink);background:var(--cyan);border-color:var(--cyan)}
+.tabbar{display:flex;gap:4px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:18px;width:fit-content;max-width:100%;flex-wrap:wrap}
+.tabbar button{padding:9px 18px;border:none;border-radius:9px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer}
+.tabbar button.active{background:var(--ink);color:var(--white)}
+
+/* Thumbnails */
+.thumb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px;margin:18px 0;max-height:640px;overflow-y:auto;padding:4px}
+.thumb-card{background:rgba(255,255,255,0.03);border:2px solid var(--border);border-radius:10px;padding:8px;text-align:center;position:relative;transition:border-color .15s}
+.thumb-card.selected{border-color:var(--green)}
+.thumb-card.marked-del{opacity:.35}
+.thumb-card canvas,.thumb-card img{width:100%;border-radius:5px;background:#fff;display:block}
+.thumb-card .tnum{font-size:0.72rem;color:var(--muted);margin-top:6px;font-weight:700}
+.thumb-card .tctrls{display:flex;justify-content:center;gap:4px;margin-top:6px;flex-wrap:wrap}
+.thumb-card .tctrls button{background:rgba(255,255,255,0.06);border:none;color:var(--white);border-radius:5px;width:24px;height:24px;font-size:0.72rem;cursor:pointer}
+.thumb-card .tcheck{position:absolute;top:6px;left:6px;width:18px;height:18px;cursor:pointer;accent-color:var(--green)}
+.thumb-card .timg-wrap{position:relative}
+
+/* Buttons */
+.btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.pdf-btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
+.pdf-btn-primary:hover{opacity:.92}
+.pdf-btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.pdf-btn-secondary{padding:13px 22px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-size:0.88rem;border-radius:10px;cursor:pointer;min-height:48px}
+.pdf-btn-secondary:hover{border-color:rgba(255,255,255,0.2)}
+
+/* Progress / results / notices */
+.progress-wrap{display:none;margin-top:18px}
+.progress-wrap.show{display:block}
+.progress-track{height:8px;border-radius:5px;background:rgba(255,255,255,0.06);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));width:0%;transition:width .25s}
+.progress-label{font-size:0.8rem;color:var(--muted);margin-top:8px}
+.result-card{display:none;margin-top:20px;background:rgba(0,232,122,0.05);border:1px solid rgba(0,232,122,0.25);border-radius:14px;padding:22px}
+.result-card.show{display:block}
+.result-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;color:var(--white);letter-spacing:.03em;margin-bottom:6px}
+.result-stats{display:flex;gap:24px;flex-wrap:wrap;margin:14px 0}
+.result-stats div .rl{font-size:0.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.result-stats div .rv{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;color:var(--white)}
+.result-stats div .rv.good{color:var(--green)}
+.result-stats div .rv.bad{color:var(--warning)}
+.notice{display:none;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:0.85rem;line-height:1.6}
+.notice.show{display:block}
+.notice-error{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);color:var(--danger)}
+.notice-warn{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);color:var(--warning)}
+.notice-info{background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan)}
+.notice details{margin-top:8px;color:var(--muted);font-size:0.76rem}
+.meta-table{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0}
+.meta-row{display:grid;grid-template-columns:180px 1fr;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.85rem}
+.meta-row:last-child{border-bottom:none}
+.meta-row:nth-child(even){background:rgba(255,255,255,0.02)}
+.meta-k{color:var(--muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.meta-v{color:var(--white);font-family:var(--mono);word-break:break-all}
+@media(max-width:640px){.meta-row{grid-template-columns:1fr}}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--white);margin:10px 0}
+.checkbox-row input{width:17px;height:17px;accent-color:var(--green)}
+
+/* Info section reuse */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.tool-panel{padding:20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="page-eyebrow">PDF Workspace</div>
+  <h1 class="page-title">PDF<br><span class="acc">Toolkit</span></h1>
+  <p class="page-sub">Everything you need to work with PDFs. Right in your browser.</p>
+  <p class="page-sub2">Free PDF tools. No registration. Your files stay on your device.</p>
+
+  <div class="badge-row">
+    <div class="badge-card"><div class="bi">🔒</div><h4>Private</h4><p>Files stay on your device.</p></div>
+    <div class="badge-card"><div class="bi">⚡</div><h4>Fast</h4><p>Every operation runs locally.</p></div>
+    <div class="badge-card"><div class="bi">🆓</div><h4>Free</h4><p>No registration required.</p></div>
+    <div class="badge-card"><div class="bi">📱</div><h4>Works Everywhere</h4><p>Desktop, tablet and mobile.</p></div>
+  </div>
+
+  <nav class="quick-nav" aria-label="Jump to a PDF tool">
+    <a href="#panel-merge" onclick="openTool('merge')">📎 Merge</a>
+    <a href="#panel-split" onclick="openTool('split')">✂️ Split</a>
+    <a href="#panel-compress" onclick="openTool('compress')">🗜️ Compress</a>
+    <a href="#panel-organize" onclick="openTool('organize')">🗂️ Organize</a>
+    <a href="#panel-pdf2jpg" onclick="openTool('pdf2jpg')">🖼️ PDF→JPG</a>
+    <a href="#panel-img2pdf" onclick="openTool('img2pdf')">📷 Image→PDF</a>
+    <a href="#panel-pagenum" onclick="openTool('pagenum')">🔢 Page Numbers</a>
+    <a href="#panel-watermark" onclick="openTool('watermark')">💧 Watermark</a>
+    <a href="#panel-metadata" onclick="openTool('metadata')">🏷️ Metadata</a>
+    <a href="#panel-info" onclick="openTool('info')">🔍 Info & Text</a>
+    <a href="#panel-protect" onclick="openTool('protect')">🔐 Protect</a>
+  </nav>
+
+  <div class="tool-grid" id="toolGrid">
+    <div class="tgrid-card" onclick="openTool('merge')"><span class="popular-tag">Popular</span><div class="ti">📎</div><h3>Merge PDF</h3><p>Combine multiple PDF files into one document, in any order you choose.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('split')"><div class="ti">✂️</div><h3>Split &amp; Extract</h3><p>Split every page into its own file, or extract just the pages you need.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('compress')"><span class="popular-tag">Popular</span><div class="ti">🗜️</div><h3>Compress PDF</h3><p>Reduce file size with honest, verified before/after results.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('organize')"><div class="ti">🗂️</div><h3>Organize Pages</h3><p>Reorder, rotate and delete pages visually with page thumbnails.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('pdf2jpg')"><span class="popular-tag">Popular</span><div class="ti">🖼️</div><h3>PDF to JPG</h3><p>Turn PDF pages into JPG images, one per page or all at once.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('img2pdf')"><span class="popular-tag">Popular</span><div class="ti">📷</div><h3>JPG/PNG to PDF</h3><p>Combine images into a PDF with page size, margin and order control.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('pagenum')"><div class="ti">🔢</div><h3>Add Page Numbers</h3><p>Stamp page numbers in the position and format you choose.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('watermark')"><div class="ti">💧</div><h3>Watermark PDF</h3><p>Add a custom text watermark — CONFIDENTIAL, DRAFT or your own text.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('metadata')"><div class="ti">🏷️</div><h3>PDF Metadata</h3><p>View embedded document details and clear them before you share a file.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card" onclick="openTool('info')"><div class="ti">🔍</div><h3>PDF Info &amp; Text</h3><p>Inspect a PDF, detect scanned pages, extract text and search inside it.</p><span class="open-link">Open Tool →</span></div>
+    <div class="tgrid-card soon" onclick="openTool('protect')"><div class="ti">🔐</div><h3>Protect / Unlock <span style="color:var(--muted);font-weight:400">(soon)</span></h3><p>Password-protect or unlock PDFs. Coming once we can do it reliably in-browser.</p><span class="open-link" style="color:var(--muted)">Learn more →</span></div>
+  </div>
+
+  <div class="privacy-panel" id="privacy">
+    <div class="pq">Is my PDF uploaded?</div>
+    <h2>No — not for any tool on this page.</h2>
+    <p>Your PDF is processed directly in your browser using JavaScript. It does not need to be, and is not, uploaded to Salman IT Tools for any of the tools below. Nothing is stored: once you leave or refresh this page, the file and every result are gone, because there was never a server-side copy to begin with.</p>
+    <p>If a future tool ever needs to use a server, it will be clearly marked and you'll be asked first — this blanket privacy statement will never quietly stop being true.</p>
+    <div class="privacy-list">
+      <span>🔒 No document uploads</span>
+      <span>🚫 No account required</span>
+      <span>🗑️ No storage</span>
+      <span>📊 No document data sent to analytics</span>
+    </div>
+  </div>
+
+  <!-- ================= TOOL PANELS ================= -->
+
+  <!-- MERGE -->
+  <section class="tool-panel" id="panel-merge" aria-labelledby="h-merge">
+    <div class="tp-head"><div><h2 id="h-merge">📎 Merge PDF</h2><p>Combine multiple PDF files into one document. Add files, drag to reorder, then merge.</p></div><button class="tp-close" onclick="closeTool('merge')">✕ Close</button></div>
+    <div class="dropzone" id="mergeDrop" tabindex="0" role="button" aria-label="Upload PDF files to merge" onclick="document.getElementById('mergeFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('mergeFileInput').click()">
+      <div class="dz-ico">📎</div><div class="dz-main">Drop PDF files here</div><div class="dz-sub">or click to choose files — you can add more than one</div>
+      <span class="dz-btn">Choose Files</span>
+    </div>
+    <input type="file" id="mergeFileInput" accept=".pdf,application/pdf" multiple style="display:none">
+    <div class="file-list" id="mergeFileList"></div>
+    <div class="notice notice-error" id="mergeError"></div>
+    <div class="btn-row">
+      <button class="pdf-btn-primary" id="mergeBtn" onclick="runMerge()" disabled>📎 Merge PDFs</button>
+      <button class="pdf-btn-secondary" onclick="resetTool('merge')">Reset</button>
+    </div>
+    <div class="progress-wrap" id="mergeProgress"><div class="progress-track"><div class="progress-fill" id="mergeProgressFill"></div></div><div class="progress-label" id="mergeProgressLabel">Processing…</div></div>
+    <div class="result-card" id="mergeResult">
+      <h4>✓ Done</h4><p id="mergeResultText"></p>
+      <div class="btn-row"><button class="pdf-btn-primary" id="mergeDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('merge')">Merge More Files</button></div>
+    </div>
+  </section>
+
+  <!-- SPLIT & EXTRACT -->
+  <section class="tool-panel" id="panel-split" aria-labelledby="h-split">
+    <div class="tp-head"><div><h2 id="h-split">✂️ Split &amp; Extract PDF</h2><p>Split every page into its own file, extract specific pages, or split by page ranges.</p></div><button class="tp-close" onclick="closeTool('split')">✕ Close</button></div>
+    <div class="dropzone" id="splitDrop" tabindex="0" role="button" aria-label="Upload a PDF to split" onclick="document.getElementById('splitFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('splitFileInput').click()">
+      <div class="dz-ico">✂️</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="splitFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="splitBody" style="display:none">
+      <div class="file-list" id="splitFileList"></div>
+      <div class="tabbar" id="splitModeTabs">
+        <button class="active" data-mode="every" onclick="setSplitMode('every',this)">Split every page</button>
+        <button data-mode="select" onclick="setSplitMode('select',this)">Extract selected pages</button>
+        <button data-mode="ranges" onclick="setSplitMode('ranges',this)">Split by ranges</button>
+      </div>
+      <div id="splitEveryPanel"><p style="font-size:0.85rem;color:var(--muted)">Each page becomes its own PDF file, bundled into a ZIP.</p></div>
+      <div id="splitSelectPanel" style="display:none">
+        <div class="opt-field"><label for="splitSelectInput">Pages to extract (e.g. 1,3,5-7,10)</label><input type="text" id="splitSelectInput" placeholder="1,3,5-7,10" oninput="syncSplitSelectFromInput()"></div>
+        <div class="thumb-grid" id="splitThumbGrid"></div>
+      </div>
+      <div id="splitRangesPanel" style="display:none">
+        <div class="opt-field"><label for="splitRangesInput">Ranges, one per output file (e.g. 1-3, 4-7, 8-10)</label><input type="text" id="splitRangesInput" placeholder="1-3, 4-7, 8-10"></div>
+      </div>
+      <div class="notice notice-error" id="splitError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="splitBtn" onclick="runSplit()">✂️ Split PDF</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('split')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="splitProgress"><div class="progress-track"><div class="progress-fill" id="splitProgressFill"></div></div><div class="progress-label" id="splitProgressLabel">Processing…</div></div>
+      <div class="result-card" id="splitResult">
+        <h4>✓ Done</h4><p id="splitResultText"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="splitDownloadBtn">⬇ Download</button><button class="pdf-btn-secondary" onclick="resetTool('split')">Process Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPRESS -->
+  <section class="tool-panel" id="panel-compress" aria-labelledby="h-compress">
+    <div class="tp-head"><div><h2 id="h-compress">🗜️ Compress PDF</h2><p>Reduce file size. Choose how aggressive the compression should be — with an honest explanation of the trade-off.</p></div><button class="tp-close" onclick="closeTool('compress')">✕ Close</button></div>
+    <div class="dropzone" id="compressDrop" tabindex="0" role="button" aria-label="Upload a PDF to compress" onclick="document.getElementById('compressFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('compressFileInput').click()">
+      <div class="dz-ico">🗜️</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="compressFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="compressBody" style="display:none">
+      <div class="file-list" id="compressFileList"></div>
+      <div class="radio-cards" id="compressLevels">
+        <div class="radio-card active" data-level="low" onclick="setCompressLevel('low',this)"><h5>Low compression</h5><p>Lossless structural optimisation only. Best quality, smallest guaranteed size reduction.</p></div>
+        <div class="radio-card" data-level="balanced" onclick="setCompressLevel('balanced',this)"><h5>Balanced (Recommended)</h5><p>Rebuilds each page as a compressed image at good quality. Meaningful size reduction.</p></div>
+        <div class="radio-card" data-level="high" onclick="setCompressLevel('high',this)"><h5>High compression</h5><p>Smaller file, lower image quality. Best for sharing, not archiving.</p></div>
+      </div>
+      <div class="notice notice-warn show" id="compressWarn">Balanced and High compression rebuild each page as an image. <strong>Text will no longer be selectable or searchable</strong> in the resulting PDF. Choose Low if you need to keep the PDF's text intact.</div>
+      <div class="notice notice-error" id="compressError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="compressBtn" onclick="runCompress()">🗜️ Compress PDF</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('compress')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="compressProgress"><div class="progress-track"><div class="progress-fill" id="compressProgressFill"></div></div><div class="progress-label" id="compressProgressLabel">Processing…</div></div>
+      <div class="result-card" id="compressResult">
+        <h4>✓ Done</h4>
+        <div class="result-stats">
+          <div><div class="rl">Original</div><div class="rv" id="compOrigSize">—</div></div>
+          <div><div class="rl">Compressed</div><div class="rv good" id="compNewSize">—</div></div>
+          <div><div class="rl">Saved</div><div class="rv" id="compSaved">—</div></div>
+        </div>
+        <p id="compressResultNote" style="font-size:0.82rem;color:var(--muted);margin-bottom:6px"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="compressDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('compress')">Compress Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORGANIZE PAGES -->
+  <section class="tool-panel" id="panel-organize" aria-labelledby="h-organize">
+    <div class="tp-head"><div><h2 id="h-organize">🗂️ Organize Pages</h2><p>Reorder, rotate and delete pages. Use the arrows to move a page, the rotate buttons to turn it, and the checkbox to mark it for deletion.</p></div><button class="tp-close" onclick="closeTool('organize')">✕ Close</button></div>
+    <div class="dropzone" id="organizeDrop" tabindex="0" role="button" aria-label="Upload a PDF to organize" onclick="document.getElementById('organizeFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('organizeFileInput').click()">
+      <div class="dz-ico">🗂️</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="organizeFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="organizeBody" style="display:none">
+      <div class="progress-wrap show" id="organizeThumbProgress"><div class="progress-track"><div class="progress-fill" id="organizeThumbProgressFill"></div></div><div class="progress-label" id="organizeThumbProgressLabel">Rendering page thumbnails…</div></div>
+      <div class="thumb-grid" id="organizeThumbGrid"></div>
+      <div class="notice notice-error" id="organizeError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="organizeBtn" onclick="runOrganize()">🗂️ Save Changes</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('organize')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="organizeProgress"><div class="progress-track"><div class="progress-fill" id="organizeProgressFill"></div></div><div class="progress-label" id="organizeProgressLabel">Processing…</div></div>
+      <div class="result-card" id="organizeResult">
+        <h4>✓ Done</h4><p id="organizeResultText"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="organizeDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('organize')">Process Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PDF TO JPG -->
+  <section class="tool-panel" id="panel-pdf2jpg" aria-labelledby="h-pdf2jpg">
+    <div class="tp-head"><div><h2 id="h-pdf2jpg">🖼️ PDF to JPG</h2><p>Convert PDF pages into JPG images. Choose all pages or just the ones you need.</p></div><button class="tp-close" onclick="closeTool('pdf2jpg')">✕ Close</button></div>
+    <div class="dropzone" id="pdf2jpgDrop" tabindex="0" role="button" aria-label="Upload a PDF to convert to JPG" onclick="document.getElementById('pdf2jpgFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('pdf2jpgFileInput').click()">
+      <div class="dz-ico">🖼️</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="pdf2jpgFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="pdf2jpgBody" style="display:none">
+      <div class="opt-row">
+        <div class="opt-field"><label for="pdf2jpgQuality">Image quality</label><input type="range" id="pdf2jpgQuality" min="0.5" max="1" step="0.05" value="0.9" oninput="document.getElementById('pdf2jpgQualityVal').textContent=Math.round(this.value*100)+'%'"><span id="pdf2jpgQualityVal" style="font-size:0.78rem;color:var(--muted)">90%</span></div>
+        <div class="opt-field"><label for="pdf2jpgDpi">Resolution</label><select id="pdf2jpgDpi"><option value="1">Screen (72 DPI)</option value="1"><option value="2" selected>Standard (150 DPI)</option><option value="4">High (300 DPI)</option></select></div>
+      </div>
+      <label class="checkbox-row"><input type="checkbox" id="pdf2jpgAllPages" checked onchange="togglePdf2jpgAll()"> Convert all pages</label>
+      <div class="thumb-grid" id="pdf2jpgThumbGrid" style="display:none"></div>
+      <div class="notice notice-error" id="pdf2jpgError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="pdf2jpgBtn" onclick="runPdf2Jpg()">🖼️ Convert to JPG</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('pdf2jpg')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="pdf2jpgProgress"><div class="progress-track"><div class="progress-fill" id="pdf2jpgProgressFill"></div></div><div class="progress-label" id="pdf2jpgProgressLabel">Processing…</div></div>
+      <div class="result-card" id="pdf2jpgResult">
+        <h4>✓ Done</h4><p id="pdf2jpgResultText"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="pdf2jpgDownloadBtn">⬇ Download</button><button class="pdf-btn-secondary" onclick="resetTool('pdf2jpg')">Process Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE TO PDF -->
+  <section class="tool-panel" id="panel-img2pdf" aria-labelledby="h-img2pdf">
+    <div class="tp-head"><div><h2 id="h-img2pdf">📷 JPG/PNG to PDF</h2><p>Combine JPG, PNG or WebP images into a single PDF. Reorder, rotate and set the page layout.</p></div><button class="tp-close" onclick="closeTool('img2pdf')">✕ Close</button></div>
+    <div class="dropzone" id="img2pdfDrop" tabindex="0" role="button" aria-label="Upload images to convert to PDF" onclick="document.getElementById('img2pdfFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('img2pdfFileInput').click()">
+      <div class="dz-ico">📷</div><div class="dz-main">Drop images here</div><div class="dz-sub">JPG, PNG or WebP — you can add more than one</div>
+      <span class="dz-btn">Choose Images</span>
+    </div>
+    <input type="file" id="img2pdfFileInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple style="display:none">
+    <div id="img2pdfBody" style="display:none">
+      <div class="thumb-grid" id="img2pdfThumbGrid"></div>
+      <div class="opt-row">
+        <div class="opt-field"><label for="img2pdfPageSize">Page size</label><select id="img2pdfPageSize"><option value="a4" selected>A4</option><option value="letter">Letter</option><option value="original">Original image size</option><option value="custom">Custom</option></select></div>
+        <div class="opt-field" id="img2pdfCustomWrap" style="display:none"><label for="img2pdfCustomW">Custom size (mm)</label><div style="display:flex;gap:8px"><input type="number" id="img2pdfCustomW" placeholder="Width" value="210"><input type="number" id="img2pdfCustomH" placeholder="Height" value="297"></div></div>
+        <div class="opt-field"><label for="img2pdfOrientation">Orientation</label><select id="img2pdfOrientation"><option value="portrait" selected>Portrait</option><option value="landscape">Landscape</option></select></div>
+        <div class="opt-field"><label for="img2pdfMargin">Margin</label><select id="img2pdfMargin"><option value="0">None</option><option value="18">Small</option><option value="36" selected>Normal</option><option value="54">Large</option></select></div>
+        <div class="opt-field"><label for="img2pdfFit">Fit</label><select id="img2pdfFit"><option value="fit" selected>Fit within page</option><option value="fill">Fill page</option></select></div>
+      </div>
+      <div class="notice notice-error" id="img2pdfError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="img2pdfBtn" onclick="runImg2Pdf()" disabled>📷 Create PDF</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('img2pdf')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="img2pdfProgress"><div class="progress-track"><div class="progress-fill" id="img2pdfProgressFill"></div></div><div class="progress-label" id="img2pdfProgressLabel">Processing…</div></div>
+      <div class="result-card" id="img2pdfResult">
+        <h4>✓ Done</h4><p id="img2pdfResultText"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="img2pdfDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('img2pdf')">Create Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE NUMBERS -->
+  <section class="tool-panel" id="panel-pagenum" aria-labelledby="h-pagenum">
+    <div class="tp-head"><div><h2 id="h-pagenum">🔢 Add Page Numbers</h2><p>Stamp page numbers onto every page, in the position and format you choose.</p></div><button class="tp-close" onclick="closeTool('pagenum')">✕ Close</button></div>
+    <div class="dropzone" id="pagenumDrop" tabindex="0" role="button" aria-label="Upload a PDF to add page numbers" onclick="document.getElementById('pagenumFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('pagenumFileInput').click()">
+      <div class="dz-ico">🔢</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="pagenumFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="pagenumBody" style="display:none">
+      <div class="file-list" id="pagenumFileList"></div>
+      <div class="opt-row">
+        <div class="opt-field"><label for="pagenumPosition">Position</label><select id="pagenumPosition"><option value="bottom-center" selected>Bottom Center</option><option value="bottom-left">Bottom Left</option><option value="bottom-right">Bottom Right</option><option value="top-center">Top Center</option><option value="top-left">Top Left</option><option value="top-right">Top Right</option></select></div>
+        <div class="opt-field"><label for="pagenumFormat">Format</label><select id="pagenumFormat"><option value="n" selected>1</option><option value="page-n">Page 1</option><option value="n-of-t">1 of 10</option><option value="page-n-of-t">Page 1 of 10</option></select></div>
+        <div class="opt-field"><label for="pagenumSize">Font size</label><input type="number" id="pagenumSize" value="11" min="6" max="36"></div>
+        <div class="opt-field"><label for="pagenumMargin">Margin (pt)</label><input type="number" id="pagenumMargin" value="28" min="8" max="80"></div>
+        <div class="opt-field"><label for="pagenumStart">Starting number</label><input type="number" id="pagenumStart" value="1" min="0"></div>
+      </div>
+      <div class="notice notice-error" id="pagenumError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="pagenumBtn" onclick="runPageNumbers()">🔢 Add Page Numbers</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('pagenum')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="pagenumProgress"><div class="progress-track"><div class="progress-fill" id="pagenumProgressFill"></div></div><div class="progress-label" id="pagenumProgressLabel">Processing…</div></div>
+      <div class="result-card" id="pagenumResult">
+        <h4>✓ Done</h4><p id="pagenumResultText"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="pagenumDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('pagenum')">Process Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WATERMARK -->
+  <section class="tool-panel" id="panel-watermark" aria-labelledby="h-watermark">
+    <div class="tp-head"><div><h2 id="h-watermark">💧 Watermark PDF</h2><p>Add a text watermark across every page.</p></div><button class="tp-close" onclick="closeTool('watermark')">✕ Close</button></div>
+    <div class="dropzone" id="watermarkDrop" tabindex="0" role="button" aria-label="Upload a PDF to watermark" onclick="document.getElementById('watermarkFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('watermarkFileInput').click()">
+      <div class="dz-ico">💧</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="watermarkFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="watermarkBody" style="display:none">
+      <div class="file-list" id="watermarkFileList"></div>
+      <div class="opt-field"><label for="watermarkText">Watermark text</label><input type="text" id="watermarkText" value="CONFIDENTIAL" maxlength="60"></div>
+      <div class="chip-row">
+        <button class="chip-btn" onclick="setWatermarkPreset('CONFIDENTIAL')">CONFIDENTIAL</button>
+        <button class="chip-btn" onclick="setWatermarkPreset('DRAFT')">DRAFT</button>
+        <button class="chip-btn" onclick="setWatermarkPreset('SAMPLE')">SAMPLE</button>
+        <button class="chip-btn" onclick="setWatermarkPreset('COPY')">COPY</button>
+        <button class="chip-btn" onclick="setWatermarkPreset('PRIVATE')">PRIVATE</button>
+      </div>
+      <div class="opt-row">
+        <div class="opt-field"><label for="watermarkSize">Font size</label><input type="range" id="watermarkSize" min="20" max="120" value="60" oninput="document.getElementById('watermarkSizeVal').textContent=this.value"><span id="watermarkSizeVal" style="font-size:0.78rem;color:var(--muted)">60</span></div>
+        <div class="opt-field"><label for="watermarkOpacity">Opacity</label><input type="range" id="watermarkOpacity" min="0.05" max="1" step="0.05" value="0.25" oninput="document.getElementById('watermarkOpacityVal').textContent=Math.round(this.value*100)+'%'"><span id="watermarkOpacityVal" style="font-size:0.78rem;color:var(--muted)">25%</span></div>
+        <div class="opt-field"><label for="watermarkRotation">Rotation</label><input type="range" id="watermarkRotation" min="0" max="90" value="45" oninput="document.getElementById('watermarkRotationVal').textContent=this.value+'°'"><span id="watermarkRotationVal" style="font-size:0.78rem;color:var(--muted)">45°</span></div>
+        <div class="opt-field"><label for="watermarkPosition">Position</label><select id="watermarkPosition"><option value="center" selected>Center</option><option value="top">Top</option><option value="bottom">Bottom</option></select></div>
+      </div>
+      <div class="notice notice-error" id="watermarkError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="watermarkBtn" onclick="runWatermark()">💧 Add Watermark</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('watermark')">Reset</button>
+      </div>
+      <div class="progress-wrap" id="watermarkProgress"><div class="progress-track"><div class="progress-fill" id="watermarkProgressFill"></div></div><div class="progress-label" id="watermarkProgressLabel">Processing…</div></div>
+      <div class="result-card" id="watermarkResult">
+        <h4>✓ Done</h4><p id="watermarkResultText"></p>
+        <div class="btn-row"><button class="pdf-btn-primary" id="watermarkDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('watermark')">Process Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METADATA -->
+  <section class="tool-panel" id="panel-metadata" aria-labelledby="h-metadata">
+    <div class="tp-head"><div><h2 id="h-metadata">🏷️ PDF Metadata</h2><p>View the document details embedded in a PDF, and clear them before you share it.</p></div><button class="tp-close" onclick="closeTool('metadata')">✕ Close</button></div>
+    <div class="dropzone" id="metadataDrop" tabindex="0" role="button" aria-label="Upload a PDF to view metadata" onclick="document.getElementById('metadataFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('metadataFileInput').click()">
+      <div class="dz-ico">🏷️</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="metadataFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="metadataBody" style="display:none">
+      <div class="file-list" id="metadataFileList"></div>
+      <h4 style="font-size:0.9rem;color:var(--white);margin:16px 0 4px">Document Information</h4>
+      <div class="meta-table" id="metaTable"></div>
+      <div class="notice notice-info show">Removing metadata clears the standard fields shown above. It does not guarantee that all identifying information (for example, content embedded by the software that created the file) has been removed.</div>
+      <div class="notice notice-error" id="metadataError"></div>
+      <div class="btn-row">
+        <button class="pdf-btn-primary" id="metadataBtn" onclick="runRemoveMetadata()">🏷️ Remove Metadata</button>
+        <button class="pdf-btn-secondary" onclick="resetTool('metadata')">Reset</button>
+      </div>
+      <div class="result-card" id="metadataResult">
+        <h4>✓ Metadata Removed</h4>
+        <div class="meta-table" id="metaTableAfter"></div>
+        <div class="btn-row"><button class="pdf-btn-primary" id="metadataDownloadBtn">⬇ Download PDF</button><button class="pdf-btn-secondary" onclick="resetTool('metadata')">Process Another PDF</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO & TEXT -->
+  <section class="tool-panel" id="panel-info" aria-labelledby="h-info">
+    <div class="tp-head"><div><h2 id="h-info">🔍 PDF Info &amp; Text</h2><p>Inspect a PDF, check whether it's a scanned/image-only document, extract its text, and search inside it.</p></div><button class="tp-close" onclick="closeTool('info')">✕ Close</button></div>
+    <div class="dropzone" id="infoDrop" tabindex="0" role="button" aria-label="Upload a PDF to inspect" onclick="document.getElementById('infoFileInput').click()" onkeydown="if(event.key==='Enter')document.getElementById('infoFileInput').click()">
+      <div class="dz-ico">🔍</div><div class="dz-main">Drop a PDF here</div><div class="dz-sub">or click to choose a file</div>
+      <span class="dz-btn">Choose File</span>
+    </div>
+    <input type="file" id="infoFileInput" accept=".pdf,application/pdf" style="display:none">
+    <div id="infoBody" style="display:none">
+      <div class="meta-table" id="infoTable"></div>
+      <div class="notice notice-warn" id="infoScannedNotice">🟡 This appears to be a scanned PDF. This document may require OCR if you want to search or copy its text — text extraction below will likely be empty.</div>
+      <div class="notice notice-error" id="infoError"></div>
+
+      <h4 style="font-size:0.9rem;color:var(--white);margin:22px 0 10px">Extract Text</h4>
+      <div class="btn-row" style="margin-top:0"><button class="pdf-btn-secondary" id="infoExtractBtn" onclick="runExtractText()">📄 Extract Text</button></div>
+      <div class="progress-wrap" id="infoProgress"><div class="progress-track"><div class="progress-fill" id="infoProgressFill"></div></div><div class="progress-label" id="infoProgressLabel">Extracting…</div></div>
+      <div id="infoTextWrap" style="display:none;margin-top:14px">
+        <textarea id="infoTextArea" readonly style="width:100%;min-height:220px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px;color:var(--white);font-family:var(--mono);font-size:0.8rem;line-height:1.6"></textarea>
+        <div class="btn-row"><button class="pdf-btn-secondary" onclick="copyExtractedText()">📋 Copy Text</button><button class="pdf-btn-secondary" id="infoDownloadTxtBtn">⬇ Download TXT</button></div>
+      </div>
+
+      <h4 style="font-size:0.9rem;color:var(--white);margin:26px 0 10px">Search Inside PDF</h4>
+      <div class="opt-field"><label for="infoSearchInput" class="sr-only">Search text</label><input type="text" id="infoSearchInput" placeholder="Search for a word or phrase…" oninput="runPdfSearch()"></div>
+      <div id="infoSearchResults" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <!-- PROTECT (COMING SOON) -->
+  <section class="tool-panel" id="panel-protect" aria-labelledby="h-protect">
+    <div class="tp-head"><div><h2 id="h-protect">🔐 Protect / Unlock PDF <span style="font-size:1rem;color:var(--muted)">— Coming Soon</span></h2><p>Password protection and removal aren't available yet.</p></div><button class="tp-close" onclick="closeTool('protect')">✕ Close</button></div>
+    <div class="notice notice-info show">
+      Reliable PDF password protection needs strong encryption, and we haven't yet found a browser-based library we're confident is safe and correct enough to ship here. Rather than fake it — you'd never actually get a genuinely protected file — we're leaving this tool out until it works properly.
+      <br><br>
+      In the meantime, most PDF viewers can do this natively: Adobe Acrobat, macOS Preview (File → Export as PDF → Encrypt), and Microsoft Word/Print-to-PDF all support setting a password. We never attempt to crack or bypass a PDF password, even a user's own — this feature will only ever unlock a file when you already know the password.
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <div class="info-section">
+    <div class="page-eyebrow">Frequently Asked Questions</div>
+    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="info-card"><h4 style="margin-bottom:6px">Are these PDF tools free?</h4><p>Yes — every tool in the PDF Toolkit is completely free with no registration, no account and no usage limits.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Are my PDFs uploaded to a server?</h4><p>No. Every tool on this page processes your PDF directly in your browser using JavaScript. Your file never leaves your device for the standard tools listed here.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is my PDF stored anywhere?</h4><p>No. Nothing is saved. Once you close or refresh the page, the file and any results are gone — there is no server-side copy to begin with.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I merge multiple PDFs into one?</h4><p>Yes. Use the Merge PDF tool to combine any number of PDF files, in any order you choose, into a single document.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I compress a PDF to make it smaller?</h4><p>Yes. The Compress PDF tool offers a lossless structural optimisation and an image-based recompression mode for larger reductions, with realistic before/after size reporting — never a made-up percentage.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I split a PDF into separate files?</h4><p>Yes. Split every page into its own file, extract specific pages, or split by page ranges using the Split &amp; Extract tool.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I convert JPG or PNG images to a PDF?</h4><p>Yes. The Image to PDF tool accepts JPG, PNG and WebP images, with options for page size, orientation, margins and image order.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I convert a PDF to JPG images?</h4><p>Yes. The PDF to JPG tool converts every page (or just the ones you choose) into JPG images, bundled into a ZIP file when there's more than one.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I remove or reorder PDF pages?</h4><p>Yes. The Organize Pages tool lets you drag pages into a new order, rotate individual pages, and delete unwanted pages, all with a visual thumbnail view.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I rotate PDF pages?</h4><p>Yes — rotation is built into the Organize Pages tool. Rotate any page 90°, 180° or 270°, individually or several at once.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I password protect a PDF?</h4><p>Not yet in this browser-based toolkit — reliable PDF encryption needs more testing before we ship it. It's marked "Coming Soon" rather than faked.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I remove PDF metadata?</h4><p>Yes. The PDF Metadata tool shows the title, author, creation date and other embedded details, and lets you clear the standard metadata fields before download.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I use the PDF Toolkit on my phone?</h4><p>Yes, every tool is designed to work on iPhone, Android, tablets and desktop browsers, with touch-friendly controls for reordering and selecting pages.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free. Private. Simple. &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+<script>
+/* ============================================================
+   Nav helpers
+   ============================================================ */
+function toggleMobileMenu(){
+  const open = document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('hamburger').setAttribute('aria-expanded', open?'true':'false');
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+window.addEventListener('scroll', closeMobileMenu);
+
+/* ============================================================
+   Lazy script loading
+   ============================================================ */
+const loadedScripts = new Set();
+function loadScript(src){
+  if(loadedScripts.has(src)) return Promise.resolve();
+  return new Promise((resolve, reject)=>{
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = ()=>{ loadedScripts.add(src); resolve(); };
+    s.onerror = ()=> reject(new Error('Failed to load '+src));
+    document.head.appendChild(s);
+  });
+}
+async function ensurePdfLib(){
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js');
+}
+async function ensurePdfJs(){
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+async function ensureJSZip(){
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+}
+
+/* ============================================================
+   Shared helpers
+   ============================================================ */
+const MAX_PDF_MB = 100;
+const MAX_PDF_BYTES = MAX_PDF_MB * 1024 * 1024;
+
+function escHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str==null ? '' : String(str);
+  return d.innerHTML;
+}
+function fmtBytes(n){
+  if(n==null) return 'Unknown';
+  if(n < 1024) return n + ' B';
+  if(n < 1024*1024) return (n/1024).toFixed(1) + ' KB';
+  return (n/(1024*1024)).toFixed(2) + ' MB';
+}
+function baseName(filename){
+  return (filename||'document').replace(/\.pdf$/i,'').replace(/\.(jpg|jpeg|png|webp)$/i,'');
+}
+function deriveName(filename, suffix, ext){
+  return baseName(filename) + '-' + suffix + '.' + (ext||'pdf');
+}
+async function fileHeaderLooksLikePdf(file){
+  try{
+    const head = await file.slice(0,5).text();
+    return head.startsWith('%PDF-');
+  }catch(e){ return false; }
+}
+function validatePdfFile(file){
+  if(!file) return 'No file selected.';
+  const isPdfExt = /\.pdf$/i.test(file.name);
+  if(!isPdfExt && file.type !== 'application/pdf') return 'This file does not appear to be a PDF.';
+  if(file.size > MAX_PDF_BYTES) return 'This file is larger than the '+MAX_PDF_MB+'MB limit for this tool.';
+  if(file.size === 0) return 'This file is empty.';
+  return null;
+}
+const objectUrls = [];
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  objectUrls.push(url);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>{ try{ URL.revokeObjectURL(url); }catch(e){} }, 30000);
+}
+window.addEventListener('beforeunload', ()=>{ objectUrls.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(e){} }); });
+
+function showNotice(id, msg){
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hideNotice(id){
+  const el = document.getElementById(id);
+  el.classList.remove('show');
+  el.textContent = '';
+}
+function friendlyError(id, err){
+  console.error(err);
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  const p = document.createElement('p');
+  p.textContent = 'Something went wrong while processing this PDF. Try another PDF or reduce the file size.';
+  el.appendChild(p);
+  const det = document.createElement('details');
+  const sum = document.createElement('summary'); sum.textContent = 'Technical details';
+  const pre = document.createElement('pre'); pre.style.whiteSpace='pre-wrap'; pre.textContent = (err && err.message) || String(err);
+  det.appendChild(sum); det.appendChild(pre); el.appendChild(det);
+  el.classList.add('show');
+}
+function setProgress(prefix, pct, label){
+  const wrap = document.getElementById(prefix+'Progress');
+  const fill = document.getElementById(prefix+'ProgressFill');
+  const lbl = document.getElementById(prefix+'ProgressLabel');
+  if(!wrap) return;
+  wrap.classList.add('show');
+  fill.style.width = Math.max(0,Math.min(100,pct)) + '%';
+  lbl.textContent = label || 'Processing…';
+}
+function hideProgress(prefix){
+  const wrap = document.getElementById(prefix+'Progress');
+  if(wrap) wrap.classList.remove('show');
+}
+function yieldUi(){ return new Promise(r=>setTimeout(r,0)); }
+function fileRowHtml(name, sub){
+  return '<div class="fico">📄</div><div class="fmeta"><div class="fname">'+escHtml(name)+'</div><div class="fsub">'+escHtml(sub)+'</div></div>';
+}
+function parseRangeString(str, maxPage){
+  const indices = new Set();
+  (str||'').split(',').forEach(part=>{
+    part = part.trim();
+    if(!part) return;
+    const rangeMatch = part.match(/^(\d+)\s*-\s*(\d+)$/);
+    if(rangeMatch){
+      let a = parseInt(rangeMatch[1],10), b = parseInt(rangeMatch[2],10);
+      if(a>b){ const t=a; a=b; b=t; }
+      for(let i=a;i<=b;i++){ if(i>=1 && i<=maxPage) indices.add(i-1); }
+    } else if(/^\d+$/.test(part)){
+      const n = parseInt(part,10);
+      if(n>=1 && n<=maxPage) indices.add(n-1);
+    }
+  });
+  return Array.from(indices).sort((a,b)=>a-b);
+}
+
+/* ============================================================
+   Tool panel open/close (accordion) + drag&drop wiring
+   ============================================================ */
+const TOOLS = ['merge','split','compress','organize','pdf2jpg','img2pdf','pagenum','watermark','metadata','info','protect'];
+function openTool(id){
+  TOOLS.forEach(t=>{
+    const panel = document.getElementById('panel-'+t);
+    if(t===id) panel.classList.add('open'); else panel.classList.remove('open');
+  });
+  document.querySelectorAll('.quick-nav a').forEach(a=> a.classList.toggle('active', a.getAttribute('href')==='#panel-'+id));
+  const panel = document.getElementById('panel-'+id);
+  setTimeout(()=> panel.scrollIntoView({behavior:'smooth', block:'start'}), 30);
+}
+function closeTool(id){
+  document.getElementById('panel-'+id).classList.remove('open');
+  document.querySelector('.quick-nav a[href="#panel-'+id+'"]').classList.remove('active');
+  document.getElementById('toolGrid').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function wireDropzone(zoneId, inputId, onFiles){
+  const zone = document.getElementById(zoneId);
+  const input = document.getElementById(inputId);
+  input.addEventListener('change', e=>{ if(e.target.files.length) onFiles(Array.from(e.target.files)); input.value=''; });
+  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', ()=> zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault(); zone.classList.remove('dragover');
+    if(e.dataTransfer.files.length) onFiles(Array.from(e.dataTransfer.files));
+  });
+}
+
+/* Reset a tool's file state + UI back to just the dropzone */
+function resetTool(id){
+  toolState[id] = {};
+  const body = document.getElementById(id+'Body');
+  if(body) body.style.display = 'none';
+  ['Error','Result'].forEach(suf=>{
+    const el = document.getElementById(id+suf);
+    if(el){ el.classList.remove('show'); el.innerHTML=''; el.textContent=''; }
+  });
+  hideProgress(id);
+  const fileList = document.getElementById(id+'FileList');
+  if(fileList) fileList.innerHTML = '';
+}
+const toolState = {};
+
+/* ============================================================
+   Thumbnail rendering (shared, via pdf.js)
+   ============================================================ */
+async function renderThumbCanvas(pdfjsDoc, pageNum, maxWidth){
+  const page = await pdfjsDoc.getPage(pageNum);
+  const baseViewport = page.getViewport({scale:1});
+  const scale = maxWidth / baseViewport.width;
+  const viewport = page.getViewport({scale});
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width; canvas.height = viewport.height;
+  const ctx = canvas.getContext('2d');
+  await page.render({canvasContext:ctx, viewport}).promise;
+  return canvas;
+}
+
+/* ============================================================
+   MERGE PDF
+   ============================================================ */
+toolState.merge = {files:[]};
+wireDropzone('mergeDrop','mergeFileInput', files=>addMergeFiles(files));
+function addMergeFiles(files){
+  hideNotice('mergeError');
+  files.forEach(f=>{
+    const err = validatePdfFile(f);
+    if(err){ showNotice('mergeError', f.name+': '+err); return; }
+    toolState.merge.files.push(f);
+  });
+  renderMergeList();
+}
+function renderMergeList(){
+  const list = document.getElementById('mergeFileList');
+  const files = toolState.merge.files;
+  list.innerHTML = files.map((f,i)=>
+    '<div class="file-row">'+fileRowHtml(f.name, fmtBytes(f.size))+
+    '<div class="fbtns">'+
+    (i>0? '<button class="icon-btn" aria-label="Move up" onclick="moveMergeFile('+i+',-1)">↑</button>':'')+
+    (i<files.length-1? '<button class="icon-btn" aria-label="Move down" onclick="moveMergeFile('+i+',1)">↓</button>':'')+
+    '<button class="icon-btn danger" aria-label="Remove file" onclick="removeMergeFile('+i+')">✕</button>'+
+    '</div></div>'
+  ).join('');
+  document.getElementById('mergeBtn').disabled = files.length < 2;
+}
+function moveMergeFile(i, dir){
+  const files = toolState.merge.files;
+  const j = i+dir;
+  if(j<0||j>=files.length) return;
+  [files[i],files[j]] = [files[j],files[i]];
+  renderMergeList();
+}
+function removeMergeFile(i){ toolState.merge.files.splice(i,1); renderMergeList(); }
+async function runMerge(){
+  hideNotice('mergeError');
+  const files = toolState.merge.files;
+  if(files.length<2) return;
+  const btn = document.getElementById('mergeBtn'); btn.disabled = true;
+  try{
+    await ensurePdfLib();
+    const { PDFDocument } = PDFLib;
+    const outDoc = await PDFDocument.create();
+    for(let i=0;i<files.length;i++){
+      setProgress('merge', Math.round((i/files.length)*100), 'Merging file '+(i+1)+' of '+files.length+' — '+files[i].name);
+      await yieldUi();
+      const bytes = await files[i].arrayBuffer();
+      let srcDoc;
+      try{ srcDoc = await PDFDocument.load(bytes, {ignoreEncryption:true}); }
+      catch(e){ throw new Error('"'+files[i].name+'" could not be read as a PDF.'); }
+      const pages = await outDoc.copyPages(srcDoc, srcDoc.getPageIndices());
+      pages.forEach(p=> outDoc.addPage(p));
+    }
+    setProgress('merge', 100, 'Finishing…');
+    const outBytes = await outDoc.save();
+    hideProgress('merge');
+    const blob = new Blob([outBytes], {type:'application/pdf'});
+    const outName = 'merged.pdf';
+    document.getElementById('mergeResultText').textContent = 'Combined '+files.length+' PDFs into one document ('+fmtBytes(blob.size)+').';
+    document.getElementById('mergeDownloadBtn').onclick = ()=> downloadBlob(blob, outName);
+    document.getElementById('mergeResult').classList.add('show');
+  }catch(err){ hideProgress('merge'); friendlyError('mergeError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   SPLIT & EXTRACT PDF
+   ============================================================ */
+toolState.split = {file:null, doc:null, pdfjsDoc:null, mode:'every', selected:new Set()};
+wireDropzone('splitDrop','splitFileInput', files=> loadSplitFile(files[0]));
+async function loadSplitFile(file){
+  hideNotice('splitError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('splitError', err); return; }
+  toolState.split.file = file;
+  document.getElementById('splitFileList').innerHTML = '<div class="file-row">'+fileRowHtml(file.name, fmtBytes(file.size))+'</div>';
+  document.getElementById('splitBody').style.display = 'block';
+  try{
+    await ensurePdfLib(); await ensurePdfJs();
+    const bytes = await file.arrayBuffer();
+    toolState.split.doc = await PDFLib.PDFDocument.load(bytes.slice(0), {ignoreEncryption:true});
+    toolState.split.pdfjsDoc = await pdfjsLib.getDocument({data:bytes.slice(0)}).promise;
+    await renderSplitThumbs();
+  }catch(e){ friendlyError('splitError', e); }
+}
+async function renderSplitThumbs(){
+  const grid = document.getElementById('splitThumbGrid');
+  grid.innerHTML = '';
+  const n = toolState.split.doc.getPageCount();
+  for(let i=1;i<=n;i++){
+    const div = document.createElement('div');
+    div.className = 'thumb-card';
+    div.id = 'splitThumb-'+i;
+    div.innerHTML = '<div class="timg-wrap"><input type="checkbox" class="tcheck" onchange="toggleSplitPage('+i+',this.checked)"></div><div class="tnum">Page '+i+'</div>';
+    grid.appendChild(div);
+    if(i % 8 === 0) await yieldUi();
+    renderThumbCanvas(toolState.split.pdfjsDoc, i, 130).then(canvas=>{
+      const wrap = div.querySelector('.timg-wrap');
+      wrap.insertBefore(canvas, wrap.firstChild);
+    }).catch(()=>{});
+  }
+}
+function toggleSplitPage(pageNum, checked){
+  const sel = toolState.split.selected;
+  if(checked) sel.add(pageNum-1); else sel.delete(pageNum-1);
+  document.getElementById('splitThumb-'+pageNum).classList.toggle('selected', checked);
+  const input = document.getElementById('splitSelectInput');
+  input.value = Array.from(sel).sort((a,b)=>a-b).map(i=>i+1).join(',');
+}
+function syncSplitSelectFromInput(){
+  const n = toolState.split.doc.getPageCount();
+  const indices = parseRangeString(document.getElementById('splitSelectInput').value, n);
+  toolState.split.selected = new Set(indices);
+  for(let i=1;i<=n;i++){
+    const card = document.getElementById('splitThumb-'+i);
+    if(!card) continue;
+    const on = indices.includes(i-1);
+    card.classList.toggle('selected', on);
+    const cb = card.querySelector('.tcheck'); if(cb) cb.checked = on;
+  }
+}
+function setSplitMode(mode, btn){
+  toolState.split.mode = mode;
+  document.querySelectorAll('#splitModeTabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('splitEveryPanel').style.display = mode==='every' ? 'block':'none';
+  document.getElementById('splitSelectPanel').style.display = mode==='select' ? 'block':'none';
+  document.getElementById('splitRangesPanel').style.display = mode==='ranges' ? 'block':'none';
+}
+async function runSplit(){
+  hideNotice('splitError');
+  const st = toolState.split;
+  if(!st.doc) return;
+  const btn = document.getElementById('splitBtn'); btn.disabled = true;
+  try{
+    await ensureJSZip();
+    const { PDFDocument } = PDFLib;
+    const n = st.doc.getPageCount();
+    const base = baseName(st.file.name);
+
+    if(st.mode === 'every'){
+      const zip = new JSZip();
+      for(let i=0;i<n;i++){
+        setProgress('split', Math.round((i/n)*100), 'Splitting page '+(i+1)+' of '+n);
+        await yieldUi();
+        const out = await PDFDocument.create();
+        const [p] = await out.copyPages(st.doc, [i]);
+        out.addPage(p);
+        const bytes = await out.save();
+        zip.file(base+'-page-'+(i+1)+'.pdf', bytes);
+      }
+      setProgress('split', 100, 'Zipping…');
+      const zipBlob = await zip.generateAsync({type:'blob'});
+      hideProgress('split');
+      document.getElementById('splitResultText').textContent = 'Split into '+n+' separate PDF files.';
+      document.getElementById('splitDownloadBtn').onclick = ()=> downloadBlob(zipBlob, base+'-split-pages.zip');
+      document.getElementById('splitResult').classList.add('show');
+
+    } else if(st.mode === 'select'){
+      const indices = parseRangeString(document.getElementById('splitSelectInput').value, n);
+      if(!indices.length){ showNotice('splitError','Enter at least one valid page number, e.g. 1,3,5-7.'); btn.disabled=false; return; }
+      setProgress('split', 40, 'Extracting '+indices.length+' page(s)…');
+      await yieldUi();
+      const out = await PDFDocument.create();
+      const pages = await out.copyPages(st.doc, indices);
+      pages.forEach(p=>out.addPage(p));
+      const bytes = await out.save();
+      hideProgress('split');
+      const blob = new Blob([bytes], {type:'application/pdf'});
+      document.getElementById('splitResultText').textContent = 'Extracted '+indices.length+' page(s) into a new PDF.';
+      document.getElementById('splitDownloadBtn').onclick = ()=> downloadBlob(blob, base+'-extracted-pages.pdf');
+      document.getElementById('splitResult').classList.add('show');
+
+    } else {
+      const rangesRaw = document.getElementById('splitRangesInput').value.split(',').map(s=>s.trim()).filter(Boolean);
+      if(!rangesRaw.length){ showNotice('splitError','Enter at least one range, e.g. 1-3, 4-7.'); btn.disabled=false; return; }
+      const zip = new JSZip();
+      for(let r=0;r<rangesRaw.length;r++){
+        const indices = parseRangeString(rangesRaw[r], n);
+        if(!indices.length) continue;
+        setProgress('split', Math.round((r/rangesRaw.length)*100), 'Building range '+(r+1)+' of '+rangesRaw.length);
+        await yieldUi();
+        const out = await PDFDocument.create();
+        const pages = await out.copyPages(st.doc, indices);
+        pages.forEach(p=>out.addPage(p));
+        const bytes = await out.save();
+        zip.file(base+'-pages-'+(indices[0]+1)+'-'+(indices[indices.length-1]+1)+'.pdf', bytes);
+      }
+      setProgress('split', 100, 'Zipping…');
+      const zipBlob = await zip.generateAsync({type:'blob'});
+      hideProgress('split');
+      document.getElementById('splitResultText').textContent = 'Created '+rangesRaw.length+' PDF file(s) from your ranges.';
+      document.getElementById('splitDownloadBtn').onclick = ()=> downloadBlob(zipBlob, base+'-ranges.zip');
+      document.getElementById('splitResult').classList.add('show');
+    }
+  }catch(err){ hideProgress('split'); friendlyError('splitError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   COMPRESS PDF
+   ============================================================ */
+toolState.compress = {file:null, level:'low'};
+wireDropzone('compressDrop','compressFileInput', files=> loadCompressFile(files[0]));
+function loadCompressFile(file){
+  hideNotice('compressError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('compressError', err); return; }
+  toolState.compress.file = file;
+  document.getElementById('compressFileList').innerHTML = '<div class="file-row">'+fileRowHtml(file.name, fmtBytes(file.size))+'</div>';
+  document.getElementById('compressBody').style.display = 'block';
+}
+function setCompressLevel(level, card){
+  toolState.compress.level = level;
+  document.querySelectorAll('#compressLevels .radio-card').forEach(c=>c.classList.remove('active'));
+  card.classList.add('active');
+  document.getElementById('compressWarn').classList.toggle('show', level!=='low');
+}
+async function runCompress(){
+  hideNotice('compressError');
+  const st = toolState.compress;
+  if(!st.file) return;
+  const btn = document.getElementById('compressBtn'); btn.disabled = true;
+  try{
+    await ensurePdfLib();
+    const origBytes = await st.file.arrayBuffer();
+    const origSize = st.file.size;
+    let outBytes;
+    if(st.level === 'low'){
+      setProgress('compress', 30, 'Optimising PDF structure…');
+      await yieldUi();
+      const doc = await PDFLib.PDFDocument.load(origBytes.slice(0), {ignoreEncryption:true});
+      outBytes = await doc.save({useObjectStreams:true});
+    } else {
+      await ensurePdfJs();
+      const dpi = st.level === 'high' ? 100 : 150;
+      const quality = st.level === 'high' ? 0.55 : 0.75;
+      const pdfjsDoc = await pdfjsLib.getDocument({data:origBytes.slice(0)}).promise;
+      const n = pdfjsDoc.numPages;
+      const outDoc = await PDFLib.PDFDocument.create();
+      for(let i=1;i<=n;i++){
+        setProgress('compress', Math.round(((i-1)/n)*90), 'Recompressing page '+i+' of '+n);
+        await yieldUi();
+        const page = await pdfjsDoc.getPage(i);
+        const scale = dpi/72;
+        const viewport = page.getViewport({scale});
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width; canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        await page.render({canvasContext:ctx, viewport}).promise;
+        const jpegBlob = await new Promise(res=> canvas.toBlob(res, 'image/jpeg', quality));
+        const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer());
+        const img = await outDoc.embedJpg(jpegBytes);
+        const baseViewport = page.getViewport({scale:1});
+        const outPage = outDoc.addPage([baseViewport.width, baseViewport.height]);
+        outPage.drawImage(img, {x:0, y:0, width:baseViewport.width, height:baseViewport.height});
+      }
+      setProgress('compress', 95, 'Finishing…');
+      await yieldUi();
+      outBytes = await outDoc.save();
+    }
+    hideProgress('compress');
+    const newSize = outBytes.byteLength;
+    const blob = new Blob([outBytes], {type:'application/pdf'});
+    document.getElementById('compOrigSize').textContent = fmtBytes(origSize);
+    document.getElementById('compNewSize').textContent = fmtBytes(newSize);
+    let note = '';
+    const savedEl = document.getElementById('compSaved');
+    const pctChange = (origSize - newSize) / origSize; // positive = smaller, negative = larger
+    if(pctChange > 0.02){
+      const savedPct = Math.round(pctChange*100);
+      const savedBytes = origSize - newSize;
+      savedEl.textContent = fmtBytes(savedBytes) + ' (' + savedPct + '%)';
+      savedEl.classList.add('good'); savedEl.classList.remove('bad');
+    } else if(pctChange >= -0.02){
+      savedEl.textContent = '~0%';
+      savedEl.classList.remove('good','bad');
+      note = 'This PDF was already efficiently structured — compression at this level did not meaningfully reduce its size. Try a higher compression level for a bigger reduction (note the quality/text trade-off above).';
+    } else {
+      const grownPct = Math.round(-pctChange*100);
+      savedEl.textContent = '−' + grownPct + '% (larger)';
+      savedEl.classList.add('bad'); savedEl.classList.remove('good');
+      note = 'This actually produced a larger file. This document is mostly vector text/graphics, and re-encoding each page as an image adds overhead rather than saving space. Image-based compression (Balanced/High) works best on image-heavy or scanned PDFs — try Low compression instead to keep this document\'s original, more efficient structure.';
+    }
+    document.getElementById('compressResultNote').textContent = note;
+    document.getElementById('compressDownloadBtn').onclick = ()=> downloadBlob(blob, deriveName(st.file.name,'compressed'));
+    document.getElementById('compressResult').classList.add('show');
+  }catch(err){ hideProgress('compress'); friendlyError('compressError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   ORGANIZE PAGES (reorder / rotate / delete)
+   ============================================================ */
+toolState.organize = {file:null, doc:null, pdfjsDoc:null, order:[]}; // order: array of {origIndex, rotation, deleted}
+wireDropzone('organizeDrop','organizeFileInput', files=> loadOrganizeFile(files[0]));
+async function loadOrganizeFile(file){
+  hideNotice('organizeError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('organizeError', err); return; }
+  const st = toolState.organize;
+  st.file = file;
+  document.getElementById('organizeBody').style.display = 'block';
+  try{
+    await ensurePdfLib(); await ensurePdfJs();
+    const bytes = await file.arrayBuffer();
+    st.doc = await PDFLib.PDFDocument.load(bytes.slice(0), {ignoreEncryption:true});
+    st.pdfjsDoc = await pdfjsLib.getDocument({data:bytes.slice(0)}).promise;
+    const n = st.doc.getPageCount();
+    st.order = Array.from({length:n}, (_,i)=>({origIndex:i, rotation:0, deleted:false}));
+    await renderOrganizeGrid();
+  }catch(e){ friendlyError('organizeError', e); }
+}
+async function renderOrganizeGrid(){
+  const grid = document.getElementById('organizeThumbGrid');
+  const st = toolState.organize;
+  grid.innerHTML = '';
+  const total = st.order.length;
+  document.getElementById('organizeThumbProgress').classList.add('show');
+  for(let pos=0; pos<total; pos++){
+    setProgress('organizeThumb', Math.round((pos/total)*100), 'Rendering page thumbnails… ('+(pos+1)+'/'+total+')');
+    const entry = st.order[pos];
+    const div = document.createElement('div');
+    div.className = 'thumb-card';
+    div.id = 'orgThumb-'+entry.origIndex;
+    div.innerHTML = '<div class="timg-wrap"></div><div class="tnum">Page '+(pos+1)+'</div><div class="tctrls">'+
+      '<button aria-label="Move left" onclick="moveOrganizePage('+entry.origIndex+',-1)">◀</button>'+
+      '<button aria-label="Rotate left" onclick="rotateOrganizePage('+entry.origIndex+',-90)">⟲</button>'+
+      '<button aria-label="Rotate right" onclick="rotateOrganizePage('+entry.origIndex+',90)">⟳</button>'+
+      '<button aria-label="Delete page" onclick="toggleDeleteOrganizePage('+entry.origIndex+')">🗑</button>'+
+      '<button aria-label="Move right" onclick="moveOrganizePage('+entry.origIndex+',1)">▶</button>'+
+      '</div>';
+    grid.appendChild(div);
+    if(pos % 6 === 0) await yieldUi();
+    renderThumbCanvas(st.pdfjsDoc, entry.origIndex+1, 130).then(canvas=>{
+      canvas.style.transform = 'rotate('+entry.rotation+'deg)';
+      div.querySelector('.timg-wrap').appendChild(canvas);
+    }).catch(()=>{});
+  }
+  hideProgress('organizeThumb');
+}
+function findOrderPos(origIndex){ return toolState.organize.order.findIndex(e=>e.origIndex===origIndex); }
+function moveOrganizePage(origIndex, dir){
+  // Swaps DOM nodes directly instead of re-rendering the whole grid — a full
+  // async re-render per click raced against itself when clicked rapidly
+  // (thumbnails are rendered progressively with yields), corrupting the
+  // grid or throwing when a later action targeted an element mid-rebuild.
+  const st = toolState.organize;
+  const pos = findOrderPos(origIndex);
+  const target = pos+dir;
+  if(target<0 || target>=st.order.length) return;
+  [st.order[pos], st.order[target]] = [st.order[target], st.order[pos]];
+  const grid = document.getElementById('organizeThumbGrid');
+  const nodeA = grid.children[pos], nodeB = grid.children[target];
+  if(!nodeA || !nodeB) return;
+  if(pos < target) grid.insertBefore(nodeB, nodeA); else grid.insertBefore(nodeA, nodeB);
+  Array.from(grid.children).forEach((card,i)=>{
+    const numEl = card.querySelector('.tnum');
+    if(numEl) numEl.textContent = 'Page '+(i+1);
+  });
+}
+function rotateOrganizePage(origIndex, delta){
+  const st = toolState.organize;
+  const entry = st.order[findOrderPos(origIndex)];
+  entry.rotation = ((entry.rotation + delta) % 360 + 360) % 360;
+  const canvas = document.querySelector('#orgThumb-'+origIndex+' canvas');
+  if(canvas) canvas.style.transform = 'rotate('+entry.rotation+'deg)';
+}
+function toggleDeleteOrganizePage(origIndex){
+  const st = toolState.organize;
+  const entry = st.order[findOrderPos(origIndex)];
+  entry.deleted = !entry.deleted;
+  const card = document.getElementById('orgThumb-'+origIndex);
+  if(card) card.classList.toggle('marked-del', entry.deleted);
+}
+async function runOrganize(){
+  hideNotice('organizeError');
+  const st = toolState.organize;
+  if(!st.doc) return;
+  const remaining = st.order.filter(e=>!e.deleted);
+  const deletedCount = st.order.length - remaining.length;
+  if(!remaining.length){ showNotice('organizeError','You cannot delete every page — at least one page must remain.'); return; }
+  if(deletedCount>0){
+    const ok = confirm('You are about to permanently remove '+deletedCount+' page(s) from the downloaded copy. The original file on your device is untouched. Continue?');
+    if(!ok) return;
+  }
+  const btn = document.getElementById('organizeBtn'); btn.disabled = true;
+  try{
+    setProgress('organize', 30, 'Rebuilding PDF…');
+    await yieldUi();
+    const outDoc = await PDFLib.PDFDocument.create();
+    const indices = remaining.map(e=>e.origIndex);
+    const pages = await outDoc.copyPages(st.doc, indices);
+    pages.forEach((p,i)=>{
+      const rot = remaining[i].rotation;
+      if(rot) p.setRotation(PDFLib.degrees((p.getRotation().angle||0) + rot));
+      outDoc.addPage(p);
+    });
+    setProgress('organize', 90, 'Finishing…');
+    await yieldUi();
+    const bytes = await outDoc.save();
+    hideProgress('organize');
+    const blob = new Blob([bytes], {type:'application/pdf'});
+    document.getElementById('organizeResultText').textContent = 'Saved '+remaining.length+' page(s)'+(deletedCount?(' — removed '+deletedCount):'')+'.';
+    document.getElementById('organizeDownloadBtn').onclick = ()=> downloadBlob(blob, deriveName(st.file.name,'organized'));
+    document.getElementById('organizeResult').classList.add('show');
+  }catch(err){ hideProgress('organize'); friendlyError('organizeError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   PDF TO JPG
+   ============================================================ */
+toolState.pdf2jpg = {file:null, pdfjsDoc:null, selected:new Set()};
+wireDropzone('pdf2jpgDrop','pdf2jpgFileInput', files=> loadPdf2JpgFile(files[0]));
+async function loadPdf2JpgFile(file){
+  hideNotice('pdf2jpgError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('pdf2jpgError', err); return; }
+  const st = toolState.pdf2jpg;
+  st.file = file;
+  document.getElementById('pdf2jpgBody').style.display = 'block';
+  try{
+    await ensurePdfJs();
+    const bytes = await file.arrayBuffer();
+    st.pdfjsDoc = await pdfjsLib.getDocument({data:bytes}).promise;
+    const grid = document.getElementById('pdf2jpgThumbGrid');
+    grid.innerHTML = '';
+    for(let i=1;i<=st.pdfjsDoc.numPages;i++){
+      const div = document.createElement('div');
+      div.className = 'thumb-card selected';
+      div.innerHTML = '<div class="timg-wrap"><input type="checkbox" class="tcheck" checked onchange="togglePdf2jpgPage('+i+',this.checked,this)"></div><div class="tnum">Page '+i+'</div>';
+      grid.appendChild(div);
+      st.selected.add(i-1);
+      if(i%8===0) await yieldUi();
+      renderThumbCanvas(st.pdfjsDoc, i, 110).then(canvas=>{
+        div.querySelector('.timg-wrap').insertBefore(canvas, div.querySelector('.timg-wrap').firstChild);
+      }).catch(()=>{});
+    }
+  }catch(e){ friendlyError('pdf2jpgError', e); }
+}
+function togglePdf2jpgAll(){
+  const all = document.getElementById('pdf2jpgAllPages').checked;
+  document.getElementById('pdf2jpgThumbGrid').style.display = all ? 'none':'grid';
+}
+function togglePdf2jpgPage(pageNum, checked, cb){
+  const sel = toolState.pdf2jpg.selected;
+  if(checked) sel.add(pageNum-1); else sel.delete(pageNum-1);
+  cb.closest('.thumb-card').classList.toggle('selected', checked);
+}
+async function runPdf2Jpg(){
+  hideNotice('pdf2jpgError');
+  const st = toolState.pdf2jpg;
+  if(!st.pdfjsDoc) return;
+  const allPages = document.getElementById('pdf2jpgAllPages').checked;
+  const quality = parseFloat(document.getElementById('pdf2jpgQuality').value);
+  const scale = parseFloat(document.getElementById('pdf2jpgDpi').value);
+  const indices = allPages ? Array.from({length:st.pdfjsDoc.numPages}, (_,i)=>i) : Array.from(st.selected).sort((a,b)=>a-b);
+  if(!indices.length){ showNotice('pdf2jpgError','Select at least one page to convert.'); return; }
+  const btn = document.getElementById('pdf2jpgBtn'); btn.disabled = true;
+  try{
+    await ensureJSZip();
+    const base = baseName(st.file.name);
+    const blobs = [];
+    for(let i=0;i<indices.length;i++){
+      setProgress('pdf2jpg', Math.round((i/indices.length)*100), 'Rendering page '+(indices[i]+1)+' ('+(i+1)+'/'+indices.length+')');
+      await yieldUi();
+      const page = await st.pdfjsDoc.getPage(indices[i]+1);
+      const viewport = page.getViewport({scale});
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width; canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      await page.render({canvasContext:ctx, viewport}).promise;
+      const blob = await new Promise(res=> canvas.toBlob(res, 'image/jpeg', quality));
+      blobs.push({name: base+'-page-'+(indices[i]+1)+'.jpg', blob});
+    }
+    hideProgress('pdf2jpg');
+    if(blobs.length===1){
+      document.getElementById('pdf2jpgResultText').textContent = 'Converted 1 page to JPG.';
+      document.getElementById('pdf2jpgDownloadBtn').onclick = ()=> downloadBlob(blobs[0].blob, blobs[0].name);
+    } else {
+      const zip = new JSZip();
+      blobs.forEach(b=> zip.file(b.name, b.blob));
+      const zipBlob = await zip.generateAsync({type:'blob'});
+      document.getElementById('pdf2jpgResultText').textContent = 'Converted '+blobs.length+' pages to JPG, bundled into a ZIP.';
+      document.getElementById('pdf2jpgDownloadBtn').onclick = ()=> downloadBlob(zipBlob, base+'-images.zip');
+    }
+    document.getElementById('pdf2jpgResult').classList.add('show');
+  }catch(err){ hideProgress('pdf2jpg'); friendlyError('pdf2jpgError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   JPG/PNG (WebP) TO PDF
+   ============================================================ */
+toolState.img2pdf = {images:[]}; // {file, dataUrl, rotation, width, height}
+wireDropzone('img2pdfDrop','img2pdfFileInput', files=> addImg2PdfFiles(files));
+document.getElementById('img2pdfPageSize').addEventListener('change', e=>{
+  document.getElementById('img2pdfCustomWrap').style.display = e.target.value==='custom' ? 'block':'none';
+});
+async function addImg2PdfFiles(files){
+  hideNotice('img2pdfError');
+  for(const f of files){
+    if(!/^image\/(jpeg|png|webp)$/.test(f.type) && !/\.(jpe?g|png|webp)$/i.test(f.name)){
+      showNotice('img2pdfError', f.name+' is not a supported image type (JPG, PNG, WebP).'); continue;
+    }
+    const dataUrl = await new Promise((res,rej)=>{ const r = new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
+    const dims = await new Promise(res=>{ const img = new Image(); img.onload=()=>res({w:img.naturalWidth,h:img.naturalHeight}); img.src=dataUrl; });
+    toolState.img2pdf.images.push({file:f, dataUrl, rotation:0, width:dims.w, height:dims.h});
+  }
+  renderImg2PdfGrid();
+}
+function renderImg2PdfGrid(){
+  const grid = document.getElementById('img2pdfThumbGrid');
+  const imgs = toolState.img2pdf.images;
+  grid.innerHTML = imgs.map((im,i)=>
+    '<div class="thumb-card"><div class="timg-wrap"><img src="'+im.dataUrl+'" style="transform:rotate('+im.rotation+'deg)" alt=""></div>'+
+    '<div class="tnum">'+(i+1)+'</div><div class="tctrls">'+
+    (i>0?'<button aria-label="Move left" onclick="moveImg2Pdf('+i+',-1)">◀</button>':'')+
+    '<button aria-label="Rotate" onclick="rotateImg2Pdf('+i+')">⟳</button>'+
+    (i<imgs.length-1?'<button aria-label="Move right" onclick="moveImg2Pdf('+i+',1)">▶</button>':'')+
+    '<button aria-label="Remove" onclick="removeImg2Pdf('+i+')">🗑</button>'+
+    '</div></div>'
+  ).join('');
+  document.getElementById('img2pdfBtn').disabled = imgs.length===0;
+}
+function moveImg2Pdf(i,dir){ const imgs=toolState.img2pdf.images; const j=i+dir; if(j<0||j>=imgs.length)return; [imgs[i],imgs[j]]=[imgs[j],imgs[i]]; renderImg2PdfGrid(); }
+function rotateImg2Pdf(i){ toolState.img2pdf.images[i].rotation = (toolState.img2pdf.images[i].rotation+90)%360; renderImg2PdfGrid(); }
+function removeImg2Pdf(i){ toolState.img2pdf.images.splice(i,1); renderImg2PdfGrid(); }
+const MM_TO_PT = 2.83465;
+async function runImg2Pdf(){
+  hideNotice('img2pdfError');
+  const imgs = toolState.img2pdf.images;
+  if(!imgs.length) return;
+  const btn = document.getElementById('img2pdfBtn'); btn.disabled = true;
+  try{
+    await ensurePdfLib();
+    const sizeMode = document.getElementById('img2pdfPageSize').value;
+    const orientation = document.getElementById('img2pdfOrientation').value;
+    const margin = parseFloat(document.getElementById('img2pdfMargin').value);
+    const fit = document.getElementById('img2pdfFit').value;
+    const customW = parseFloat(document.getElementById('img2pdfCustomW').value)||210;
+    const customH = parseFloat(document.getElementById('img2pdfCustomH').value)||297;
+    const doc = await PDFLib.PDFDocument.create();
+
+    for(let i=0;i<imgs.length;i++){
+      setProgress('img2pdf', Math.round((i/imgs.length)*100), 'Adding image '+(i+1)+' of '+imgs.length);
+      await yieldUi();
+      const im = imgs[i];
+      // Draw to canvas (handles rotation + WebP->JPEG conversion + transparency)
+      const swap = (im.rotation===90 || im.rotation===270);
+      const cw = swap? im.height : im.width, ch = swap? im.width : im.height;
+      const canvas = document.createElement('canvas');
+      canvas.width = cw; canvas.height = ch;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0,0,cw,ch);
+      const imgEl = await new Promise((res,rej)=>{ const el=new Image(); el.onload=()=>res(el); el.onerror=rej; el.src=im.dataUrl; });
+      ctx.save();
+      ctx.translate(cw/2, ch/2);
+      ctx.rotate(im.rotation * Math.PI/180);
+      ctx.drawImage(imgEl, -im.width/2, -im.height/2, im.width, im.height);
+      ctx.restore();
+      const jpegBlob = await new Promise(res=> canvas.toBlob(res, 'image/jpeg', 0.92));
+      const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer());
+      const embedded = await doc.embedJpg(jpegBytes);
+
+      let pageW, pageH;
+      if(sizeMode==='original'){ pageW = cw; pageH = ch; }
+      else if(sizeMode==='custom'){ pageW = customW*MM_TO_PT; pageH = customH*MM_TO_PT; }
+      else { pageW = 595.28; pageH = 841.89; if(sizeMode==='letter'){ pageW=612; pageH=792; } }
+      if(sizeMode!=='original' && orientation==='landscape' && pageW<pageH){ const t=pageW; pageW=pageH; pageH=t; }
+
+      const page = doc.addPage([pageW, pageH]);
+      const availW = pageW - margin*2, availH = pageH - margin*2;
+      let drawW, drawH;
+      const imgRatio = cw/ch, availRatio = availW/availH;
+      if(fit==='fill'){
+        if(imgRatio > availRatio){ drawH = availH; drawW = availH*imgRatio; } else { drawW = availW; drawH = availW/imgRatio; }
+      } else {
+        if(imgRatio > availRatio){ drawW = availW; drawH = availW/imgRatio; } else { drawH = availH; drawW = availH*imgRatio; }
+      }
+      const x = (pageW - drawW)/2, y = (pageH - drawH)/2;
+      page.drawImage(embedded, {x, y, width:drawW, height:drawH});
+    }
+    setProgress('img2pdf', 95, 'Finishing…');
+    await yieldUi();
+    const bytes = await doc.save();
+    hideProgress('img2pdf');
+    const blob = new Blob([bytes], {type:'application/pdf'});
+    document.getElementById('img2pdfResultText').textContent = 'Created a PDF from '+imgs.length+' image(s) — '+fmtBytes(blob.size)+'.';
+    document.getElementById('img2pdfDownloadBtn').onclick = ()=> downloadBlob(blob, 'images.pdf');
+    document.getElementById('img2pdfResult').classList.add('show');
+  }catch(err){ hideProgress('img2pdf'); friendlyError('img2pdfError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   PAGE NUMBERS
+   ============================================================ */
+toolState.pagenum = {file:null};
+wireDropzone('pagenumDrop','pagenumFileInput', files=> loadPagenumFile(files[0]));
+function loadPagenumFile(file){
+  hideNotice('pagenumError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('pagenumError', err); return; }
+  toolState.pagenum.file = file;
+  document.getElementById('pagenumFileList').innerHTML = '<div class="file-row">'+fileRowHtml(file.name, fmtBytes(file.size))+'</div>';
+  document.getElementById('pagenumBody').style.display = 'block';
+}
+function formatPageNumber(fmt, n, total){
+  switch(fmt){
+    case 'page-n': return 'Page '+n;
+    case 'n-of-t': return n+' of '+total;
+    case 'page-n-of-t': return 'Page '+n+' of '+total;
+    default: return String(n);
+  }
+}
+async function runPageNumbers(){
+  hideNotice('pagenumError');
+  const st = toolState.pagenum;
+  if(!st.file) return;
+  const btn = document.getElementById('pagenumBtn'); btn.disabled = true;
+  try{
+    await ensurePdfLib();
+    const bytes = await st.file.arrayBuffer();
+    const doc = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
+    const font = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
+    const position = document.getElementById('pagenumPosition').value;
+    const format = document.getElementById('pagenumFormat').value;
+    const size = parseFloat(document.getElementById('pagenumSize').value)||11;
+    const margin = parseFloat(document.getElementById('pagenumMargin').value)||28;
+    const start = parseInt(document.getElementById('pagenumStart').value,10)||0;
+    const pages = doc.getPages();
+    const total = pages.length;
+    pages.forEach((page,i)=>{
+      setProgress('pagenum', Math.round((i/total)*100), 'Numbering page '+(i+1)+' of '+total);
+      const label = formatPageNumber(format, start+i, start+total-1);
+      const {width, height} = page.getSize();
+      const textWidth = font.widthOfTextAtSize(label, size);
+      let x, y;
+      if(position.includes('left')) x = margin;
+      else if(position.includes('right')) x = width - margin - textWidth;
+      else x = (width - textWidth)/2;
+      y = position.startsWith('top') ? height - margin : margin;
+      page.drawText(label, {x, y, size, font, color: PDFLib.rgb(0.15,0.15,0.15)});
+    });
+    setProgress('pagenum', 95, 'Finishing…');
+    await yieldUi();
+    const outBytes = await doc.save();
+    hideProgress('pagenum');
+    const blob = new Blob([outBytes], {type:'application/pdf'});
+    document.getElementById('pagenumResultText').textContent = 'Added page numbers to '+total+' page(s).';
+    document.getElementById('pagenumDownloadBtn').onclick = ()=> downloadBlob(blob, deriveName(st.file.name,'page-numbers'));
+    document.getElementById('pagenumResult').classList.add('show');
+  }catch(err){ hideProgress('pagenum'); friendlyError('pagenumError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   WATERMARK
+   ============================================================ */
+toolState.watermark = {file:null};
+wireDropzone('watermarkDrop','watermarkFileInput', files=> loadWatermarkFile(files[0]));
+function loadWatermarkFile(file){
+  hideNotice('watermarkError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('watermarkError', err); return; }
+  toolState.watermark.file = file;
+  document.getElementById('watermarkFileList').innerHTML = '<div class="file-row">'+fileRowHtml(file.name, fmtBytes(file.size))+'</div>';
+  document.getElementById('watermarkBody').style.display = 'block';
+}
+function setWatermarkPreset(text){
+  document.getElementById('watermarkText').value = text;
+  document.querySelectorAll('#panel-watermark .chip-btn').forEach(c=> c.classList.toggle('active', c.textContent===text));
+}
+async function runWatermark(){
+  hideNotice('watermarkError');
+  const st = toolState.watermark;
+  if(!st.file) return;
+  const text = document.getElementById('watermarkText').value.trim();
+  if(!text){ showNotice('watermarkError','Enter watermark text first.'); return; }
+  const btn = document.getElementById('watermarkBtn'); btn.disabled = true;
+  try{
+    await ensurePdfLib();
+    const bytes = await st.file.arrayBuffer();
+    const doc = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
+    const font = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    const size = parseFloat(document.getElementById('watermarkSize').value);
+    const opacity = parseFloat(document.getElementById('watermarkOpacity').value);
+    const rotation = parseFloat(document.getElementById('watermarkRotation').value);
+    const position = document.getElementById('watermarkPosition').value;
+    const pages = doc.getPages();
+    pages.forEach((page,i)=>{
+      setProgress('watermark', Math.round((i/pages.length)*100), 'Watermarking page '+(i+1)+' of '+pages.length);
+      const {width, height} = page.getSize();
+      const textWidth = font.widthOfTextAtSize(text, size);
+      const cy = position==='top' ? height*0.8 : position==='bottom' ? height*0.2 : height/2;
+      page.drawText(text, {
+        x: width/2 - (textWidth/2)*Math.cos(rotation*Math.PI/180),
+        y: cy - (textWidth/2)*Math.sin(rotation*Math.PI/180),
+        size, font, color: PDFLib.rgb(0.5,0.5,0.5), opacity,
+        rotate: PDFLib.degrees(rotation)
+      });
+    });
+    setProgress('watermark', 95, 'Finishing…');
+    await yieldUi();
+    const outBytes = await doc.save();
+    hideProgress('watermark');
+    const blob = new Blob([outBytes], {type:'application/pdf'});
+    document.getElementById('watermarkResultText').textContent = 'Added a "'+text+'" watermark to '+pages.length+' page(s).';
+    document.getElementById('watermarkDownloadBtn').onclick = ()=> downloadBlob(blob, deriveName(st.file.name,'watermarked'));
+    document.getElementById('watermarkResult').classList.add('show');
+  }catch(err){ hideProgress('watermark'); friendlyError('watermarkError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   METADATA (view + remove)
+   ============================================================ */
+toolState.metadata = {file:null, doc:null};
+wireDropzone('metadataDrop','metadataFileInput', files=> loadMetadataFile(files[0]));
+function pdfVersionFromBytes(bytes){
+  const head = new TextDecoder('latin1').decode(bytes.slice(0,16));
+  const m = head.match(/%PDF-(\d\.\d)/);
+  return m ? m[1] : 'Unknown';
+}
+async function loadMetadataFile(file){
+  hideNotice('metadataError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('metadataError', err); return; }
+  const st = toolState.metadata;
+  st.file = file;
+  document.getElementById('metadataFileList').innerHTML = '<div class="file-row">'+fileRowHtml(file.name, fmtBytes(file.size))+'</div>';
+  document.getElementById('metadataBody').style.display = 'block';
+  document.getElementById('metadataResult').classList.remove('show');
+  try{
+    await ensurePdfLib();
+    const bytes = await file.arrayBuffer();
+    const arr = new Uint8Array(bytes);
+    st.doc = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
+    renderMetaTable('metaTable', st.doc, file, pdfVersionFromBytes(arr));
+  }catch(e){ friendlyError('metadataError', e); }
+}
+function fmtDate(d){
+  try{ return d ? new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : 'Not available'; }
+  catch(e){ return 'Not available'; }
+}
+function renderMetaTable(elId, doc, file, version){
+  const rows = [
+    ['Title', doc.getTitle()], ['Author', doc.getAuthor()], ['Subject', doc.getSubject()],
+    ['Creator', doc.getCreator()], ['Producer', doc.getProducer()],
+    ['Created', fmtDate(doc.getCreationDate())], ['Modified', fmtDate(doc.getModificationDate())],
+    ['PDF Version', version], ['Page Count', String(doc.getPageCount())], ['File Size', fmtBytes(file.size)]
+  ];
+  document.getElementById(elId).innerHTML = rows.map(([k,v])=>
+    '<div class="meta-row"><div class="meta-k">'+escHtml(k)+'</div><div class="meta-v">'+escHtml(v||'Not available')+'</div></div>'
+  ).join('');
+}
+async function runRemoveMetadata(){
+  hideNotice('metadataError');
+  const st = toolState.metadata;
+  if(!st.doc) return;
+  const btn = document.getElementById('metadataBtn'); btn.disabled = true;
+  try{
+    st.doc.setTitle(''); st.doc.setAuthor(''); st.doc.setSubject('');
+    st.doc.setKeywords([]); st.doc.setProducer(''); st.doc.setCreator('');
+    const now = new Date();
+    st.doc.setCreationDate(now); st.doc.setModificationDate(now);
+    const outBytes = await st.doc.save();
+    const blob = new Blob([outBytes], {type:'application/pdf'});
+    renderMetaTable('metaTableAfter', st.doc, {size:blob.size}, pdfVersionFromBytes(new Uint8Array(outBytes)));
+    document.getElementById('metadataDownloadBtn').onclick = ()=> downloadBlob(blob, deriveName(st.file.name,'no-metadata'));
+    document.getElementById('metadataResult').classList.add('show');
+  }catch(err){ friendlyError('metadataError', err); }
+  btn.disabled = false;
+}
+
+/* ============================================================
+   PDF INFO & TEXT (info / scanned-detection / extract / search)
+   ============================================================ */
+toolState.info = {file:null, doc:null, pdfjsDoc:null, pageTexts:null};
+wireDropzone('infoDrop','infoFileInput', files=> loadInfoFile(files[0]));
+async function loadInfoFile(file){
+  hideNotice('infoError');
+  const err = validatePdfFile(file);
+  if(err){ showNotice('infoError', err); return; }
+  const st = toolState.info;
+  st.file = file; st.pageTexts = null;
+  document.getElementById('infoBody').style.display = 'block';
+  document.getElementById('infoTextWrap').style.display = 'none';
+  document.getElementById('infoSearchResults').innerHTML = '';
+  document.getElementById('infoSearchInput').value = '';
+  document.getElementById('infoScannedNotice').classList.remove('show');
+  try{
+    await ensurePdfLib(); await ensurePdfJs();
+    const bytes = await file.arrayBuffer();
+    const arr = new Uint8Array(bytes);
+    st.doc = await PDFLib.PDFDocument.load(bytes.slice(0), {ignoreEncryption:true});
+    st.pdfjsDoc = await pdfjsLib.getDocument({data:bytes.slice(0)}).promise;
+    const hasMeta = !!(st.doc.getTitle() || st.doc.getAuthor() || st.doc.getSubject() || st.doc.getCreator());
+    // Sample up to 5 pages for scanned-detection
+    const sampleCount = Math.min(5, st.pdfjsDoc.numPages);
+    let sampleText = '';
+    for(let i=1;i<=sampleCount;i++){
+      const page = await st.pdfjsDoc.getPage(i);
+      const content = await page.getTextContent();
+      sampleText += content.items.map(it=>it.str).join(' ');
+    }
+    const scanned = sampleText.trim().length < 20;
+    document.getElementById('infoScannedNotice').classList.toggle('show', scanned);
+    document.getElementById('infoTable').innerHTML = [
+      ['File', file.name], ['Size', fmtBytes(file.size)], ['Pages', String(st.doc.getPageCount())],
+      ['PDF Version', pdfVersionFromBytes(arr)], ['Metadata', hasMeta?'Available':'Not available'],
+      ['Text', scanned?'Not detected (likely image-only)':'Text detected'],
+    ].map(([k,v])=> '<div class="meta-row"><div class="meta-k">'+escHtml(k)+'</div><div class="meta-v">'+escHtml(v)+'</div></div>').join('');
+  }catch(e){ friendlyError('infoError', e); }
+}
+async function runExtractText(){
+  hideNotice('infoError');
+  const st = toolState.info;
+  if(!st.pdfjsDoc) return;
+  const btn = document.getElementById('infoExtractBtn'); btn.disabled = true;
+  try{
+    const n = st.pdfjsDoc.numPages;
+    const texts = [];
+    for(let i=1;i<=n;i++){
+      setProgress('info', Math.round((i/n)*100), 'Extracting page '+i+' of '+n);
+      await yieldUi();
+      const page = await st.pdfjsDoc.getPage(i);
+      const content = await page.getTextContent();
+      texts.push(content.items.map(it=>it.str).join(' '));
+    }
+    st.pageTexts = texts;
+    hideProgress('info');
+    const full = texts.map((t,i)=>'--- Page '+(i+1)+' ---\n'+(t.trim()||'(no text found on this page)')).join('\n\n');
+    document.getElementById('infoTextArea').value = full;
+    document.getElementById('infoTextWrap').style.display = 'block';
+    document.getElementById('infoDownloadTxtBtn').onclick = ()=> downloadBlob(new Blob([full],{type:'text/plain'}), deriveName(st.file.name,'text','txt'));
+  }catch(err){ hideProgress('info'); friendlyError('infoError', err); }
+  btn.disabled = false;
+}
+function copyExtractedText(){
+  const ta = document.getElementById('infoTextArea');
+  ta.select();
+  try{ navigator.clipboard.writeText(ta.value); }catch(e){ document.execCommand('copy'); }
+}
+async function runPdfSearch(){
+  const st = toolState.info;
+  const q = document.getElementById('infoSearchInput').value.trim();
+  const resultsEl = document.getElementById('infoSearchResults');
+  resultsEl.innerHTML = '';
+  if(!q || !st.pdfjsDoc) return;
+  if(!st.pageTexts){
+    resultsEl.innerHTML = '<p style="font-size:0.82rem;color:var(--muted)">Extracting text to search — click "Extract Text" above first, or wait a moment…</p>';
+    await runExtractText();
+    if(!st.pageTexts) return;
+  }
+  const qLow = q.toLowerCase();
+  let totalMatches = 0;
+  const hits = [];
+  st.pageTexts.forEach((text,i)=>{
+    const low = text.toLowerCase();
+    let idx = low.indexOf(qLow), count=0;
+    while(idx!==-1){ count++; idx = low.indexOf(qLow, idx+qLow.length); }
+    if(count>0){
+      totalMatches += count;
+      const firstIdx = low.indexOf(qLow);
+      const start = Math.max(0, firstIdx-40);
+      const snippet = (start>0?'…':'') + text.slice(start, firstIdx+qLow.length+40) + '…';
+      hits.push({page:i+1, count, snippet});
+    }
+  });
+  if(!hits.length){ resultsEl.innerHTML = '<p style="font-size:0.85rem;color:var(--muted)">No matches found.</p>'; return; }
+  const header = document.createElement('p');
+  header.style.cssText = 'font-size:0.85rem;color:var(--white);margin-bottom:10px';
+  header.textContent = totalMatches + ' match' + (totalMatches===1?'':'es') + ' across ' + hits.length + ' page(s)';
+  resultsEl.appendChild(header);
+  hits.forEach(h=>{
+    const row = document.createElement('div');
+    row.className = 'file-row';
+    row.style.cursor = 'default';
+    const strong = document.createElement('strong');
+    strong.style.color = 'var(--cyan)';
+    strong.textContent = 'Page '+h.page+' ('+h.count+') ';
+    const span = document.createElement('span');
+    span.style.cssText = 'color:var(--muted);font-size:0.82rem';
+    span.textContent = h.snippet;
+    const wrap = document.createElement('div');
+    wrap.appendChild(strong); wrap.appendChild(span);
+    row.appendChild(wrap);
+    resultsEl.appendChild(row);
+  });
+}
+
+/* Deep-link support: open a tool if the URL already has #panel-x */
+(function(){
+  const hash = location.hash.replace('#panel-','');
+  if(TOOLS.includes(hash)) openTool(hash);
+})();
+</script>
+</body>
+</html>

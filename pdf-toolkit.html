@@ -1342,6 +1342,7 @@ async function addImg2PdfFiles(files){
     const dims = await new Promise(res=>{ const img = new Image(); img.onload=()=>res({w:img.naturalWidth,h:img.naturalHeight}); img.src=dataUrl; });
     toolState.img2pdf.images.push({file:f, dataUrl, rotation:0, width:dims.w, height:dims.h});
   }
+  if(toolState.img2pdf.images.length) document.getElementById('img2pdfBody').style.display = 'block';
   renderImg2PdfGrid();
 }
 function renderImg2PdfGrid(){

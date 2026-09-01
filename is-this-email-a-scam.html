@@ -592,6 +592,19 @@ function showInsufficient(){
 /* ============================================================
    Helpers
    ============================================================ */
+/* Some scam emails insert invisible Unicode "format" characters
+   (zero-width joiners, bidi/format marks, etc.) inside words —
+   e.g. "A⁭C⁭⁫⁭CO⁭U⁭NT" for "ACCOUNT" — specifically to defeat
+   keyword-based spam/phishing filters. \p{Cf} covers this whole
+   class of characters. We strip them before any text analysis
+   runs, and separately flag their presence as evidence itself. */
+const INVISIBLE_CHAR_RE = /\p{Cf}/gu;
+function stripInvisible(str){
+  return (str||'').replace(INVISIBLE_CHAR_RE, '');
+}
+function countInvisible(str){
+  return ((str||'').match(INVISIBLE_CHAR_RE) || []).length;
+}
 function escHtml(str){
   const d = document.createElement('div');
   d.textContent = str == null ? '' : String(str);
@@ -878,15 +891,18 @@ function pat(label, re){ return {label, re}; }
 const URGENCY_PHRASES = [
   pat('act now', /\bact now\b/i), pat('urgent', /\burgent\b/i), pat('immediate / immediately', /\bimmediate(?:ly)?\b/i),
   pat('final warning/reminder', /final (?:warning|reminder|notice)/i), pat('account suspended', /account (?:has been |is )?suspended/i),
-  pat('account will be closed', /account will be closed/i), pat('account has been limited', /account has been limited/i),
+  pat('account will be closed', /account will be[^.\n]{0,25}closed/i), pat('account has been limited', /account has been limited/i),
   pat('account has been compromised', /account (?:has been|was) compromised/i), pat('verify now', /verify now/i),
   pat('verify your account', /verify(?:ing)? your account/i), pat('payment required', /payment (?:is )?required/i),
   pat('last chance', /last chance/i), pat('within 24 hours', /within 24 hours/i), pat('within 48 hours', /within 48 hours/i),
   pat('failure to respond', /failure to respond/i), pat('legal action', /legal action/i),
   pat('you will be arrested', /you will be arrested/i), pat('arrest warrant', /arrest warrant/i),
-  pat('refund is waiting', /refund is waiting/i), pat('you have won', /you('?| ha)ve won/i), pat('congratulations', /congratulations/i),
+  pat('refund is waiting', /refund(?:s)? (?:is|are|awaits?|waiting)/i), pat('you have won', /you('?| ha)ve won/i), pat('congratulations', /congratulations/i),
   pat('claim your prize', /claim your prize/i), pat('avoid suspension', /avoid suspension/i),
-  pat('unusual activity detected', /unusual (?:sign-?in )?activity/i), pat('unauthorized access', /unauthorized access/i),
+  pat('unusual/suspicious login activity', /(?:unusual|suspicious) (?:sign-?in|login) attempts?|unusual (?:sign-?in )?activity/i), pat('unauthorized access', /unauthorized access/i),
+  pat('unrecognized device', /unrecognized device/i), pat('account frozen', /account (?:has been |is |was )?frozen/i),
+  pat('orders cancelled', /(?:cancel(?:l)?ed) (?:all )?(?:your |active )?orders/i), pat('mandatory action', /(?:this (?:step|action) is )?mandatory\b/i),
+  pat('if you ignore this', /if you ignore this (?:notice|message|email)/i),
   pat('data/files will be deleted', /(?:will be|being) (?:permanently )?(?:deleted|removed|erased)/i),
   pat('at risk of deletion', /at (?:immediate )?risk of (?:deletion|being deleted|removal)/i),
   pat('if no action is taken', /if no action is taken/i), pat('prevent data loss', /prevent (?:data|file) loss/i),
@@ -939,6 +955,7 @@ const CATS = {
   attachment_risk:{cap:25, label:'Suspicious attachment'},
   lookalike_domain:{cap:18, label:'Lookalike / typosquat domain'},
   mass_scam_pattern:{cap:14, label:'Mass-scam template patterns'},
+  obfuscation:{cap:25, label:'Hidden character obfuscation'},
 };
 
 /* ============================================================
@@ -1226,7 +1243,7 @@ function analyzeContentPatterns(rawText, urgencyHits, financialHits){
   if(/^\s*dear\s+(?:user|customer|valued customer|member|account holder|sir\/?madam)\b/im.test(rawText)){
     flags.push({code:'generic_greeting', sev:'info', cat:'mass_scam_pattern', weight:3, label:'Generic, non-personalised greeting', detail:'The message opens with a generic greeting ("Dear User/Customer") rather than your name. Legitimate account and billing notices are almost always addressed to you personally.'});
   }
-  if(/\bthe\s+[a-z0-9 ]{2,25}\s+(?:support|security)\s+team\b/i.test(rawText)){
+  if(/\bthe\s+[a-z0-9 ]{2,25}\s+(?:support|security)\s+team\b/i.test(rawText) || /\b[a-z][a-z0-9 ]{1,20}\s+customer\s+service\b\s*$/im.test(rawText.trim())){
     flags.push({code:'vague_signoff', sev:'info', cat:'mass_scam_pattern', weight:3, label:'Vague, unverifiable sign-off', detail:'The message is signed by a generic team name rather than a named, verifiable person — common in mass phishing and spam campaigns.'});
   }
   if(/unsubscribe/i.test(rawText) && (urgencyHits.length>0 || financialHits.length>0)){
@@ -1281,7 +1298,12 @@ function analyzeOrgMatch(brandMentions, fromDomain){
   const legitBrandOfSender = fromDomain ? matchBrandByDomain(fromDomain) : null;
   brandMentions.forEach(b=>{
     if(seen.has(b.name)) return; seen.add(b.name);
-    if(!fromDomain) return;
+    if(!fromDomain){
+      // Brand claimed in the body/signature, but nothing to check it against
+      rows.push({org:b.name, senderDomain:'Not available', match:false});
+      flags.push({code:'org_unverified_'+b.name, sev:'warning', cat:'org_domain_mismatch', weight:10, label:'Claims to be from '+b.name+' but there\'s no sender address to verify', detail:'This message presents itself as being from '+b.name+', but no sender email address was available in what you pasted to check whether it actually came from an official '+b.name+' domain. Treat unverified brand claims with caution — add the headers or upload the .eml file to check the real sending address.'});
+      return;
+    }
     const isMatch = legitBrandOfSender && legitBrandOfSender.name===b.name;
     rows.push({org:b.name, senderDomain:fromDomain, match:isMatch});
     if(!isMatch){
@@ -1359,19 +1381,31 @@ function analyzeEmail(){
       return;
     }
 
-    const fromInfo = parseAddress(decodeMimeWords(data.headers.get('from')));
-    const subject = decodeMimeWords(data.headers.get('subject'));
-    const replyToInfo = parseAddress(decodeMimeWords(data.headers.get('reply-to')));
-    const returnPathInfo = parseAddress(data.headers.get('return-path'));
-    const toInfo = parseAddress(decodeMimeWords(data.headers.get('to')));
+    // Decode/extract raw values first, then measure + strip invisible
+    // Unicode "format" characters before anything else touches the text —
+    // scammers use these to break up words and dodge keyword matching.
+    const rawFrom = decodeMimeWords(data.headers.get('from'));
+    const rawSubject = decodeMimeWords(data.headers.get('subject'));
+    const rawReplyTo = decodeMimeWords(data.headers.get('reply-to'));
+    const rawReturnPath = data.headers.get('return-path');
+    const rawTo = decodeMimeWords(data.headers.get('to'));
+    const rawBodyText = data.bodyText || '';
+    const invisibleCount = countInvisible(rawFrom + ' ' + rawSubject + ' ' + rawBodyText);
+
+    const fromInfo = parseAddress(stripInvisible(rawFrom));
+    const subject = stripInvisible(rawSubject);
+    const replyToInfo = parseAddress(stripInvisible(rawReplyTo));
+    const returnPathInfo = parseAddress(stripInvisible(rawReturnPath));
+    const toInfo = parseAddress(stripInvisible(rawTo));
+    const cleanBodyText = stripInvisible(rawBodyText);
     const messageId = data.headers.get('message-id');
     const dateHdr = data.headers.get('date') || data.headers.get('sent');
 
-    const htmlLinks = data.bodyHtml ? extractHtmlLinks(data.bodyHtml) : [];
-    const textLinks = extractPlainTextLinks((data.bodyText||'') + '\n' + subject);
+    const htmlLinks = data.bodyHtml ? extractHtmlLinks(data.bodyHtml).map(l=>({text:stripInvisible(l.text), href:stripInvisible(l.href)})) : [];
+    const textLinks = extractPlainTextLinks(cleanBodyText + '\n' + subject);
     const merged = mergeLinks(htmlLinks, textLinks);
 
-    if(isInsufficient(data.bodyText, data.headers, merged.length)){
+    if(isInsufficient(cleanBodyText, data.headers, merged.length)){
       showInsufficient();
       return;
     }
@@ -1379,12 +1413,17 @@ function analyzeEmail(){
     const urlResults = merged.map(analyzeUrl);
     const flags = [];
 
+    if(invisibleCount >= 3){
+      const weight = invisibleCount >= 15 ? 25 : invisibleCount >= 8 ? 18 : 10;
+      flags.push({code:'invisible_chars', sev:'critical', cat:'obfuscation', weight, label:'Hidden characters used to disguise the text', detail:'This message contains '+invisibleCount+' invisible formatting characters inserted inside words (for example, breaking up brand names or common phrases one letter at a time). This is a technique used almost exclusively to slip text past spam and keyword-based phishing filters — legitimate emails essentially never do this. We removed them before analysing the wording below, which is why the quotes elsewhere read as normal text.'});
+    }
+
     flags.push(...analyzeSender(fromInfo, replyToInfo, returnPathInfo));
     const authInfo = analyzeAuth(data.headers);
     flags.push(...authInfo.flags);
     flags.push(...consolidateUrlFlags(urlResults));
 
-    const allText = subject + '\n' + (data.bodyText||'');
+    const allText = subject + '\n' + cleanBodyText;
     const urgencyHits = scanKeywords(allText, URGENCY_PHRASES);
     const financialHits = scanKeywords(allText, FINANCIAL_PHRASES);
     const credentialHits = scanKeywords(allText, CREDENTIAL_PHRASES);

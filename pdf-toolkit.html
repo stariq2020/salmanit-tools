@@ -1336,7 +1336,9 @@ async function addImg2PdfFiles(files){
   hideNotice('img2pdfError');
   for(const f of files){
     if(!/^image\/(jpeg|png|webp)$/.test(f.type) && !/\.(jpe?g|png|webp)$/i.test(f.name)){
-      showNotice('img2pdfError', f.name+' is not a supported image type (JPG, PNG, WebP).'); continue;
+      const isHeicOrBmp = /\.(heic|heif|bmp)$/i.test(f.name);
+      showNotice('img2pdfError', f.name+' is not a supported image type here (JPG, PNG, WebP only).'+(isHeicOrBmp?' Convert it to JPG or PNG first using the Universal File Converter (file-converter.html), then add it here.':''));
+      continue;
     }
     const dataUrl = await new Promise((res,rej)=>{ const r = new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
     const dims = await new Promise(res=>{ const img = new Image(); img.onload=()=>res({w:img.naturalWidth,h:img.naturalHeight}); img.src=dataUrl; });

@@ -183,6 +183,17 @@ footer a{color:var(--green);text-decoration:none}
     <a class="dl-btn" id="downloadLink" href="#" download>⬇ Download</a>
   </div>
 
+  <div class="result-card" id="pdfRedirectCard" style="background:rgba(0,200,255,0.06);border-color:rgba(0,200,255,0.25)">
+    <div class="result-info">
+      <div class="result-icon">📕</div>
+      <div>
+        <div class="result-name">PDF tools have their own home now</div>
+        <div class="result-sub">Merge, split, compress, convert to/from JPG, watermark, organize pages and more — all in the PDF Toolkit.</div>
+      </div>
+    </div>
+    <a class="dl-btn" href="pdf-toolkit.html" style="background:linear-gradient(135deg,var(--cyan),#0099CC)">📕 Open PDF Toolkit →</a>
+  </div>
+
   <!-- How it works -->
   <div class="info-section">
     <div class="page-eyebrow">How It Works</div>
@@ -200,13 +211,13 @@ footer a{color:var(--green);text-decoration:none}
     <div class="page-eyebrow">Reference</div>
     <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Supported Conversions</h2>
     <p style="font-size:0.88rem;color:var(--muted);margin-top:10px;max-width:700px">Not every format can convert to every other format — the list below shows exactly what's available for each source file type, so there are no surprises.</p>
+    <p style="font-size:0.85rem;color:var(--cyan);margin-top:10px;max-width:700px">📕 Converting an existing PDF (to images or otherwise), or turning images into a PDF? That's handled by the dedicated <a href="pdf-toolkit.html" style="color:var(--cyan);text-decoration:underline">PDF Toolkit</a> — with page selection, quality control and layout options this table doesn't cover.</p>
     <div class="conv-table-wrap">
       <table class="conv-table">
         <thead><tr><th>Source Format</th><th>Can Convert To</th></tr></thead>
         <tbody>
-          <tr><td class="fmt-name">JPG / PNG / WebP / BMP</td><td>JPG, PNG, WebP, BMP, PDF</td></tr>
-          <tr><td class="fmt-name">HEIC (iPhone photos)</td><td>JPG, PNG, WebP, PDF</td></tr>
-          <tr><td class="fmt-name">PDF</td><td>JPG, PNG, WebP (one image per page)</td></tr>
+          <tr><td class="fmt-name">JPG / PNG / WebP / BMP</td><td>JPG, PNG, WebP, BMP</td></tr>
+          <tr><td class="fmt-name">HEIC (iPhone photos)</td><td>JPG, PNG, WebP</td></tr>
           <tr><td class="fmt-name">Word (.docx)</td><td>PDF, JPG, PNG</td></tr>
           <tr><td class="fmt-name">CSV</td><td>Excel (.xlsx), JSON, PDF</td></tr>
           <tr><td class="fmt-name">Excel (.xlsx)</td><td>CSV, JSON, PDF</td></tr>
@@ -223,7 +234,7 @@ footer a{color:var(--green);text-decoration:none}
     <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Choosing The Right Format</div>
     <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why File Format Actually Matters</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
-      Every file format is a trade-off. PDF preserves exact layout and is universally viewable, which makes it the right choice for anything you need to look identical on every device — invoices, contracts, printed documents. But a PDF is difficult to edit and awkward to insert into a web page or slide deck, which is why converting it to JPG or PNG is often the more practical option when you just need the visual content, not an editable document.
+      Every file format is a trade-off. PDF preserves exact layout and is universally viewable, which makes it the right choice for anything you need to look identical on every device — invoices, contracts, printed documents. But a PDF is difficult to edit and awkward to insert into a web page or slide deck, which is why converting it to JPG or PNG is often the more practical option when you just need the visual content, not an editable document. That conversion — along with merging, splitting, compressing and everything else involving an existing PDF — now lives in the dedicated <a href="pdf-toolkit.html" style="color:var(--cyan)">PDF Toolkit</a>.
     </p>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
       Image formats have the same kind of trade-offs. JPG compresses well and is supported everywhere, making it the default for photographs, but it doesn't support transparency and loses a little quality every time it's re-saved. PNG is lossless and supports transparent backgrounds, which makes it the better choice for logos, screenshots and graphics with sharp edges or text — at the cost of a larger file size. WebP typically gives the smallest file size of the three at an equivalent quality level and is supported by all modern browsers, but older software sometimes doesn't recognise it, which is where converting back to JPG or PNG becomes useful. HEIC is Apple's default photo format on modern iPhones — it compresses extremely well, but a large amount of non-Apple software, and many websites, still can't open it directly, which is by far the most common reason people need to convert it.
@@ -253,8 +264,8 @@ footer a{color:var(--green);text-decoration:none}
         <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Simple documents — text, headings, basic formatting — convert cleanly. Complex layouts with multi-column text, precise table positioning, or embedded objects may not come out pixel-perfect, since browsers can't fully replicate Word's own rendering engine. For everyday letters, CVs and reports it works well.</p>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
-        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Can I convert a multi-page PDF or document?</h4>
-        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Yes. Converting a multi-page PDF to images produces one image per page, automatically bundled into a ZIP file so you get everything in a single download. Converting Word documents to PDF automatically splits the content across multiple pages, the same way printing would.</p>
+        <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Can I convert a multi-page Word document to PDF?</h4>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Yes. Converting a Word document to PDF automatically splits the content across multiple pages, the same way printing would. For turning an existing multi-page PDF into images (or images into a PDF), use the <a href="pdf-toolkit.html" style="color:var(--green)">PDF Toolkit</a> — it handles page selection and bundles multi-page results into a ZIP automatically.</p>
       </div>
     </div>
   </div>
@@ -306,10 +317,8 @@ const EXT_MAP = {
 function getTargets(source) {
   switch(source) {
     case 'jpg': case 'png': case 'webp': case 'bmp':
-      return ['jpg','png','webp','bmp','pdf'].filter(f => f !== source);
+      return ['jpg','png','webp','bmp'].filter(f => f !== source);
     case 'heic':
-      return ['jpg','png','webp','pdf'];
-    case 'pdf':
       return ['jpg','png','webp'];
     case 'docx':
       return ['pdf','jpg','png'];
@@ -347,10 +356,6 @@ async function ensureJsPDF() {
 async function ensureAutoTable() {
   await ensureJsPDF();
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js');
-}
-async function ensurePdfJs() {
-  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
-  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 async function ensureMammoth() {
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
@@ -438,37 +443,6 @@ function canvasToBlobForFormat(canvas, targetFmt) {
     const quality = (mime === 'image/jpeg' || mime === 'image/webp') ? 0.92 : undefined;
     canvas.toBlob(blob => resolve(blob), mime, quality);
   });
-}
-
-async function imageCanvasToPdfBlob(canvas, sourceFmtHint) {
-  await ensureJsPDF();
-  const { jsPDF } = window.jspdf;
-  const isPng = sourceFmtHint === 'png';
-  const imgData = canvas.toDataURL(isPng ? 'image/png' : 'image/jpeg', 0.95);
-  const doc = new jsPDF({
-    orientation: canvas.width > canvas.height ? 'l' : 'p',
-    unit: 'px',
-    format: [canvas.width, canvas.height]
-  });
-  doc.addImage(imgData, isPng ? 'PNG' : 'JPEG', 0, 0, canvas.width, canvas.height);
-  return doc.output('blob');
-}
-
-/* ---------------- PDF -> images ---------------- */
-async function pdfToImageBlobs(file, targetFmt) {
-  await ensurePdfJs();
-  const buf = await file.arrayBuffer();
-  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
-  const blobs = [];
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const viewport = page.getViewport({ scale: 2 });
-    const canvas = document.createElement('canvas');
-    canvas.width = viewport.width; canvas.height = viewport.height;
-    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-    blobs.push(await canvasToBlobForFormat(canvas, targetFmt));
-  }
-  return blobs;
 }
 
 /* ---------------- DOCX -> canvas / PDF ---------------- */
@@ -572,20 +546,12 @@ async function performConversion(file, sourceFmt, targetFmt) {
     const jpegBlob = await heicToJpegBlob(file);
     if (targetFmt === 'jpg') return { blobs: [jpegBlob], names: [`${baseName}.jpg`] };
     const canvas = await fileToCanvas(jpegBlob);
-    if (targetFmt === 'pdf') return { blobs: [await imageCanvasToPdfBlob(canvas, 'jpg')], names: [`${baseName}.pdf`] };
     return { blobs: [await canvasToBlobForFormat(canvas, targetFmt)], names: [`${baseName}.${targetFmt}`] };
   }
 
   if (IMAGE_FMTS.includes(sourceFmt)) {
     const canvas = await fileToCanvas(file);
-    if (targetFmt === 'pdf') return { blobs: [await imageCanvasToPdfBlob(canvas, sourceFmt)], names: [`${baseName}.pdf`] };
     return { blobs: [await canvasToBlobForFormat(canvas, targetFmt)], names: [`${baseName}.${targetFmt}`] };
-  }
-
-  if (sourceFmt === 'pdf') {
-    const blobs = await pdfToImageBlobs(file, targetFmt);
-    const names = blobs.map((b, i) => blobs.length > 1 ? `${baseName}_page${i + 1}.${targetFmt}` : `${baseName}.${targetFmt}`);
-    return { blobs, names };
   }
 
   if (sourceFmt === 'docx') {
@@ -630,6 +596,7 @@ const statusLine = document.getElementById('statusLine');
 const statusSpinner = document.getElementById('statusSpinner');
 const statusText = document.getElementById('statusText');
 const resultCard = document.getElementById('resultCard');
+const pdfRedirectCard = document.getElementById('pdfRedirectCard');
 const resultName = document.getElementById('resultName');
 const resultSub = document.getElementById('resultSub');
 const downloadLink = document.getElementById('downloadLink');
@@ -657,18 +624,27 @@ function formatBytes(bytes) {
 function handleFile(file) {
   const fmt = detectFormat(file);
   resetResult();
+  pdfRedirectCard.style.display = 'none';
   if (!fmt) {
     showStatus(`"${file.name}" isn't a supported file type yet. Supported: ${Object.values(FORMAT_LABELS).join(', ')}.`, true);
     return;
   }
-  currentFile = file;
-  currentSourceFmt = fmt;
 
   dropZone.classList.add('has-file');
   fileChip.style.display = 'flex';
   fcIcon.textContent = FORMAT_ICONS[fmt] || '📄';
   fcName.textContent = file.name;
   fcMeta.textContent = `${FORMAT_LABELS[fmt]} · ${formatBytes(file.size)}`;
+
+  if (fmt === 'pdf') {
+    currentFile = null; currentSourceFmt = null;
+    convertCard.style.display = 'none';
+    hideStatus();
+    pdfRedirectCard.style.display = 'flex';
+    return;
+  }
+  currentFile = file;
+  currentSourceFmt = fmt;
 
   const targets = getTargets(fmt);
   targetSelect.innerHTML = targets.map(t => `<option value="${t}">${FORMAT_LABELS[t]}</option>`).join('');
@@ -693,6 +669,7 @@ function resetTool() {
   dropZone.classList.remove('has-file');
   fileChip.style.display = 'none';
   convertCard.style.display = 'none';
+  pdfRedirectCard.style.display = 'none';
   resetResult();
   hideStatus();
 }

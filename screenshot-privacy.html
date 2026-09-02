@@ -946,8 +946,10 @@ function detectNino(text, spans, out){
 }
 // HMRC Unique Taxpayer Reference: 10 digits, almost always shown right next to a "UTR" label —
 // context-gated the same way as bank account numbers, since a bare 10-digit run is too ambiguous.
+// The label/number gap is deliberately loose ("UTR" ... up to 30 non-digit chars ... digits) to
+// cover real-world phrasing like "Your UTR (Unique Taxpayer Reference) is: 1234567890".
 function detectTaxRef(text, spans, out){
-  const re = /\b(?:UTR|Unique\s*Taxpayer\s*Reference)\s*[:\-]?\s*(\d{5}\s?\d{5})\b/gi;
+  const re = /\b(?:UTR|Unique\s*Taxpayer\s*Reference)\b[^\d]{0,30}(\d{5}\s?\d{5})\b/gi;
   let m;
   while((m = re.exec(text))){
     const val = m[1].replace(/\s+/g,'');
@@ -956,35 +958,77 @@ function detectTaxRef(text, spans, out){
     if(bbox) out.push({ category:'taxid', rawValue:val, confidence:0.75, ...bbox });
   }
 }
-// Cross-line "Label:\nValue" heuristic — many real-world forms and portals (HMRC, invoices, ID
+// Cross-line "Label\nValue" heuristic — many real-world forms and portals (HMRC, invoices, ID
 // documents) put a field label on its own line with the value on the next line, which per-line
 // regexes can never catch since a personal name, DOB or address has no structural pattern of its
-// own. Low-to-medium confidence by design; always reviewable, never silently trusted.
+// own. Label matching is a "contains" test (not an exact match) capped to short lines, so it
+// covers real phrasing like "Correspondence address" or "Unique Taxpayer Reference (UTR)" — not
+// just the bare word. Low-to-medium confidence by design; always reviewable, never silently
+// trusted. UK addresses commonly span several lines, so the address branch keeps consuming short
+// lines after the label until it hits a postcode-looking line, another label, a blank line, or a
+// 4-line cap.
+const CROSS_LINE_LABELS = [
+  { re:/\b(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|your\s*name|\bname\b)/i, cat:'name' },
+  { re:/\b(national\s*insurance(?:\s*number)?|\bni\s*no\.?\b|\bnino\b)/i, cat:'nino' },
+  { re:/\b(date\s*of\s*birth|\bdob\b|\bd\.?o\.?b\.?\b)/i, cat:'dob' },
+  { re:/\b(correspondence\s*address|home\s*address|postal\s*address|your\s*address|residential\s*address|\baddress\b)/i, cat:'address' },
+  { re:/\b(unique\s*taxpayer\s*reference|\butr\b)/i, cat:'taxid' },
+];
+const UK_POSTCODE_RE = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/i;
 function runCrossLineDetectors(lines, out){
   const built = lines.map(buildLineText);
-  const labelRe = /^(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|name|national\s*insurance(?:\s*number)?|ni\s*no\.?|nino|date\s*of\s*birth|dob|d\.?o\.?b\.?|address)\s*:?\s*$/i;
   for(let i = 0; i < built.length - 1; i++){
-    const t = built[i].text.trim();
-    const m = labelRe.exec(t);
-    if(!m) continue;
-    const kind = m[1].toLowerCase().replace(/\s+/g,' ');
-    const nextText = built[i+1].text.trim();
+    const labelLine = built[i].text.trim();
+    if(!labelLine || labelLine.length > 45) continue;
+    const hit = CROSS_LINE_LABELS.find(l => l.re.test(labelLine));
+    if(!hit) continue;
+
+    if(hit.cat === 'address'){
+      let j = i + 1, count = 0;
+      while(j < built.length && count < 4){
+        const t = built[j].text.trim();
+        if(!t || t.length > 60) break;
+        if(t.length <= 45 && CROSS_LINE_LABELS.some(l => l.re.test(t))) break;
+        const bbox = mapRangeToBBox(built[j].spans, 0, t.length);
+        if(bbox) out.push({ category:'address', rawValue:t, confidence:0.5, ...bbox });
+        count++; j++;
+        if(UK_POSTCODE_RE.test(t)) break; // natural end of a UK address block
+      }
+      continue;
+    }
+
+    const valueLine = built[i+1];
+    const nextText = valueLine.text.trim();
     if(!nextText || nextText.length > 60) continue;
-    let category = null;
-    if(/national|ni\s*no|nino/.test(kind)) category = 'nino';
-    else if(/birth|dob/.test(kind)) category = 'dob';
-    else if(/address/.test(kind)) category = 'address';
-    else if(/name|account\s*holder/.test(kind)) category = 'name';
-    if(!category) continue;
-    const bbox = mapRangeToBBox(built[i+1].spans, 0, nextText.length);
-    if(bbox) out.push({ category, rawValue:nextText, confidence:0.55, ...bbox });
+
+    if(hit.cat === 'nino'){
+      const ninoFound = [];
+      detectNino(nextText, valueLine.spans, ninoFound);
+      if(ninoFound.length){ ninoFound.forEach(f => out.push(f)); continue; }
+      if(/^[A-Za-z]{2}[\d ]{6,9}[A-Za-z]?$/.test(nextText)){
+        const bbox = mapRangeToBBox(valueLine.spans, 0, nextText.length);
+        if(bbox) out.push({ category:'nino', rawValue:nextText.replace(/\s+/g,''), confidence:0.5, ...bbox });
+      }
+      continue;
+    }
+    if(hit.cat === 'taxid'){
+      const digits = nextText.replace(/\D/g,'');
+      if(digits.length === 10){
+        const bbox = mapRangeToBBox(valueLine.spans, 0, nextText.length);
+        if(bbox) out.push({ category:'taxid', rawValue:digits, confidence:0.7, ...bbox });
+      }
+      continue;
+    }
+    const bbox = mapRangeToBBox(valueLine.spans, 0, nextText.length);
+    if(bbox) out.push({ category:hit.cat, rawValue:nextText, confidence:0.55, ...bbox });
   }
 }
 
-// Same-line "Label: Value" fields — e.g. "Name: John Smith" or "Date of Birth: 12/04/1980" all on
-// one OCR line. The cross-line heuristic below handles the label-on-its-own-line case separately.
+// Same-line "Label: Value" fields — e.g. "Name: John Smith" or "Date of birth 12/04/1980" all on
+// one OCR line (colon optional, since forms often omit it). The cross-line heuristic above handles
+// the label-on-its-own-line case separately.
 function detectLabeledFields(text, spans, out){
-  const re = /\b(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|name|date\s*of\s*birth|dob)\s*:\s*([A-Za-z][A-Za-z '.-]{1,40}|\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})/gi;
+  const re = /\b(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|name|date\s*of\s*birth|dob)\s*[:\-]?\s*([A-Za-z][A-Za-z '.-]{1,40}|\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})/gi;
   let m;
   while((m = re.exec(text))){
     const kind = m[1].toLowerCase();
@@ -1943,6 +1987,11 @@ function runSelfTests(){
     { name:'dob-same-line', text:'Date of Birth: 12/04/1980', cat:'dob', shouldFind:true },
     { name:'name-cross-line-label', lines:['Full Name', 'John Smith'], cat:'name', shouldFind:true },
     { name:'nino-cross-line-label', lines:['National Insurance Number', 'AB123456C'], cat:'nino', shouldFind:true },
+    { name:'utr-cross-line-label', lines:['Unique Taxpayer Reference (UTR)', '1234567890'], cat:'taxid', shouldFind:true },
+    { name:'utr-same-line-parenthetical', text:'Your UTR (Unique Taxpayer Reference) is: 1234567890', cat:'taxid', shouldFind:true },
+    { name:'dob-cross-line-no-colon', lines:['Date of birth', '01/01/1990'], cat:'dob', shouldFind:true },
+    { name:'dob-same-line-no-colon', text:'Date of birth 01/01/1990', cat:'dob', shouldFind:true },
+    { name:'address-cross-line-multiline', lines:['Correspondence address', '10 Example Street', 'Sometown', 'RH11 7NH', 'National Insurance Number'], cat:'address', shouldFind:true },
   ];
   const lines = [];
   let pass = 0, fail = 0;

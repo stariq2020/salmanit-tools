@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screenshot Privacy Tool | Blur Sensitive Information Online | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/screenshot-privacy.html">
+<meta name="description" content="Find and hide sensitive information in screenshots. Detect emails, phone numbers, IP addresses, URLs, secrets and more. Process screenshots privately in your browser.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https: blob:; worker-src 'self' blob: https:; connect-src 'self' https: blob: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Does this screenshot privacy tool upload my image?","acceptedAnswer":{"@type":"Answer","text":"No. Your screenshot is loaded and analysed entirely inside your own browser using on-device OCR and pattern detection. It is never uploaded to Salman IT Tools' servers for normal use. The only network requests made are to fetch the OCR library itself from a CDN the first time you scan an image — your image is never part of that request."}},
+    {"@type":"Question","name":"Can I blur an email address in a screenshot?","acceptedAnswer":{"@type":"Answer","text":"Yes. The tool automatically detects email addresses using on-device text recognition and lets you blur, pixelate or solidly cover them with one click, or draw your own manual redaction box over any area."}},
+    {"@type":"Question","name":"Can it detect IP addresses?","acceptedAnswer":{"@type":"Answer","text":"Yes, both IPv4 and (where practical) IPv6 addresses are detected, including private/internal ranges, since these can still reveal information about a network."}},
+    {"@type":"Question","name":"Can it detect API keys?","acceptedAnswer":{"@type":"Answer","text":"The tool looks for common patterns associated with API keys, access tokens, bearer tokens, GitHub tokens and JWTs and flags them as a possible secret. It cannot verify whether a key is real, active or valid — treat any flagged item as worth reviewing, not a confirmed credential."}},
+    {"@type":"Question","name":"Can it remove EXIF metadata?","acceptedAnswer":{"@type":"Answer","text":"Yes. Exporting a protected screenshot re-encodes the image on your device, which strips EXIF data such as GPS location and camera information automatically. The tool also shows you what metadata was found before you download."}},
+    {"@type":"Question","name":"Can I manually redact part of a screenshot?","acceptedAnswer":{"@type":"Answer","text":"Yes. Manual Redact lets you draw a rectangle over any area and cover it with blur, pixelation or a solid block, in addition to whatever automatic detection finds."}},
+    {"@type":"Question","name":"Is screenshot redaction permanent?","acceptedAnswer":{"@type":"Answer","text":"Redactions are only baked into the image you download. Your original screenshot stays untouched in the editor until you close or refresh the page, so you can undo, redo or reset at any time before exporting."}},
+    {"@type":"Question","name":"Is blur safe for passwords?","acceptedAnswer":{"@type":"Answer","text":"Not recommended. Blur can sometimes be partially reversed or may not fully obscure high-contrast text. For passwords, API keys, tokens and card numbers, use Solid Cover instead."}},
+    {"@type":"Question","name":"What information should I hide before sharing a screenshot?","acceptedAnswer":{"@type":"Answer","text":"Common candidates include email addresses, phone numbers, IP addresses, internal hostnames or file paths, API keys and tokens, payment card or bank details, and anything that identifies a person, account or internal system that isn't relevant to what you're sharing."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--caution:#EAC54F;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px;z-index:600}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1080px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:700px;margin-bottom:20px}
+
+.privacy-box{display:flex;gap:14px;background:rgba(0,200,255,0.05);border:1px solid rgba(0,200,255,0.2);border-radius:14px;padding:18px 20px;margin-bottom:24px}
+.privacy-box .pi{font-size:1.4rem;flex-shrink:0}
+.privacy-box p{font-size:0.86rem;color:var(--white);line-height:1.7;opacity:.92}
+.privacy-box strong{color:var(--cyan)}
+
+.always-warn{display:flex;gap:10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:0.82rem;color:var(--white);line-height:1.6}
+.always-warn b{color:var(--warning)}
+
+/* Upload zone */
+.drop-zone{border:2px dashed rgba(0,232,122,0.3);border-radius:20px;padding:52px 24px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(0,232,122,0.03);margin-bottom:16px;position:relative}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--green);background:rgba(0,232,122,0.07)}
+.drop-icon{font-size:2.6rem;margin-bottom:14px}
+.drop-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.drop-sub{font-size:0.85rem;color:var(--muted);margin-bottom:18px}
+.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.drop-btn:hover{opacity:.9;transform:scale(1.02)}
+.drop-formats{font-size:0.75rem;color:var(--muted);margin-top:14px}
+#fileInput{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.ghost-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;padding:10px 18px;border-radius:9px;cursor:pointer;transition:all .2s}
+.ghost-btn:hover{background:rgba(255,255,255,0.1)}
+.error-box{display:none;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:0.85rem;color:var(--white)}
+.error-box b{color:var(--danger)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--border);color:var(--white);padding:12px 20px;border-radius:10px;font-size:0.85rem;box-shadow:0 8px 30px rgba(0,0,0,0.4);opacity:0;pointer-events:none;transition:all .3s;z-index:800}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Editor */
+.editor-wrap{display:none;margin-bottom:32px}
+.editor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.editor-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.04em;color:var(--white)}
+.editor-header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.action-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.action-btn:hover{background:rgba(255,255,255,0.1)}
+.action-btn.danger{color:var(--danger);border-color:rgba(239,68,68,0.25)}
+
+.mode-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.switch-group{display:flex;align-items:center;gap:8px}
+.switch{position:relative;width:40px;height:22px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .slider{position:absolute;inset:0;background:rgba(255,255,255,0.12);border-radius:20px;cursor:pointer;transition:.2s}
+.switch .slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:var(--white);border-radius:50%;transition:.2s}
+.switch input:checked+.slider{background:var(--cyan)}
+.switch input:checked+.slider::before{transform:translateX(18px)}
+.switch-label{font-size:0.82rem;color:var(--white);cursor:pointer}
+.switch-label small{display:block;color:var(--muted);font-size:0.72rem;margin-top:1px}
+
+.viewer-toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;order:0}
+.vt-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vt-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:600;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.vt-btn:hover{background:rgba(255,255,255,0.1)}
+.vt-btn.active{background:var(--cyan);color:var(--ink);border-color:transparent}
+.vt-zoom{font-size:0.78rem;color:var(--muted);min-width:42px;text-align:center}
+
+.editor-viewer{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.viewer-stage{position:relative;width:100%;max-height:60vh;min-height:260px;overflow:auto;border-radius:14px;border:1px solid var(--border);background-color:#0a111d;background-image:linear-gradient(45deg,#0c1424 25%,transparent 25%),linear-gradient(-45deg,#0c1424 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#0c1424 75%),linear-gradient(-45deg,transparent 75%,#0c1424 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;order:1;touch-action:pan-x pan-y;cursor:grab}
+.viewer-stage.dragging{cursor:grabbing}
+.viewer-inner{position:relative;line-height:0}
+.viewer-inner canvas{position:absolute;top:0;left:0;display:block}
+#overlayCanvas{pointer-events:none}
+@media(max-width:640px){.viewer-toolbar{order:2}.viewer-stage{order:1;max-height:48vh}}
+
+.manual-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.mode-pick{display:flex;gap:6px;flex-wrap:wrap}
+.blur-warning{display:none;gap:8px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.8rem;color:var(--white);line-height:1.6;margin-bottom:14px;align-items:flex-start}
+
+.scan-status{display:none;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;font-size:0.85rem;color:var(--white)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,232,122,0.25);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress-track{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;min-width:80px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:4px;transition:width .25s}
+
+.primary-cta{width:100%;padding:16px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-bottom:14px}
+.primary-cta:hover{opacity:.9;box-shadow:0 8px 24px rgba(0,232,122,0.3)}
+.primary-cta:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.primary-cta.cyan{background:linear-gradient(135deg,var(--cyan),#0099CC);color:var(--ink)}
+
+/* Results */
+.results-wrap{display:none}
+.summary-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.sum-chip{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:0.85rem;color:var(--white);font-weight:600}
+.sum-chip .n{font-family:'Bebas Neue',sans-serif;font-size:1.1rem}
+.sum-chip.high{border-color:rgba(239,68,68,0.3)}
+.sum-chip.medium{border-color:rgba(245,158,11,0.3)}
+.sum-chip.review{border-color:rgba(234,197,79,0.3)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+.detect-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.detect-panel h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--white);margin-bottom:10px}
+.detect-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.detect-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto}
+.detect-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--white)}
+.detect-item:hover{background:rgba(255,255,255,0.06)}
+.detect-item.risk-high{border-left:3px solid var(--danger)}
+.detect-item.risk-medium{border-left:3px solid var(--warning)}
+.detect-item.risk-review{border-left:3px solid var(--caution)}
+.detect-item.applied{opacity:.55;cursor:default}
+.di-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px}
+.detect-item.checked .di-check{background:var(--cyan);border-color:var(--cyan);color:var(--ink)}
+.di-body{flex:1;min-width:0}
+.di-label{font-size:0.86rem;font-weight:600;color:var(--white)}
+.di-value{font-family:var(--mono);font-size:0.76rem;color:var(--muted);margin-top:2px;word-break:break-all}
+.di-badge{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+.di-badge.high{background:rgba(239,68,68,0.14);color:var(--danger)}
+.di-badge.medium{background:rgba(245,158,11,0.14);color:var(--warning)}
+.di-badge.review{background:rgba(234,197,79,0.14);color:var(--caution)}
+.di-tag{font-size:0.68rem;color:var(--green);font-weight:700;flex-shrink:0}
+
+.legend-row{display:flex;flex-wrap:wrap;gap:14px;font-size:0.76rem;color:var(--muted);margin-bottom:12px}
+.legend-row span{display:flex;align-items:center;gap:6px}
+.legend-dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* Metadata */
+.meta-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.meta-panel h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--white);margin-bottom:10px}
+.meta-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.meta-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.03);border-radius:8px;padding:9px 12px;font-size:0.84rem}
+.meta-row .mv{font-weight:700}
+.meta-row .mv.found{color:var(--warning)}
+.meta-row .mv.notfound{color:var(--green)}
+.meta-note{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+/* Score */
+.score-hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:14px;display:none}
+.band-low .band-badge{background:rgba(0,232,122,0.12);color:var(--green)}
+.band-caution .band-badge{background:rgba(234,197,79,0.14);color:var(--caution)}
+.band-suspicious .band-badge{background:rgba(245,158,11,0.14);color:var(--warning)}
+.band-high .band-badge{background:rgba(239,68,68,0.14);color:var(--danger)}
+.band-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.05em;padding:7px 16px;border-radius:10px;margin-bottom:12px}
+.score-row{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+.score-num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1}
+.score-num span{font-size:1.2rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:600}
+.band-low .score-num{color:var(--green)}
+.band-caution .score-num{color:var(--caution)}
+.band-suspicious .score-num{color:var(--warning)}
+.band-high .score-num{color:var(--danger)}
+.verdict-line{font-size:0.95rem;color:var(--white);margin-bottom:2px}
+.meter{height:10px;border-radius:6px;background:rgba(255,255,255,0.06);overflow:hidden;margin-top:12px}
+.meter-fill{height:100%;border-radius:6px;transition:width .7s ease}
+.band-low .meter-fill{background:linear-gradient(90deg,var(--green),var(--green2))}
+.band-caution .meter-fill{background:linear-gradient(90deg,var(--caution),#D9A62B)}
+.band-suspicious .meter-fill{background:linear-gradient(90deg,var(--warning),#D97706)}
+.band-high .meter-fill{background:linear-gradient(90deg,#F87171,var(--danger))}
+
+/* Export */
+.export-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;display:none}
+.export-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.fmt-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;min-width:150px}
+.fmt-select option{background:#0E1A2E}
+
+.finalcheck{display:none;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.finalcheck.warn{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.25)}
+.finalcheck.clean{background:rgba(0,232,122,0.06);border-color:rgba(0,232,122,0.25)}
+.finalcheck.unknown{background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.25)}
+.finalcheck h5{font-size:0.95rem;color:var(--white);margin-bottom:6px}
+.finalcheck p{font-size:0.84rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.finalcheck .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+.success-box{display:none;background:rgba(0,232,122,0.06);border:1px solid rgba(0,232,122,0.25);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.success-box h5{color:var(--green);font-size:1.05rem;margin-bottom:6px}
+.success-box p{font-size:0.84rem;color:var(--white);opacity:.85;line-height:1.7;margin-bottom:4px}
+
+.compare-view{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;gap:4px}
+.compare-view .vt-btn{flex:1}
+
+/* Info sections */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+.section-h{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.section-p{font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px}
+
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+.related-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-decoration:none;transition:all .2s}
+.related-card:hover{border-color:rgba(0,200,255,0.3);background:rgba(0,200,255,0.03)}
+.related-card .rc-ico{font-size:1.3rem;margin-bottom:6px}
+.related-card .rc-name{font-size:0.88rem;font-weight:700;color:var(--white)}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.mode-row{flex-direction:column;align-items:stretch}.export-row{flex-direction:column;align-items:stretch}}
+
+/* Dev self-test panel */
+#selfTestPanel{display:none;position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#000;color:#0f0;font-family:var(--mono);font-size:11px;padding:12px;z-index:900;border-top:2px solid #0f0}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="page-eyebrow">Free Online Tool</div>
+  <h1 class="page-title">🛡️ <span class="acc">Screenshot Privacy</span></h1>
+  <p class="page-sub">Find and hide sensitive information before you share a screenshot. Automatically find emails, phone numbers, IP addresses, URLs and other potentially sensitive information, then blur or hide them with one click — before posting to LinkedIn, Reddit, a support ticket, GitHub or anywhere else.</p>
+
+  <div class="privacy-box">
+    <span class="pi">🔒</span>
+    <p><strong>100% browser-based processing.</strong> Your screenshot stays on your device. We don't upload or store your image — detection and redaction both run locally in your browser.</p>
+  </div>
+
+  <div class="always-warn">
+    <span>⚠️</span>
+    <div><b>Important:</b> automated detection cannot guarantee that every piece of sensitive information has been found. Always review the entire screenshot yourself before sharing it.</div>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <!-- Upload zone -->
+  <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" style="display:none">
+  <div class="drop-zone" id="dropZone">
+    <div class="drop-icon">🖼️</div>
+    <div class="drop-title">Drop your screenshot here</div>
+    <div class="drop-sub">or press Ctrl+V to paste a screenshot from your clipboard</div>
+    <button class="drop-btn" id="chooseBtn" type="button">📁&nbsp; Choose Image</button>
+    <div class="drop-formats">Supports PNG, JPG/JPEG, WebP · Max 20 MB · Nothing is uploaded</div>
+  </div>
+  <div class="upload-actions">
+    <button class="ghost-btn" id="demoBtn" type="button">▶️ Try Example</button>
+  </div>
+
+  <!-- Editor -->
+  <div class="editor-wrap" id="editorWrap">
+    <div class="editor-header">
+      <h3>Screenshot Editor</h3>
+      <div class="editor-header-actions">
+        <button class="action-btn" onclick="changeImage()">📁 Change Image</button>
+        <button class="action-btn danger" onclick="clearImage()">🗑️ Clear Image</button>
+      </div>
+    </div>
+
+    <div class="mode-row">
+      <div class="switch-group">
+        <label class="switch"><input type="checkbox" id="itModeToggle"><span class="slider"></span></label>
+        <label class="switch-label" for="itModeToggle">🧑‍💻 IT Mode<small>Prioritise hostnames, internal domains, credentials &amp; M365/Entra IDs</small></label>
+      </div>
+      <div class="switch-group">
+        <label class="switch"><input type="checkbox" id="postcodeToggle"><span class="slider"></span></label>
+        <label class="switch-label" for="postcodeToggle">📍 Auto-redact postcodes<small>Off by default — a postcode isn't automatically sensitive</small></label>
+      </div>
+    </div>
+
+    <div class="editor-viewer">
+      <div class="viewer-toolbar" id="viewerToolbar">
+        <div class="vt-group">
+          <button class="vt-btn" onclick="zoomBy(0.8)" aria-label="Zoom out">−</button>
+          <span class="vt-zoom" id="zoomLabel">100%</span>
+          <button class="vt-btn" onclick="zoomBy(1.25)" aria-label="Zoom in">+</button>
+        </div>
+        <div class="vt-group">
+          <button class="vt-btn" onclick="fitToScreen()">Fit</button>
+          <button class="vt-btn" onclick="actualSize()">100%</button>
+          <button class="vt-btn" onclick="resetView()">↺ Reset View</button>
+        </div>
+        <div class="vt-group compare-view">
+          <button class="vt-btn active" id="viewOrigBtn" onclick="setCompareView('original')">Original</button>
+          <button class="vt-btn" id="viewProtBtn" onclick="setCompareView('protected')">Protected</button>
+        </div>
+      </div>
+      <div class="viewer-stage" id="viewerStage">
+        <div class="viewer-inner" id="viewerInner">
+          <canvas id="mainCanvas"></canvas>
+          <canvas id="overlayCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="manual-toolbar">
+      <button class="vt-btn" id="manualToggleBtn" onclick="toggleManualMode()">✏️ Manual Redact</button>
+      <div class="mode-pick" id="modePick" style="display:none">
+        <button class="vt-btn mode-opt active" data-mode="blur" onclick="setManualMode('blur')">Blur</button>
+        <button class="vt-btn mode-opt" data-mode="pixelate" onclick="setManualMode('pixelate')">Pixelate</button>
+        <button class="vt-btn mode-opt" data-mode="cover" onclick="setManualMode('cover')">Solid Cover</button>
+        <button class="vt-btn mode-opt" data-mode="remove" onclick="setManualMode('remove')">Remove</button>
+      </div>
+      <span style="flex:1"></span>
+      <button class="vt-btn" onclick="undoRedaction()">↶ Undo</button>
+      <button class="vt-btn" onclick="redoRedaction()">↷ Redo</button>
+    </div>
+    <div class="blur-warning" id="blurWarning">
+      <span>⚠️</span>
+      <div>For secrets and passwords, use <strong>Solid Cover</strong> instead of Blur. Blur may not completely prevent information from being recovered.</div>
+    </div>
+
+    <div class="scan-status" id="scanStatus">
+      <span class="spinner"></span>
+      <span id="scanStatusText">Scanning screenshot…</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+
+    <button class="primary-cta" id="scanBtn" onclick="startScan()">🛡️ Scan Screenshot</button>
+    <div aria-live="polite" class="sr-only" id="scanAnnounce"></div>
+
+    <!-- Results -->
+    <div class="results-wrap" id="resultsWrap">
+      <div class="summary-row" id="summaryRow"></div>
+
+      <div class="detect-panel" id="detectPanel">
+        <h4>Detected Information</h4>
+        <div class="legend-row">
+          <span><span class="legend-dot" style="background:var(--danger)"></span> High confidence</span>
+          <span><span class="legend-dot" style="background:var(--warning)"></span> Medium confidence</span>
+          <span><span class="legend-dot" style="background:var(--caution)"></span> Review (low confidence)</span>
+        </div>
+        <div class="detect-actions">
+          <button class="action-btn" onclick="redactAll()">🔒 Redact All</button>
+          <button class="action-btn" onclick="selectNone()">Select None</button>
+          <button class="action-btn" onclick="reviewAll()">👁️ Review All</button>
+        </div>
+        <div class="detect-list" id="detectList"></div>
+      </div>
+
+      <button class="primary-cta cyan" id="protectBtn" onclick="protectScreenshot()">🔒 Protect Screenshot</button>
+
+      <div class="meta-panel" id="metaPanel" style="display:none">
+        <h4>Image Metadata</h4>
+        <div class="meta-rows" id="metaRows"></div>
+        <p class="meta-note" id="metaNote"></p>
+      </div>
+
+      <div class="score-hero" id="scoreHero">
+        <div class="band-badge" id="bandBadge">🛡️ Privacy Score</div>
+        <div class="score-row">
+          <div class="score-num" id="scoreNum">0<span>/100</span></div>
+          <div class="verdict-line" id="verdictLine"></div>
+        </div>
+        <div class="meter"><div class="meter-fill" id="meterFill" style="width:0%"></div></div>
+      </div>
+
+      <div class="export-panel" id="exportPanel">
+        <div class="export-row">
+          <div class="field-group">
+            <label>Format</label>
+            <select class="fmt-select" id="exportFormat" onchange="onFormatChange()">
+              <option value="image/png">PNG (Lossless)</option>
+              <option value="image/jpeg">JPG</option>
+            </select>
+          </div>
+          <div class="field-group" id="qualityGroup" style="display:none">
+            <label>JPG Quality</label>
+            <select class="fmt-select" id="exportQuality">
+              <option value="1">100%</option>
+              <option value="0.9" selected>90%</option>
+              <option value="0.8">80%</option>
+              <option value="0.7">70%</option>
+            </select>
+          </div>
+        </div>
+        <button class="primary-cta" id="downloadBtn" onclick="downloadProtected()">⬇️ Download Protected Screenshot</button>
+      </div>
+
+      <div class="finalcheck" id="finalCheck"></div>
+      <div class="success-box" id="successBox"></div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="info-section">
+    <div class="page-eyebrow">How Privacy Protection Works</div>
+    <h2 class="section-h">Everything Happens On Your Device</h2>
+    <p class="section-p">Your screenshot is processed directly in your browser using on-device text recognition (OCR). It isn't uploaded to our server for normal use. The tool looks for common patterns such as email addresses, phone numbers, IP addresses, URLs and possible secrets, then draws a box around each one it finds. You decide what gets hidden — nothing is redacted automatically without your say-so. The protected image is generated on your device and only leaves your browser when you choose to download it.</p>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🔒</div><h4>No Uploads</h4><p>Your screenshot never leaves your device during scanning, redaction or export. Only the OCR library itself is fetched from a CDN — never your image.</p></div>
+      <div class="info-card"><div class="ico">🔍</div><h4>You Decide</h4><p>Every detection is a suggestion, not an automatic action. Review each one, choose what to redact, and apply it yourself.</p></div>
+      <div class="info-card"><div class="ico">✏️</div><h4>Manual Redaction</h4><p>Automatic detection will never catch everything — draw your own redaction box over any area, any time.</p></div>
+      <div class="info-card"><div class="ico">🧹</div><h4>Metadata Removed</h4><p>Exporting re-encodes the image, which strips EXIF data like GPS location and camera information automatically.</p></div>
+    </div>
+  </div>
+
+  <!-- Why it matters -->
+  <div class="info-section">
+    <div class="page-eyebrow">Why Screenshot Privacy Matters</div>
+    <h2 class="section-h">Why Should I Hide Information in Screenshots?</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">📧</div><h4>Email Addresses</h4><p>Can be used for spam, targeted phishing, or to identify you or a colleague.</p></div>
+      <div class="info-card"><div class="ico">🌐</div><h4>IP Addresses</h4><p>May reveal internal network information, even for private ranges like 192.168.x.x.</p></div>
+      <div class="info-card"><div class="ico">🔑</div><h4>API Keys</h4><p>Could allow unauthorised access to a system or service if the key is still active.</p></div>
+      <div class="info-card"><div class="ico">🔐</div><h4>Internal Hostnames</h4><p>May reveal information about an organisation's infrastructure and naming conventions.</p></div>
+      <div class="info-card"><div class="ico">🏢</div><h4>Microsoft 365 / Entra IDs</h4><p>Tenant, application and object identifiers may expose organisational details.</p></div>
+      <div class="info-card"><div class="ico">🔗</div><h4>URLs</h4><p>May contain sensitive paths, access tokens, or point to internal-only systems.</p></div>
+      <div class="info-card"><div class="ico">📍</div><h4>GPS Metadata</h4><p>Can reveal exactly where a photo was taken, even if the image itself shows nothing sensitive.</p></div>
+    </div>
+  </div>
+
+  <!-- IT mode -->
+  <div class="info-section">
+    <div class="page-eyebrow">Built For IT Professionals</div>
+    <h2 class="section-h">🧑‍💻 IT Mode</h2>
+    <p class="section-p">Salman IT Tools is an IT-focused site, so Screenshot Privacy includes an optional IT Mode. When enabled, it prioritises and more aggressively looks for the kind of information IT engineers accidentally leave in screenshots: internal hostnames, UNC paths, DOMAIN\username strings, PowerShell lines containing secrets, database connection strings, JWTs, and possible Microsoft 365 / Entra tenant, application and object identifiers. It's off by default because some of these checks are more prone to false positives outside an IT context.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="info-section">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="info-card"><h4 style="margin-bottom:6px">Does this screenshot privacy tool upload my image?</h4><p>No. Your screenshot is loaded and analysed entirely inside your own browser using on-device OCR and pattern detection. It is never uploaded to Salman IT Tools' servers for normal use. The only network request made is to fetch the OCR library itself from a CDN the first time you scan — your image is never part of that request.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I blur an email address in a screenshot?</h4><p>Yes. The tool automatically detects email addresses using on-device text recognition and lets you blur, pixelate or solidly cover them with one click, or draw your own manual redaction box over any area.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can it detect IP addresses?</h4><p>Yes, both IPv4 and (where practical) IPv6 addresses are detected, including private/internal ranges, since these can still reveal information about a network.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can it detect API keys?</h4><p>The tool looks for common patterns associated with API keys, access tokens, bearer tokens, GitHub tokens and JWTs and flags them as a possible secret. It cannot verify whether a key is real, active or valid — treat any flagged item as worth reviewing, not a confirmed credential.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can it remove EXIF metadata?</h4><p>Yes. Exporting a protected screenshot re-encodes the image on your device, which strips EXIF data such as GPS location and camera information automatically. The tool also shows you what metadata was found before you download.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can I manually redact part of a screenshot?</h4><p>Yes. Manual Redact lets you draw a rectangle over any area and cover it with blur, pixelation or a solid block, in addition to whatever automatic detection finds.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is screenshot redaction permanent?</h4><p>Redactions are only baked into the image you download. Your original screenshot stays untouched in the editor until you close or refresh the page, so you can undo, redo or reset at any time before exporting.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is blur safe for passwords?</h4><p>Not recommended. Blur can sometimes be partially reversed or may not fully obscure high-contrast text. For passwords, API keys, tokens and card numbers, use Solid Cover instead.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">What information should I hide before sharing a screenshot?</h4><p>Common candidates include email addresses, phone numbers, IP addresses, internal hostnames or file paths, API keys and tokens, payment card or bank details, and anything that identifies a person, account or internal system that isn't relevant to what you're sharing.</p></div>
+    </div>
+  </div>
+
+  <!-- Related tools -->
+  <div class="info-section">
+    <div class="page-eyebrow">More Security Tools</div>
+    <h2 class="section-h">Related Salman IT Tools</h2>
+    <div class="related-grid">
+      <a class="related-card" href="is-this-email-a-scam.html"><div class="rc-ico">📧</div><div class="rc-name">Is This Email a Scam?</div></a>
+      <a class="related-card" href="password-generator.html"><div class="rc-ico">🔑</div><div class="rc-name">Password Generator</div></a>
+      <a class="related-card" href="email-header-analyzer.html"><div class="rc-ico">📨</div><div class="rc-name">Email Header Analyzer</div></a>
+      <a class="related-card" href="jwt-decoder.html"><div class="rc-ico">🪙</div><div class="rc-name">JWT Decoder</div></a>
+      <a class="related-card" href="m365-scan.html"><div class="rc-ico">🛡️</div><div class="rc-name">M365 Security Scanner</div></a>
+      <a class="related-card" href="object-remover.html"><div class="rc-ico">🖼️</div><div class="rc-name">Object &amp; Watermark Remover</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<div class="toast" id="toast"></div>
+<pre id="selfTestPanel"></pre>
+
+<script>
+/* ============================================================================
+   Screenshot Privacy — Salman IT Tools
+   Single-file implementation. Rough module map (mirrors a normal component
+   layout even though everything lives in one <script> per this site's
+   convention of one self-contained HTML file per tool):
+     CONFIG & STATE
+     utils/            — masking, validation, DOM helpers, toasts
+     detection/*        — email, phone, ip, url, apiKeys/jwt, creditCards,
+                           iban, ukPostcode, addresses, usernames,
+                           windows/hostnames, microsoft365
+     ocr/worker          — lazy Tesseract.js loading + recognition
+     components/ImageCanvas + redaction/(blur,pixelate,cover,manual)
+     components/DetectionPanel / RedactionToolbar
+     metadata/           — EXIF presence scan
+     components/PrivacyScore
+     export/             — final privacy check + download
+     Self-tests (?selftest=1)
+   ============================================================================ */
+
+/* ---------------- CONFIG ---------------- */
+const MAX_BYTES = 20 * 1024 * 1024;
+const MAX_DIM_HARD = 16000;
+const MAX_MEGAPIXELS_HARD = 120;
+const OCR_MAX_DIM = 2200;
+const PREF_KEY = 'ssp_prefs_v1';
+
+const CATEGORIES = {
+  secret:    { icon:'🔑', label:'Possible secret/token', risk:'high', defaultMode:'cover', autoSelect:true },
+  card:      { icon:'💳', label:'Payment card number', risk:'high', defaultMode:'cover', autoSelect:true },
+  iban:      { icon:'🏦', label:'IBAN', risk:'high', defaultMode:'cover', autoSelect:true },
+  banking:   { icon:'🏦', label:'Possible banking information', risk:'high', defaultMode:'cover', autoSelect:false },
+  windowsit: { icon:'🔐', label:'Possible credential or internal IT information', risk:'high', defaultMode:'cover', autoSelect:true },
+  m365:      { icon:'🏢', label:'Possible Microsoft 365 tenant information', risk:'medium', defaultMode:'blur', autoSelect:false },
+  email:     { icon:'📧', label:'Email address', risk:'medium', defaultMode:'blur', autoSelect:true },
+  phone:     { icon:'📱', label:'Phone number', risk:'medium', defaultMode:'blur', autoSelect:true },
+  ip:        { icon:'🌐', label:'IP address', risk:'medium', defaultMode:'blur', autoSelect:true },
+  url:       { icon:'🔗', label:'URL', risk:'medium', defaultMode:'blur', autoSelect:false },
+  postcode:  { icon:'📍', label:'UK postcode', risk:'review', defaultMode:'blur', autoSelect:false },
+  address:   { icon:'📍', label:'Possible address', risk:'review', defaultMode:'blur', autoSelect:false },
+  username:  { icon:'👤', label:'Username', risk:'review', defaultMode:'blur', autoSelect:false },
+};
+const PRIORITY = ['secret','card','iban','address','email','url','ip','phone','banking','m365','windowsit','postcode','username'];
+
+/* ---------------- STATE ---------------- */
+const state = {
+  originalImage: null,
+  filename: null,
+  baseName: 'screenshot',
+  itMode: false,
+  postcodeAuto: false,
+  detections: [],
+  redactions: [],
+  redoStack: [],
+  manualMode: false,
+  manualPickMode: 'blur',
+  manualDragRect: null,
+  highlightId: null,
+  compareView: 'original',
+  zoom: 1,
+  ocrFailed: false,
+  scanned: false,
+  pendingExportCanvas: null,
+  exifInfo: null,
+};
+let imgW = 0, imgH = 0;
+
+/* ---------------- DOM refs ---------------- */
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const chooseBtn = document.getElementById('chooseBtn');
+const demoBtn = document.getElementById('demoBtn');
+const editorWrap = document.getElementById('editorWrap');
+const errorBox = document.getElementById('errorBox');
+const mainCanvas = document.getElementById('mainCanvas');
+const overlayCanvas = document.getElementById('overlayCanvas');
+const viewerStage = document.getElementById('viewerStage');
+const viewerInner = document.getElementById('viewerInner');
+const resultsWrap = document.getElementById('resultsWrap');
+const toastEl = document.getElementById('toast');
+
+/* ---------------- utils/ ---------------- */
+function uid(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+function el(tag, cls, text){ const n = document.createElement(tag); if(cls) n.className = cls; if(text != null) n.textContent = text; return n; }
+function showError(msg){ errorBox.textContent = ''; const b = el('b',null,'⚠️ '); errorBox.appendChild(b); errorBox.appendChild(document.createTextNode(msg)); errorBox.style.display = 'block'; }
+function clearErrors(){ errorBox.style.display = 'none'; errorBox.textContent = ''; }
+let toastTimer = null;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> toastEl.classList.remove('show'), 2600);
+}
+function announce(msg){ const a = document.getElementById('scanAnnounce'); if(a) a.textContent = msg; }
+
+function luhnValid(digits){
+  let sum = 0, alt = false;
+  for(let i = digits.length - 1; i >= 0; i--){
+    let d = digits.charCodeAt(i) - 48;
+    if(d < 0 || d > 9) return false;
+    if(alt){ d *= 2; if(d > 9) d -= 9; }
+    sum += d; alt = !alt;
+  }
+  return sum % 10 === 0;
+}
+function ibanValid(iban){
+  if(iban.length < 15 || iban.length > 34) return false;
+  const rearranged = iban.slice(4) + iban.slice(0,4);
+  let converted = '';
+  for(const c of rearranged){
+    const code = c.charCodeAt(0);
+    converted += (code >= 65 && code <= 90) ? String(code - 55) : c;
+  }
+  let remainder = converted;
+  while(remainder.length > 9){
+    const block = remainder.slice(0, 9);
+    remainder = String(parseInt(block, 10) % 97) + remainder.slice(block.length);
+  }
+  return parseInt(remainder, 10) % 97 === 1;
+}
+
+function maskValue(cat, raw){
+  switch(cat){
+    case 'email': {
+      const idx = raw.indexOf('@');
+      if(idx < 1) return '••••';
+      return raw.slice(0,1) + '***' + raw.slice(idx);
+    }
+    case 'phone': {
+      const digits = raw.replace(/[^\d+]/g,'');
+      const head = digits.slice(0, Math.min(3, digits.length));
+      const tail = digits.slice(-2);
+      return head + ' ••• ••' + tail;
+    }
+    case 'ip': {
+      if(raw.indexOf('.') > -1){
+        const parts = raw.split('.');
+        return parts[0] + '.•••.•••.••';
+      }
+      return raw.slice(0, 4) + '::••••';
+    }
+    case 'url': {
+      try{
+        const withScheme = /^https?:\/\//i.test(raw) ? raw : 'http://' + raw;
+        const u = new URL(withScheme);
+        return u.hostname + (u.pathname && u.pathname !== '/' ? '/•••' : '');
+      }catch(e){ return raw.split('/')[0]; }
+    }
+    case 'card': {
+      const digits = raw.replace(/\D/g,'');
+      return '•••• •••• •••• ' + digits.slice(-4);
+    }
+    case 'iban':
+      return raw.slice(0,4) + ' •••• •••• ••' + raw.slice(-2);
+    case 'postcode': {
+      const outward = raw.trim().split(/\s+/)[0] || raw.slice(0,3);
+      return outward + ' •••';
+    }
+    case 'username':
+      return '@' + raw.replace(/^@/,'').slice(0,1) + '•••';
+    case 'm365':
+      return raw.slice(0,4) + '••••-••••-••••-••••••••••••';
+    default:
+      return '';
+  }
+}
+
+/* ---------------- detection/ ---------------- */
+function getBBox(w){ if(w.bbox) return w.bbox; if(typeof w.x0 === 'number') return w; return null; }
+
+function buildLineText(line){
+  const spans = [];
+  let text = '';
+  let cursor = 0;
+  (line.words || []).forEach((w,i) => {
+    const bbox = getBBox(w);
+    if(!bbox) return;
+    if(i > 0){ text += ' '; cursor += 1; }
+    const t = w.text || '';
+    spans.push({ start: cursor, end: cursor + t.length, bbox });
+    text += t;
+    cursor += t.length;
+  });
+  return { text, spans };
+}
+function mapRangeToBBox(spans, start, end){
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity,hit=false;
+  spans.forEach(s => {
+    if(s.end <= start || s.start >= end) return;
+    hit = true;
+    x0 = Math.min(x0, s.bbox.x0); y0 = Math.min(y0, s.bbox.y0);
+    x1 = Math.max(x1, s.bbox.x1); y1 = Math.max(y1, s.bbox.y1);
+  });
+  if(!hit) return null;
+  return { x:x0, y:y0, w:Math.max(2,x1-x0), h:Math.max(2,y1-y0) };
+}
+function isWordChar(ch){ return !!ch && /[A-Za-z0-9._-]/.test(ch); }
+
+function detectEmail(text, spans, out){
+  const re = /\b[A-Za-z0-9][A-Za-z0-9._%+-]{0,63}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?){1,}\b/g;
+  let m;
+  while((m = re.exec(text))){
+    const raw = m[0].replace(/[.,;:!?)]+$/,'');
+    const bbox = mapRangeToBBox(spans, m.index, m.index + raw.length);
+    if(bbox) out.push({ category:'email', rawValue:raw, confidence:0.97, ...bbox });
+  }
+}
+function detectPhone(text, spans, out){
+  const patterns = [
+    /(\+44\s?7\d{3}|\(?07\d{3}\)?)[\s-]?\d{3}[\s-]?\d{3}\b/g,
+    /\+44\s?\(?0?\d{1,4}\)?[\s-]?\d{3,4}[\s-]?\d{3,4}\b/g,
+    /\b0\d{2,4}[\s-]?\d{3,4}[\s-]?\d{3,4}\b/g,
+    /\+1[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}\b/g,
+    /\+\d{1,3}[\s-]?\d{2,4}[\s-]?\d{3,4}[\s-]?\d{2,4}\b/g,
+  ];
+  patterns.forEach(re => {
+    let m;
+    while((m = re.exec(text))){
+      const digitCount = (m[0].match(/\d/g)||[]).length;
+      if(digitCount < 8 || digitCount > 13) continue;
+      const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+      if(bbox) out.push({ category:'phone', rawValue:m[0], confidence:0.75, ...bbox });
+    }
+  });
+}
+function detectIp(text, spans, out){
+  const v4 = /\b(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\b/g;
+  let m;
+  while((m = v4.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'ip', rawValue:m[0], confidence:0.95, ...bbox });
+  }
+  const v6 = /\b(?:[A-Fa-f0-9]{1,4}:){2,7}(?:[A-Fa-f0-9]{1,4}|:)\b/g;
+  while((m = v6.exec(text))){
+    if((m[0].match(/:/g)||[]).length < 2) continue;
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'ip', rawValue:m[0], confidence:0.7, ...bbox });
+  }
+}
+function detectUrl(text, spans, out){
+  const schemeRe = /\b(?:https?:\/\/|www\.)[^\s<>"')\]]+/gi;
+  const bareRe = /\b[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\.(?:com|net|org|io|gov|edu|co\.uk|org\.uk|local|internal|corp|dev|app|info|biz)(?:\/[^\s<>"')\]]*)?\b/gi;
+  let m;
+  const push = (raw, index) => {
+    raw = raw.replace(/[.,;:!?)]+$/,'');
+    const bbox = mapRangeToBBox(spans, index, index + raw.length);
+    if(!bbox) return;
+    const isM365 = /sharepoint\.com|teams\.microsoft\.com/i.test(raw);
+    const isInternal = !isM365 && /\.(local|corp|internal|lan|intranet)(\/|$)/i.test(raw);
+    const category = isM365 ? 'm365' : isInternal ? 'windowsit' : 'url';
+    out.push({ category, rawValue: raw, confidence: 0.9, ...bbox });
+  };
+  while((m = schemeRe.exec(text))) push(m[0], m.index);
+  while((m = bareRe.exec(text))) push(m[0], m.index);
+}
+function detectSecrets(text, spans, out){
+  const patterns = [
+    { re:/\b(?:api[_-]?key|secret|access[_-]?token|client[_-]?secret)\s*[:=]\s*['"]?[A-Za-z0-9_\-\.\/+=]{8,}['"]?/gi, conf:0.75 },
+    { re:/\bBearer\s+[A-Za-z0-9\-_.=]{10,}/gi, conf:0.85 },
+    { re:/\bgh[pousr]_[A-Za-z0-9]{20,40}\b/g, conf:0.95 },
+    { re:/\b(?:sk|pk|rk)_(?:live|test)_[A-Za-z0-9]{16,}\b/g, conf:0.95 },
+    { re:/\bAKIA[0-9A-Z]{16}\b/g, conf:0.95 },
+    { re:/\bsk-[A-Za-z0-9]{20,}\b/g, conf:0.9 },
+    { re:/\beyJ[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b/g, conf:0.95 },
+    { re:/\bxox[baprs]-[A-Za-z0-9-]{10,}\b/g, conf:0.9 },
+    { re:/-----BEGIN [A-Z ]*PRIVATE KEY-----/g, conf:0.98 },
+    { re:/\bAPI_KEY\s*=\s*\S+/gi, conf:0.7 },
+  ];
+  patterns.forEach(p => {
+    let m;
+    while((m = p.re.exec(text))){
+      const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+      if(bbox) out.push({ category:'secret', rawValue:m[0], confidence:p.conf, ...bbox });
+    }
+  });
+}
+function detectCards(text, spans, out){
+  const re = /\b(?:\d[ -]?){13,19}\b/g;
+  let m;
+  while((m = re.exec(text))){
+    const digits = m[0].replace(/\D/g,'');
+    if(digits.length < 13 || digits.length > 19) continue;
+    if(!luhnValid(digits)) continue;
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'card', rawValue:digits, confidence:0.9, ...bbox });
+  }
+}
+function detectIban(text, spans, out){
+  const patterns = [
+    /\b[A-Z]{2}\d{2}[A-Z0-9]{11,30}\b/g,             // contiguous, e.g. GB29NWBK60161331926819
+    /\b[A-Z]{2}\d{2}(?:\s[A-Z0-9]{2,4}){3,8}\b/g,     // spaced, e.g. GB29 NWBK 6016 1331 9268 19
+  ];
+  const seen = new Set();
+  patterns.forEach(re => {
+    let m;
+    while((m = re.exec(text))){
+      const compact = m[0].replace(/\s+/g,'');
+      if(seen.has(compact)) continue;
+      seen.add(compact);
+      const conf = ibanValid(compact) ? 0.92 : 0.5;
+      const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+      if(bbox) out.push({ category:'iban', rawValue:compact, confidence:conf, ...bbox });
+    }
+  });
+}
+function detectBanking(text, spans, out){
+  const sortRe = /\b\d{2}-\d{2}-\d{2}\b/g;
+  let m, hasSort = false;
+  while((m = sortRe.exec(text))){
+    hasSort = true;
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'banking', rawValue:m[0], confidence:0.8, ...bbox });
+  }
+  if(hasSort){
+    const accRe = /\b\d{8}\b/g;
+    while((m = accRe.exec(text))){
+      const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+      if(bbox) out.push({ category:'banking', rawValue:m[0], confidence:0.65, ...bbox });
+    }
+  } else {
+    const ctxRe = /\baccount\s*(?:no|number)?\s*[:#]?\s*(\d{8})\b/i;
+    const cm = ctxRe.exec(text);
+    if(cm){
+      const start = cm.index + cm[0].lastIndexOf(cm[1]);
+      const bbox = mapRangeToBBox(spans, start, start + cm[1].length);
+      if(bbox) out.push({ category:'banking', rawValue:cm[1], confidence:0.5, ...bbox });
+    }
+  }
+}
+function detectPostcode(text, spans, out){
+  const re = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/gi;
+  let m;
+  while((m = re.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'postcode', rawValue:m[0].toUpperCase(), confidence:0.85, ...bbox });
+  }
+}
+function detectAddress(text, spans, out){
+  const re = /\b\d{1,4}\s+[A-Za-z][A-Za-z\s]{2,30}\b(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Close|Way|Court|Ct|Place|Pl|Gardens|Grove|Crescent)\b[^.\n]{0,40}/gi;
+  let m;
+  while((m = re.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'address', rawValue:m[0], confidence:0.5, ...bbox });
+  }
+}
+function detectUsername(text, spans, out){
+  const re = /@[A-Za-z][A-Za-z0-9_]{2,19}\b/g;
+  let m;
+  while((m = re.exec(text))){
+    const before = m.index > 0 ? text[m.index - 1] : '';
+    if(isWordChar(before)) continue; // part of an email local@domain, not a standalone mention
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'username', rawValue:m[0], confidence:0.45, ...bbox });
+  }
+}
+function detectWindowsIT(text, spans, out, itMode){
+  const uncRe = /\\\\[A-Za-z0-9_.-]{1,63}\\[A-Za-z0-9_.$-]{1,63}(?:\\[A-Za-z0-9_.$ -]{1,63})*/g;
+  let m;
+  while((m = uncRe.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'windowsit', rawValue:m[0], confidence:0.85, ...bbox });
+  }
+  const domainUserRe = /\b[A-Za-z][A-Za-z0-9_-]{1,63}\\[A-Za-z][A-Za-z0-9_.-]{1,63}\b/g;
+  while((m = domainUserRe.exec(text))){
+    if(m.index > 0 && text[m.index - 1] === '\\') continue; // part of a UNC path
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'windowsit', rawValue:m[0], confidence:0.7, ...bbox });
+  }
+  const psRe = /\$(?:password|pwd|pass|securestring|cred(?:ential)?)\s*=\s*['"][^'"]{2,}['"]/gi;
+  while((m = psRe.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'windowsit', rawValue:m[0], confidence:0.85, ...bbox });
+  }
+  const connRe = /\b(?:mongodb|postgres(?:ql)?|mysql|redis|amqp):\/\/[^\s:]+:[^\s@]+@[^\s\/]+/gi;
+  while((m = connRe.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'windowsit', rawValue:m[0], confidence:0.9, ...bbox });
+  }
+  const internalDomRe = /\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:local|corp|internal|lan|intranet)\b/gi;
+  while((m = internalDomRe.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'windowsit', rawValue:m[0], confidence:0.75, ...bbox });
+  }
+  if(itMode){
+    const hostRe = /\b[A-Z]{2,15}\d{2,4}\b/g;
+    while((m = hostRe.exec(text))){
+      const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+      if(bbox) out.push({ category:'windowsit', rawValue:m[0], confidence:0.5, ...bbox });
+    }
+  }
+}
+function detectM365(text, spans, out){
+  const re = /\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b/g;
+  let m;
+  while((m = re.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'m365', rawValue:m[0], confidence:0.6, ...bbox });
+  }
+}
+
+const DETECTORS = [detectSecrets, detectCards, detectIban, detectAddress, detectEmail, detectUrl, detectIp, detectPhone, detectBanking, detectPostcode, detectUsername];
+
+function runDetectors(line, out, itMode){
+  const { text, spans } = buildLineText(line);
+  if(!text.trim()) return;
+  DETECTORS.forEach(fn => fn(text, spans, out));
+  detectWindowsIT(text, spans, out, itMode);
+  detectM365(text, spans, out);
+}
+function rectsOverlap(a, b, thresh){
+  const ix = Math.max(0, Math.min(a.x+a.w, b.x+b.w) - Math.max(a.x, b.x));
+  const iy = Math.max(0, Math.min(a.y+a.h, b.y+b.h) - Math.max(a.y, b.y));
+  const inter = ix * iy;
+  if(inter <= 0) return false;
+  const minArea = Math.max(1, Math.min(a.w*a.h, b.w*b.h));
+  return inter / minArea > thresh;
+}
+function resolveOverlaps(list){
+  const sorted = list.slice().sort((a,b) => (PRIORITY.indexOf(a.category) - PRIORITY.indexOf(b.category)) || ((b.w*b.h) - (a.w*a.h)));
+  const kept = [];
+  sorted.forEach(item => { if(!kept.some(k => rectsOverlap(k, item, 0.4))) kept.push(item); });
+  return kept;
+}
+function finalizeDetections(rawList, postcodeAuto){
+  return rawList.map(r => {
+    const cat = CATEGORIES[r.category];
+    const autoSel = r.category === 'postcode' ? postcodeAuto : cat.autoSelect;
+    return {
+      id: uid(), category:r.category, label:cat.label, icon:cat.icon, risk:cat.risk,
+      confidence:r.confidence, x:r.x, y:r.y, w:Math.max(6,r.w), h:Math.max(6,r.h),
+      rawValue:r.rawValue, maskedDisplay:maskValue(r.category, r.rawValue),
+      checked: !!autoSel, applied:false,
+    };
+  });
+}
+
+/* ---------------- ocr/worker ---------------- */
+let tesseractLoaded = false;
+function ensureTesseract(){
+  if(window.Tesseract){ tesseractLoaded = true; return Promise.resolve(); }
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload = () => { tesseractLoaded = true; resolve(); };
+    s.onerror = () => reject(new Error('tesseract-load-failed'));
+    document.head.appendChild(s);
+  });
+}
+let ocrWorker = null, ocrWorkerPromise = null;
+function getWorker(onProgress){
+  if(ocrWorker) return Promise.resolve(ocrWorker);
+  if(!ocrWorkerPromise){
+    ocrWorkerPromise = Tesseract.createWorker('eng', 1, { logger: onProgress }).then(w => { ocrWorker = w; return w; });
+  }
+  return ocrWorkerPromise;
+}
+function flattenLines(data){
+  const lines = [];
+  if(data.blocks && data.blocks.length){
+    data.blocks.forEach(b => (b.paragraphs||[]).forEach(p => (p.lines||[]).forEach(l => lines.push(l))));
+  } else if(data.paragraphs && data.paragraphs.length){
+    data.paragraphs.forEach(p => (p.lines||[]).forEach(l => lines.push(l)));
+  } else if(data.lines && data.lines.length){
+    lines.push(...data.lines);
+  } else if(data.words && data.words.length){
+    lines.push({ text:data.text||'', words:data.words });
+  }
+  return lines.filter(l => l.words && l.words.length);
+}
+function setScanStatus(text, pct){
+  const box = document.getElementById('scanStatus');
+  box.style.display = 'flex';
+  document.getElementById('scanStatusText').textContent = text;
+  document.getElementById('progressFill').style.width = clamp(pct,0,100) + '%';
+  announce(text);
+}
+function hideScanStatus(){ document.getElementById('scanStatus').style.display = 'none'; }
+
+async function performOCRAndDetect(canvas, scaleBackX, scaleBackY){
+  let worker;
+  try{
+    await ensureTesseract();
+    worker = await getWorker(m => {
+      if(m.status === 'recognizing text'){ setScanStatus('Scanning screenshot…', Math.round(5 + m.progress*80)); }
+      else if(m.status){ setScanStatus('Scanning screenshot… (' + m.status + ')', 5); }
+    });
+  }catch(err){
+    return { ocrFailed:true, detections:[] };
+  }
+  let data;
+  try{
+    setScanStatus('Scanning screenshot…', 5);
+    const recognizePromise = worker.recognize(canvas, {}, { blocks:true, text:true });
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('ocr-timeout')), 60000));
+    const res = await Promise.race([recognizePromise, timeoutPromise]);
+    data = res.data;
+  }catch(err){
+    // A crashed or unresponsive OCR worker never replies to recognize() — the
+    // race above stops us waiting forever. Drop the worker so the next scan
+    // attempt starts a fresh one instead of retrying a dead worker.
+    ocrWorker = null; ocrWorkerPromise = null;
+    return { ocrFailed:true, detections:[] };
+  }
+  setScanStatus('Detecting sensitive information…', 90);
+  const lines = flattenLines(data);
+  const found = [];
+  lines.forEach(line => runDetectors(line, found, state.itMode));
+  found.forEach(f => { f.x *= scaleBackX; f.y *= scaleBackY; f.w *= scaleBackX; f.h *= scaleBackY; });
+  const resolved = resolveOverlaps(found);
+  setScanStatus('Scan complete.', 100);
+  return { ocrFailed:false, detections:resolved, rawText:data.text||'' };
+}
+
+/* ---------------- metadata/ (EXIF presence scan, JPEG only) ---------------- */
+function scanExif(file){
+  if(!/jpeg|jpg/i.test(file.type)){
+    setExifResult({ supported:false, gps:false, camera:false, creation:false });
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const buf = e.target.result;
+      const view = new DataView(buf);
+      if(view.getUint16(0) !== 0xFFD8){ setExifResult({ supported:true, gps:false, camera:false, creation:false, found:false }); return; }
+      let offset = 2;
+      let gps=false, camera=false, creation=false, found=false;
+      while(offset < view.byteLength - 4){
+        if(view.getUint8(offset) !== 0xFF) break;
+        const marker = view.getUint8(offset+1);
+        if(marker === 0xD8){ offset += 2; continue; }
+        if(marker === 0xD9 || marker === 0xDA) break;
+        const size = view.getUint16(offset+2);
+        if(marker === 0xE1 && offset+10 <= view.byteLength){
+          const tag = String.fromCharCode(view.getUint8(offset+4),view.getUint8(offset+5),view.getUint8(offset+6),view.getUint8(offset+7));
+          if(tag === 'Exif'){
+            found = true;
+            const tiffStart = offset + 10;
+            const little = view.getUint16(tiffStart) === 0x4949;
+            const get16 = o => view.getUint16(o, little);
+            const get32 = o => view.getUint32(o, little);
+            const ifd0Offset = tiffStart + get32(tiffStart+4);
+            if(ifd0Offset+2 <= view.byteLength){
+              const entries = get16(ifd0Offset);
+              for(let i=0;i<entries;i++){
+                const entryOffset = ifd0Offset + 2 + i*12;
+                if(entryOffset+12 > view.byteLength) break;
+                const tagId = get16(entryOffset);
+                if(tagId === 0x8825) gps = true;
+                if(tagId === 0x010F || tagId === 0x0110) camera = true;
+                if(tagId === 0x0132) creation = true;
+              }
+            }
+          }
+        }
+        offset += 2 + size;
+      }
+      setExifResult({ supported:true, gps, camera, creation, found });
+    }catch(err){
+      setExifResult({ supported:true, gps:false, camera:false, creation:false, error:true });
+    }
+  };
+  reader.readAsArrayBuffer(file.slice(0, 131072));
+}
+function setExifResult(info){
+  state.exifInfo = info;
+  const panel = document.getElementById('metaPanel');
+  const rows = document.getElementById('metaRows');
+  const note = document.getElementById('metaNote');
+  rows.innerHTML = '';
+  if(!info.supported){
+    panel.style.display = 'block';
+    note.textContent = 'EXIF presence checking only runs on JPEG files. PNG/WebP screenshots rarely carry this data, and any metadata that does exist is stripped automatically when you download the protected image, since export re-encodes the image.';
+    return;
+  }
+  panel.style.display = 'block';
+  const addRow = (label, foundVal) => {
+    const row = el('div','meta-row');
+    row.appendChild(el('span',null,label));
+    row.appendChild(el('span','mv ' + (foundVal?'found':'notfound'), foundVal ? 'Found' : 'Not found'));
+    rows.appendChild(row);
+  };
+  addRow('GPS location', info.gps);
+  addRow('Camera information', info.camera);
+  addRow('Creation metadata', info.creation);
+  if(info.gps || info.camera || info.creation){
+    note.textContent = '⚠️ This image may contain information about where or how it was created. Downloading the protected image automatically strips this data — re-encoding the image on export removes EXIF, GPS and camera metadata.';
+  } else {
+    note.textContent = 'No EXIF metadata was found. Any metadata that did exist would be removed automatically when you download the protected image.';
+  }
+}
+
+/* ---------------- components/UploadZone ---------------- */
+chooseBtn.addEventListener('click', e => { e.stopPropagation(); fileInput.click(); });
+dropZone.addEventListener('click', e => { if(e.target !== chooseBtn) fileInput.click(); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  const f = [...e.dataTransfer.files].find(f => f.type.startsWith('image/'));
+  if(f) handleIncomingFile(f);
+});
+fileInput.addEventListener('change', () => { if(fileInput.files[0]) handleIncomingFile(fileInput.files[0]); fileInput.value = ''; });
+demoBtn.addEventListener('click', loadDemoImage);
+document.addEventListener('paste', e => {
+  if(!e.clipboardData) return;
+  for(const item of e.clipboardData.items){
+    if(item.type && item.type.indexOf('image/') === 0){
+      const file = item.getAsFile();
+      if(file){ toast('📋 Screenshot detected from clipboard'); handleIncomingFile(file); }
+      e.preventDefault();
+      break;
+    }
+  }
+});
+
+async function handleIncomingFile(file){
+  clearErrors();
+  if(!file) return;
+  if(file.size > MAX_BYTES){ showError('This file is larger than 20 MB. Please choose a smaller screenshot.'); return; }
+  const okType = ['image/png','image/jpeg','image/jpg','image/webp'].includes(file.type);
+  let bytes;
+  try{ bytes = new Uint8Array(await file.slice(0,16).arrayBuffer()); }
+  catch(e){ showError("This file couldn't be read."); return; }
+  const isPng = bytes[0]===0x89&&bytes[1]===0x50&&bytes[2]===0x4E&&bytes[3]===0x47;
+  const isJpg = bytes[0]===0xFF&&bytes[1]===0xD8&&bytes[2]===0xFF;
+  const isWebp = bytes[0]===0x52&&bytes[1]===0x49&&bytes[2]===0x46&&bytes[3]===0x46&&bytes[8]===0x57&&bytes[9]===0x45&&bytes[10]===0x42&&bytes[11]===0x50;
+  if(!(isPng||isJpg||isWebp) || !okType){
+    showError("This file type isn't supported. Please upload a PNG, JPG or WEBP image.");
+    return;
+  }
+  loadImageFile(file, isJpg);
+}
+function loadImageFile(file, isJpg){
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      if(img.naturalWidth === 0 || img.naturalHeight === 0){ showError('This image could not be read. It may be corrupted.'); return; }
+      const mp = (img.naturalWidth * img.naturalHeight) / 1e6;
+      if(Math.max(img.naturalWidth, img.naturalHeight) > MAX_DIM_HARD || mp > MAX_MEGAPIXELS_HARD){
+        showError('This image is too large to process safely in the browser. Please use a smaller screenshot.');
+        return;
+      }
+      setupEditor(img, file.name);
+    };
+    img.onerror = () => showError('This image could not be read. It may be corrupted or in an unsupported format.');
+    img.src = e.target.result;
+  };
+  reader.onerror = () => showError('Could not read this file.');
+  reader.readAsDataURL(file);
+  if(isJpg) scanExif(file);
+  else setExifResult({ supported:false });
+}
+function loadDemoImage(){
+  const c = document.createElement('canvas');
+  c.width = 920; c.height = 500;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#0B1120'; ctx.fillRect(0,0,920,500);
+  ctx.fillStyle = '#12203a'; ctx.fillRect(0,0,920,42);
+  ctx.fillStyle = '#5A6A85'; ctx.font = '14px monospace';
+  ctx.fillText('C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', 16, 26);
+  ctx.font = '20px monospace';
+  ctx.fillStyle = '#F0F6FF';
+  const lines = [
+    'PS C:\\Users\\jsmith> Get-ADUser -Identity jsmith',
+    '',
+    'User: john.smith@example.com',
+    'IP: 192.168.1.25',
+    'Server: DC01.company.local',
+    'Phone: +44 7700 900123',
+    'API_KEY=example_fake_key_123456',
+    'Share: \\\\FILESERVER01\\Finance',
+  ];
+  lines.forEach((line,i) => ctx.fillText(line, 24, 90 + i*38));
+  ctx.font = '13px monospace';
+  ctx.fillStyle = '#00C8FF';
+  ctx.fillText('DEMO DATA ONLY — none of these are real credentials', 24, 478);
+  c.toBlob(blob => {
+    if(!blob) return;
+    const file = new File([blob], 'demo-screenshot.png', { type:'image/png' });
+    toast('▶️ Demo data only — none of these are real credentials');
+    handleIncomingFile(file);
+  }, 'image/png');
+}
+
+/* ---------------- components/ImageCanvas ---------------- */
+function setupEditor(img, filename){
+  state.originalImage = img;
+  state.filename = filename;
+  state.baseName = (filename||'screenshot').replace(/\.[^.]+$/,'') || 'screenshot';
+  imgW = img.naturalWidth; imgH = img.naturalHeight;
+
+  mainCanvas.width = imgW; mainCanvas.height = imgH;
+  overlayCanvas.width = imgW; overlayCanvas.height = imgH;
+
+  state.detections = [];
+  state.redactions = [];
+  state.redoStack = [];
+  state.manualMode = false;
+  state.manualDragRect = null;
+  state.highlightId = null;
+  state.compareView = 'original';
+  state.scanned = false;
+  state.ocrFailed = false;
+
+  overlayCanvas.style.pointerEvents = 'none';
+  document.getElementById('modePick').style.display = 'none';
+  document.getElementById('manualToggleBtn').classList.remove('active');
+  document.getElementById('resultsWrap').style.display = 'none';
+  document.getElementById('exportPanel').style.display = 'none';
+  document.getElementById('scoreHero').style.display = 'none';
+  document.getElementById('metaPanel').style.display = 'none';
+  document.getElementById('finalCheck').style.display = 'none';
+  document.getElementById('successBox').style.display = 'none';
+  document.getElementById('scanBtn').style.display = 'block';
+  document.getElementById('scanBtn').disabled = false;
+  hideScanStatus();
+  setCompareView('original');
+
+  dropZone.style.display = 'none';
+  document.querySelector('.upload-actions').style.display = 'none';
+  editorWrap.style.display = 'block';
+
+  requestAnimationFrame(() => { fitToScreen(); renderMain(); drawOverlay(); });
+}
+function changeImage(){
+  editorWrap.style.display = 'none';
+  dropZone.style.display = 'block';
+  document.querySelector('.upload-actions').style.display = 'flex';
+}
+function clearImage(){
+  if(!confirm('Remove this image and all analysis results?')) return;
+  state.originalImage = null;
+  state.detections = [];
+  state.redactions = [];
+  state.redoStack = [];
+  mainCanvas.getContext('2d').clearRect(0,0,mainCanvas.width,mainCanvas.height);
+  overlayCanvas.getContext('2d').clearRect(0,0,overlayCanvas.width,overlayCanvas.height);
+  changeImage();
+  toast('🗑️ Image and analysis results removed');
+}
+
+/* ---------------- viewer: zoom / pan / fit ---------------- */
+function applyZoomStyle(){
+  const w = Math.round(imgW * state.zoom), h = Math.round(imgH * state.zoom);
+  viewerInner.style.width = w + 'px';
+  viewerInner.style.height = h + 'px';
+  [mainCanvas, overlayCanvas].forEach(c => { c.style.width = w + 'px'; c.style.height = h + 'px'; });
+  document.getElementById('zoomLabel').textContent = Math.round(state.zoom*100) + '%';
+}
+function zoomBy(factor){ state.zoom = clamp(state.zoom * factor, 0.05, 4); applyZoomStyle(); }
+function fitToScreen(){
+  if(!imgW || !imgH) return;
+  const stageW = viewerStage.clientWidth - 4;
+  const stageH = viewerStage.clientHeight - 4;
+  state.zoom = clamp(Math.min(stageW / imgW, stageH / imgH), 0.05, 4);
+  applyZoomStyle();
+  viewerStage.scrollLeft = 0; viewerStage.scrollTop = 0;
+}
+function actualSize(){ state.zoom = 1; applyZoomStyle(); }
+function resetView(){ fitToScreen(); }
+function setCompareView(view){
+  state.compareView = view;
+  document.getElementById('viewOrigBtn').classList.toggle('active', view === 'original');
+  document.getElementById('viewProtBtn').classList.toggle('active', view === 'protected');
+  renderMain();
+}
+
+let panDrag = null;
+viewerStage.addEventListener('pointerdown', e => {
+  if(state.manualMode || e.pointerType === 'touch') return;
+  panDrag = { startX:e.clientX, startY:e.clientY, scrollX:viewerStage.scrollLeft, scrollY:viewerStage.scrollTop };
+  viewerStage.classList.add('dragging');
+});
+window.addEventListener('pointermove', e => {
+  if(!panDrag) return;
+  viewerStage.scrollLeft = panDrag.scrollX - (e.clientX - panDrag.startX);
+  viewerStage.scrollTop = panDrag.scrollY - (e.clientY - panDrag.startY);
+});
+window.addEventListener('pointerup', () => { panDrag = null; viewerStage.classList.remove('dragging'); });
+window.addEventListener('resize', () => { if(state.originalImage) applyZoomStyle(); });
+
+function getImagePos(e, canvasEl){
+  const rect = canvasEl.getBoundingClientRect();
+  const scaleX = canvasEl.width / rect.width;
+  const scaleY = canvasEl.height / rect.height;
+  return { x:(e.clientX-rect.left)*scaleX, y:(e.clientY-rect.top)*scaleY };
+}
+
+/* ---------------- redaction/ (blur, pixelate, cover, manual/remove) ---------------- */
+function applyRedaction(ctx, r){
+  const x = clamp(Math.round(r.x), 0, imgW), y = clamp(Math.round(r.y), 0, imgH);
+  const w = clamp(Math.round(r.w), 1, imgW - x), h = clamp(Math.round(r.h), 1, imgH - y);
+  if(w <= 0 || h <= 0) return;
+  if(r.mode === 'cover'){
+    ctx.save();
+    ctx.fillStyle = '#0B1120';
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.strokeRect(x+0.5, y+0.5, w-1, h-1);
+    ctx.restore();
+  } else if(r.mode === 'pixelate'){
+    const blockSize = Math.max(6, Math.round(Math.min(w,h) / 10));
+    const tw = Math.max(1, Math.round(w / blockSize));
+    const th = Math.max(1, Math.round(h / blockSize));
+    const tmp = document.createElement('canvas'); tmp.width = tw; tmp.height = th;
+    tmp.getContext('2d').drawImage(state.originalImage, x, y, w, h, 0, 0, tw, th);
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(tmp, 0, 0, tw, th, x, y, w, h);
+    ctx.restore();
+  } else if(r.mode === 'remove'){
+    const pad = Math.max(w, h) * 0.6;
+    const sx = clamp(x - pad, 0, imgW), sy = clamp(y - pad, 0, imgH);
+    const ex = clamp(x + w + pad, 0, imgW), ey = clamp(y + h + pad, 0, imgH);
+    const sw = Math.max(1, ex - sx), sh = Math.max(1, ey - sy);
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h;
+    tmp.getContext('2d').drawImage(state.originalImage, sx, sy, sw, sh, 0, 0, w, h);
+    ctx.save();
+    ctx.filter = 'blur(' + Math.max(8, Math.round(Math.min(w,h)/2)) + 'px)';
+    ctx.drawImage(tmp, x, y, w, h);
+    ctx.restore();
+  } else { // blur
+    const blurAmt = Math.max(6, Math.round(Math.min(w,h) / 6));
+    const pad = blurAmt * 2;
+    const sx = clamp(x - pad, 0, imgW), sy = clamp(y - pad, 0, imgH);
+    const ex = clamp(x + w + pad, 0, imgW), ey = clamp(y + h + pad, 0, imgH);
+    const sw = Math.max(1, ex - sx), sh = Math.max(1, ey - sy);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    ctx.filter = 'blur(' + blurAmt + 'px)';
+    ctx.drawImage(state.originalImage, sx, sy, sw, sh, sx, sy, sw, sh);
+    ctx.restore();
+  }
+}
+function renderMain(){
+  const ctx = mainCanvas.getContext('2d');
+  ctx.clearRect(0,0,imgW,imgH);
+  if(!state.originalImage) return;
+  ctx.drawImage(state.originalImage, 0, 0, imgW, imgH);
+  if(state.compareView === 'protected'){
+    state.redactions.forEach(r => applyRedaction(ctx, r));
+  }
+}
+function buildExportCanvas(){
+  const c = document.createElement('canvas');
+  c.width = imgW; c.height = imgH;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(state.originalImage, 0, 0, imgW, imgH);
+  state.redactions.forEach(r => applyRedaction(ctx, r));
+  return c;
+}
+function renderAll(){ renderMain(); drawOverlay(); }
+
+function drawOverlay(){
+  const ctx = overlayCanvas.getContext('2d');
+  ctx.clearRect(0,0,imgW,imgH);
+  state.detections.forEach(d => {
+    if(d.applied) return;
+    const col = d.risk === 'high' ? '#EF4444' : d.risk === 'medium' ? '#F59E0B' : '#EAC54F';
+    ctx.save();
+    ctx.strokeStyle = col;
+    ctx.lineWidth = (d.id === state.highlightId) ? 4 : 2;
+    if(d.risk === 'review') ctx.setLineDash([6,4]);
+    ctx.strokeRect(d.x, d.y, d.w, d.h);
+    if(d.id === state.highlightId){
+      ctx.fillStyle = col + '33';
+      ctx.fillRect(d.x, d.y, d.w, d.h);
+    }
+    ctx.restore();
+  });
+  if(state.manualDragRect){
+    const r = state.manualDragRect;
+    ctx.save();
+    ctx.strokeStyle = '#00C8FF';
+    ctx.setLineDash([4,3]);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(r.x, r.y, r.w, r.h);
+    ctx.restore();
+  }
+}
+
+/* ---------------- RedactionToolbar: manual redact + undo/redo ---------------- */
+function toggleManualMode(){
+  state.manualMode = !state.manualMode;
+  overlayCanvas.style.pointerEvents = state.manualMode ? 'auto' : 'none';
+  overlayCanvas.style.cursor = state.manualMode ? 'crosshair' : '';
+  document.getElementById('modePick').style.display = state.manualMode ? 'flex' : 'none';
+  document.getElementById('manualToggleBtn').classList.toggle('active', state.manualMode);
+  updateBlurWarning();
+}
+function setManualMode(mode){
+  state.manualPickMode = mode;
+  document.querySelectorAll('.mode-opt').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  updateBlurWarning();
+}
+function updateBlurWarning(){
+  document.getElementById('blurWarning').style.display = (state.manualMode && state.manualPickMode === 'blur') ? 'flex' : 'none';
+}
+let manualDrag = null;
+function rectFromDrag(d){
+  const x = Math.min(d.x0,d.x1), y = Math.min(d.y0,d.y1);
+  const w = Math.abs(d.x1-d.x0), h = Math.abs(d.y1-d.y0);
+  return { x: clamp(x,0,imgW), y: clamp(y,0,imgH), w: clamp(w,0,imgW-x), h: clamp(h,0,imgH-y) };
+}
+overlayCanvas.addEventListener('pointerdown', e => {
+  if(!state.manualMode) return;
+  overlayCanvas.setPointerCapture(e.pointerId);
+  const pos = getImagePos(e, overlayCanvas);
+  manualDrag = { x0:pos.x, y0:pos.y, x1:pos.x, y1:pos.y };
+  state.manualDragRect = rectFromDrag(manualDrag);
+});
+overlayCanvas.addEventListener('pointermove', e => {
+  if(!manualDrag) return;
+  const pos = getImagePos(e, overlayCanvas);
+  manualDrag.x1 = pos.x; manualDrag.y1 = pos.y;
+  state.manualDragRect = rectFromDrag(manualDrag);
+  drawOverlay();
+});
+overlayCanvas.addEventListener('pointerup', () => {
+  if(!manualDrag) return;
+  const r = rectFromDrag(manualDrag);
+  manualDrag = null;
+  state.manualDragRect = null;
+  if(r.w > 4 && r.h > 4) pushRedaction({ id:uid(), x:r.x, y:r.y, w:r.w, h:r.h, mode:state.manualPickMode, source:'manual' });
+  drawOverlay();
+});
+
+function findDetection(id){ return state.detections.find(d => d.id === id); }
+function pushRedaction(r){
+  state.redactions.push(r);
+  state.redoStack.length = 0;
+  renderAll();
+  updateAfterRedactionChange();
+}
+function undoRedaction(){
+  if(!state.redactions.length) return;
+  const r = state.redactions.pop();
+  state.redoStack.push(r);
+  if(r.detectionId){ const d = findDetection(r.detectionId); if(d) d.applied = false; }
+  renderAll();
+  updateAfterRedactionChange();
+}
+function redoRedaction(){
+  if(!state.redoStack.length) return;
+  const r = state.redoStack.pop();
+  state.redactions.push(r);
+  if(r.detectionId){ const d = findDetection(r.detectionId); if(d) d.applied = true; }
+  renderAll();
+  updateAfterRedactionChange();
+}
+function updateAfterRedactionChange(){
+  renderDetectionList();
+  computePrivacyScore();
+  const anyRedactions = state.redactions.length > 0;
+  document.getElementById('exportPanel').style.display = state.scanned ? 'block' : 'none';
+  if(anyRedactions) setCompareView('protected');
+}
+
+/* ---------------- Scan pipeline ---------------- */
+async function startScan(){
+  if(!state.originalImage) return;
+  const scanBtn = document.getElementById('scanBtn');
+  scanBtn.disabled = true;
+  clearErrors();
+  setScanStatus('Scanning screenshot…', 2);
+
+  const ocrCanvas = document.createElement('canvas');
+  const scale = Math.min(1, OCR_MAX_DIM / Math.max(imgW, imgH));
+  const ow = Math.max(1, Math.round(imgW*scale)), oh = Math.max(1, Math.round(imgH*scale));
+  ocrCanvas.width = ow; ocrCanvas.height = oh;
+  ocrCanvas.getContext('2d').drawImage(state.originalImage, 0, 0, ow, oh);
+
+  const result = await performOCRAndDetect(ocrCanvas, 1/scale, 1/scale);
+  hideScanStatus();
+  scanBtn.disabled = false;
+  state.scanned = true;
+
+  if(result.ocrFailed){
+    state.ocrFailed = true;
+    state.detections = [];
+    showError("We couldn't reliably read all text in this image. Manual Redaction has been switched on so you can still cover sensitive areas before downloading — automated scanning isn't available, so review the screenshot carefully yourself.");
+    state.manualMode = true;
+    overlayCanvas.style.pointerEvents = 'auto';
+    overlayCanvas.style.cursor = 'crosshair';
+    document.getElementById('modePick').style.display = 'flex';
+    document.getElementById('manualToggleBtn').classList.add('active');
+    updateBlurWarning();
+  } else {
+    state.detections = finalizeDetections(result.detections, state.postcodeAuto);
+  }
+
+  document.getElementById('resultsWrap').style.display = 'block';
+  document.getElementById('exportPanel').style.display = 'block';
+  renderSummary();
+  renderDetectionList();
+  computePrivacyScore();
+  renderAll();
+  announce(state.detections.length + ' possible sensitive items found.');
+  document.getElementById('resultsWrap').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ---------------- components/DetectionPanel ---------------- */
+function renderSummary(){
+  const row = document.getElementById('summaryRow');
+  row.innerHTML = '';
+  const counts = { high:0, medium:0, review:0 };
+  state.detections.forEach(d => { if(!d.applied) counts[d.risk]++; });
+  const total = counts.high + counts.medium + counts.review;
+  const heading = el('div', null);
+  heading.style.cssText = 'width:100%;font-size:0.95rem;color:var(--white);margin-bottom:2px';
+  heading.textContent = total === 0
+    ? 'Privacy Scan Complete — no obvious sensitive information detected.'
+    : 'Privacy Scan Complete — we found ' + total + ' item' + (total===1?'':'s') + ' that may contain sensitive information.';
+  row.appendChild(heading);
+  const mk = (cls, icon, label, n) => { const c = el('div','sum-chip '+cls); c.appendChild(el('span',null,icon+' '+label+':')); c.appendChild(el('span','n',String(n))); return c; };
+  row.appendChild(mk('high','🔴','High risk',counts.high));
+  row.appendChild(mk('medium','🟠','Medium risk',counts.medium));
+  row.appendChild(mk('review','🟡','Review',counts.review));
+}
+function riskBadgeText(risk){ return risk==='high' ? '🔴 High' : risk==='medium' ? '🟠 Medium' : '🟡 Review'; }
+function renderDetectionList(){
+  const wrap = document.getElementById('detectList');
+  wrap.innerHTML = '';
+  if(!state.detections.length){
+    wrap.appendChild(el('p', null, state.ocrFailed ? 'No automatic detections — use Manual Redact below to cover sensitive areas yourself.' : 'No sensitive information was automatically detected. Review the image yourself before sharing.'));
+    return;
+  }
+  const sorted = state.detections.slice().sort((a,b) => {
+    if(a.applied !== b.applied) return a.applied ? 1 : -1;
+    const order = { high:0, medium:1, review:2 };
+    return order[a.risk] - order[b.risk];
+  });
+  sorted.forEach(d => {
+    const item = el('button','detect-item risk-'+d.risk + (d.applied?' applied':'') + (d.checked?' checked':''));
+    item.type = 'button';
+    item.setAttribute('aria-pressed', d.checked ? 'true' : 'false');
+    item.setAttribute('aria-label', d.label + ', ' + riskBadgeText(d.risk).replace(/^\S+\s/,'') + ' confidence' + (d.applied?', already redacted':''));
+    const check = el('span','di-check', d.checked ? '✓' : '');
+    const body = el('div','di-body');
+    body.appendChild(el('div','di-label', d.icon + ' ' + d.label));
+    if(d.maskedDisplay) body.appendChild(el('div','di-value', d.maskedDisplay));
+    item.appendChild(check);
+    item.appendChild(body);
+    if(d.applied){
+      item.appendChild(el('span','di-tag','✅ Redacted'));
+    } else {
+      item.appendChild(el('span','di-badge '+d.risk, riskBadgeText(d.risk)));
+    }
+    item.addEventListener('click', () => {
+      if(d.applied){ highlightDetection(d.id); return; }
+      d.checked = !d.checked;
+      renderDetectionList();
+      drawOverlay();
+      updateProtectAvailability();
+    });
+    wrap.appendChild(item);
+  });
+}
+function updateProtectAvailability(){
+  const anyChecked = state.detections.some(d => d.checked && !d.applied);
+  document.getElementById('protectBtn').disabled = !anyChecked;
+}
+function highlightDetection(id){
+  const d = findDetection(id);
+  if(!d) return;
+  state.highlightId = id;
+  drawOverlay();
+  const targetX = (d.x + d.w/2) * state.zoom - viewerStage.clientWidth/2;
+  const targetY = (d.y + d.h/2) * state.zoom - viewerStage.clientHeight/2;
+  viewerStage.scrollTo({ left: Math.max(0,targetX), top: Math.max(0,targetY), behavior:'smooth' });
+  setTimeout(() => { if(state.highlightId === id){ state.highlightId = null; drawOverlay(); } }, 1600);
+}
+function redactAll(){
+  state.detections.forEach(d => { if(!d.applied && (CATEGORIES[d.category].autoSelect || d.risk === 'high' || (d.category==='postcode' && state.postcodeAuto))) d.checked = true; });
+  renderDetectionList();
+  protectScreenshot();
+}
+function selectNone(){
+  state.detections.forEach(d => { if(!d.applied) d.checked = false; });
+  renderDetectionList();
+  updateProtectAvailability();
+}
+function reviewAll(){
+  const unapplied = state.detections.filter(d => !d.applied);
+  if(!unapplied.length) return;
+  viewerStage.scrollIntoView({ behavior:'smooth', block:'center' });
+  const ctx = overlayCanvas.getContext('2d');
+  let flashes = 0;
+  const flashOn = () => {
+    drawOverlay();
+    unapplied.forEach(d => {
+      ctx.save(); ctx.fillStyle = 'rgba(0,200,255,0.28)'; ctx.fillRect(d.x,d.y,d.w,d.h); ctx.restore();
+    });
+  };
+  const iv = setInterval(() => {
+    flashes++;
+    if(flashes % 2 === 1) flashOn(); else drawOverlay();
+    if(flashes >= 4) clearInterval(iv);
+  }, 260);
+}
+function protectScreenshot(){
+  const toApply = state.detections.filter(d => d.checked && !d.applied);
+  toApply.forEach(d => {
+    const mode = CATEGORIES[d.category].defaultMode;
+    state.redactions.push({ id:uid(), x:d.x, y:d.y, w:d.w, h:d.h, mode, detectionId:d.id, source:'auto' });
+    d.applied = true;
+  });
+  state.redoStack.length = 0;
+  renderDetectionList();
+  renderAll();
+  computePrivacyScore();
+  updateProtectAvailability();
+  if(toApply.length){ setCompareView('protected'); toast('🔒 Protected ' + toApply.length + ' item' + (toApply.length===1?'':'s')); }
+}
+
+/* ---------------- components/PrivacyScore ---------------- */
+function computePrivacyScore(){
+  if(state.ocrFailed){
+    const hero = document.getElementById('scoreHero');
+    hero.style.display = 'block';
+    hero.className = 'score-hero band-caution';
+    document.getElementById('bandBadge').textContent = '🛡️ Privacy Score Unavailable';
+    document.getElementById('scoreNum').innerHTML = '—';
+    document.getElementById('verdictLine').textContent = 'Automated scanning could not read this image. Review and redact manually before sharing.';
+    document.getElementById('meterFill').style.width = '0%';
+    return;
+  }
+  if(!state.scanned) return;
+  const remaining = state.detections.filter(d => !d.applied);
+  let score = 100;
+  remaining.forEach(d => { score -= d.risk==='high' ? 15 : d.risk==='medium' ? 8 : 3; });
+  score = clamp(Math.round(score), 0, 98);
+  const band = score>=90 ? 'low' : score>=70 ? 'caution' : score>=40 ? 'suspicious' : 'high';
+  const hero = document.getElementById('scoreHero');
+  hero.style.display = 'block';
+  hero.className = 'score-hero band-' + band;
+  document.getElementById('bandBadge').textContent = '🛡️ Privacy Score';
+  document.getElementById('scoreNum').innerHTML = score + '<span>/100</span>';
+  document.getElementById('verdictLine').textContent = remaining.length === 0
+    ? 'No obvious sensitive information remains.'
+    : 'We recommend reviewing ' + remaining.length + ' area' + (remaining.length===1?'':'s') + ' before sharing.';
+  document.getElementById('meterFill').style.width = score + '%';
+}
+
+/* ---------------- export/ ---------------- */
+function onFormatChange(){
+  const fmt = document.getElementById('exportFormat').value;
+  document.getElementById('qualityGroup').style.display = fmt === 'image/jpeg' ? 'flex' : 'none';
+}
+function showFinalCheckUI(kind, findings){
+  const box = document.getElementById('finalCheck');
+  box.innerHTML = '';
+  box.className = 'finalcheck ' + kind;
+  box.style.display = 'block';
+  if(kind === 'scanning'){
+    box.appendChild(el('h5', null, '🔍 Final Privacy Check'));
+    box.appendChild(el('p', null, 'Re-scanning the protected image before download…'));
+    return;
+  }
+  if(kind === 'clean'){
+    box.appendChild(el('h5', null, '✅ Final Privacy Check Passed'));
+    box.appendChild(el('p', null, 'No obvious sensitive information was found in the protected image.'));
+    return;
+  }
+  if(kind === 'unknown'){
+    box.appendChild(el('h5', null, '⚠️ Final Check Unavailable'));
+    box.appendChild(el('p', null, "We couldn't re-scan the protected image automatically. Please review it yourself before sharing."));
+    const row = el('div','btn-row');
+    const dlBtn = el('button','action-btn','Download Anyway');
+    dlBtn.onclick = () => proceedDownload(state.pendingExportCanvas);
+    row.appendChild(dlBtn);
+    box.appendChild(row);
+    return;
+  }
+  // warn
+  box.appendChild(el('h5', null, '⚠️ ' + findings.length + ' possible sensitive item' + (findings.length===1?'':'s') + ' still visible'));
+  box.appendChild(el('p', null, 'The final check found information that may still be visible in the protected image. We recommend reviewing these before downloading.'));
+  const list = el('div','detect-list');
+  findings.forEach(f => {
+    const cat = CATEGORIES[f.category];
+    const row = el('div','detect-item risk-'+cat.risk);
+    row.appendChild(el('span','di-check',''));
+    const body = el('div','di-body');
+    body.appendChild(el('div','di-label', cat.icon + ' ' + cat.label));
+    const masked = maskValue(f.category, f.rawValue);
+    if(masked) body.appendChild(el('div','di-value', masked));
+    row.appendChild(body);
+    list.appendChild(row);
+  });
+  box.appendChild(list);
+  const row = el('div','btn-row');
+  row.style.marginTop = '12px';
+  const reviewBtn = el('button','action-btn','Review Again');
+  reviewBtn.onclick = () => {
+    const added = finalizeDetections(findings, state.postcodeAuto);
+    added.forEach(d => state.detections.push(d));
+    renderSummary(); renderDetectionList(); drawOverlay(); updateProtectAvailability();
+    box.style.display = 'none';
+    document.getElementById('detectPanel').scrollIntoView({ behavior:'smooth', block:'center' });
+  };
+  const dlBtn = el('button','action-btn danger','Download Anyway');
+  dlBtn.onclick = () => proceedDownload(state.pendingExportCanvas);
+  row.appendChild(reviewBtn); row.appendChild(dlBtn);
+  box.appendChild(row);
+}
+async function downloadProtected(){
+  if(!state.originalImage) return;
+  document.getElementById('successBox').style.display = 'none';
+  const exportCanvas = buildExportCanvas();
+  state.pendingExportCanvas = exportCanvas;
+  showFinalCheckUI('scanning');
+  let result;
+  const checkCanvas = document.createElement('canvas');
+  const scale = Math.min(1, OCR_MAX_DIM / Math.max(imgW, imgH));
+  const cw = Math.max(1, Math.round(imgW*scale)), ch = Math.max(1, Math.round(imgH*scale));
+  checkCanvas.width = cw; checkCanvas.height = ch;
+  checkCanvas.getContext('2d').drawImage(exportCanvas, 0, 0, cw, ch);
+  try{ result = await performOCRAndDetect(checkCanvas, 1/scale, 1/scale); }
+  catch(e){ result = { ocrFailed:true, detections:[] }; }
+  hideScanStatus();
+  if(result.ocrFailed){
+    showFinalCheckUI('unknown');
+    return;
+  }
+  if(result.detections.length){
+    showFinalCheckUI('warn', result.detections);
+    return;
+  }
+  showFinalCheckUI('clean');
+  proceedDownload(exportCanvas);
+}
+function proceedDownload(canvas){
+  if(!canvas) return;
+  const fmt = document.getElementById('exportFormat').value;
+  const quality = fmt === 'image/jpeg' ? parseFloat(document.getElementById('exportQuality').value) : undefined;
+  canvas.toBlob(blob => {
+    if(!blob) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = state.baseName + '-protected' + (fmt === 'image/jpeg' ? '.jpg' : '.png');
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    showSuccessConfirmation();
+  }, fmt, quality);
+}
+function showSuccessConfirmation(){
+  const box = document.getElementById('successBox');
+  box.innerHTML = '';
+  box.style.display = 'block';
+  box.appendChild(el('h5', null, '✅ Protected screenshot created'));
+  box.appendChild(el('p', null, 'Your protected image was generated on your device.'));
+  box.appendChild(el('p', null, '🧹 Metadata removed — exporting re-encodes the image, which strips EXIF, GPS and camera data automatically.'));
+  box.appendChild(el('p', null, 'Remember to review the screenshot manually before sharing. Automated detection cannot guarantee that every sensitive detail has been found.'));
+  box.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+/* ---------------- Preferences (UI settings only — never image data) ---------------- */
+function loadPrefs(){
+  try{
+    const raw = localStorage.getItem(PREF_KEY);
+    if(raw){
+      const p = JSON.parse(raw);
+      state.itMode = !!p.itMode;
+      state.postcodeAuto = !!p.postcodeAuto;
+    }
+  }catch(e){ /* storage unavailable — ignore */ }
+}
+function savePrefs(){
+  try{ localStorage.setItem(PREF_KEY, JSON.stringify({ itMode:state.itMode, postcodeAuto:state.postcodeAuto })); }
+  catch(e){ /* storage unavailable — ignore */ }
+}
+
+/* ---------------- Init ---------------- */
+function toggleMobileMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadPrefs();
+  const itToggle = document.getElementById('itModeToggle');
+  const pcToggle = document.getElementById('postcodeToggle');
+  itToggle.checked = state.itMode;
+  pcToggle.checked = state.postcodeAuto;
+  itToggle.addEventListener('change', () => { state.itMode = itToggle.checked; savePrefs(); });
+  pcToggle.addEventListener('change', () => {
+    state.postcodeAuto = pcToggle.checked;
+    savePrefs();
+    state.detections.forEach(d => { if(d.category === 'postcode' && !d.applied) d.checked = state.postcodeAuto; });
+    if(state.scanned){ renderDetectionList(); updateProtectAvailability(); }
+  });
+
+  if(location.search.indexOf('selftest') > -1) runSelfTests();
+});
+
+/* ----------------------------------------------------------------------------
+   Self-tests (?selftest=1) — this repo is static HTML/JS with no build step
+   or test runner, so this is the pragmatic stand-in for an automated suite:
+   it exercises the exact same runDetectors() code path OCR results use, via
+   synthetic word-boxes, and reports PASS/FAIL for detection + false-positive
+   cases. Open screenshot-privacy.html?selftest=1 to run it.
+   ---------------------------------------------------------------------------- */
+function makeSyntheticLine(text){
+  const words = text.split(/\s+/).filter(Boolean);
+  let cursor = 0;
+  return { words: words.map((w,i) => {
+    const bbox = { x0:i*10, y0:0, x1:i*10 + Math.max(1,w.length), y1:10 };
+    cursor += w.length + 1;
+    return { text:w, bbox };
+  }) };
+}
+function runSelfTests(){
+  const cases = [
+    { name:'email', text:'Contact john@example.com now', cat:'email', shouldFind:true },
+    { name:'uk-mobile', text:'Call 07700 900123 today', cat:'phone', shouldFind:true },
+    { name:'ipv4', text:'Server IP 192.168.1.25 is down', cat:'ip', shouldFind:true },
+    { name:'url-scheme', text:'Visit https://example.com/login now', cat:'url', shouldFind:true },
+    { name:'card-valid-luhn', text:'Card 4111 1111 1111 1111 charged', cat:'card', shouldFind:true },
+    { name:'card-invalid-luhn', text:'Card 4111 1111 1111 1121 charged', cat:'card', shouldFind:false },
+    { name:'iban', text:'IBAN GB29 NWBK 6016 1331 9268 19', cat:'iban', shouldFind:true },
+    { name:'jwt', text:'Token eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U', cat:'secret', shouldFind:true },
+    { name:'github-token', text:'set token to ghp_abcdefghijklmnopqrstuvwxyz012345', cat:'secret', shouldFind:true },
+    { name:'postcode', text:'Send to CR0 1AA please', cat:'postcode', shouldFind:true },
+    { name:'sortcode', text:'Sort code 12-34-56 account 12345678', cat:'banking', shouldFind:true },
+    { name:'unc-path', text:'Share is \\\\FILESERVER01\\Finance for everyone', cat:'windowsit', shouldFind:true },
+    { name:'internal-domain', text:'Server: DC01.company.local is the DC', cat:'windowsit', shouldFind:true },
+    { name:'fp-plain-order-number', text:'Order number 123456 confirmed', cat:'banking', shouldFind:false },
+    { name:'fp-example-domain-still-flagged-as-url', text:'See example.com/login for details', cat:'url', shouldFind:true },
+    { name:'mention-low-confidence-not-autoselected', text:'Thanks @john for the update', cat:'username', shouldFind:true, expectAutoSelect:false },
+  ];
+  const lines = [];
+  let pass = 0, fail = 0;
+  cases.forEach(c => {
+    const line = makeSyntheticLine(c.text);
+    const found = [];
+    runDetectors(line, found, true);
+    const resolved = resolveOverlaps(found);
+    const match = resolved.find(f => f.category === c.cat);
+    let ok = c.shouldFind ? !!match : !match;
+    let note = '';
+    if(ok && c.expectAutoSelect === false && match){
+      const autoSel = c.cat === 'postcode' ? false : CATEGORIES[c.cat].autoSelect;
+      if(autoSel){ ok = false; note = ' (expected NOT auto-selected)'; }
+    }
+    if(ok){ pass++; } else { fail++; }
+    lines.push((ok ? 'PASS' : 'FAIL') + '  ' + c.name + note + '  ->  ' + JSON.stringify(c.text));
+  });
+  const summary = 'Screenshot Privacy self-tests: ' + pass + ' passed, ' + fail + ' failed (' + cases.length + ' total)';
+  lines.unshift(summary, '');
+  console.log(summary);
+  console.table(cases.map((c,i) => ({ name:c.name, result:lines[i+2].slice(0,4) })));
+  const panel = document.getElementById('selfTestPanel');
+  panel.textContent = lines.join('\n');
+  panel.style.display = 'block';
+}
+</script>
+
+</body>
+</html>

@@ -792,7 +792,17 @@ function detectUrl(text, spans, out){
 }
 function detectSecrets(text, spans, out){
   const patterns = [
-    { re:/\b(?:api[_-]?key|secret|access[_-]?token|client[_-]?secret)\s*[:=]\s*['"]?[A-Za-z0-9_\-\.\/+=]{8,}['"]?/gi, conf:0.75 },
+    // Separator between the two label words allows a literal space too ("API Key:"), not just
+    // underscore/hyphen ("API_KEY=") — a real miss found via user testing: "API Key: ..." (the
+    // common human-readable form) didn't match when only api[_-]?key was allowed.
+    { re:/\b(?:api[_\s-]?key|secret|access[_\s-]?token|client[_\s-]?secret)\s*[:=]\s*['"]?[A-Za-z0-9_\-\.\/+=]{8,}['"]?/gi, conf:0.75 },
+    // Plain "Password:" / "Pwd:" label — distinct from the PowerShell-specific $password= pattern
+    // in detectWindowsIT, which only fires on script syntax. This catches the far more common
+    // "Password: value" shown in forms, phishing simulations, credential dumps, etc.
+    { re:/\b(?:password|pwd)\s*[:=]\s*['"]?\S{4,64}['"]?/gi, conf:0.75 },
+    // MFA / one-time-password codes — effectively a temporary credential, gated behind an explicit
+    // label so a random 4-8 digit number elsewhere isn't flagged.
+    { re:/\b(?:mfa\s*code|one[- ]?time\s*(?:code|password|passcode)|otp|security\s*code|verification\s*code)\s*[:=]\s*\d{4,8}\b/gi, conf:0.6 },
     { re:/\bBearer\s+[A-Za-z0-9\-_.=]{10,}/gi, conf:0.85 },
     { re:/\bgh[pousr]_[A-Za-z0-9]{20,40}\b/g, conf:0.95 },
     { re:/\b(?:sk|pk|rk)_(?:live|test)_[A-Za-z0-9]{16,}\b/g, conf:0.95 },
@@ -1023,6 +1033,11 @@ function runCrossLineDetectors(lines, out){
     if(!labelLine || labelLine.length > 45 || !bboxes[i]) continue;
     const hit = CROSS_LINE_LABELS.find(l => l.re.test(labelLine));
     if(!hit) continue;
+    // "IP Address:", "Email Address:" etc. contain "address" as a substring but aren't a postal
+    // address field — without this guard, a line like "IP Address: 192.168.1.25" was wrongly
+    // treated as a bare address label with a "missing" value, and the multi-line address fallback
+    // below it then swallowed several unrelated following lines as if they were a stacked address.
+    if(hit.cat === 'address' && /\b(?:ip|e-?mail|mac|web|url)\s+address/i.test(labelLine)) continue;
 
     const rowCandidates = findSameRowCandidates(built, bboxes, i, bboxes[i]).filter(c => !isNewFieldLine(c.line.text.trim()));
 
@@ -1130,6 +1145,10 @@ function detectLabeledFields(text, spans, out){
   while((m = addrRe.exec(text))){
     const val = m[1].trim();
     if(!val) continue;
+    // "IP Address:", "Email Address:" etc. — the word right before the match isn't a postal
+    // address qualifier, it's a completely different field ("IP Address: 1.2.3.4" is an IP).
+    const precedingWord = text.slice(0, m.index).trim().split(/\s+/).pop() || '';
+    if(/^(?:ip|e-?mail|mac|web|url)$/i.test(precedingWord)) continue;
     const start = m.index + m[0].lastIndexOf(m[1]);
     const bbox = mapRangeToBBox(spans, start, start + val.length);
     if(bbox) out.push({ category:'address', rawValue:val, confidence:0.5, ...bbox });
@@ -2128,6 +2147,18 @@ function runSelfTests(){
     // stray text before ever trying the date pattern.
     { name:'address-same-line', text:'Address: 10 Example Street, Sometown', cat:'address', shouldFind:true },
     { name:'fp-address-substring-in-unrelated-label', text:'2. Address effective from: Not Entered', cat:'address', shouldFind:false },
+    // Found via a real user test document (phishing-simulation screenshot with fake credentials).
+    { name:'api-key-with-space-separator', text:'API Key: TEST_API_KEY_DO_NOT_USE_1234567890', cat:'secret', shouldFind:true },
+    { name:'password-label', text:'Password: FakePassword123!', cat:'secret', shouldFind:true },
+    { name:'mfa-code-label', text:'MFA Code: 123456', cat:'secret', shouldFind:true },
+    { name:'fp-password-prose-mention-no-value', text:'Please enter your password when prompted.', cat:'secret', shouldFind:false },
+    // "IP Address:" contains the substring "address" but isn't a postal address field — found via
+    // the same real test document: it was wrongly triggering the address cross-line heuristic,
+    // which then swallowed several unrelated following lines as a fake "stacked address block".
+    { name:'fp-ip-address-same-line-not-postal', text:'IP Address: 192.168.1.25', cat:'address', shouldFind:false },
+    { name:'ip-still-found-on-ip-address-labeled-line', text:'IP Address: 192.168.1.25', cat:'ip', shouldFind:true },
+    { name:'fp-ip-address-cross-line-does-not-eat-following-lines', lines:['IP Address: 192.168.1.25','Server: DC01.company.internal','Tenant ID: 12345678-1234-1234-1234-123456789012'], cat:'address', shouldFind:false },
+    { name:'fp-email-address-label-not-postal', text:'Email Address: john@example.com', cat:'address', shouldFind:false },
     { name:'dob-same-line-with-noise-gap', text:'Date of birth xyz 03/11/1986', cat:'dob', shouldFind:true },
   ];
   const lines = [];

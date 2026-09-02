@@ -23,7 +23,8 @@
     {"@type":"Question","name":"Can I manually redact part of a screenshot?","acceptedAnswer":{"@type":"Answer","text":"Yes. Manual Redact lets you draw a rectangle over any area and cover it with blur, pixelation or a solid block, in addition to whatever automatic detection finds."}},
     {"@type":"Question","name":"Is screenshot redaction permanent?","acceptedAnswer":{"@type":"Answer","text":"Redactions are only baked into the image you download. Your original screenshot stays untouched in the editor until you close or refresh the page, so you can undo, redo or reset at any time before exporting."}},
     {"@type":"Question","name":"Is blur safe for passwords?","acceptedAnswer":{"@type":"Answer","text":"Not recommended. Blur can sometimes be partially reversed or may not fully obscure high-contrast text. For passwords, API keys, tokens and card numbers, use Solid Cover instead."}},
-    {"@type":"Question","name":"What information should I hide before sharing a screenshot?","acceptedAnswer":{"@type":"Answer","text":"Common candidates include email addresses, phone numbers, IP addresses, internal hostnames or file paths, API keys and tokens, payment card or bank details, and anything that identifies a person, account or internal system that isn't relevant to what you're sharing."}}
+    {"@type":"Question","name":"What information should I hide before sharing a screenshot?","acceptedAnswer":{"@type":"Answer","text":"Common candidates include full names, National Insurance numbers, dates of birth, email addresses, phone numbers, IP addresses, internal hostnames or file paths, API keys and tokens, payment card, bank or tax reference details, and anything that identifies a person, account or internal system that isn't relevant to what you're sharing."}},
+    {"@type":"Question","name":"Can it detect names and National Insurance numbers on tax or HR documents?","acceptedAnswer":{"@type":"Answer","text":"Yes. It recognises the standard UK National Insurance number format and HMRC Unique Taxpayer Reference (UTR) directly, and looks for names and dates of birth next to common form labels like \"Name:\" or \"Date of Birth:\", including when the label and value are on separate lines. Because a name has no fixed structural pattern the way an email address does, this is a best-effort heuristic rather than a guarantee — always review the whole screenshot yourself, and use Manual Redact for anything it misses."}}
   ]
 }
 </script>
@@ -470,6 +471,7 @@ footer a{color:var(--green);text-decoration:none}
       <div class="info-card"><div class="ico">🏢</div><h4>Microsoft 365 / Entra IDs</h4><p>Tenant, application and object identifiers may expose organisational details.</p></div>
       <div class="info-card"><div class="ico">🔗</div><h4>URLs</h4><p>May contain sensitive paths, access tokens, or point to internal-only systems.</p></div>
       <div class="info-card"><div class="ico">📍</div><h4>GPS Metadata</h4><p>Can reveal exactly where a photo was taken, even if the image itself shows nothing sensitive.</p></div>
+      <div class="info-card"><div class="ico">🪪</div><h4>Names, NI Numbers &amp; Tax References</h4><p>Screenshots of tax returns, HR systems or ID documents often contain a full name, National Insurance number or UTR next to a "Name:" or "NI No:" label — exactly the kind of information worth double-checking before you share.</p></div>
     </div>
   </div>
 
@@ -492,7 +494,8 @@ footer a{color:var(--green);text-decoration:none}
       <div class="info-card"><h4 style="margin-bottom:6px">Can I manually redact part of a screenshot?</h4><p>Yes. Manual Redact lets you draw a rectangle over any area and cover it with blur, pixelation or a solid block, in addition to whatever automatic detection finds.</p></div>
       <div class="info-card"><h4 style="margin-bottom:6px">Is screenshot redaction permanent?</h4><p>Redactions are only baked into the image you download. Your original screenshot stays untouched in the editor until you close or refresh the page, so you can undo, redo or reset at any time before exporting.</p></div>
       <div class="info-card"><h4 style="margin-bottom:6px">Is blur safe for passwords?</h4><p>Not recommended. Blur can sometimes be partially reversed or may not fully obscure high-contrast text. For passwords, API keys, tokens and card numbers, use Solid Cover instead.</p></div>
-      <div class="info-card"><h4 style="margin-bottom:6px">What information should I hide before sharing a screenshot?</h4><p>Common candidates include email addresses, phone numbers, IP addresses, internal hostnames or file paths, API keys and tokens, payment card or bank details, and anything that identifies a person, account or internal system that isn't relevant to what you're sharing.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">What information should I hide before sharing a screenshot?</h4><p>Common candidates include full names, National Insurance numbers, dates of birth, email addresses, phone numbers, IP addresses, internal hostnames or file paths, API keys and tokens, payment card, bank or tax reference details, and anything that identifies a person, account or internal system that isn't relevant to what you're sharing.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Can it detect names and National Insurance numbers on tax or HR documents?</h4><p>Yes. It recognises the standard UK National Insurance number format and HMRC Unique Taxpayer Reference (UTR) directly, and looks for names and dates of birth next to common form labels like "Name:" or "Date of Birth:", including when the label and value are on separate lines. Because a name has no fixed structural pattern the way an email address does, this is a best-effort heuristic rather than a guarantee — always review the whole screenshot yourself, and use Manual Redact for anything it misses.</p></div>
     </div>
   </div>
 
@@ -543,16 +546,20 @@ footer a{color:var(--green);text-decoration:none}
 const MAX_BYTES = 20 * 1024 * 1024;
 const MAX_DIM_HARD = 16000;
 const MAX_MEGAPIXELS_HARD = 120;
-const OCR_MAX_DIM = 2200;
+const OCR_MAX_DIM = 3000;
 const PREF_KEY = 'ssp_prefs_v1';
 
 const CATEGORIES = {
   secret:    { icon:'🔑', label:'Possible secret/token', risk:'high', defaultMode:'cover', autoSelect:true },
   card:      { icon:'💳', label:'Payment card number', risk:'high', defaultMode:'cover', autoSelect:true },
   iban:      { icon:'🏦', label:'IBAN', risk:'high', defaultMode:'cover', autoSelect:true },
+  nino:      { icon:'🪪', label:'Possible National Insurance number', risk:'high', defaultMode:'cover', autoSelect:true },
+  taxid:     { icon:'🪪', label:'Possible tax/ID reference (e.g. UTR)', risk:'high', defaultMode:'cover', autoSelect:true },
   banking:   { icon:'🏦', label:'Possible banking information', risk:'high', defaultMode:'cover', autoSelect:false },
   windowsit: { icon:'🔐', label:'Possible credential or internal IT information', risk:'high', defaultMode:'cover', autoSelect:true },
   m365:      { icon:'🏢', label:'Possible Microsoft 365 tenant information', risk:'medium', defaultMode:'blur', autoSelect:false },
+  name:      { icon:'👤', label:'Possible personal name', risk:'medium', defaultMode:'blur', autoSelect:true },
+  dob:       { icon:'🎂', label:'Possible date of birth', risk:'medium', defaultMode:'blur', autoSelect:true },
   email:     { icon:'📧', label:'Email address', risk:'medium', defaultMode:'blur', autoSelect:true },
   phone:     { icon:'📱', label:'Phone number', risk:'medium', defaultMode:'blur', autoSelect:true },
   ip:        { icon:'🌐', label:'IP address', risk:'medium', defaultMode:'blur', autoSelect:true },
@@ -561,7 +568,7 @@ const CATEGORIES = {
   address:   { icon:'📍', label:'Possible address', risk:'review', defaultMode:'blur', autoSelect:false },
   username:  { icon:'👤', label:'Username', risk:'review', defaultMode:'blur', autoSelect:false },
 };
-const PRIORITY = ['secret','card','iban','address','email','url','ip','phone','banking','m365','windowsit','postcode','username'];
+const PRIORITY = ['secret','card','iban','nino','taxid','address','name','dob','email','url','ip','phone','banking','m365','windowsit','postcode','username'];
 
 /* ---------------- STATE ---------------- */
 const state = {
@@ -682,6 +689,14 @@ function maskValue(cat, raw){
       return '@' + raw.replace(/^@/,'').slice(0,1) + '•••';
     case 'm365':
       return raw.slice(0,4) + '••••-••••-••••-••••••••••••';
+    case 'nino':
+      return raw.slice(0,2) + ' •• •• •• ' + raw.slice(-1);
+    case 'name': {
+      const parts = raw.trim().split(/\s+/).filter(Boolean);
+      return parts.map(p => p.slice(0,1) + '•••').join(' ');
+    }
+    case 'dob':
+      return '••/••/••••';
     default:
       return '';
   }
@@ -919,8 +934,70 @@ function detectM365(text, spans, out){
     if(bbox) out.push({ category:'m365', rawValue:m[0], confidence:0.6, ...bbox });
   }
 }
+// UK National Insurance number: 2 letters (excluding D,F,I,Q,U,V as 1st and D,F,I,Q,U,V,O as 2nd,
+// and excluding the reserved prefixes BG/GB/NK/KN/TN/NT/ZZ), 6 digits, 1 suffix letter A-D.
+function detectNino(text, spans, out){
+  const re = /\b(?!BG|GB|NK|KN|TN|NT|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z]\s?\d{2}\s?\d{2}\s?\d{2}\s?[A-D]\b/gi;
+  let m;
+  while((m = re.exec(text))){
+    const bbox = mapRangeToBBox(spans, m.index, m.index + m[0].length);
+    if(bbox) out.push({ category:'nino', rawValue:m[0].replace(/\s+/g,''), confidence:0.9, ...bbox });
+  }
+}
+// HMRC Unique Taxpayer Reference: 10 digits, almost always shown right next to a "UTR" label —
+// context-gated the same way as bank account numbers, since a bare 10-digit run is too ambiguous.
+function detectTaxRef(text, spans, out){
+  const re = /\b(?:UTR|Unique\s*Taxpayer\s*Reference)\s*[:\-]?\s*(\d{5}\s?\d{5})\b/gi;
+  let m;
+  while((m = re.exec(text))){
+    const val = m[1].replace(/\s+/g,'');
+    const start = m.index + m[0].lastIndexOf(m[1]);
+    const bbox = mapRangeToBBox(spans, start, start + m[1].length);
+    if(bbox) out.push({ category:'taxid', rawValue:val, confidence:0.75, ...bbox });
+  }
+}
+// Cross-line "Label:\nValue" heuristic — many real-world forms and portals (HMRC, invoices, ID
+// documents) put a field label on its own line with the value on the next line, which per-line
+// regexes can never catch since a personal name, DOB or address has no structural pattern of its
+// own. Low-to-medium confidence by design; always reviewable, never silently trusted.
+function runCrossLineDetectors(lines, out){
+  const built = lines.map(buildLineText);
+  const labelRe = /^(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|name|national\s*insurance(?:\s*number)?|ni\s*no\.?|nino|date\s*of\s*birth|dob|d\.?o\.?b\.?|address)\s*:?\s*$/i;
+  for(let i = 0; i < built.length - 1; i++){
+    const t = built[i].text.trim();
+    const m = labelRe.exec(t);
+    if(!m) continue;
+    const kind = m[1].toLowerCase().replace(/\s+/g,' ');
+    const nextText = built[i+1].text.trim();
+    if(!nextText || nextText.length > 60) continue;
+    let category = null;
+    if(/national|ni\s*no|nino/.test(kind)) category = 'nino';
+    else if(/birth|dob/.test(kind)) category = 'dob';
+    else if(/address/.test(kind)) category = 'address';
+    else if(/name|account\s*holder/.test(kind)) category = 'name';
+    if(!category) continue;
+    const bbox = mapRangeToBBox(built[i+1].spans, 0, nextText.length);
+    if(bbox) out.push({ category, rawValue:nextText, confidence:0.55, ...bbox });
+  }
+}
 
-const DETECTORS = [detectSecrets, detectCards, detectIban, detectAddress, detectEmail, detectUrl, detectIp, detectPhone, detectBanking, detectPostcode, detectUsername];
+// Same-line "Label: Value" fields — e.g. "Name: John Smith" or "Date of Birth: 12/04/1980" all on
+// one OCR line. The cross-line heuristic below handles the label-on-its-own-line case separately.
+function detectLabeledFields(text, spans, out){
+  const re = /\b(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|name|date\s*of\s*birth|dob)\s*:\s*([A-Za-z][A-Za-z '.-]{1,40}|\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})/gi;
+  let m;
+  while((m = re.exec(text))){
+    const kind = m[1].toLowerCase();
+    const val = m[2].trim();
+    if(!val) continue;
+    const category = /birth|dob/.test(kind) ? 'dob' : 'name';
+    const start = m.index + m[0].lastIndexOf(m[2]);
+    const bbox = mapRangeToBBox(spans, start, start + val.length);
+    if(bbox) out.push({ category, rawValue:val, confidence:0.65, ...bbox });
+  }
+}
+
+const DETECTORS = [detectSecrets, detectCards, detectIban, detectNino, detectTaxRef, detectLabeledFields, detectAddress, detectEmail, detectUrl, detectIp, detectPhone, detectBanking, detectPostcode, detectUsername];
 
 function runDetectors(line, out, itMode){
   const { text, spans } = buildLineText(line);
@@ -1027,6 +1104,7 @@ async function performOCRAndDetect(canvas, scaleBackX, scaleBackY){
   const lines = flattenLines(data);
   const found = [];
   lines.forEach(line => runDetectors(line, found, state.itMode));
+  runCrossLineDetectors(lines, found);
   found.forEach(f => { f.x *= scaleBackX; f.y *= scaleBackY; f.w *= scaleBackX; f.h *= scaleBackY; });
   const resolved = resolveOverlaps(found);
   setScanStatus('Scan complete.', 100);
@@ -1857,13 +1935,29 @@ function runSelfTests(){
     { name:'fp-plain-order-number', text:'Order number 123456 confirmed', cat:'banking', shouldFind:false },
     { name:'fp-example-domain-still-flagged-as-url', text:'See example.com/login for details', cat:'url', shouldFind:true },
     { name:'mention-low-confidence-not-autoselected', text:'Thanks @john for the update', cat:'username', shouldFind:true, expectAutoSelect:false },
+    { name:'nino-same-line', text:'National Insurance no: AB 12 34 56 C', cat:'nino', shouldFind:true },
+    { name:'fp-nino-hmrc-placeholder-QQ-not-real', text:'e.g. QQ 12 34 56 C', cat:'nino', shouldFind:false },
+    { name:'utr-labeled', text:'UTR: 1234567890 for this return', cat:'taxid', shouldFind:true },
+    { name:'fp-bare-10-digits-not-utr', text:'Reference 1234567890 noted', cat:'taxid', shouldFind:false },
+    { name:'name-same-line', text:'Name: John Smith', cat:'name', shouldFind:true },
+    { name:'dob-same-line', text:'Date of Birth: 12/04/1980', cat:'dob', shouldFind:true },
+    { name:'name-cross-line-label', lines:['Full Name', 'John Smith'], cat:'name', shouldFind:true },
+    { name:'nino-cross-line-label', lines:['National Insurance Number', 'AB123456C'], cat:'nino', shouldFind:true },
   ];
   const lines = [];
   let pass = 0, fail = 0;
   cases.forEach(c => {
-    const line = makeSyntheticLine(c.text);
     const found = [];
-    runDetectors(line, found, true);
+    let displayText;
+    if(c.lines){
+      const synthLines = c.lines.map(makeSyntheticLine);
+      runCrossLineDetectors(synthLines, found);
+      displayText = c.lines.join(' / ');
+    } else {
+      const line = makeSyntheticLine(c.text);
+      runDetectors(line, found, true);
+      displayText = c.text;
+    }
     const resolved = resolveOverlaps(found);
     const match = resolved.find(f => f.category === c.cat);
     let ok = c.shouldFind ? !!match : !match;
@@ -1873,7 +1967,7 @@ function runSelfTests(){
       if(autoSel){ ok = false; note = ' (expected NOT auto-selected)'; }
     }
     if(ok){ pass++; } else { fail++; }
-    lines.push((ok ? 'PASS' : 'FAIL') + '  ' + c.name + note + '  ->  ' + JSON.stringify(c.text));
+    lines.push((ok ? 'PASS' : 'FAIL') + '  ' + c.name + note + '  ->  ' + JSON.stringify(displayText));
   });
   const summary = 'Screenshot Privacy self-tests: ' + pass + ' passed, ' + fail + ' failed (' + cases.length + ' total)';
   lines.unshift(summary, '');

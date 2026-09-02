@@ -975,20 +975,65 @@ const CROSS_LINE_LABELS = [
   { re:/\b(unique\s*taxpayer\s*reference|\butr\b)/i, cat:'taxid' },
 ];
 const UK_POSTCODE_RE = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/i;
+
+// Union bbox of every word in a built line — used to find lines that sit on the same visual row.
+function lineBBoxFromSpans(spans){
+  if(!spans.length) return null;
+  let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;
+  spans.forEach(s => { x0=Math.min(x0,s.bbox.x0); y0=Math.min(y0,s.bbox.y0); x1=Math.max(x1,s.bbox.x1); y1=Math.max(y1,s.bbox.y1); });
+  return { x0, y0, x1, y1 };
+}
+function vOverlapRatio(a, b){
+  const inter = Math.max(0, Math.min(a.y1,b.y1) - Math.max(a.y0,b.y0));
+  const minH = Math.min(a.y1-a.y0, b.y1-b.y0) || 1;
+  return inter / minH;
+}
+// Many real forms (HMRC's own "view your return" page included) are laid out as a two-column
+// table — the label sits on the left, the value sits to the right on the SAME visual row, not on
+// the next line down. Tesseract's reading order often processes a whole label column before the
+// value column, so index-adjacency (i, i+1) can land on a completely unrelated line. This finds
+// the nearest line that starts to the right of the label and shares most of its vertical span.
+function findSameRowValue(built, bboxes, i, labelBBox){
+  let best = null, bestX = Infinity;
+  for(let j = 0; j < built.length; j++){
+    if(j === i) continue;
+    const bb = bboxes[j];
+    if(!bb || bb.x0 <= labelBBox.x1) continue;
+    if(vOverlapRatio(labelBBox, bb) < 0.4) continue;
+    if(bb.x0 < bestX){ bestX = bb.x0; best = built[j]; }
+  }
+  return best;
+}
+function isNewFieldLine(t){
+  return /^\d+[.)]\s/.test(t) || (t.length <= 45 && CROSS_LINE_LABELS.some(l => l.re.test(t)));
+}
 function runCrossLineDetectors(lines, out){
   const built = lines.map(buildLineText);
-  for(let i = 0; i < built.length - 1; i++){
+  const bboxes = built.map(b => lineBBoxFromSpans(b.spans));
+
+  for(let i = 0; i < built.length; i++){
     const labelLine = built[i].text.trim();
-    if(!labelLine || labelLine.length > 45) continue;
+    if(!labelLine || labelLine.length > 45 || !bboxes[i]) continue;
     const hit = CROSS_LINE_LABELS.find(l => l.re.test(labelLine));
     if(!hit) continue;
 
+    let sameRow = findSameRowValue(built, bboxes, i, bboxes[i]);
+    if(sameRow && isNewFieldLine(sameRow.text.trim())) sameRow = null; // landed on another label, not a value
+
     if(hit.cat === 'address'){
+      if(sameRow){
+        const t = sameRow.text.trim();
+        if(t && t.length <= 80){
+          const bbox = mapRangeToBBox(sameRow.spans, 0, t.length);
+          if(bbox) out.push({ category:'address', rawValue:t, confidence:0.55, ...bbox });
+        }
+        continue;
+      }
+      // No same-row value — fall back to a stacked multi-line address block below the label.
       let j = i + 1, count = 0;
       while(j < built.length && count < 4){
         const t = built[j].text.trim();
-        if(!t || t.length > 60) break;
-        if(t.length <= 45 && CROSS_LINE_LABELS.some(l => l.re.test(t))) break;
+        if(!t || t.length > 60 || isNewFieldLine(t)) break;
         const bbox = mapRangeToBBox(built[j].spans, 0, t.length);
         if(bbox) out.push({ category:'address', rawValue:t, confidence:0.5, ...bbox });
         count++; j++;
@@ -997,7 +1042,12 @@ function runCrossLineDetectors(lines, out){
       continue;
     }
 
-    const valueLine = built[i+1];
+    let valueLine = sameRow;
+    if(!valueLine && i+1 < built.length){
+      const belowText = built[i+1].text.trim();
+      if(belowText && !isNewFieldLine(belowText)) valueLine = built[i+1];
+    }
+    if(!valueLine) continue;
     const nextText = valueLine.text.trim();
     if(!nextText || nextText.length > 60) continue;
 
@@ -1952,14 +2002,28 @@ document.addEventListener('DOMContentLoaded', () => {
    synthetic word-boxes, and reports PASS/FAIL for detection + false-positive
    cases. Open screenshot-privacy.html?selftest=1 to run it.
    ---------------------------------------------------------------------------- */
-function makeSyntheticLine(text){
+// row picks the vertical band (simulating stacked lines that must NOT be treated as same-row);
+// xStart picks the horizontal start (simulating a right-hand table column positioned far right).
+function makeSyntheticLine(text, row, xStart){
+  row = row || 0; xStart = xStart || 0;
   const words = text.split(/\s+/).filter(Boolean);
-  let cursor = 0;
-  return { words: words.map((w,i) => {
-    const bbox = { x0:i*10, y0:0, x1:i*10 + Math.max(1,w.length), y1:10 };
-    cursor += w.length + 1;
+  let cursor = xStart;
+  const y0 = row*20, y1 = row*20 + 10;
+  return { words: words.map(w => {
+    const bbox = { x0:cursor, y0, x1:cursor + Math.max(1,w.length*6), y1 };
+    cursor = bbox.x1 + 6;
     return { text:w, bbox };
   }) };
+}
+// grid: array of rows, each row an array of cell strings — simulates a real two-column table where
+// the label (cell 0) and its value (cell 1) are separate OCR line objects sharing the same row but
+// far apart horizontally, exactly like the HMRC "view your return" page layout.
+function makeGridLines(grid){
+  const result = [];
+  grid.forEach((cells, rowIdx) => {
+    cells.forEach((text, colIdx) => { if(text) result.push(makeSyntheticLine(text, rowIdx, colIdx*500)); });
+  });
+  return result;
 }
 function runSelfTests(){
   const cases = [
@@ -1992,18 +2056,30 @@ function runSelfTests(){
     { name:'dob-cross-line-no-colon', lines:['Date of birth', '01/01/1990'], cat:'dob', shouldFind:true },
     { name:'dob-same-line-no-colon', text:'Date of birth 01/01/1990', cat:'dob', shouldFind:true },
     { name:'address-cross-line-multiline', lines:['Correspondence address', '10 Example Street', 'Sometown', 'RH11 7NH', 'National Insurance Number'], cat:'address', shouldFind:true },
+    // Two-column table layout (label left, value right, same row) — the real HMRC "view your
+    // return" page shape that the stacked-line heuristics above cannot handle on their own.
+    { name:'dob-two-column-table', grid:[['1. Your date of birth','03/11/1986']], cat:'dob', shouldFind:true },
+    { name:'name-two-column-table', grid:[['Your name','John Smith']], cat:'name', shouldFind:true },
+    { name:'utr-two-column-table', grid:[['Your unique taxpayer reference (UTR):','1234567890']], cat:'taxid', shouldFind:true },
+    { name:'nino-two-column-table', grid:[['4. National Insurance Number (NINO):','SN 12 34 56 B']], cat:'nino', shouldFind:true },
+    { name:'address-two-column-table', grid:[['2. Address effective from:','10 Example Street, Sometown, RH11 7NH']], cat:'address', shouldFind:true },
+    { name:'two-column-does-not-grab-unrelated-row-below', grid:[['1. Your date of birth','03/11/1986'],['2. Address effective from:','Not Entered']], cat:'dob', shouldFind:true },
   ];
   const lines = [];
   let pass = 0, fail = 0;
   cases.forEach(c => {
     const found = [];
     let displayText;
-    if(c.lines){
-      const synthLines = c.lines.map(makeSyntheticLine);
+    if(c.grid){
+      const synthLines = makeGridLines(c.grid);
+      runCrossLineDetectors(synthLines, found);
+      displayText = JSON.stringify(c.grid);
+    } else if(c.lines){
+      const synthLines = c.lines.map((t, idx) => makeSyntheticLine(t, idx, 0));
       runCrossLineDetectors(synthLines, found);
       displayText = c.lines.join(' / ');
     } else {
-      const line = makeSyntheticLine(c.text);
+      const line = makeSyntheticLine(c.text, 0, 0);
       runDetectors(line, found, true);
       displayText = c.text;
     }

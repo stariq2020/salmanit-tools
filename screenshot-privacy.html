@@ -991,22 +991,29 @@ function vOverlapRatio(a, b){
 // Many real forms (HMRC's own "view your return" page included) are laid out as a two-column
 // table — the label sits on the left, the value sits to the right on the SAME visual row, not on
 // the next line down. Tesseract's reading order often processes a whole label column before the
-// value column, so index-adjacency (i, i+1) can land on a completely unrelated line. This finds
-// the nearest line that starts to the right of the label and shares most of its vertical span.
-function findSameRowValue(built, bboxes, i, labelBBox){
-  let best = null, bestX = Infinity;
+// value column, so index-adjacency (i, i+1) can land on a completely unrelated line. This returns
+// EVERY line positioned to the right of the label that shares most of its vertical span, nearest
+// first — not just the single nearest one. Picking only the nearest was the previous bug: a wrong
+// or spurious OCR fragment sitting between the label and the true value would win by proximity
+// alone. Callers now walk the candidate list and take the first one that structurally validates
+// (looks like a date, a NINO, 10 digits, etc.), so an irrelevant nearby fragment gets skipped
+// instead of wrongly redacted while the real value goes untouched.
+function findSameRowCandidates(built, bboxes, i, labelBBox){
+  const candidates = [];
   for(let j = 0; j < built.length; j++){
     if(j === i) continue;
     const bb = bboxes[j];
     if(!bb || bb.x0 <= labelBBox.x1) continue;
     if(vOverlapRatio(labelBBox, bb) < 0.4) continue;
-    if(bb.x0 < bestX){ bestX = bb.x0; best = built[j]; }
+    candidates.push({ line: built[j], bbox: bb });
   }
-  return best;
+  candidates.sort((a,b) => a.bbox.x0 - b.bbox.x0);
+  return candidates;
 }
 function isNewFieldLine(t){
   return /^\d+[.)]\s/.test(t) || (t.length <= 45 && CROSS_LINE_LABELS.some(l => l.re.test(t)));
 }
+const DATE_VALUE_RE = /\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}/;
 function runCrossLineDetectors(lines, out){
   const built = lines.map(buildLineText);
   const bboxes = built.map(b => lineBBoxFromSpans(b.spans));
@@ -1017,14 +1024,14 @@ function runCrossLineDetectors(lines, out){
     const hit = CROSS_LINE_LABELS.find(l => l.re.test(labelLine));
     if(!hit) continue;
 
-    let sameRow = findSameRowValue(built, bboxes, i, bboxes[i]);
-    if(sameRow && isNewFieldLine(sameRow.text.trim())) sameRow = null; // landed on another label, not a value
+    const rowCandidates = findSameRowCandidates(built, bboxes, i, bboxes[i]).filter(c => !isNewFieldLine(c.line.text.trim()));
 
     if(hit.cat === 'address'){
-      if(sameRow){
-        const t = sameRow.text.trim();
-        if(t && t.length <= 80){
-          const bbox = mapRangeToBBox(sameRow.spans, 0, t.length);
+      const addrCandidate = rowCandidates.find(c => c.line.text.trim().length >= 3);
+      if(addrCandidate){
+        const t = addrCandidate.line.text.trim();
+        if(t.length <= 80){
+          const bbox = mapRangeToBBox(addrCandidate.line.spans, 0, t.length);
           if(bbox) out.push({ category:'address', rawValue:t, confidence:0.55, ...bbox });
         }
         continue;
@@ -1042,7 +1049,42 @@ function runCrossLineDetectors(lines, out){
       continue;
     }
 
-    let valueLine = sameRow;
+    if(hit.cat === 'dob'){
+      const dobCandidate = rowCandidates.find(c => DATE_VALUE_RE.test(c.line.text));
+      const belowText = i+1 < built.length ? built[i+1].text.trim() : '';
+      const source = dobCandidate ? dobCandidate.line : (DATE_VALUE_RE.test(belowText) && !isNewFieldLine(belowText) ? built[i+1] : null);
+      if(!source) continue;
+      const m = DATE_VALUE_RE.exec(source.text);
+      if(!m) continue;
+      const bbox = mapRangeToBBox(source.spans, m.index, m.index + m[0].length);
+      if(bbox) out.push({ category:'dob', rawValue:m[0], confidence:0.7, ...bbox });
+      continue;
+    }
+
+    if(hit.cat === 'nino'){
+      const found = [];
+      rowCandidates.forEach(c => detectNino(c.line.text, c.line.spans, found));
+      if(!found.length && i+1 < built.length){
+        const belowText = built[i+1].text.trim();
+        if(belowText && !isNewFieldLine(belowText)) detectNino(belowText, built[i+1].spans, found);
+      }
+      found.forEach(f => out.push(f));
+      continue;
+    }
+
+    if(hit.cat === 'taxid'){
+      const utrCandidate = rowCandidates.find(c => c.line.text.replace(/\D/g,'').length === 10);
+      const belowText = i+1 < built.length ? built[i+1].text.trim() : '';
+      const source = utrCandidate ? utrCandidate.line : (belowText.replace(/\D/g,'').length === 10 && !isNewFieldLine(belowText) ? built[i+1] : null);
+      if(!source) continue;
+      const t = source.text.trim();
+      const bbox = mapRangeToBBox(source.spans, 0, t.length);
+      if(bbox) out.push({ category:'taxid', rawValue:t.replace(/\D/g,''), confidence:0.7, ...bbox });
+      continue;
+    }
+
+    // name / other free-text categories — no structural validator, take the nearest candidate.
+    let valueLine = rowCandidates.length ? rowCandidates[0].line : null;
     if(!valueLine && i+1 < built.length){
       const belowText = built[i+1].text.trim();
       if(belowText && !isNewFieldLine(belowText)) valueLine = built[i+1];
@@ -1050,44 +1092,47 @@ function runCrossLineDetectors(lines, out){
     if(!valueLine) continue;
     const nextText = valueLine.text.trim();
     if(!nextText || nextText.length > 60) continue;
-
-    if(hit.cat === 'nino'){
-      const ninoFound = [];
-      detectNino(nextText, valueLine.spans, ninoFound);
-      if(ninoFound.length){ ninoFound.forEach(f => out.push(f)); continue; }
-      if(/^[A-Za-z]{2}[\d ]{6,9}[A-Za-z]?$/.test(nextText)){
-        const bbox = mapRangeToBBox(valueLine.spans, 0, nextText.length);
-        if(bbox) out.push({ category:'nino', rawValue:nextText.replace(/\s+/g,''), confidence:0.5, ...bbox });
-      }
-      continue;
-    }
-    if(hit.cat === 'taxid'){
-      const digits = nextText.replace(/\D/g,'');
-      if(digits.length === 10){
-        const bbox = mapRangeToBBox(valueLine.spans, 0, nextText.length);
-        if(bbox) out.push({ category:'taxid', rawValue:digits, confidence:0.7, ...bbox });
-      }
-      continue;
-    }
     const bbox = mapRangeToBBox(valueLine.spans, 0, nextText.length);
     if(bbox) out.push({ category:hit.cat, rawValue:nextText, confidence:0.55, ...bbox });
   }
 }
 
-// Same-line "Label: Value" fields — e.g. "Name: John Smith" or "Date of birth 12/04/1980" all on
-// one OCR line (colon optional, since forms often omit it). The cross-line heuristic above handles
-// the label-on-its-own-line case separately.
+// Same-line "Label: Value" fields — e.g. "Name: John Smith", "Date of birth ... 12/04/1980" or
+// "Address: 10 Example Street" all on one OCR line (separator optional, since forms often omit
+// it, and the label→value gap is deliberately generous to skip past any stray OCR noise in
+// between). Each category has its OWN regex rather than a shared one with alternation — sharing
+// one regex with a "letters OR digits" alternation was the previous bug: the engine tried the
+// letters branch first and happily matched any stray alphabetic fragment between the label and a
+// real date, redacting the wrong text while leaving the actual date untouched. Splitting them out
+// means a date-labelled field only ever accepts something that structurally IS a date.
 function detectLabeledFields(text, spans, out){
-  const re = /\b(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|name|date\s*of\s*birth|dob)\s*[:\-]?\s*([A-Za-z][A-Za-z '.-]{1,40}|\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})/gi;
   let m;
-  while((m = re.exec(text))){
-    const kind = m[1].toLowerCase();
+  const nameRe = /\b(full\s*name|surname|first\s*name|taxpayer'?s?\s*name|customer\s*name|account\s*holder|your\s*name|name)\s*[:\-]?\s*([A-Za-z][A-Za-z'.-]*(?:\s[A-Za-z][A-Za-z'.-]*){0,3})/gi;
+  while((m = nameRe.exec(text))){
     const val = m[2].trim();
     if(!val) continue;
-    const category = /birth|dob/.test(kind) ? 'dob' : 'name';
     const start = m.index + m[0].lastIndexOf(m[2]);
     const bbox = mapRangeToBBox(spans, start, start + val.length);
-    if(bbox) out.push({ category, rawValue:val, confidence:0.65, ...bbox });
+    if(bbox) out.push({ category:'name', rawValue:val, confidence:0.65, ...bbox });
+  }
+  const dobRe = /\b(?:date\s*of\s*birth|dob)\b[^\d]{0,80}(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})/gi;
+  while((m = dobRe.exec(text))){
+    const val = m[1];
+    const start = m.index + m[0].lastIndexOf(val);
+    const bbox = mapRangeToBBox(spans, start, start + val.length);
+    if(bbox) out.push({ category:'dob', rawValue:val, confidence:0.7, ...bbox });
+  }
+  // Colon required (unlike name/dob) — "address" is a substring of other, unrelated field labels
+  // in the wild (HMRC's own "Address effective from:" being a real example), so an optional
+  // separator let the regex treat that label's own trailing words as if they were the value.
+  // A literal colon right after the word is what real "Address: 10 Example Street" fields use.
+  const addrRe = /\b(?:correspondence\s*address|home\s*address|postal\s*address|your\s*address|residential\s*address|address)\s*:\s*([A-Za-z0-9][A-Za-z0-9 ,.'-]{4,80})/gi;
+  while((m = addrRe.exec(text))){
+    const val = m[1].trim();
+    if(!val) continue;
+    const start = m.index + m[0].lastIndexOf(m[1]);
+    const bbox = mapRangeToBBox(spans, start, start + val.length);
+    if(bbox) out.push({ category:'address', rawValue:val, confidence:0.5, ...bbox });
   }
 }
 
@@ -2015,13 +2060,21 @@ function makeSyntheticLine(text, row, xStart){
     return { text:w, bbox };
   }) };
 }
-// grid: array of rows, each row an array of cell strings — simulates a real two-column table where
-// the label (cell 0) and its value (cell 1) are separate OCR line objects sharing the same row but
-// far apart horizontally, exactly like the HMRC "view your return" page layout.
+// grid: array of rows, each row an array of cells — simulates a real two-column table where the
+// label (cell 0) and its value (last cell) are separate OCR line objects sharing the same row but
+// far apart horizontally, exactly like the HMRC "view your return" page layout. A cell is either a
+// plain string (auto-spaced at colIdx*500) or {text, x} for an explicit position — used to inject a
+// spurious "noise" candidate between the label and the real value, reproducing the exact bug where
+// picking the nearest same-row candidate (instead of the first structurally-valid one) redacted the
+// wrong fragment while leaving the real value untouched.
 function makeGridLines(grid){
   const result = [];
   grid.forEach((cells, rowIdx) => {
-    cells.forEach((text, colIdx) => { if(text) result.push(makeSyntheticLine(text, rowIdx, colIdx*500)); });
+    cells.forEach((cell, colIdx) => {
+      const text = typeof cell === 'string' ? cell : cell.text;
+      const x = typeof cell === 'string' ? colIdx*500 : cell.x;
+      if(text) result.push(makeSyntheticLine(text, rowIdx, x));
+    });
   });
   return result;
 }
@@ -2064,6 +2117,18 @@ function runSelfTests(){
     { name:'nino-two-column-table', grid:[['4. National Insurance Number (NINO):','SN 12 34 56 B']], cat:'nino', shouldFind:true },
     { name:'address-two-column-table', grid:[['2. Address effective from:','10 Example Street, Sometown, RH11 7NH']], cat:'address', shouldFind:true },
     { name:'two-column-does-not-grab-unrelated-row-below', grid:[['1. Your date of birth','03/11/1986'],['2. Address effective from:','Not Entered']], cat:'dob', shouldFind:true },
+    // Reproduces the exact real-world bug: a spurious OCR fragment sits between the label and the
+    // real value on the same row. Picking the NEAREST candidate (the old behaviour) would redact
+    // "xyz" and leave the real date/NINO/UTR untouched — these assert the real value is still found.
+    { name:'dob-skips-noise-candidate-between-label-and-value', grid:[[ '1. Your date of birth', {text:'xyz', x:260}, {text:'03/11/1986', x:900} ]], cat:'dob', shouldFind:true },
+    { name:'nino-skips-noise-candidate-between-label-and-value', grid:[[ '4. National Insurance Number (NINO):', {text:'xyz', x:420}, {text:'AB123456C', x:1000} ]], cat:'nino', shouldFind:true },
+    { name:'utr-skips-noise-candidate-between-label-and-value', grid:[[ 'Your unique taxpayer reference (UTR):', {text:'xyz', x:420}, {text:'1234567890', x:1000} ]], cat:'taxid', shouldFind:true },
+    // Same-line label+value (label and value merged onto one OCR line) — including a noise gap for
+    // DOB, reproducing the other half of the bug: the old shared alternation regex could match
+    // stray text before ever trying the date pattern.
+    { name:'address-same-line', text:'Address: 10 Example Street, Sometown', cat:'address', shouldFind:true },
+    { name:'fp-address-substring-in-unrelated-label', text:'2. Address effective from: Not Entered', cat:'address', shouldFind:false },
+    { name:'dob-same-line-with-noise-gap', text:'Date of birth xyz 03/11/1986', cat:'dob', shouldFind:true },
   ];
   const lines = [];
   let pass = 0, fail = 0;

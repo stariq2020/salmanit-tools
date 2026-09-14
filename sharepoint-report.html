@@ -475,7 +475,7 @@ async function getToken(){
 
 // ---- GRAPH HELPERS ---------------------------------------------
 async function graphGet(url, token){
-  const res = await fetch(url, { headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' } });
+  const res = await fetch(url, { headers: { Authorization: 'Bearer ' + token, Accept: 'application/json, text/csv;q=0.9, */*;q=0.1' } });
   if (!res.ok) {
     let detail = '';
     try { const j = await res.json(); detail = (j.error && j.error.message) || ''; } catch(e){}
@@ -612,16 +612,20 @@ async function generateReport(){
     const sitesP = graphGetAllPages(`${GRAPH_BASE}/sites?search=*&$top=100`, token, 500)
       .catch(err => { console.error('sites', err); return []; });
 
+    // Note: these three SharePoint report endpoints only support CSV output —
+    // requesting $format=application/json gets a hard 400 "JSON format is not
+    // supported." — so we take the default CSV response and parse it with the
+    // CSV parser below (normalizeRow/pick already handle both shapes).
     setProgress(40, 'Fetching storage & usage report…');
-    const usageP = graphGet(`${GRAPH_BASE}/reports/getSharePointSiteUsageDetail(period='${period}')?$format=application/json`, token)
+    const usageP = graphGet(`${GRAPH_BASE}/reports/getSharePointSiteUsageDetail(period='${period}')`, token)
       .catch(err => { console.error('usage', err); return { value: [], __error: err }; });
 
     setProgress(60, 'Fetching activity report…');
-    const fileCountsP = graphGet(`${GRAPH_BASE}/reports/getSharePointActivityFileCounts(period='${period}')?$format=application/json`, token)
+    const fileCountsP = graphGet(`${GRAPH_BASE}/reports/getSharePointActivityFileCounts(period='${period}')`, token)
       .catch(err => { console.error('fileCounts', err); return { value: [], __error: err }; });
 
     setProgress(80, 'Fetching top active users…');
-    const userDetailP = graphGet(`${GRAPH_BASE}/reports/getSharePointActivityUserDetail(period='${period}')?$format=application/json`, token)
+    const userDetailP = graphGet(`${GRAPH_BASE}/reports/getSharePointActivityUserDetail(period='${period}')`, token)
       .catch(err => { console.error('userDetail', err); return { value: [], __error: err }; });
 
     const [sites, usageResp, fileCountsResp, userDetailResp] = await Promise.all([sitesP, usageP, fileCountsP, userDetailP]);
@@ -632,12 +636,21 @@ async function generateReport(){
     const fileCountRows = (fileCountsResp.__csv || fileCountsResp.value || []).map(normalizeRow);
     const userRows = (userDetailResp.__csv || userDetailResp.value || []).map(normalizeRow);
 
-    const anyReportFailed = usageResp.__error || fileCountsResp.__error || userDetailResp.__error;
-    const anyPermissionError = [usageResp.__error, fileCountsResp.__error, userDetailResp.__error].some(e => e && (e.status === 403 || e.status === 401));
-    if (anyPermissionError) {
-      showGenError("Some data couldn't be loaded — Microsoft returned a permissions error. This usually means admin consent hasn't been granted yet for <strong>Reports.Read.All</strong> / <strong>Sites.Read.All</strong>. Ask your Global Admin to grant consent, then sign out and back in.");
-    } else if (anyReportFailed) {
-      showGenError("Some report data couldn't be loaded. The report below shows whatever data was available.");
+    const failures = [
+      ['Storage & usage report', usageResp.__error],
+      ['Activity file counts', fileCountsResp.__error],
+      ['Activity user detail', userDetailResp.__error],
+    ].filter(([, e]) => e);
+    const anyPermissionError = failures.some(([, e]) => e.status === 403 || e.status === 401);
+
+    if (failures.length) {
+      let msg = anyPermissionError
+        ? "Some data couldn't be loaded — Microsoft returned a permissions error. This usually means admin consent hasn't been granted yet for <strong>Reports.Read.All</strong>. Ask your Global Admin to grant consent, then sign out and back in.<br><br>"
+        : "Some report data couldn't be loaded. The report below shows whatever data was available.<br><br>";
+      msg += '<details open><summary style="cursor:pointer;color:inherit">Technical details (' + failures.length + ')</summary>';
+      msg += failures.map(([label, e]) => `<div style="margin-top:6px"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(e.status ? `HTTP ${e.status} — ` : '') + escapeHtml(e.message || String(e))}</div>`).join('');
+      msg += '</details>';
+      showGenError(msg);
     }
 
     renderReport({ period, sites, usageRows, fileCountRows, userRows });

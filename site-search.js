@@ -20,8 +20,8 @@
       keywords: ["pdf", "merge pdf", "split pdf", "compress pdf", "convert pdf", "rotate", "organize pdf"] },
 
     { name: "SharePoint Report Builder", url: "sharepoint-report.html",
-      description: "Generate a client-ready SharePoint report — site inventory, storage & growth, activity metrics — via Microsoft Graph.",
-      keywords: ["sharepoint", "report", "o365", "office 365", "microsoft 365", "storage report", "usage report", "site inventory", "graph api"] },
+      description: "Generate a client-ready SharePoint report — live site inventory via Microsoft Graph, plus storage & activity from an imported M365 usage export.",
+      keywords: ["sharepoint", "report", "o365", "office 365", "microsoft 365", "storage report", "usage report", "site inventory", "graph api", "csv import"] },
 
     { name: "M365 Security Scanner", url: "m365-scan.html",
       description: "Scan a Microsoft 365 tenant for MFA gaps, risky sign-ins, Conditional Access and SharePoint issues.",

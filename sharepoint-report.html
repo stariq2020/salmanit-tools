@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/sharepoint-report.html">
+<meta name="description" content="Generate a client-ready SharePoint report — site inventory, storage & growth, and activity metrics — straight from Microsoft Graph. Sign in with your own M365 admin account, export a branded PDF. Nothing is stored on our servers.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Is this SharePoint Report tool free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it's completely free with no registration and no usage limits beyond what Microsoft Graph itself allows."}},
+    {"@type":"Question","name":"Is my SharePoint data uploaded to Salman IT Tools?","acceptedAnswer":{"@type":"Answer","text":"No. This tool signs you in directly with Microsoft and calls the Microsoft Graph API from your own browser using your own access token. Report data goes from Microsoft to your browser only — it is never sent to or stored on Salman IT Tools' servers."}},
+    {"@type":"Question","name":"Why do I need to sign in as an admin?","acceptedAnswer":{"@type":"Answer","text":"Tenant-wide storage, usage and activity reports require the Reports.Read.All and Sites.Read.All Microsoft Graph permissions, which need admin consent. A Global Administrator or SharePoint Administrator needs to sign in the first time, or grant consent for the app."}},
+    {"@type":"Question","name":"Why are the names in my report hidden or showing as random IDs?","acceptedAnswer":{"@type":"Answer","text":"Microsoft 365 has a privacy setting called 'concealed names' enabled by default on usage reports. A Global Administrator can disable it in the Microsoft 365 admin center under Settings > Org settings > Reports > 'Display concealed names'."}},
+    {"@type":"Question","name":"Does this show a full audit trail of every file action?","acceptedAnswer":{"@type":"Answer","text":"No. This tool shows aggregate storage, inventory and activity metrics from the Microsoft Graph Reports API. A full per-action audit trail (who did exactly what, when) requires the separate Office 365 Management Activity API and a backend subscription — a different, heavier tool."}},
+    {"@type":"Question","name":"Can I export the report as a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Once a report is generated, use the Export / Print Report button, which opens your browser's print dialog — choose 'Save as PDF' for a branded, client-ready document."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--caution:#EAC54F;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1120px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1.05rem;color:var(--white);opacity:.85;line-height:1.7;max-width:680px;margin-bottom:8px}
+.page-sub2{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:28px}
+
+.badge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px}
+.badge-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.badge-card .bi{font-size:1.3rem;margin-bottom:6px}
+.badge-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:3px}
+.badge-card p{font-size:0.78rem;color:var(--muted);line-height:1.5}
+@media(max-width:760px){.badge-row{grid-template-columns:1fr 1fr}}
+
+.panel{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px}
+.panel h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.7rem;letter-spacing:.03em;color:var(--white);margin-bottom:6px}
+.panel p.desc{font-size:0.88rem;color:var(--muted);max-width:680px;line-height:1.6;margin-bottom:18px}
+
+.privacy-panel{background:linear-gradient(135deg,rgba(0,232,122,0.05),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:18px;padding:32px;margin-bottom:24px}
+.privacy-panel h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.5rem;letter-spacing:.03em;color:var(--white);margin-bottom:14px}
+.privacy-panel p{font-size:0.88rem;color:var(--white);opacity:.85;line-height:1.7;max-width:760px;margin-bottom:12px}
+.privacy-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.privacy-list span{font-size:0.78rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:6px 14px}
+
+/* Auth */
+.auth-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.account-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:10px 16px}
+.account-chip .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--ink);font-size:0.9rem;flex-shrink:0}
+.account-chip .an{font-size:0.85rem;color:var(--white);font-weight:600}
+.account-chip .ae{font-size:0.74rem;color:var(--muted)}
+
+/* Buttons (shared) */
+.btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center}
+.pdf-btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
+.pdf-btn-primary:hover{opacity:.92}
+.pdf-btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.pdf-btn-secondary{padding:13px 22px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-size:0.88rem;border-radius:10px;cursor:pointer;min-height:48px}
+.pdf-btn-secondary:hover{border-color:rgba(255,255,255,0.2)}
+
+/* Options */
+.opt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:16px 0}
+.opt-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:7px}
+.opt-field select{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit}
+.opt-field select:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+
+/* Notices */
+.notice{display:none;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:0.85rem;line-height:1.6}
+.notice.show{display:block}
+.notice-error{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);color:var(--danger)}
+.notice-warn{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);color:var(--warning)}
+.notice-info{background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan)}
+
+/* Progress */
+.progress-wrap{display:none;margin-top:18px}
+.progress-wrap.show{display:block}
+.progress-track{height:8px;border-radius:5px;background:rgba(255,255,255,0.06);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));width:0%;transition:width .25s}
+.progress-label{font-size:0.8rem;color:var(--muted);margin-top:8px}
+
+/* Report */
+#reportRoot{display:none}
+#reportRoot.show{display:block}
+.report-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.report-header .rh-brand{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em}
+.report-header .rh-meta{font-size:0.8rem;color:var(--muted);line-height:1.7}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
+.stat-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:18px}
+.stat-card .sl{font-size:0.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
+.stat-card .sv{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.7rem;color:var(--white)}
+.stat-card .sv.accent{color:var(--green)}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr}}
+
+.section-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.35rem;letter-spacing:.03em;color:var(--white);margin:32px 0 6px}
+.section-sub{font-size:0.8rem;color:var(--muted);margin-bottom:16px;line-height:1.6}
+
+.bar-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.bar-row{display:grid;grid-template-columns:180px 1fr 90px;gap:12px;align-items:center;font-size:0.82rem}
+.bar-row .bl{color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:16px;border-radius:8px;background:rgba(255,255,255,0.05);overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:8px}
+.bar-row .bv{color:var(--muted);text-align:right;font-family:var(--mono);font-size:0.78rem}
+
+.data-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-bottom:8px}
+table.data-table{width:100%;border-collapse:collapse;font-size:0.82rem;min-width:560px}
+table.data-table th{text-align:left;font-size:0.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border);white-space:nowrap}
+table.data-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--white);white-space:nowrap}
+table.data-table tr:last-child td{border-bottom:none}
+table.data-table tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
+.table-note{font-size:0.76rem;color:var(--muted);margin-bottom:20px}
+
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+.step-list{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.step-item{display:flex;gap:12px;align-items:flex-start}
+.step-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(0,232,122,0.12);color:var(--green);font-weight:800;font-size:0.8rem;display:flex;align-items:center;justify-content:center}
+.step-item p{font-size:0.85rem;color:var(--white);opacity:.85;line-height:1.6}
+.step-item code{font-family:var(--mono);font-size:0.78rem;background:rgba(255,255,255,0.05);padding:1px 6px;border-radius:4px;color:var(--cyan)}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.panel{padding:20px}.stat-grid{grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:110px 1fr 70px}}
+
+@media print{
+  @page{margin:14mm;size:A4}
+  body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  nav,footer,.page-eyebrow,.page-title,.page-sub,.page-sub2,.badge-row,.privacy-panel,#authPanel,#controlsPanel,.info-section,.no-print{display:none!important}
+  .page{max-width:100%;padding:0;margin:0}
+  #reportRoot{border:none;padding:0;background:#fff}
+  .panel{background:#fff;border:none;padding:0;box-shadow:none}
+  .stat-card,.info-card{background:#f4f6f9;border:1px solid #ddd}
+  .stat-card .sv,.report-header .rh-brand,.section-title{color:#111}
+  table.data-table th{background:#f0f0f0;color:#555}
+  table.data-table td{color:#111}
+  .bar-track{background:#eee}
+  .report-header{border-bottom:2px solid #111}
+}
+</style>
+<script src="site-search.js" defer></script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="page-eyebrow">Microsoft 365 / SharePoint</div>
+  <h1 class="page-title">SharePoint<br><span class="acc">Report Builder</span></h1>
+  <p class="page-sub">Generate a client-ready SharePoint report in minutes — site inventory, storage &amp; growth, and activity metrics, pulled straight from Microsoft Graph.</p>
+  <p class="page-sub2">Sign in with your own Microsoft 365 admin account and export a branded, print-ready report. No manual exports, no spreadsheets to stitch together.</p>
+
+  <div class="badge-row">
+    <div class="badge-card"><div class="bi">🔒</div><h4>Direct to Microsoft</h4><p>Your browser talks to Graph directly.</p></div>
+    <div class="badge-card"><div class="bi">🚫</div><h4>Nothing Stored</h4><p>We never see or keep your data.</p></div>
+    <div class="badge-card"><div class="bi">🆓</div><h4>Free</h4><p>No registration on our side.</p></div>
+    <div class="badge-card"><div class="bi">🖨️</div><h4>PDF Ready</h4><p>Export a branded client report.</p></div>
+  </div>
+
+  <div class="privacy-panel">
+    <h2>Where does my data actually go?</h2>
+    <p>This tool is different from most on this site: it needs live data, so it can't run 100% offline. What it <strong>does</strong> do: sign you in directly with Microsoft, then call the Microsoft Graph API from your own browser using your own access token. What it <strong>never</strong> does: send your SharePoint data to, or store it on, Salman IT Tools' servers. The report only ever exists in your browser tab, and disappears when you close it.</p>
+    <div class="privacy-list">
+      <span>🔑 You sign in with Microsoft, not us</span>
+      <span>📡 Data flows Microsoft → your browser only</span>
+      <span>🗑️ Nothing saved, no cookies of report data</span>
+      <span>🧾 Aggregate metrics, not a full audit trail</span>
+    </div>
+  </div>
+
+  <!-- AUTH PANEL -->
+  <section class="panel" id="authPanel">
+    <h2>1. Connect to Microsoft 365</h2>
+    <p class="desc">You'll need to sign in as (or get consent from) a <strong>Global Administrator</strong> or <strong>SharePoint Administrator</strong> — tenant-wide storage and usage reports require admin-consented permissions (<code style="font-family:var(--mono);color:var(--cyan)">Sites.Read.All</code>, <code style="font-family:var(--mono);color:var(--cyan)">Reports.Read.All</code>). This is a one-time consent per tenant.</p>
+
+    <div class="notice notice-error" id="authError"></div>
+    <div class="notice notice-warn" id="authWarn"></div>
+
+    <div class="auth-row" id="authRow">
+      <button class="pdf-btn-primary" id="signInBtn" onclick="signIn()">🔑 Sign in with Microsoft</button>
+    </div>
+    <div class="auth-row" id="signedInRow" style="display:none">
+      <div class="account-chip">
+        <div class="av" id="acctInitial">?</div>
+        <div>
+          <div class="an" id="acctName">—</div>
+          <div class="ae" id="acctEmail">—</div>
+        </div>
+      </div>
+      <button class="pdf-btn-secondary" onclick="signOutUser()">Sign Out</button>
+    </div>
+  </section>
+
+  <!-- CONTROLS PANEL -->
+  <section class="panel" id="controlsPanel" style="display:none">
+    <h2>2. Generate the Report</h2>
+    <p class="desc">Choose a reporting period. Microsoft Graph limits usage/activity reports to these fixed windows.</p>
+    <div class="opt-row">
+      <div class="opt-field">
+        <label for="periodSelect">Reporting period</label>
+        <select id="periodSelect">
+          <option value="D7">Last 7 days</option>
+          <option value="D30" selected>Last 30 days</option>
+          <option value="D90">Last 90 days</option>
+          <option value="D180">Last 180 days</option>
+        </select>
+      </div>
+    </div>
+    <div class="notice notice-error" id="genError"></div>
+    <div class="btn-row">
+      <button class="pdf-btn-primary" id="genBtn" onclick="generateReport()">📊 Generate Report</button>
+    </div>
+    <div class="progress-wrap" id="genProgress">
+      <div class="progress-track"><div class="progress-fill" id="genProgressFill"></div></div>
+      <div class="progress-label" id="genProgressLabel">Fetching data from Microsoft Graph…</div>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="panel" id="reportRoot">
+    <div class="report-header">
+      <div>
+        <div class="rh-brand">📊 SharePoint Report</div>
+        <div class="rh-meta" id="reportMetaTenant">Tenant: —</div>
+        <div class="rh-meta" id="reportMetaPeriod">Period: —</div>
+        <div class="rh-meta" id="reportMetaDate">Generated: —</div>
+      </div>
+      <div class="btn-row no-print" style="margin-top:0">
+        <button class="pdf-btn-primary" onclick="window.print()">🖨️ Export / Print Report</button>
+      </div>
+    </div>
+
+    <div class="notice notice-warn" id="concealedWarn">
+      <strong>Heads up:</strong> some names below look like anonymised IDs, not real names. Microsoft 365 conceals user names in reports by default. A Global Admin can turn this off in the <strong>Microsoft 365 admin center → Settings → Org settings → Reports → "Display concealed names"</strong>.
+    </div>
+
+    <div class="stat-grid" id="statGrid">
+      <div class="stat-card"><div class="sl">Sites Found</div><div class="sv" id="statSites">—</div></div>
+      <div class="stat-card"><div class="sl">Storage Used</div><div class="sv accent" id="statStorage">—</div></div>
+      <div class="stat-card"><div class="sl">Active Users</div><div class="sv" id="statUsers">—</div></div>
+      <div class="stat-card"><div class="sl">External Shares</div><div class="sv" id="statExternal">—</div></div>
+    </div>
+
+    <div class="section-title">Top Sites by Storage</div>
+    <p class="section-sub">From the SharePoint site usage report for the selected period.</p>
+    <div class="bar-list" id="storageBarList"></div>
+    <p class="table-note" id="storageNote"></p>
+
+    <div class="section-title">Site Inventory</div>
+    <p class="section-sub" id="inventorySub">Sites visible to the signed-in account via Microsoft Graph.</p>
+    <div class="data-table-wrap"><table class="data-table" id="inventoryTable">
+      <thead><tr><th>Site Name</th><th>URL</th><th>Template</th><th>Last Modified</th></tr></thead>
+      <tbody id="inventoryBody"></tbody>
+    </table></div>
+    <p class="table-note" id="inventoryNote"></p>
+
+    <div class="section-title">Activity Summary <span id="activityPeriodLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></div>
+    <p class="section-sub">Tenant-wide file activity counts from the SharePoint activity report.</p>
+    <div class="stat-grid" id="activityGrid">
+      <div class="stat-card"><div class="sl">Viewed / Edited</div><div class="sv" id="actViewed">—</div></div>
+      <div class="stat-card"><div class="sl">Synced</div><div class="sv" id="actSynced">—</div></div>
+      <div class="stat-card"><div class="sl">Shared Internally</div><div class="sv" id="actInternal">—</div></div>
+      <div class="stat-card"><div class="sl">Shared Externally</div><div class="sv" id="actExternal">—</div></div>
+    </div>
+
+    <div class="section-title">Top Active Users</div>
+    <p class="section-sub">Ranked by total file activity (viewed/edited + synced + shared) over the period.</p>
+    <div class="data-table-wrap"><table class="data-table" id="usersTable">
+      <thead><tr><th>User</th><th>Viewed/Edited</th><th>Synced</th><th>Shared Internal</th><th>Shared External</th><th>Last Activity</th></tr></thead>
+      <tbody id="usersBody"></tbody>
+    </table></div>
+    <p class="table-note" id="usersNote"></p>
+
+    <p class="table-note" style="margin-top:8px">Generated with the free SharePoint Report Builder at salmanittools.co.uk. This report shows aggregate storage, inventory and activity metrics only — not a full per-action audit trail.</p>
+  </section>
+
+  <div class="info-section">
+    <h2 class="section-title" style="margin-top:0">How This Works</h2>
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><p>You sign in with your own Microsoft 365 account using the button above — a standard Microsoft sign-in popup, not a form on this site.</p></div>
+      <div class="step-item"><div class="step-num">2</div><p>The first time, Microsoft will ask for admin consent to two read-only permissions: <code>Sites.Read.All</code> and <code>Reports.Read.All</code>. Only a Global Admin or SharePoint Admin can grant this.</p></div>
+      <div class="step-item"><div class="step-num">3</div><p>Your browser calls <code>graph.microsoft.com</code> directly using your token to pull site inventory, storage/usage and activity reports.</p></div>
+      <div class="step-item"><div class="step-num">4</div><p>Everything renders locally into the report below. Use "Export / Print Report" to save a branded PDF for a client — nothing is uploaded anywhere in this process.</p></div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">📦</div><h4>Site Inventory</h4><p>Every SharePoint site visible to the signed-in account — name, URL, template and last activity.</p></div>
+      <div class="info-card"><div class="ico">📈</div><h4>Storage &amp; Growth</h4><p>Per-site storage used, file counts and page views for the period you choose.</p></div>
+      <div class="info-card"><div class="ico">👥</div><h4>Activity Metrics</h4><p>Tenant-wide and per-user activity — viewed/edited, synced, shared internally and externally.</p></div>
+      <div class="info-card"><div class="ico">🖨️</div><h4>Branded PDF Export</h4><p>One click turns the on-screen dashboard into a clean, print-ready report for a client.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free. Private. Simple. &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3/lib/msal-browser.min.js"></script>
+<script>
+/* ============================================================
+   SharePoint Report Builder
+   - MSAL.js (PKCE, public client, no secret) signs the visitor
+     in directly with Microsoft.
+   - All Microsoft Graph calls happen client-side, using the
+     signed-in user's own token. No data passes through or is
+     stored on this site's server — there is no server involved.
+   ============================================================ */
+
+function toggleMobileMenu(){
+  const m = document.getElementById('mobileMenu');
+  const h = document.getElementById('hamburger');
+  const open = m.classList.toggle('open');
+  h.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').setAttribute('aria-expanded','false');
+}
+
+// ---- CONFIG ---------------------------------------------------
+const MSAL_CLIENT_ID = "4081224c-ab5c-408c-ba65-6703688c7af5";
+const GRAPH_SCOPES = ["Sites.Read.All", "Reports.Read.All"];
+const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
+
+const msalConfig = {
+  auth: {
+    clientId: MSAL_CLIENT_ID,
+    authority: "https://login.microsoftonline.com/common",
+    redirectUri: window.location.origin + window.location.pathname,
+  },
+  cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: false }
+};
+
+let msalInstance = null;
+let currentAccount = null;
+
+async function initMsal(){
+  msalInstance = new msal.PublicClientApplication(msalConfig);
+  await msalInstance.initialize();
+  // Handle the case where a redirect flow (rather than popup) completes.
+  const resp = await msalInstance.handleRedirectPromise().catch(()=>null);
+  if (resp && resp.account) {
+    currentAccount = resp.account;
+  } else {
+    const accounts = msalInstance.getAllAccounts();
+    if (accounts.length) currentAccount = accounts[0];
+  }
+  if (currentAccount) showSignedIn(currentAccount);
+}
+
+function showSignedIn(account){
+  document.getElementById('authRow').style.display = 'none';
+  document.getElementById('signedInRow').style.display = 'flex';
+  document.getElementById('controlsPanel').style.display = 'block';
+  const name = account.name || account.username || 'Signed in';
+  document.getElementById('acctName').textContent = name;
+  document.getElementById('acctEmail').textContent = account.username || '';
+  document.getElementById('acctInitial').textContent = (name.trim()[0] || '?').toUpperCase();
+}
+
+function showAuthError(msg){
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function clearAuthError(){
+  document.getElementById('authError').classList.remove('show');
+}
+function showAuthWarn(msg){
+  const el = document.getElementById('authWarn');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+async function signIn(){
+  clearAuthError();
+  document.getElementById('authWarn').classList.remove('show');
+  try {
+    const result = await msalInstance.loginPopup({ scopes: GRAPH_SCOPES, prompt: 'select_account' });
+    currentAccount = result.account;
+    msalInstance.setActiveAccount(currentAccount);
+    showSignedIn(currentAccount);
+  } catch (err) {
+    console.error(err);
+    if (/AADSTS65001|consent/i.test(err && err.errorMessage || '')) {
+      showAuthWarn("Microsoft needs an admin to approve this app's permissions for your organisation. Ask your Global Administrator to sign in here once, or to grant admin consent for this app in Entra ID.");
+    } else if (/popup_window_error|user_cancelled/i.test(err && err.errorCode || '')) {
+      showAuthError("Sign-in was cancelled or the popup was blocked. Please allow popups for this site and try again.");
+    } else {
+      showAuthError("Sign-in failed: " + (err && (err.errorMessage || err.message) || 'Unknown error'));
+    }
+  }
+}
+
+function signOutUser(){
+  document.getElementById('reportRoot').classList.remove('show');
+  document.getElementById('controlsPanel').style.display = 'none';
+  document.getElementById('signedInRow').style.display = 'none';
+  document.getElementById('authRow').style.display = 'flex';
+  if (msalInstance && currentAccount) {
+    msalInstance.logoutPopup({ account: currentAccount }).catch(()=>{});
+  }
+  currentAccount = null;
+}
+
+async function getToken(){
+  const req = { scopes: GRAPH_SCOPES, account: currentAccount };
+  try {
+    const r = await msalInstance.acquireTokenSilent(req);
+    return r.accessToken;
+  } catch (err) {
+    const r = await msalInstance.acquireTokenPopup(req);
+    return r.accessToken;
+  }
+}
+
+// ---- GRAPH HELPERS ---------------------------------------------
+async function graphGet(url, token){
+  const res = await fetch(url, { headers: { Authorization: 'Bearer ' + token, Accept: 'application/json' } });
+  if (!res.ok) {
+    let detail = '';
+    try { const j = await res.json(); detail = (j.error && j.error.message) || ''; } catch(e){}
+    const err = new Error(`Graph request failed (${res.status}): ${detail || res.statusText}`);
+    err.status = res.status;
+    throw err;
+  }
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('application/json')) return res.json();
+  // Fallback: some report endpoints ignore $format and return CSV.
+  const text = await res.text();
+  return { __csv: parseCsv(text) };
+}
+
+async function graphGetAllPages(url, token, cap){
+  let items = [];
+  let next = url;
+  while (next && items.length < cap) {
+    const page = await graphGet(next, token);
+    if (page.value) items = items.concat(page.value);
+    next = page['@odata.nextLink'] || null;
+  }
+  return items.slice(0, cap);
+}
+
+function parseCsv(text){
+  const lines = text.replace(/\r/g,'').split('\n').filter(l => l.length);
+  if (!lines.length) return [];
+  const headers = splitCsvLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const cells = splitCsvLine(line);
+    const row = {};
+    headers.forEach((h, i) => row[h] = cells[i]);
+    return row;
+  });
+}
+function splitCsvLine(line){
+  const out = []; let cur = ''; let inQ = false;
+  for (let i=0;i<line.length;i++){
+    const c = line[i];
+    if (inQ){
+      if (c === '"' && line[i+1] === '"'){ cur += '"'; i++; }
+      else if (c === '"'){ inQ = false; }
+      else cur += c;
+    } else {
+      if (c === '"') inQ = true;
+      else if (c === ',') { out.push(cur); cur=''; }
+      else cur += c;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+
+// Normalizes a report row (JSON camelCase OR CSV "Title Case" headers) into
+// one flat object keyed by simplified lowercase-alnum field names, so the
+// same lookup works regardless of which shape Graph handed back.
+function normalizeRow(row){
+  const out = {};
+  for (const k in row) {
+    const nk = k.toLowerCase().replace(/[^a-z0-9]/g,'');
+    out[nk] = row[k];
+  }
+  return out;
+}
+function pick(norm, ...names){
+  for (const n of names) {
+    const key = n.toLowerCase().replace(/[^a-z0-9]/g,'');
+    if (norm[key] !== undefined && norm[key] !== null && norm[key] !== '') return norm[key];
+  }
+  return undefined;
+}
+
+function looksConcealed(str){
+  if (!str) return false;
+  // Concealed names look like long hex/alnum blobs, not "First Last" or an email.
+  return /^[a-f0-9]{16,}$/i.test(str.trim()) && !str.includes('@') && !str.includes(' ');
+}
+
+function formatBytes(bytes){
+  const n = Number(bytes);
+  if (!isFinite(n) || n <= 0) return '0 B';
+  const units = ['B','KB','MB','GB','TB'];
+  let i = 0; let v = n;
+  while (v >= 1024 && i < units.length-1) { v /= 1024; i++; }
+  return v.toFixed(v < 10 && i > 0 ? 1 : 0) + ' ' + units[i];
+}
+function formatDate(d){
+  if (!d) return '—';
+  const dt = new Date(d);
+  if (isNaN(dt.getTime())) return String(d).slice(0,10);
+  return dt.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+}
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+function periodLabel(p){
+  return { D7:'Last 7 days', D30:'Last 30 days', D90:'Last 90 days', D180:'Last 180 days' }[p] || p;
+}
+
+// ---- REPORT GENERATION -------------------------------------------
+function showGenError(msg){
+  const el = document.getElementById('genError');
+  el.innerHTML = msg;
+  el.classList.add('show');
+}
+function clearGenError(){
+  document.getElementById('genError').classList.remove('show');
+}
+function setProgress(pct, label){
+  const wrap = document.getElementById('genProgress');
+  wrap.classList.add('show');
+  document.getElementById('genProgressFill').style.width = pct + '%';
+  if (label) document.getElementById('genProgressLabel').textContent = label;
+}
+function hideProgress(){
+  document.getElementById('genProgress').classList.remove('show');
+}
+
+async function generateReport(){
+  clearGenError();
+  document.getElementById('reportRoot').classList.remove('show');
+  const genBtn = document.getElementById('genBtn');
+  genBtn.disabled = true;
+  const period = document.getElementById('periodSelect').value;
+
+  try {
+    setProgress(5, 'Getting an access token…');
+    const token = await getToken();
+
+    setProgress(20, 'Fetching site inventory…');
+    const sitesP = graphGetAllPages(`${GRAPH_BASE}/sites?search=*&$top=100`, token, 500)
+      .catch(err => { console.error('sites', err); return []; });
+
+    setProgress(40, 'Fetching storage & usage report…');
+    const usageP = graphGet(`${GRAPH_BASE}/reports/getSharePointSiteUsageDetail(period='${period}')?$format=application/json`, token)
+      .catch(err => { console.error('usage', err); return { value: [], __error: err }; });
+
+    setProgress(60, 'Fetching activity report…');
+    const fileCountsP = graphGet(`${GRAPH_BASE}/reports/getSharePointActivityFileCounts(period='${period}')?$format=application/json`, token)
+      .catch(err => { console.error('fileCounts', err); return { value: [], __error: err }; });
+
+    setProgress(80, 'Fetching top active users…');
+    const userDetailP = graphGet(`${GRAPH_BASE}/reports/getSharePointActivityUserDetail(period='${period}')?$format=application/json`, token)
+      .catch(err => { console.error('userDetail', err); return { value: [], __error: err }; });
+
+    const [sites, usageResp, fileCountsResp, userDetailResp] = await Promise.all([sitesP, usageP, fileCountsP, userDetailP]);
+
+    setProgress(95, 'Building report…');
+
+    const usageRows = (usageResp.__csv || usageResp.value || []).map(normalizeRow);
+    const fileCountRows = (fileCountsResp.__csv || fileCountsResp.value || []).map(normalizeRow);
+    const userRows = (userDetailResp.__csv || userDetailResp.value || []).map(normalizeRow);
+
+    const anyReportFailed = usageResp.__error || fileCountsResp.__error || userDetailResp.__error;
+    const anyPermissionError = [usageResp.__error, fileCountsResp.__error, userDetailResp.__error].some(e => e && (e.status === 403 || e.status === 401));
+    if (anyPermissionError) {
+      showGenError("Some data couldn't be loaded — Microsoft returned a permissions error. This usually means admin consent hasn't been granted yet for <strong>Reports.Read.All</strong> / <strong>Sites.Read.All</strong>. Ask your Global Admin to grant consent, then sign out and back in.");
+    } else if (anyReportFailed) {
+      showGenError("Some report data couldn't be loaded. The report below shows whatever data was available.");
+    }
+
+    renderReport({ period, sites, usageRows, fileCountRows, userRows });
+    hideProgress();
+  } catch (err) {
+    console.error(err);
+    hideProgress();
+    showGenError("Couldn't generate the report: " + escapeHtml(err.message || String(err)));
+  } finally {
+    genBtn.disabled = false;
+  }
+}
+
+function renderReport({ period, sites, usageRows, fileCountRows, userRows }){
+  const tenantName = (currentAccount && currentAccount.username) ? currentAccount.username.split('@')[1] : '—';
+  document.getElementById('reportMetaTenant').textContent = 'Tenant: ' + tenantName;
+  document.getElementById('reportMetaPeriod').textContent = 'Period: ' + periodLabel(period);
+  document.getElementById('reportMetaDate').textContent = 'Generated: ' + new Date().toLocaleString();
+  document.getElementById('activityPeriodLabel').textContent = '(' + periodLabel(period) + ')';
+
+  // ---- Storage / usage --------------------------------------------
+  const usageParsed = usageRows.map(r => ({
+    siteUrl: pick(r,'siteurl','site url') || '(unknown site)',
+    ownerName: pick(r,'ownerdisplayname','owner display name'),
+    storageBytes: Number(pick(r,'storageusedinbytes','storageusedbyte','storage used byte')) || 0,
+    fileCount: Number(pick(r,'filecount','file count')) || 0,
+    activeFileCount: Number(pick(r,'activefilecount','active file count')) || 0,
+    pageViews: Number(pick(r,'pageviewcount','page view count')) || 0,
+    lastActivity: pick(r,'lastactivitydate','last activity date'),
+    rootWebTemplate: pick(r,'rootwebtemplate','root web template'),
+  })).filter(r => r.storageBytes > 0 || r.fileCount > 0);
+
+  const totalStorage = usageParsed.reduce((sum, r) => sum + r.storageBytes, 0);
+  const topByStorage = usageParsed.slice().sort((a,b) => b.storageBytes - a.storageBytes).slice(0, 10);
+  const maxStorage = topByStorage.length ? topByStorage[0].storageBytes : 1;
+
+  const barList = document.getElementById('storageBarList');
+  barList.innerHTML = topByStorage.length ? topByStorage.map(r => `
+    <div class="bar-row">
+      <div class="bl" title="${escapeHtml(r.siteUrl)}">${escapeHtml(shortSiteName(r.siteUrl))}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max(2, (r.storageBytes/maxStorage*100)).toFixed(1)}%"></div></div>
+      <div class="bv">${formatBytes(r.storageBytes)}</div>
+    </div>`).join('') : '<p class="table-note">No storage usage data returned for this period.</p>';
+  document.getElementById('storageNote').textContent = usageParsed.length
+    ? `Showing top ${topByStorage.length} of ${usageParsed.length} sites with usage data.`
+    : '';
+
+  // ---- Site inventory ------------------------------------------------
+  const inventoryBody = document.getElementById('inventoryBody');
+  const invSorted = sites.slice().sort((a,b) => new Date(b.lastModifiedDateTime||0) - new Date(a.lastModifiedDateTime||0)).slice(0, 50);
+  inventoryBody.innerHTML = invSorted.length ? invSorted.map(s => `
+    <tr>
+      <td>${escapeHtml(s.displayName || s.name || '(unnamed)')}</td>
+      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis">${escapeHtml(s.webUrl || '')}</td>
+      <td>${escapeHtml((s.root ? 'Root' : (s.siteCollection && s.siteCollection.hostname)) || '—')}</td>
+      <td>${formatDate(s.lastModifiedDateTime)}</td>
+    </tr>`).join('') : '<tr><td colspan="4">No sites returned. Your account may not have access to any SharePoint sites, or the search API returned nothing.</td></tr>';
+  document.getElementById('inventoryNote').textContent = sites.length
+    ? `Showing ${invSorted.length} of ${sites.length} sites found, sorted by most recently modified.`
+    : '';
+
+  // ---- Activity summary (tenant-wide) --------------------------------
+  const fcParsed = fileCountRows.map(r => ({
+    date: pick(r,'reportdate','report date'),
+    viewedOrEdited: Number(pick(r,'viewedoreditedfilecount','viewed or edited file count')) || 0,
+    synced: Number(pick(r,'syncedfilecount','synced file count')) || 0,
+    sharedInternal: Number(pick(r,'sharedinternallyfilecount','shared internally file count')) || 0,
+    sharedExternal: Number(pick(r,'sharedexternallyfilecount','shared externally file count')) || 0,
+  })).filter(r => r.date);
+  fcParsed.sort((a,b) => new Date(b.date) - new Date(a.date));
+  const latestFc = fcParsed[0] || { viewedOrEdited:0, synced:0, sharedInternal:0, sharedExternal:0 };
+
+  document.getElementById('actViewed').textContent = latestFc.viewedOrEdited.toLocaleString();
+  document.getElementById('actSynced').textContent = latestFc.synced.toLocaleString();
+  document.getElementById('actInternal').textContent = latestFc.sharedInternal.toLocaleString();
+  document.getElementById('actExternal').textContent = latestFc.sharedExternal.toLocaleString();
+
+  // ---- Top active users -----------------------------------------------
+  const userParsed = userRows.map(r => ({
+    user: pick(r,'userprincipalname','user principal name') || pick(r,'displayname','display name') || '(unknown)',
+    viewedOrEdited: Number(pick(r,'viewedoreditedfilecount','viewed or edited file count')) || 0,
+    synced: Number(pick(r,'syncedfilecount','synced file count')) || 0,
+    sharedInternal: Number(pick(r,'sharedinternallyfilecount','shared internally file count')) || 0,
+    sharedExternal: Number(pick(r,'sharedexternallyfilecount','shared externally file count')) || 0,
+    lastActivity: pick(r,'lastactivitydate','last activity date'),
+  }));
+  userParsed.forEach(u => u.total = u.viewedOrEdited + u.synced + u.sharedInternal + u.sharedExternal);
+  const topUsers = userParsed.filter(u => u.total > 0).sort((a,b) => b.total - a.total).slice(0, 10);
+
+  const usersBody = document.getElementById('usersBody');
+  usersBody.innerHTML = topUsers.length ? topUsers.map(u => `
+    <tr>
+      <td>${escapeHtml(u.user)}</td>
+      <td>${u.viewedOrEdited.toLocaleString()}</td>
+      <td>${u.synced.toLocaleString()}</td>
+      <td>${u.sharedInternal.toLocaleString()}</td>
+      <td>${u.sharedExternal.toLocaleString()}</td>
+      <td>${formatDate(u.lastActivity)}</td>
+    </tr>`).join('') : '<tr><td colspan="6">No user activity data returned for this period.</td></tr>';
+  document.getElementById('usersNote').textContent = userParsed.length
+    ? `Showing top ${topUsers.length} of ${userParsed.length} users by total activity.`
+    : '';
+
+  // ---- Top stat cards ---------------------------------------------------
+  document.getElementById('statSites').textContent = sites.length.toLocaleString();
+  document.getElementById('statStorage').textContent = formatBytes(totalStorage);
+  document.getElementById('statUsers').textContent = userParsed.filter(u => u.total > 0).length.toLocaleString();
+  document.getElementById('statExternal').textContent = latestFc.sharedExternal.toLocaleString();
+
+  // ---- Concealed-names detection -----------------------------------------
+  const concealed = usageParsed.some(r => looksConcealed(r.ownerName)) || userParsed.some(u => looksConcealed(u.user));
+  document.getElementById('concealedWarn').classList.toggle('show', concealed);
+
+  document.getElementById('reportRoot').classList.add('show');
+  document.getElementById('reportRoot').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function shortSiteName(url){
+  if (!url) return '(unknown)';
+  try {
+    const u = new URL(url);
+    const parts = u.pathname.split('/').filter(Boolean);
+    return parts.length ? parts[parts.length-1] : u.hostname;
+  } catch(e) {
+    return url;
+  }
+}
+
+initMsal().catch(err => {
+  console.error(err);
+  showAuthError('Could not initialise Microsoft sign-in: ' + (err.message || err));
+});
+</script>
+</body>
+</html>

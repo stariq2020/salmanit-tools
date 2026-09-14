@@ -19,6 +19,10 @@
       description: "Merge, split, compress, rotate and convert PDF files — runs entirely in your browser.",
       keywords: ["pdf", "merge pdf", "split pdf", "compress pdf", "convert pdf", "rotate", "organize pdf"] },
 
+    { name: "SharePoint Report Builder", url: "sharepoint-report.html",
+      description: "Generate a client-ready SharePoint report — site inventory, storage & growth, activity metrics — via Microsoft Graph.",
+      keywords: ["sharepoint", "report", "o365", "office 365", "microsoft 365", "storage report", "usage report", "site inventory", "graph api"] },
+
     { name: "M365 Security Scanner", url: "m365-scan.html",
       description: "Scan a Microsoft 365 tenant for MFA gaps, risky sign-ins, Conditional Access and SharePoint issues.",
       keywords: ["o365", "office 365", "microsoft 365", "tenant", "mfa", "security scan", "entra", "azure ad"] },

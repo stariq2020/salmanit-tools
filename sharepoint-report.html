@@ -34,7 +34,7 @@
   --mono:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;color-scheme:dark}
 body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--green);outline-offset:2px}
@@ -94,8 +94,17 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 /* Options */
 .opt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:16px 0}
 .opt-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:7px}
-.opt-field select,.opt-field input[type=text]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit}
+.opt-field select,.opt-field input[type=text]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit;color-scheme:dark}
 .opt-field select:focus,.opt-field input[type=text]:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+.opt-field select option{background:var(--card);color:var(--white)}
+.opt-field input[type=text]:-webkit-autofill,
+.opt-field input[type=text]:-webkit-autofill:hover,
+.opt-field input[type=text]:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--white);
+  -webkit-box-shadow:0 0 0 1000px #0E1A2E inset;
+  box-shadow:0 0 0 1000px #0E1A2E inset;
+  transition:background-color 999999s ease-in-out 0s;
+}
 .check-row{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 16px}
 .check-row label{display:flex;align-items:center;gap:7px;font-size:0.85rem;font-weight:400;text-transform:none;letter-spacing:normal;color:var(--white)}
 
@@ -827,21 +836,25 @@ async function runAuditSearch(){
     const query = await createRes.json();
     const queryId = query.id;
 
-    setAuditProgress(25, 'Running query against the audit log… this can take up to a minute.');
+    setAuditProgress(25, 'Running query against the audit log… this can take a few minutes, especially the first search on a tenant.');
     let status = query.status || 'notStarted';
+    const pollStart = Date.now();
+    const MAX_WAIT_MS = 8 * 60 * 1000; // Purview audit search can genuinely take several minutes, particularly the first query a tenant runs.
     let tries = 0;
-    while (status !== 'succeeded' && status !== 'failed' && status !== 'cancelled' && tries < 40) {
-      await new Promise(r => setTimeout(r, 3000));
+    while (status !== 'succeeded' && status !== 'failed' && status !== 'cancelled' && (Date.now() - pollStart) < MAX_WAIT_MS) {
+      const interval = tries < 15 ? 3000 : 8000; // poll quickly at first, then back off to avoid hammering Graph on long-running queries
+      await new Promise(r => setTimeout(r, interval));
       const pollRes = await fetch(`${GRAPH_BASE}/security/auditLog/queries/${queryId}`, { headers: { Authorization: 'Bearer ' + token } });
       if (!pollRes.ok) throw new Error('Lost track of the audit query while polling (' + pollRes.status + ').');
       const pollJson = await pollRes.json();
       status = pollJson.status;
       tries++;
-      setAuditProgress(25 + Math.min(60, tries * 2), 'Running query against the audit log… (' + status + ')');
+      const elapsedSec = Math.round((Date.now() - pollStart) / 1000);
+      setAuditProgress(25 + Math.min(60, tries * 2), `Running query against the audit log… (${status}, ${elapsedSec}s elapsed)`);
     }
     if (status === 'failed') throw new Error("The audit query failed on Microsoft's side. Try a shorter date range.");
     if (status === 'cancelled') throw new Error('The audit query was cancelled.');
-    if (status !== 'succeeded') throw new Error('Timed out waiting for the audit query to finish. Try a shorter date range and search again.');
+    if (status !== 'succeeded') throw new Error("Still running after 8 minutes, so we stopped waiting. This is common for the first audit search on a tenant while Purview finishes indexing — wait a few minutes and search again, or try a shorter date range.");
 
     setAuditProgress(88, 'Fetching matching records…');
     let records = [];

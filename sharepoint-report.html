@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools</title>
 <link rel="canonical" href="https://salmanittools.co.uk/sharepoint-report.html">
-<meta name="description" content="Generate a client-ready SharePoint report — site inventory straight from Microsoft Graph, plus storage, usage and activity from your exported M365 usage reports. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta name="description" content="Generate a client-ready SharePoint report — live site inventory and real Purview audit log search straight from Microsoft Graph, plus storage and usage stats from your exported M365 reports. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -20,7 +20,8 @@
     {"@type":"Question","name":"Why do I need to sign in?","acceptedAnswer":{"@type":"Answer","text":"Site inventory uses the Sites.Read.All Microsoft Graph permission. Some tenants require a Global Administrator or SharePoint Administrator to grant admin consent the first time this app is used; others allow any signed-in user."}},
     {"@type":"Question","name":"Why can't the tool fetch storage, usage and activity data automatically like it does site inventory?","acceptedAnswer":{"@type":"Answer","text":"Microsoft Graph's usage report endpoints redirect to a temporary download link that does not allow cross-origin browser requests (a CORS restriction Microsoft applies on their end) — no amount of permissions or code changes on this tool's side can work around it from a browser. The Microsoft 365 admin center can export the same reports as a CSV file, which this tool can then read and turn into charts and a PDF entirely client-side."}},
     {"@type":"Question","name":"Why are the names in my report hidden or showing as random IDs?","acceptedAnswer":{"@type":"Answer","text":"Microsoft 365 has a privacy setting called 'concealed names' enabled by default on usage reports, which also affects the CSV exports this tool reads. A Global Administrator can disable it in the Microsoft 365 admin center under Settings > Org settings > Reports > 'Display concealed names'."}},
-    {"@type":"Question","name":"Does this show a full audit trail of every file action?","acceptedAnswer":{"@type":"Answer","text":"No. This tool shows aggregate storage, inventory and activity metrics from Microsoft's own usage reports. A full per-action audit trail (who did exactly what, when) requires the separate Office 365 Management Activity API and a backend subscription — a different, heavier tool."}},
+    {"@type":"Question","name":"Does this show a full audit trail of every file action?","acceptedAnswer":{"@type":"Answer","text":"Yes — the 'Search the Audit Log' step queries the Microsoft Purview unified audit log directly via Microsoft Graph, using your own signed-in token, entirely from your browser. It needs an account with a Global Administrator, Compliance Administrator, Security Administrator (or equivalent custom audit role), and your tenant's audit logging must be turned on. The aggregate storage/usage stats further down the page are separate and still come from an exported CSV, since Microsoft blocks browsers from fetching those specific report endpoints directly."}},
+    {"@type":"Question","name":"Why does audit log search fail with a permissions error?","acceptedAnswer":{"@type":"Answer","text":"Two common causes: your account doesn't hold an admin role that's allowed to search the audit log (Global Administrator, Compliance Administrator or Security Administrator, or a custom role with audit search rights), or a Global Administrator hasn't yet granted admin consent for the AuditLogsQuery-SharePoint.Read.All permission on this app in Entra ID. Both are one-time, tenant-side fixes."}},
     {"@type":"Question","name":"Can I export the report as a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Once a report is generated, use the Export / Print Report button, which opens your browser's print dialog — choose 'Save as PDF' for a branded, client-ready document."}}
   ]
 }
@@ -93,8 +94,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 /* Options */
 .opt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:16px 0}
 .opt-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:7px}
-.opt-field select{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit}
-.opt-field select:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+.opt-field select,.opt-field input[type=text]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit}
+.opt-field select:focus,.opt-field input[type=text]:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+.check-row{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 16px}
+.check-row label{display:flex;align-items:center;gap:7px;font-size:0.85rem;font-weight:400;text-transform:none;letter-spacing:normal;color:var(--white)}
 
 /* Notices */
 .notice{display:none;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:0.85rem;line-height:1.6}
@@ -182,7 +185,7 @@ footer a{color:var(--green);text-decoration:none}
 @media print{
   @page{margin:14mm;size:A4}
   body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  nav,footer,.page-eyebrow,.page-title,.page-sub,.page-sub2,.badge-row,.privacy-panel,#authPanel,#controlsPanel,#importPanel,.info-section,.no-print{display:none!important}
+  nav,footer,.page-eyebrow,.page-title,.page-sub,.page-sub2,.badge-row,.privacy-panel,#authPanel,#controlsPanel,#auditPanel,#importPanel,.info-section,.no-print{display:none!important}
   .page{max-width:100%;padding:0;margin:0}
   #reportRoot{border:none;padding:0;background:#fff}
   .panel{background:#fff;border:none;padding:0;box-shadow:none}
@@ -222,8 +225,8 @@ footer a{color:var(--green);text-decoration:none}
 <div class="page">
   <div class="page-eyebrow">Microsoft 365 / SharePoint</div>
   <h1 class="page-title">SharePoint<br><span class="acc">Report Builder</span></h1>
-  <p class="page-sub">Generate a client-ready SharePoint report in minutes — live site inventory from Microsoft Graph, plus storage, usage and activity from your own exported M365 reports.</p>
-  <p class="page-sub2">Sign in with your own Microsoft 365 account, drop in a usage report export, and get a branded, print-ready report. Nothing runs through our servers, ever.</p>
+  <p class="page-sub">Generate a client-ready SharePoint report in minutes — live site inventory and real Purview audit log search from Microsoft Graph, plus storage and usage stats from your own exported M365 reports.</p>
+  <p class="page-sub2">Sign in with your own Microsoft 365 account, search the actual audit log, and get a branded, print-ready report. Nothing runs through our servers, ever.</p>
 
   <div class="badge-row">
     <div class="badge-card"><div class="bi">🔒</div><h4>Direct to Microsoft</h4><p>Your browser talks to Graph directly.</p></div>
@@ -234,20 +237,20 @@ footer a{color:var(--green);text-decoration:none}
 
   <div class="privacy-panel">
     <h2>Where does my data actually go?</h2>
-    <p>Nowhere near us — this tool is genuinely 100% client-side, in two parts. Site inventory: sign in directly with Microsoft, then the Microsoft Graph API is called from your own browser using your own access token. Storage, usage and activity: Microsoft doesn't allow browsers to fetch those specific reports directly (a restriction on Microsoft's end, not something we can bypass) — so you export them once from the M365 admin center and drop the file in below, and it's parsed locally using your browser's file reader. Either way, nothing is sent to or stored on Salman IT Tools' servers. The report only ever exists in your browser tab, and disappears when you close it.</p>
+    <p>Nowhere near us — this tool is genuinely 100% client-side, in three parts. Site inventory and audit log search: sign in directly with Microsoft, then Microsoft Graph is called from your own browser using your own access token — that includes real audit log records from Microsoft Purview, not just aggregate stats. Storage &amp; usage: Microsoft doesn't allow browsers to fetch those specific report endpoints directly (a restriction on Microsoft's end, not something we can bypass) — so you export them once from the M365 admin center and drop the file in, and it's parsed locally using your browser's file reader. Either way, nothing is sent to or stored on Salman IT Tools' servers. The report only ever exists in your browser tab, and disappears when you close it.</p>
     <div class="privacy-list">
       <span>🔑 You sign in with Microsoft, not us</span>
-      <span>📡 Inventory: Microsoft → your browser only</span>
-      <span>📄 Usage/activity: your export, read locally</span>
+      <span>📡 Inventory &amp; audit log: Microsoft → your browser only</span>
+      <span>📄 Storage/usage stats: your export, read locally</span>
       <span>🗑️ Nothing saved, no cookies of report data</span>
-      <span>🧾 Aggregate metrics, not a full audit trail</span>
+      <span>🧾 Real audit trail, via Purview audit log search</span>
     </div>
   </div>
 
   <!-- AUTH PANEL -->
   <section class="panel" id="authPanel">
     <h2>1. Connect to Microsoft 365</h2>
-    <p class="desc">Sign in with your Microsoft 365 account to pull live site inventory (<code style="font-family:var(--mono);color:var(--cyan)">Sites.Read.All</code>). Some tenants require a Global Administrator or SharePoint Administrator to approve this the first time — that's a one-time consent per tenant, not something needed on every visit.</p>
+    <p class="desc">Sign in with your Microsoft 365 account to pull live site inventory (<code style="font-family:var(--mono);color:var(--cyan)">Sites.Read.All</code>) and search the real audit log (<code style="font-family:var(--mono);color:var(--cyan)">AuditLogsQuery-SharePoint.Read.All</code>). Some tenants require a Global Administrator to approve this the first time — that's a one-time consent per tenant, not something needed on every visit. Audit log search itself additionally needs your signed-in account to hold an admin role such as Global, Compliance or Security Administrator.</p>
 
     <div class="notice notice-error" id="authError"></div>
     <div class="notice notice-warn" id="authWarn"></div>
@@ -292,9 +295,56 @@ footer a{color:var(--green);text-decoration:none}
     </div>
   </section>
 
+  <!-- AUDIT LOG PANEL -->
+  <section class="panel" id="auditPanel" style="display:none">
+    <h2>3. Search the Audit Log</h2>
+    <p class="desc">Pull real audit trail records — who did what, when, to which file or site — straight from the <strong>Microsoft Purview unified audit log</strong>, via a Microsoft Graph API that returns data directly (no CORS wall like the usage reports below). This calls Graph from your browser using your own token; nothing passes through our servers. Requires an account with a Global Administrator, Compliance Administrator, Security Administrator (or equivalent custom audit role), and audit logging turned on for your tenant.</p>
+
+    <div class="opt-row">
+      <div class="opt-field">
+        <label for="auditRangeSelect">Date range</label>
+        <select id="auditRangeSelect">
+          <option value="1">Last 24 hours</option>
+          <option value="7" selected>Last 7 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+      </div>
+      <div class="opt-field">
+        <label for="auditUserFilter">Filter by user (optional)</label>
+        <input type="text" id="auditUserFilter" placeholder="user@yourdomain.com">
+      </div>
+      <div class="opt-field">
+        <label for="auditKeywordFilter">Keyword (optional)</label>
+        <input type="text" id="auditKeywordFilter" placeholder="e.g. a file or folder name">
+      </div>
+    </div>
+
+    <div class="opt-field">
+      <label>Include activity from</label>
+      <div class="check-row">
+        <label><input type="checkbox" id="auditIncludeSP" checked> SharePoint (files, sharing, lists)</label>
+        <label><input type="checkbox" id="auditIncludeOD" checked> OneDrive</label>
+        <label><input type="checkbox" id="auditIncludeDLP"> Compliance / DLP</label>
+      </div>
+    </div>
+
+    <div class="notice notice-error" id="auditError"></div>
+    <div class="notice notice-warn" id="auditWarn"></div>
+    <div class="notice notice-info" id="auditInfo"></div>
+    <div class="btn-row">
+      <button class="pdf-btn-primary" id="auditBtn" onclick="runAuditSearch()">🔍 Search Audit Log</button>
+      <button class="pdf-btn-secondary" id="auditExportBtn" style="display:none" onclick="exportAuditCsv()">⬇️ Export Raw Records (CSV)</button>
+    </div>
+    <div class="progress-wrap" id="auditProgress">
+      <div class="progress-track"><div class="progress-fill" id="auditProgressFill"></div></div>
+      <div class="progress-label" id="auditProgressLabel">Creating audit log query…</div>
+    </div>
+  </section>
+
   <!-- IMPORT PANEL (usage / activity CSVs) -->
   <section class="panel" id="importPanel" style="display:none">
-    <h2>3. Import Usage &amp; Activity Data <span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;vertical-align:middle">Optional</span></h2>
+    <h2>4. Storage &amp; Usage Stats <span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;vertical-align:middle">Optional</span></h2>
     <p class="desc">Microsoft Graph blocks browsers from fetching these specific reports directly — a restriction on Microsoft's end, not something this tool can work around. The admin center can export the same data as a CSV file, which this tool reads entirely on your device.</p>
     <div class="step-list compact">
       <div class="step-item"><div class="step-num">1</div><p>Open <a href="https://admin.microsoft.com/Adminportal/Home#/reportsUsage/SharePointActivity" target="_blank" rel="noopener" style="color:var(--cyan)">Microsoft 365 admin center → Reports → Usage</a> and choose "SharePoint site usage" or "SharePoint activity."</p></div>
@@ -348,6 +398,14 @@ footer a{color:var(--green);text-decoration:none}
     </table></div>
     <p class="table-note" id="inventoryNote"></p>
 
+    <div class="section-title">Audit Log <span id="auditRangeLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></div>
+    <p class="section-sub">Raw activity records from the Microsoft Purview unified audit log, fetched live via Microsoft Graph using your own signed-in permissions.</p>
+    <div class="data-table-wrap"><table class="data-table" id="auditTable">
+      <thead><tr><th>Date/Time</th><th>User</th><th>Operation</th><th>Object</th><th>Service</th><th>IP Address</th></tr></thead>
+      <tbody id="auditBody"><tr><td colspan="6">Run a search in step 3 above to populate this.</td></tr></tbody>
+    </table></div>
+    <p class="table-note" id="auditNote"></p>
+
     <div class="section-title">Activity Summary <span id="activityPeriodLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></div>
     <p class="section-sub">Tenant-wide file activity counts from the imported SharePoint activity report.</p>
     <div class="stat-grid" id="activityGrid">
@@ -373,14 +431,15 @@ footer a{color:var(--green);text-decoration:none}
     <div class="step-list">
       <div class="step-item"><div class="step-num">1</div><p>You sign in with your own Microsoft 365 account using the button above — a standard Microsoft sign-in popup, not a form on this site. Some tenants will ask a Global Admin or SharePoint Admin to approve this the first time.</p></div>
       <div class="step-item"><div class="step-num">2</div><p>Your browser calls <code>graph.microsoft.com</code> directly using your own token to pull live site inventory — name, URL, template, last activity.</p></div>
-      <div class="step-item"><div class="step-num">3</div><p>Storage, usage and activity reports can't be fetched the same way — Microsoft Graph redirects those specific requests to a download link that browsers aren't allowed to follow cross-origin. So you export the report once from the M365 admin center and drop the CSV in below; it's parsed with JavaScript's FileReader, entirely on your device.</p></div>
-      <div class="step-item"><div class="step-num">4</div><p>Everything renders locally into the report below. Use "Export / Print Report" to save a branded PDF for a client — nothing is uploaded anywhere in this process.</p></div>
+      <div class="step-item"><div class="step-num">3</div><p>Audit log search calls the Microsoft Purview unified audit log via Graph's <code>/security/auditLog/queries</code> API — a query is created, polled until it finishes, then matching records are paged in. This one returns JSON with normal CORS headers, so it genuinely works from a browser, unlike the usage reports below.</p></div>
+      <div class="step-item"><div class="step-num">4</div><p>Storage and usage reports can't be fetched the same way — Microsoft Graph redirects those specific requests to a download link that browsers aren't allowed to follow cross-origin. So you export the report once from the M365 admin center and drop the CSV in; it's parsed with JavaScript's FileReader, entirely on your device.</p></div>
+      <div class="step-item"><div class="step-num">5</div><p>Everything renders locally into the report below. Use "Export / Print Report" to save a branded PDF for a client, or "Export Raw Records" for the full audit log as CSV — nothing is uploaded anywhere in this process.</p></div>
     </div>
 
     <div class="info-grid">
       <div class="info-card"><div class="ico">📦</div><h4>Site Inventory</h4><p>Every SharePoint site visible to the signed-in account — name, URL, template and last activity. Fetched live, automatically.</p></div>
-      <div class="info-card"><div class="ico">📈</div><h4>Storage &amp; Growth</h4><p>Per-site storage used, file counts and page views — from a usage report you export once and drop in.</p></div>
-      <div class="info-card"><div class="ico">👥</div><h4>Activity Metrics</h4><p>Tenant-wide and per-user activity — viewed/edited, synced, shared internally and externally — from an imported activity export.</p></div>
+      <div class="info-card"><div class="ico">🧾</div><h4>Real Audit Log</h4><p>Actual Purview audit records — who did what, when, to which file — searched live via Graph. Filter by date range, user, keyword or activity type.</p></div>
+      <div class="info-card"><div class="ico">📈</div><h4>Storage &amp; Usage</h4><p>Per-site storage used, file counts and page views — from a usage report you export once and drop in.</p></div>
       <div class="info-card"><div class="ico">🖨️</div><h4>Branded PDF Export</h4><p>One click turns the on-screen dashboard into a clean, print-ready report for a client.</p></div>
     </div>
   </div>
@@ -420,7 +479,11 @@ const MSAL_CLIENT_ID = "4081224c-ab5c-408c-ba65-6703688c7af5";
 // headers, so a browser can never read them directly regardless of scope.
 // Those sections are filled in from an imported CSV export instead — see
 // the CSV import handling below.
-const GRAPH_SCOPES = ["Sites.Read.All"];
+// AuditLogsQuery-SharePoint.Read.All powers the real audit log search (a
+// different Graph API that returns JSON directly, no CORS redirect) — this
+// needs the app registration's API permissions updated and admin consent
+// granted in Entra ID before it will work for any tenant.
+const GRAPH_SCOPES = ["Sites.Read.All", "AuditLogsQuery-SharePoint.Read.All"];
 const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
 
 const msalConfig = {
@@ -453,6 +516,7 @@ function showSignedIn(account){
   document.getElementById('authRow').style.display = 'none';
   document.getElementById('signedInRow').style.display = 'flex';
   document.getElementById('controlsPanel').style.display = 'block';
+  document.getElementById('auditPanel').style.display = 'block';
   const name = account.name || account.username || 'Signed in';
   document.getElementById('acctName').textContent = name;
   document.getElementById('acctEmail').textContent = account.username || '';
@@ -496,11 +560,13 @@ async function signIn(){
 function signOutUser(){
   document.getElementById('reportRoot').classList.remove('show');
   document.getElementById('controlsPanel').style.display = 'none';
+  document.getElementById('auditPanel').style.display = 'none';
   document.getElementById('importPanel').style.display = 'none';
   document.getElementById('signedInRow').style.display = 'none';
   document.getElementById('authRow').style.display = 'flex';
   document.getElementById('csvFileList').innerHTML = '';
-  lastSites = []; importedUsageRows = []; importedFileCountRows = []; importedUserRows = [];
+  document.getElementById('auditExportBtn').style.display = 'none';
+  lastSites = []; importedUsageRows = []; importedFileCountRows = []; importedUserRows = []; lastAuditRecords = [];
   if (msalInstance && currentAccount) {
     msalInstance.logoutPopup({ account: currentAccount }).catch(()=>{});
   }
@@ -650,6 +716,7 @@ let lastPeriod = 'D30';
 let importedUsageRows = [];
 let importedFileCountRows = [];
 let importedUserRows = [];
+let lastAuditRecords = [];
 
 async function generateReport(){
   clearGenError();
@@ -684,6 +751,180 @@ async function generateReport(){
   } finally {
     genBtn.disabled = false;
   }
+}
+
+// ---- AUDIT LOG SEARCH (Microsoft Purview unified audit log via Graph) ----
+// Unlike the usage/activity report endpoints, /security/auditLog/queries
+// returns JSON directly with normal CORS headers — no redirect problem —
+// so this can genuinely run client-side, no CSV export needed.
+const SP_RECORD_TYPES = ['sharePoint','sharePointFileOperation','sharePointSharingOperation','sharePointListOperation','sharePointListItemOperation','sharePointCommentOperation','sharePointContentTypeOperation','sharePointFieldOperation','sharePointAppPermissionOperation'];
+const OD_RECORD_TYPES = ['oneDrive'];
+const DLP_RECORD_TYPES = ['complianceDLPSharePoint','complianceDLPSharePointClassification'];
+
+function clearAuditNotices(){
+  ['auditError','auditWarn','auditInfo'].forEach(id => document.getElementById(id).classList.remove('show'));
+}
+function showAuditError(msg){
+  const el = document.getElementById('auditError');
+  el.innerHTML = msg;
+  el.classList.add('show');
+}
+function setAuditProgress(pct, label){
+  const wrap = document.getElementById('auditProgress');
+  wrap.classList.add('show');
+  document.getElementById('auditProgressFill').style.width = pct + '%';
+  if (label) document.getElementById('auditProgressLabel').textContent = label;
+}
+function hideAuditProgress(){
+  document.getElementById('auditProgress').classList.remove('show');
+}
+
+async function runAuditSearch(){
+  clearAuditNotices();
+  document.getElementById('auditExportBtn').style.display = 'none';
+  const btn = document.getElementById('auditBtn');
+  btn.disabled = true;
+
+  let recordTypeFilters = [];
+  if (document.getElementById('auditIncludeSP').checked) recordTypeFilters = recordTypeFilters.concat(SP_RECORD_TYPES);
+  if (document.getElementById('auditIncludeOD').checked) recordTypeFilters = recordTypeFilters.concat(OD_RECORD_TYPES);
+  if (document.getElementById('auditIncludeDLP').checked) recordTypeFilters = recordTypeFilters.concat(DLP_RECORD_TYPES);
+  if (!recordTypeFilters.length) {
+    showAuditError('Pick at least one activity type to search.');
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+    const token = await getToken();
+
+    const days = Number(document.getElementById('auditRangeSelect').value);
+    const end = new Date();
+    const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+    const userFilter = document.getElementById('auditUserFilter').value.trim();
+    const keyword = document.getElementById('auditKeywordFilter').value.trim();
+
+    const body = {
+      displayName: 'SalmanITTools SharePoint Report ' + end.toISOString(),
+      filterStartDateTime: start.toISOString(),
+      filterEndDateTime: end.toISOString(),
+      recordTypeFilters,
+    };
+    if (userFilter) body.userPrincipalNameFilters = [userFilter];
+    if (keyword) body.keywordFilter = keyword;
+
+    setAuditProgress(10, 'Creating audit log query…');
+    const createRes = await fetch(`${GRAPH_BASE}/security/auditLog/queries`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!createRes.ok) {
+      let detail = ''; try { const j = await createRes.json(); detail = (j.error && j.error.message) || ''; } catch(e){}
+      const err = new Error(detail || createRes.statusText); err.status = createRes.status; throw err;
+    }
+    const query = await createRes.json();
+    const queryId = query.id;
+
+    setAuditProgress(25, 'Running query against the audit log… this can take up to a minute.');
+    let status = query.status || 'notStarted';
+    let tries = 0;
+    while (status !== 'succeeded' && status !== 'failed' && status !== 'cancelled' && tries < 40) {
+      await new Promise(r => setTimeout(r, 3000));
+      const pollRes = await fetch(`${GRAPH_BASE}/security/auditLog/queries/${queryId}`, { headers: { Authorization: 'Bearer ' + token } });
+      if (!pollRes.ok) throw new Error('Lost track of the audit query while polling (' + pollRes.status + ').');
+      const pollJson = await pollRes.json();
+      status = pollJson.status;
+      tries++;
+      setAuditProgress(25 + Math.min(60, tries * 2), 'Running query against the audit log… (' + status + ')');
+    }
+    if (status === 'failed') throw new Error("The audit query failed on Microsoft's side. Try a shorter date range.");
+    if (status === 'cancelled') throw new Error('The audit query was cancelled.');
+    if (status !== 'succeeded') throw new Error('Timed out waiting for the audit query to finish. Try a shorter date range and search again.');
+
+    setAuditProgress(88, 'Fetching matching records…');
+    let records = [];
+    let next = `${GRAPH_BASE}/security/auditLog/queries/${queryId}/records?$top=999`;
+    const CAP = 5000;
+    while (next && records.length < CAP) {
+      const r = await fetch(next, { headers: { Authorization: 'Bearer ' + token } });
+      if (!r.ok) break;
+      const j = await r.json();
+      records = records.concat(j.value || []);
+      next = j['@odata.nextLink'] || null;
+    }
+
+    lastAuditRecords = records.slice(0, CAP);
+    renderAuditResults(lastAuditRecords, start, end);
+    if (records.length >= CAP) {
+      const el = document.getElementById('auditWarn');
+      el.textContent = `Showing the first ${CAP.toLocaleString()} matching records. Narrow the date range or filters to see a more complete picture.`;
+      el.classList.add('show');
+    } else {
+      const el = document.getElementById('auditInfo');
+      el.textContent = `Found ${records.length.toLocaleString()} matching record(s).`;
+      el.classList.add('show');
+    }
+    document.getElementById('auditExportBtn').style.display = lastAuditRecords.length ? 'inline-block' : 'none';
+    hideAuditProgress();
+  } catch (err) {
+    console.error('audit search', err);
+    hideAuditProgress();
+    const status = err && err.status;
+    if (status === 403 || status === 401) {
+      showAuditError("Microsoft blocked this audit search — you likely need a Global Administrator, Compliance Administrator or Security Administrator role (or a custom role with audit search rights). If this is the first time anyone has used audit search with this app, a Global Admin also needs to grant admin consent for <strong>AuditLogsQuery-SharePoint.Read.All</strong> in Entra ID, then sign out and back in.<br><br><details><summary style=\"cursor:pointer;color:inherit\">Technical details</summary>" + escapeHtml(err.message || String(err)) + "</details>");
+    } else {
+      showAuditError('Audit search failed: ' + escapeHtml(err.message || String(err)));
+    }
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function auditRecordObject(rec){
+  const d = rec.auditData || {};
+  return rec.objectId || d.SourceFileName || d.SourceRelativeUrl || d.SiteUrl || d.ItemName || '—';
+}
+
+function renderAuditResults(records, start, end){
+  document.getElementById('auditRangeLabel').textContent = '(' + formatDate(start) + ' – ' + formatDate(end) + ')';
+  const body = document.getElementById('auditBody');
+  const sorted = records.slice().sort((a,b) => new Date(b.createdDateTime||0) - new Date(a.createdDateTime||0));
+  const shown = sorted.slice(0, 500);
+  body.innerHTML = shown.length ? shown.map(r => `
+    <tr>
+      <td>${escapeHtml(r.createdDateTime ? new Date(r.createdDateTime).toLocaleString() : '—')}</td>
+      <td>${escapeHtml(r.userPrincipalName || r.userId || '—')}</td>
+      <td>${escapeHtml(r.operation || '—')}</td>
+      <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis" title="${escapeHtml(auditRecordObject(r))}">${escapeHtml(auditRecordObject(r))}</td>
+      <td>${escapeHtml(r.service || r.auditLogRecordType || '—')}</td>
+      <td>${escapeHtml(r.clientIp || '—')}</td>
+    </tr>`).join('') : '<tr><td colspan="6">No matching audit records for this range and filters.</td></tr>';
+  document.getElementById('auditNote').textContent = records.length
+    ? `Showing ${shown.length} of ${records.length.toLocaleString()} matching record(s), most recent first. Use "Export Raw Records" for the full set with all details.`
+    : '';
+  document.getElementById('reportRoot').classList.add('show');
+  document.getElementById('reportRoot').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function exportAuditCsv(){
+  if (!lastAuditRecords.length) return;
+  const cols = ['createdDateTime','userPrincipalName','operation','service','auditLogRecordType','clientIp','objectId','auditData'];
+  const lines = [cols.join(',')];
+  lastAuditRecords.forEach(r => {
+    const row = cols.map(c => {
+      let v = c === 'auditData' ? JSON.stringify(r.auditData || {}) : r[c];
+      if (v == null) v = '';
+      return '"' + String(v).replace(/"/g,'""') + '"';
+    });
+    lines.push(row.join(','));
+  });
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'sharepoint-audit-log.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function renderReport({ period, sites, usageRows, fileCountRows, userRows }){

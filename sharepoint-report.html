@@ -205,6 +205,14 @@ footer a{color:var(--green);text-decoration:none}
   table.data-table td{color:#111}
   .bar-track{background:#eee}
   .report-header{border-bottom:2px solid #111}
+  /* Screen tables rely on horizontal scroll for overflow, which doesn't
+     exist on paper — force everything to wrap and fit the page width
+     instead of getting clipped at the printable margin. */
+  .data-table-wrap{overflow-x:visible;border-color:#ddd}
+  table.data-table{width:100%;min-width:0;table-layout:fixed}
+  table.data-table th,table.data-table td{white-space:normal;word-break:break-word;padding:6px 8px;font-size:0.72rem}
+  table.data-table tr,.stat-card,.info-card,.section-title{break-inside:avoid}
+  .section-title{break-after:avoid}
 }
 </style>
 <script src="site-search.js" defer></script>
@@ -408,7 +416,10 @@ footer a{color:var(--green);text-decoration:none}
     </table></div>
     <p class="table-note" id="inventoryNote"></p>
 
-    <div class="section-title">Audit Log <span id="auditRangeLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></div>
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <span>Audit Log <span id="auditRangeLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></span>
+      <button class="pdf-btn-secondary no-print" id="auditExportBtnReport" style="display:none;padding:8px 16px;font-size:0.78rem;min-height:auto" onclick="exportAuditCsv()">⬇️ Export Raw Records (CSV)</button>
+    </div>
     <p class="section-sub">Raw activity records from the Microsoft Purview unified audit log, fetched live via Microsoft Graph using your own signed-in permissions.</p>
     <div class="data-table-wrap"><table class="data-table" id="auditTable">
       <thead><tr><th>Date/Time</th><th>User</th><th>Operation</th><th>Object</th><th>Service</th><th>IP Address</th></tr></thead>
@@ -575,8 +586,8 @@ function signOutUser(){
   document.getElementById('signedInRow').style.display = 'none';
   document.getElementById('authRow').style.display = 'flex';
   document.getElementById('csvFileList').innerHTML = '';
-  document.getElementById('auditExportBtn').style.display = 'none';
-  lastSites = []; importedUsageRows = []; importedFileCountRows = []; importedUserRows = []; lastAuditRecords = [];
+  setAuditExportVisible(false);
+  lastSites = []; importedUsageRows = []; importedFileCountRows = []; importedUserRows = []; lastAuditRecords = []; siteInventoryFetched = false;
   if (msalInstance && currentAccount) {
     msalInstance.logoutPopup({ account: currentAccount }).catch(()=>{});
   }
@@ -727,6 +738,13 @@ let importedUsageRows = [];
 let importedFileCountRows = [];
 let importedUserRows = [];
 let lastAuditRecords = [];
+let siteInventoryFetched = false;
+
+function setAuditExportVisible(show){
+  const d = show ? 'inline-block' : 'none';
+  document.getElementById('auditExportBtn').style.display = d;
+  document.getElementById('auditExportBtnReport').style.display = d;
+}
 
 async function generateReport(){
   clearGenError();
@@ -745,6 +763,7 @@ async function generateReport(){
     setProgress(95, 'Building report…');
     lastSites = sites;
     lastPeriod = period;
+    siteInventoryFetched = true;
 
     renderReport({ period, sites, usageRows: importedUsageRows, fileCountRows: importedFileCountRows, userRows: importedUserRows });
     document.getElementById('importPanel').style.display = 'block';
@@ -791,7 +810,7 @@ function hideAuditProgress(){
 
 async function runAuditSearch(){
   clearAuditNotices();
-  document.getElementById('auditExportBtn').style.display = 'none';
+  setAuditExportVisible(false);
   const btn = document.getElementById('auditBtn');
   btn.disabled = true;
 
@@ -803,6 +822,14 @@ async function runAuditSearch(){
     showAuditError('Pick at least one activity type to search.');
     btn.disabled = false;
     return;
+  }
+
+  // So the report isn't left showing blank tenant/stats/site inventory
+  // when someone searches the audit log without clicking "Generate
+  // Report" first — the two are meant to combine into one report.
+  if (!siteInventoryFetched) {
+    setAuditProgress(5, 'Fetching site inventory for the report header…');
+    await generateReport();
   }
 
   try {
@@ -879,7 +906,7 @@ async function runAuditSearch(){
       el.textContent = `Found ${records.length.toLocaleString()} matching record(s).`;
       el.classList.add('show');
     }
-    document.getElementById('auditExportBtn').style.display = lastAuditRecords.length ? 'inline-block' : 'none';
+    setAuditExportVisible(lastAuditRecords.length > 0);
     hideAuditProgress();
   } catch (err) {
     console.error('audit search', err);

@@ -158,6 +158,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 table.data-table{width:100%;border-collapse:collapse;font-size:0.82rem;min-width:560px}
 table.data-table th{text-align:left;font-size:0.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border);white-space:nowrap}
 table.data-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--white);white-space:nowrap}
+table.data-table td.wrap-cell{white-space:normal;word-break:break-all;min-width:200px}
 table.data-table tr:last-child td{border-bottom:none}
 table.data-table tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
 .table-note{font-size:0.76rem;color:var(--muted);margin-bottom:20px}
@@ -886,6 +887,20 @@ function auditRecordObject(rec){
   return rec.objectId || d.SourceFileName || d.SourceRelativeUrl || d.SiteUrl || d.ItemName || '—';
 }
 
+// Shows a readable breadcrumb (site/.../file) instead of a raw URL that's
+// either cut off with an ellipsis on screen or runs off the printed page.
+function shortenPath(value){
+  if (!value || value === '—') return '—';
+  try {
+    const u = new URL(value);
+    const parts = decodeURIComponent(u.pathname).split('/').filter(Boolean);
+    if (!parts.length) return u.hostname;
+    return parts.length > 3 ? u.hostname + '/…/' + parts.slice(-2).join('/') : u.hostname + '/' + parts.join('/');
+  } catch (e) {
+    return value;
+  }
+}
+
 function renderAuditResults(records, start, end){
   document.getElementById('auditRangeLabel').textContent = '(' + formatDate(start) + ' – ' + formatDate(end) + ')';
   const body = document.getElementById('auditBody');
@@ -896,7 +911,7 @@ function renderAuditResults(records, start, end){
       <td>${escapeHtml(r.createdDateTime ? new Date(r.createdDateTime).toLocaleString() : '—')}</td>
       <td>${escapeHtml(r.userPrincipalName || r.userId || '—')}</td>
       <td>${escapeHtml(r.operation || '—')}</td>
-      <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis" title="${escapeHtml(auditRecordObject(r))}">${escapeHtml(auditRecordObject(r))}</td>
+      <td class="wrap-cell" title="${escapeHtml(auditRecordObject(r))}">${escapeHtml(shortenPath(auditRecordObject(r)))}</td>
       <td>${escapeHtml(r.service || r.auditLogRecordType || '—')}</td>
       <td>${escapeHtml(r.clientIp || '—')}</td>
     </tr>`).join('') : '<tr><td colspan="6">No matching audit records for this range and filters.</td></tr>';
@@ -967,7 +982,7 @@ function renderReport({ period, sites, usageRows, fileCountRows, userRows }){
   inventoryBody.innerHTML = invSorted.length ? invSorted.map(s => `
     <tr>
       <td>${escapeHtml(s.displayName || s.name || '(unnamed)')}</td>
-      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis">${escapeHtml(s.webUrl || '')}</td>
+      <td class="wrap-cell" title="${escapeHtml(s.webUrl || '')}">${escapeHtml(s.webUrl || '')}</td>
       <td>${escapeHtml((s.root ? 'Root' : (s.siteCollection && s.siteCollection.hostname)) || '—')}</td>
       <td>${formatDate(s.lastModifiedDateTime)}</td>
     </tr>`).join('') : '<tr><td colspan="4">No sites returned. Your account may not have access to any SharePoint sites, or the search API returned nothing.</td></tr>';

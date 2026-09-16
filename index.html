@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Salman IT Tools — Free Windows Utilities & Online Tools</title>
 <link rel="canonical" href="https://salmanittools.co.uk/">
-<meta name="description" content="Free IT tools by a Microsoft 365 & Cloud Infrastructure Expert with 25+ years of experience. M365 Security Scanner, Conditional Access Policy Explainer, image compressor, QR generator, password generator, network tools, and Windows utilities — all free, no signup required.">
+<meta name="description" content="Free IT tools by a Microsoft 365 & Cloud Infrastructure Expert with 25+ years of experience. Microsoft 365 Tenant Audit, Conditional Access Policy Explainer, image compressor, QR generator, password generator, network tools, and Windows utilities — all free, no signup required.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1403,14 +1403,14 @@ footer a:hover { text-decoration: underline; }
         <div class="tool-icon-wrap" style="flex-shrink:0">🔐</div>
         <div style="flex:1">
           <div class="tool-badge" style="color:#00C8FF;background:rgba(0,200,255,0.08);border-color:rgba(0,200,255,0.2)">● Free Online Tool</div>
-          <div class="tool-name" style="margin-bottom:6px">M365 Security Scanner</div>
-          <div class="tool-desc">Connect your Microsoft 365 tenant and get a full security health report — MFA, admin roles, risky sign-ins, Conditional Access and more.</div>
+          <div class="tool-name" style="margin-bottom:6px">Microsoft 365 Tenant Audit</div>
+          <div class="tool-desc">Connect your Microsoft 365 tenant and get a full audit — MFA, admin roles, risky sign-ins, Conditional Access, license usage, mailbox sizes, inbox rules and more.</div>
         </div>
       </div>
       <div class="tc-actions">
         <a class="dl-btn" href="m365-scan.html" target="_blank" style="background:linear-gradient(135deg,#00C8FF,#0099CC)">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          Open Scanner
+          Open Audit Tool
         </a>
         <button class="learn-btn" onclick="toggleDetails(this)">Details <span class="learn-arrow">▾</span></button>
       </div>
@@ -1424,7 +1424,9 @@ footer a:hover { text-decoration: underline; }
           <li>Microsoft Secure Score out of 100</li>
           <li>SharePoint external sharing settings</li>
           <li>Intune device compliance status</li>
-          <li>External mail forwarding detection</li>
+          <li>License utilization — purchased vs. assigned per SKU</li>
+          <li>Mailbox sizes and quota warnings</li>
+          <li>Inbox rules &amp; mail forwarding — catches rule-based exfiltration</li>
           <li>Full user list with licenses — export to PDF</li>
         </ul>
         <div class="tool-meta-row" style="margin-top:12px">
@@ -2077,10 +2079,10 @@ footer a:hover { text-decoration: underline; }
       <div class="faq-a">No. Everything runs locally on your machine. The only external connection is when checking for Windows Updates — which goes directly to Microsoft servers, not ours.</div>
     </div>
 
-    <!-- M365 Scanner -->
+    <!-- M365 Tenant Audit -->
     <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">Is the M365 Security Scanner safe to use? <span class="faq-arrow">▾</span></div>
-      <div class="faq-a">Yes. The scanner uses Microsoft's official OAuth authentication — the same login flow used by Microsoft's own admin tools. You sign in directly with Microsoft, not through our site. We never see or store your password.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">Is the Microsoft 365 Tenant Audit tool safe to use? <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">Yes. It uses Microsoft's official OAuth authentication — the same login flow used by Microsoft's own admin tools. You sign in directly with Microsoft, not through our site. We never see or store your password.</div>
     </div>
     <div class="faq-item reveal">
       <div class="faq-q" onclick="toggleFaq(this)">What permissions does the M365 scanner request? <span class="faq-arrow">▾</span></div>

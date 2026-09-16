@@ -23,9 +23,9 @@
       description: "Generate a client-ready SharePoint report — live site inventory via Microsoft Graph, plus storage & activity from an imported M365 usage export.",
       keywords: ["sharepoint", "report", "o365", "office 365", "microsoft 365", "storage report", "usage report", "site inventory", "graph api", "csv import"] },
 
-    { name: "M365 Security Scanner", url: "m365-scan.html",
-      description: "Scan a Microsoft 365 tenant for MFA gaps, risky sign-ins, Conditional Access and SharePoint issues.",
-      keywords: ["o365", "office 365", "microsoft 365", "tenant", "mfa", "security scan", "entra", "azure ad"] },
+    { name: "Microsoft 365 Tenant Audit", url: "m365-scan.html",
+      description: "Full Microsoft 365 tenant audit — MFA gaps, risky sign-ins, Conditional Access, license usage, mailbox sizes, inbox rules and more.",
+      keywords: ["o365", "office 365", "microsoft 365", "tenant", "tenant audit", "mfa", "security scan", "security audit", "entra", "azure ad", "license usage", "mailbox size", "inbox rules"] },
 
     { name: "Conditional Access Policy Explainer", url: "ca-policy-explainer.html",
       description: "Paste your Entra ID Conditional Access policy JSON and get a plain-English explanation instantly.",

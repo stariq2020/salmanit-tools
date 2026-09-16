@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>Free M365 Security Scanner — Salman IT Tools</title>
+<title>Free Microsoft 365 Tenant Audit — Salman IT Tools</title>
 <link rel="canonical" href="https://salmanittools.co.uk/m365-scan.html">
-<meta name="description" content="Free Microsoft 365 tenant security scanner. Check MFA, admin roles, risky sign-ins, Conditional Access, SharePoint and more.">
+<meta name="description" content="Free Microsoft 365 tenant audit tool. Check MFA, admin roles, risky sign-ins, Conditional Access, license usage, mailbox sizes, inbox rules and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -182,9 +182,9 @@ footer a{color:var(--green);text-decoration:none}
 </div>
 
 <div class="page">
-  <div class="page-eyebrow">Free Security Tool</div>
-  <h1 class="page-title">M365 Security<br><span class="acc">Scanner</span></h1>
-  <p class="page-sub">Connect your Microsoft 365 tenant and get a full security health report — MFA status, admin roles, risky sign-ins, Conditional Access, SharePoint, devices and more.</p>
+  <div class="page-eyebrow">Free Audit Tool</div>
+  <h1 class="page-title">Microsoft 365<br><span class="acc">Tenant Audit</span></h1>
+  <p class="page-sub">Connect your Microsoft 365 tenant and get a full audit — MFA status, admin roles, risky sign-ins, Conditional Access, SharePoint, devices, license usage, mailbox sizes, inbox rules and more.</p>
 
   <div class="connect-card" id="connectCard">
     <div class="connect-icon">🔐</div>
@@ -211,7 +211,7 @@ footer a{color:var(--green);text-decoration:none}
     <button class="sign-out-btn" onclick="signOut()">Sign Out</button>
   </div>
 
-  <button class="scan-btn" id="scanBtn" onclick="runScan()">🔍 &nbsp;Run Full Security Scan</button>
+  <button class="scan-btn" id="scanBtn" onclick="runScan()">🔍 &nbsp;Run Full Tenant Audit</button>
 
   <div class="error-card" id="errorCard">
     <h4>⚠️ Scan Error</h4>
@@ -219,7 +219,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div class="progress-wrap" id="progressWrap">
-    <div class="progress-title">Running security scan…</div>
+    <div class="progress-title">Running tenant audit…</div>
     <div class="progress-steps" id="progressSteps"></div>
     <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
   </div>
@@ -227,11 +227,11 @@ footer a{color:var(--green);text-decoration:none}
   <div class="results-wrap" id="resultsWrap">
     <div class="results-header">
       <div>
-        <div class="results-title">Security Report</div>
+        <div class="results-title">Tenant Audit Report</div>
         <div class="results-tenant" id="resultsTenant"></div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="rescan-btn" onclick="exportPDF()">📄 Full Security Report (PDF)</button>
+        <button class="rescan-btn" onclick="exportPDF()">📄 Full Tenant Audit Report (PDF)</button>
         <button class="rescan-btn" onclick="exportCAPDF()">🔒 Conditional Access Report (PDF)</button>
         <button class="rescan-btn" onclick="runScan()">🔄 Re-scan</button>
       </div>
@@ -514,7 +514,7 @@ function friendlyLicense(sku) {
 // ── Main scan ─────────────────────────────────────────────────────────────────
 async function runScan() {
   document.getElementById('scanBtn').disabled = true;
-  document.getElementById('scanBtn').textContent = '⏳ Scanning…';
+  document.getElementById('scanBtn').textContent = '⏳ Auditing…';
   document.getElementById('resultSections').innerHTML = '';
   document.getElementById('scoreRow').innerHTML = '';
   initProgress();
@@ -897,7 +897,7 @@ async function runScan() {
     showError('Scan failed: ' + (e.message||e));
   }
   document.getElementById('scanBtn').disabled = false;
-  document.getElementById('scanBtn').textContent = '🔍  Run Full Security Scan';
+  document.getElementById('scanBtn').textContent = '🔍  Run Full Tenant Audit';
 }
 
 // ── CA Policy Findings Engine ───────────────────────────────────────────────
@@ -1447,17 +1447,28 @@ async function exportPDF() {
     col:  c.querySelector('.sc-val')?.style.color||'#1a2b45',
   }));
 
-  const sections = [...document.querySelectorAll('.result-section')].map(s => ({
-    icon:      s.querySelector('.result-section-icon')?.textContent||'',
-    title:     s.querySelector('.result-section-title')?.textContent||'',
-    badge:     s.querySelector('.result-section-badge')?.textContent||'',
-    badgeCls:  s.querySelector('.result-section-badge')?.className||'',
-    rows:      [...s.querySelectorAll('.res-row')].map(r => ({
-      key: r.querySelector('.res-key')?.textContent||'',
-      val: r.querySelector('.res-val')?.textContent||'',
-      cls: r.querySelector('.res-val')?.className||'',
-    })),
-  }));
+  const colFixAll = html => html
+    .replace(/var\(--green\)/g,'#00c468').replace(/var\(--warning\)/g,'#d97706')
+    .replace(/var\(--danger\)/g,'#dc2626').replace(/var\(--white\)/g,'#1a2b45').replace(/var\(--cyan\)/g,'#0284c7');
+
+  // Sections like License Utilization and Mailbox Sizes render as a
+  // <table> instead of .res-row divs, so they need their own capture here
+  // — otherwise they'd show up in the PDF with a header and no data at all.
+  const sections = [...document.querySelectorAll('.result-section')].map(s => {
+    const table = s.querySelector('.result-section-body table');
+    return {
+      icon:      s.querySelector('.result-section-icon')?.textContent||'',
+      title:     s.querySelector('.result-section-title')?.textContent||'',
+      badge:     s.querySelector('.result-section-badge')?.textContent||'',
+      badgeCls:  s.querySelector('.result-section-badge')?.className||'',
+      rows:      [...s.querySelectorAll('.res-row')].map(r => ({
+        key: r.querySelector('.res-key')?.textContent||'',
+        val: r.querySelector('.res-val')?.textContent||'',
+        cls: r.querySelector('.res-val')?.className||'',
+      })),
+      tableHtml: table ? colFixAll(table.outerHTML.replace(/class="user-table"/,'class="ut"')) : '',
+    };
+  });
 
   // CA Findings — pulled directly from scan data (not DOM, since it uses custom markup)
   const caFindingsData = window._scanData.caFindings || [];
@@ -1467,7 +1478,7 @@ async function exportPDF() {
     .replace('var(--danger)','#dc2626').replace('var(--white)','#1a2b45').replace('var(--cyan)','#0284c7');
 
   const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>M365 Security Report — ${org}</title>
+<title>Microsoft 365 Tenant Audit Report — ${org}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;color:#1a2b45;font-size:11pt}
@@ -1512,8 +1523,8 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
 </head><body>
 <div class="cover">
   <div class="cover-logo">⚡ Salman IT Tools</div>
-  <div class="cover-title">M365 Security Report</div>
-  <div class="cover-sub">Microsoft 365 Tenant Security Assessment</div>
+  <div class="cover-title">Microsoft 365 Tenant Audit Report</div>
+  <div class="cover-sub">Full Tenant Security &amp; Configuration Audit</div>
   <div class="cover-meta">
     <div class="cml"><label>Organisation</label><span>${org}</span></div>
     <div class="cml"><label>Report Date</label><span>${date}</span></div>
@@ -1524,11 +1535,12 @@ h2{font-size:13pt;color:#1e3a5f;margin:24px 0 14px;padding-bottom:7px;border-bot
 <div class="body">
   <h2>Executive Summary</h2>
   <div class="scores">${scoreCards.map(s=>`<div class="sc"><div class="v" style="color:${colFix(s.col)}">${s.val}</div><div class="l">${s.lbl}</div></div>`).join('')}</div>
-  <h2>Security Findings</h2>
+  <h2>Audit Findings</h2>
   ${sections.filter(s=>!s.title.includes('Users') && !s.title.includes('CA Best-Practice Findings')).map(s=>{
     const bc = s.badgeCls.includes('badge-bad')?'bad':s.badgeCls.includes('badge-warn')?'warn':s.badgeCls.includes('badge-ok')?'ok':'info';
     return `<div class="sec"><div class="sec-hdr"><span>${s.icon}</span><span class="sec-title">${s.title}</span><span class="sec-badge ${bc}">${s.badge}</span></div>
-    ${s.rows.map(r=>{const c=r.cls.includes('good')?'good':r.cls.includes('warn')?'warn':r.cls.includes('bad')?'bad':'';return`<div class="rrow"><span class="rk">${r.key}</span><span class="rv ${c}">${r.val}</span></div>`}).join('')}</div>`;
+    ${s.rows.map(r=>{const c=r.cls.includes('good')?'good':r.cls.includes('warn')?'warn':r.cls.includes('bad')?'bad':'';return`<div class="rrow"><span class="rk">${r.key}</span><span class="rv ${c}">${r.val}</span></div>`}).join('')}
+    ${s.tableHtml}</div>`;
   }).join('')}
   ${caFindingsData.length ? `
   <div class="pg"></div>

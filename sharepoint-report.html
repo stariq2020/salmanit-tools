@@ -575,16 +575,23 @@ const MSAL_CLIENT_ID = "4081224c-ab5c-408c-ba65-6703688c7af5";
 // activity report endpoints redirect by default to a CSV download link with
 // no CORS headers, so a plain fetch() can never follow that redirect from a
 // browser. Appending $format=application/json makes Graph return the same
-// rows inline from graph.microsoft.com itself instead of redirecting, which
-// does carry normal CORS headers — so these can be fetched automatically,
-// same as audit log search below. The CSV import panel stays as a fallback
-// for tenants where Reports.Read.All hasn't been consented yet.
+// rows inline instead of redirecting, which does carry normal CORS headers —
+// but v1.0 rejects that parameter ("JSON format is not supported"); only
+// /beta actually honors it for this endpoint family (see GRAPH_BETA_BASE
+// below). The CSV import panel stays as a fallback for tenants where
+// Reports.Read.All hasn't been consented yet, or if beta ever changes.
 // AuditLogsQuery-SharePoint.Read.All powers the real audit log search (a
 // different Graph API that returns JSON directly, no CORS redirect) — this
 // needs the app registration's API permissions updated and admin consent
 // granted in Entra ID before it will work for any tenant.
 const GRAPH_SCOPES = ["Sites.Read.All", "Reports.Read.All", "AuditLogsQuery-SharePoint.Read.All"];
 const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
+// The v1.0 report endpoints only ever return CSV (a 302 redirect to a
+// download link) — $format=application/json is documented and actually
+// works only on /beta for this endpoint family. Everything else in this
+// file (site inventory, audit log) stays on v1.0; only the three usage/
+// activity report calls below use beta, purely to get JSON back inline.
+const GRAPH_BETA_BASE = "https://graph.microsoft.com/beta";
 
 const msalConfig = {
   auth: {
@@ -833,7 +840,7 @@ function setAuditExportVisible(show){
 // normalizeRow() strip case and punctuation before matching, so the exact
 // same parsing code handles both sources.
 async function fetchUsageReportJson(reportFn, period, token){
-  const url = `${GRAPH_BASE}/reports/${reportFn}(period='${period}')?$format=application/json`;
+  const url = `${GRAPH_BETA_BASE}/reports/${reportFn}(period='${period}')?$format=application/json`;
   const res = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
   if (!res.ok) {
     let detail = ''; try { const j = await res.json(); detail = (j.error && j.error.message) || ''; } catch(e){}

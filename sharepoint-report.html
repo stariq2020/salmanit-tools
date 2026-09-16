@@ -94,9 +94,12 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 /* Options */
 .opt-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:16px 0}
 .opt-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:7px}
-.opt-field select,.opt-field input[type=text]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit;color-scheme:dark}
-.opt-field select:focus,.opt-field input[type=text]:focus{outline:none;border-color:rgba(0,232,122,0.4)}
+.opt-field select,.opt-field input[type=text],.opt-field input[type=date]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit;color-scheme:dark}
+.opt-field select:focus,.opt-field input[type=text]:focus,.opt-field input[type=date]:focus{outline:none;border-color:rgba(0,232,122,0.4)}
 .opt-field select option{background:var(--card);color:var(--white)}
+.opt-field select[multiple]{padding:4px}
+.opt-field select[multiple] option{padding:5px 8px;border-radius:5px}
+.opt-hint{font-size:0.72rem;color:var(--muted);margin-top:6px}
 .opt-field input[type=text]:-webkit-autofill,
 .opt-field input[type=text]:-webkit-autofill:hover,
 .opt-field input[type=text]:-webkit-autofill:focus{
@@ -321,12 +324,21 @@ footer a{color:var(--green);text-decoration:none}
     <div class="opt-row">
       <div class="opt-field">
         <label for="auditRangeSelect">Date range</label>
-        <select id="auditRangeSelect">
+        <select id="auditRangeSelect" onchange="toggleAuditCustomRange()">
           <option value="1">Last 24 hours</option>
           <option value="7" selected>Last 7 days</option>
           <option value="30">Last 30 days</option>
           <option value="90">Last 90 days</option>
+          <option value="custom">Custom range…</option>
         </select>
+      </div>
+      <div class="opt-field" id="auditCustomFromWrap" style="display:none">
+        <label for="auditCustomFrom">From</label>
+        <input type="date" id="auditCustomFrom">
+      </div>
+      <div class="opt-field" id="auditCustomToWrap" style="display:none">
+        <label for="auditCustomTo">To</label>
+        <input type="date" id="auditCustomTo">
       </div>
       <div class="opt-field">
         <label for="auditUserFilter">Filter by user (optional)</label>
@@ -336,6 +348,44 @@ footer a{color:var(--green);text-decoration:none}
         <label for="auditKeywordFilter">Keyword (optional)</label>
         <input type="text" id="auditKeywordFilter" placeholder="e.g. a file or folder name">
       </div>
+    </div>
+
+    <div class="opt-field">
+      <label for="auditOperationFilter">Action / operation (optional)</label>
+      <select id="auditOperationFilter" multiple size="6">
+        <optgroup label="Files">
+          <option value="FileAccessed">File accessed</option>
+          <option value="FileModified">File modified</option>
+          <option value="FileModifiedExtended">File modified (extended)</option>
+          <option value="FileDeleted">File deleted</option>
+          <option value="FileDeletedFirstStageRecycleBin">File deleted (recycle bin)</option>
+          <option value="FileDownloaded">File downloaded</option>
+          <option value="FileUploaded">File uploaded</option>
+          <option value="FileRenamed">File renamed</option>
+          <option value="FileMoved">File moved</option>
+          <option value="FileCopied">File copied</option>
+          <option value="FileCheckedOut">File checked out</option>
+          <option value="FileCheckedIn">File checked in</option>
+        </optgroup>
+        <optgroup label="Sharing">
+          <option value="SharingSet">Sharing permissions changed</option>
+          <option value="SharingInvitationCreated">Sharing invitation sent</option>
+          <option value="SharingInvitationAccepted">Sharing invitation accepted</option>
+          <option value="AnonymousLinkCreated">Anonymous link created</option>
+          <option value="AnonymousLinkUsed">Anonymous link used</option>
+          <option value="SecureLinkCreated">Secure link created</option>
+          <option value="SecureLinkUsed">Secure link used</option>
+        </optgroup>
+        <optgroup label="Lists &amp; sites">
+          <option value="ListItemCreated">List item created</option>
+          <option value="ListItemModified">List item modified</option>
+          <option value="ListItemDeleted">List item deleted</option>
+          <option value="SiteCollectionAdminAdded">Site collection admin added</option>
+          <option value="SiteCollectionAdminRemoved">Site collection admin removed</option>
+          <option value="SitePermissionsModified">Site permissions modified</option>
+        </optgroup>
+      </select>
+      <p class="opt-hint">Hold Ctrl/Cmd to pick several. Leave empty to include every action.</p>
     </div>
 
     <div class="opt-field">
@@ -807,6 +857,11 @@ function setAuditProgress(pct, label){
 function hideAuditProgress(){
   document.getElementById('auditProgress').classList.remove('show');
 }
+function toggleAuditCustomRange(){
+  const isCustom = document.getElementById('auditRangeSelect').value === 'custom';
+  document.getElementById('auditCustomFromWrap').style.display = isCustom ? '' : 'none';
+  document.getElementById('auditCustomToWrap').style.display = isCustom ? '' : 'none';
+}
 
 async function runAuditSearch(){
   clearAuditNotices();
@@ -835,11 +890,31 @@ async function runAuditSearch(){
   try {
     const token = await getToken();
 
-    const days = Number(document.getElementById('auditRangeSelect').value);
-    const end = new Date();
-    const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+    const rangeVal = document.getElementById('auditRangeSelect').value;
+    let start, end;
+    if (rangeVal === 'custom') {
+      const fromVal = document.getElementById('auditCustomFrom').value;
+      const toVal = document.getElementById('auditCustomTo').value;
+      if (!fromVal || !toVal) {
+        showAuditError('Pick both a "from" and "to" date for the custom range.');
+        btn.disabled = false;
+        return;
+      }
+      start = new Date(fromVal + 'T00:00:00');
+      end = new Date(toVal + 'T23:59:59.999');
+      if (start > end) {
+        showAuditError('The "from" date must be before the "to" date.');
+        btn.disabled = false;
+        return;
+      }
+    } else {
+      const days = Number(rangeVal);
+      end = new Date();
+      start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+    }
     const userFilter = document.getElementById('auditUserFilter').value.trim();
     const keyword = document.getElementById('auditKeywordFilter').value.trim();
+    const operationFilters = Array.from(document.getElementById('auditOperationFilter').selectedOptions).map(o => o.value);
 
     const body = {
       displayName: 'SalmanITTools SharePoint Report ' + end.toISOString(),
@@ -849,6 +924,7 @@ async function runAuditSearch(){
     };
     if (userFilter) body.userPrincipalNameFilters = [userFilter];
     if (keyword) body.keywordFilter = keyword;
+    if (operationFilters.length) body.operationFilters = operationFilters;
 
     setAuditProgress(10, 'Creating audit log query…');
     const createRes = await fetch(`${GRAPH_BASE}/security/auditLog/queries`, {

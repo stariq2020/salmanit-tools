@@ -446,8 +446,8 @@ function showError(msg) {
 
 const STEPS = ['Fetching users & licenses','Checking MFA status','Checking admin roles',
   'Checking Conditional Access','Fetching risky sign-ins','Getting Secure Score',
-  'Checking SharePoint','Fetching devices','Checking mail forwarding',
-  'Checking OAuth app grants','Building report'];
+  'Checking SharePoint','Fetching devices','Checking mail forwarding & rules',
+  'Checking OAuth app grants','Checking mailbox sizes','Building report'];
 
 function initProgress() {
   document.getElementById('progressSteps').innerHTML = STEPS.map((s,i) =>
@@ -541,7 +541,12 @@ async function runScan() {
     const disabledUsers  = users.filter(u => !u.accountEnabled);
     const licensedUsers  = users.filter(u => u.assignedLicenses?.length > 0);
     const unlicensedEnabled = enabledUsers.filter(u => !u.assignedLicenses?.length);
-    window._scanData = { orgName, users, skuMap, scanDate: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) };
+    // Purchased vs assigned per SKU — same /subscribedSkus call already used to build skuMap above.
+    const skuUtilization = (skuData?.value||[])
+      .filter(s => (s.prepaidUnits?.enabled||0) > 0 || (s.consumedUnits||0) > 0)
+      .map(s => ({ name: friendlyLicense(s.skuPartNumber), purchased: s.prepaidUnits?.enabled||0, assigned: s.consumedUnits||0, available: (s.prepaidUnits?.enabled||0) - (s.consumedUnits||0) }))
+      .sort((a,b) => b.assigned - a.assigned);
+    window._scanData = { orgName, users, skuMap, skuUtilization, scanDate: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) };
     stepDone(0);
 
     // 1 — MFA
@@ -676,13 +681,17 @@ async function runScan() {
     stepActive(8);
     // mailboxSettings can't be selected on the /users list endpoint — fetch per-user (limit to 30 licensed users for performance)
     const licensedForFwd = licensedUsers.slice(0, 30);
+    const tenantDomain = currentAccount.username.split('@')[1];
     const fwdResults = await Promise.all(licensedForFwd.map(async u => {
-      const data = await graphSafe(`/users/${u.id}?$select=displayName,userPrincipalName,mailboxSettings`, token);
-      return { user: u, settings: data?.mailboxSettings };
+      const [data, rulesData] = await Promise.all([
+        graphSafe(`/users/${u.id}?$select=displayName,userPrincipalName,mailboxSettings`, token),
+        graphSafe(`/users/${u.id}/mailFolders/inbox/messageRules`, token),
+      ]);
+      return { user: u, settings: data?.mailboxSettings, rules: rulesData?.value||[] };
     }));
     const extFwds = fwdResults.filter(r => {
       const addr = r.settings?.forwardingSmtpAddress;
-      return addr && !addr.includes(currentAccount.username.split('@')[1]);
+      return addr && !addr.includes(tenantDomain);
     });
     let fwdHtml = extFwds.length
       ? row('External Forwards', '⚠️ '+extFwds.length+' mailbox(es) forwarding externally','bad')
@@ -690,6 +699,33 @@ async function runScan() {
     extFwds.forEach(r => { fwdHtml += row(r.user.displayName||r.user.userPrincipalName, r.settings.forwardingSmtpAddress,'warn'); });
     if (extFwds.length) issues++;
     stepDone(8);
+
+    // 8b — Inbox rules — rule-based forwarding is a classic BEC technique that
+    // the mailboxSettings.forwardingSmtpAddress check above doesn't catch,
+    // since attackers configure it as an inbox rule instead of the simple
+    // "forward all mail" setting. Also flags forward+auto-delete combos,
+    // which hide the forwarded mail from the mailbox owner.
+    const riskyRules = [];
+    fwdResults.forEach(r => {
+      r.rules.forEach(rule => {
+        if (!rule.isEnabled) return;
+        const actions = rule.actions || {};
+        const targets = [...(actions.forwardTo||[]), ...(actions.redirectTo||[]), ...(actions.forwardAsAttachmentTo||[])]
+          .map(t => t.emailAddress?.address).filter(Boolean);
+        const externalTargets = targets.filter(addr => !addr.toLowerCase().includes('@'+tenantDomain.toLowerCase()));
+        if (externalTargets.length) {
+          riskyRules.push({ user: r.user, rule, externalTargets, autoDeletes: !!actions.delete });
+        }
+      });
+    });
+    let rulesHtml = riskyRules.length
+      ? row('Suspicious Inbox Rules', '⚠️ '+riskyRules.length+' rule(s) forwarding to external addresses','bad')
+      : row('Inbox Rules','✅ No external-forwarding rules detected (checked '+licensedForFwd.length+' mailboxes)','good');
+    riskyRules.forEach(r => {
+      const label = r.rule.displayName + ' → ' + r.externalTargets.join(', ') + (r.autoDeletes ? ' (auto-deletes after forwarding ⚠️)' : '');
+      rulesHtml += row(r.user.displayName||r.user.userPrincipalName, label, 'bad');
+    });
+    if (riskyRules.length) issues++;
 
     // 9 — OAuth app grants (risky delegated/app permissions consented in the tenant)
     stepActive(9);
@@ -717,8 +753,34 @@ async function runScan() {
     if (riskyGrants.some(r => !r.app?.verifiedPublisher?.displayName)) issues++;
     stepDone(9);
 
-    // 10 — Build report
+    // 10 — Mailbox sizes. Graph's usage-report endpoints only ever return
+    // CSV (a redirect a browser can't follow) on v1.0 — $format=application/json
+    // is documented and actually works only on /beta for this endpoint family.
     stepActive(10);
+    const mbxRes = await fetch(`https://graph.microsoft.com/beta/reports/getMailboxUsageDetail(period='D7')?$format=application/json`, { headers: { Authorization: 'Bearer ' + token } });
+    const mbxJson = mbxRes.ok ? await mbxRes.json().catch(()=>null) : null;
+    const mailboxes = (mbxJson?.value || []).filter(m => !m.isDeleted).map(m => ({
+      name: m.displayName || m.userPrincipalName, upn: m.userPrincipalName,
+      usedBytes: m.storageUsedInBytes || 0, quotaBytes: m.prohibitSendQuotaInBytes || 0, itemCount: m.itemCount || 0,
+    })).sort((a,b) => b.usedBytes - a.usedBytes);
+    const fmtBytes = n => { if (!n) return '0 B'; const u=['B','KB','MB','GB','TB']; let i=0,v=n; while(v>=1024&&i<u.length-1){v/=1024;i++;} return v.toFixed(v<10&&i>0?1:0)+' '+u[i]; };
+    const nearQuota = mailboxes.filter(m => m.quotaBytes && m.usedBytes/m.quotaBytes >= 0.9);
+    let mbxHtml = '';
+    if (mailboxes.length) {
+      mbxHtml += row('Mailboxes Checked', mailboxes.length) + row('Near Quota (90%+)', nearQuota.length, nearQuota.length===0?'good':'warn');
+      mbxHtml += '<div style="margin-top:10px;overflow-x:auto"><table class="user-table"><tr><th>Mailbox</th><th>Used</th><th>Quota</th><th>Items</th></tr>'
+        + mailboxes.slice(0,20).map(m => `<tr><td style="font-weight:600">${m.name}</td><td>${fmtBytes(m.usedBytes)}</td>
+          <td>${m.quotaBytes?fmtBytes(m.quotaBytes):'—'}</td><td>${m.itemCount.toLocaleString()}</td></tr>`).join('')
+        + '</table></div>';
+      if (mailboxes.length > 20) mbxHtml += `<div style="font-size:0.78rem;color:var(--muted);margin-top:6px">Showing top 20 of ${mailboxes.length} mailboxes by size</div>`;
+    } else {
+      mbxHtml = row('Mailbox Sizes', "Couldn't fetch mailbox usage data — this needs the Reports.Read.All permission consented for this app in Entra ID.", 'warn');
+    }
+    if (nearQuota.length) issues++;
+    stepDone(10);
+
+    // 11 — Build report
+    stepActive(11);
 
     // Score cards
     addScoreCard('👥', users.length, 'Total Users', 'var(--white)');
@@ -748,6 +810,17 @@ async function runScan() {
     if (users.length>200) usersHtml += `<div style="font-size:0.78rem;color:var(--muted);margin-top:6px">Showing first 200 of ${users.length} users</div>`;
 
     addSection('👥','Users & Licenses',users.length+' users','info', usersHtml);
+
+    // License utilization — purchased vs assigned per SKU
+    const overAssignedSkus = skuUtilization.filter(s => s.available < 0);
+    let licHtml = skuUtilization.length
+      ? '<div style="overflow-x:auto"><table class="user-table"><tr><th>License</th><th>Purchased</th><th>Assigned</th><th>Available</th></tr>'
+        + skuUtilization.map(s => `<tr><td style="font-weight:600">${s.name}</td><td>${s.purchased}</td><td>${s.assigned}</td>
+          <td style="color:${s.available<0?'var(--danger)':s.available===0?'var(--warning)':'var(--green)'}">${s.available<0?'⚠️ ':''}${s.available}</td></tr>`).join('')
+        + '</table></div>'
+      : row('Licenses','No licensed SKUs found','warn');
+    if (overAssignedSkus.length) issues++;
+    addSection('💳','License Utilization', skuUtilization.length+' SKU'+(skuUtilization.length!==1?'s':''), overAssignedSkus.length?'bad':'info', licHtml);
     addSection('🔐','MFA Status', mfaDisabled===0?'✅ All enabled':'⚠️ '+mfaDisabled+' without MFA', mfaDisabled===0?'ok':'bad', mfaHtml);
     addSection('👑','Admin Roles', globalAdmins.length+' Global Admins', globalAdmins.length<=2?'ok':globalAdmins.length<=5?'warn':'bad', adminHtml);
     addSection('🔒','Conditional Access', caEnabled.length>0?caEnabled.length+' active':'❌ None', caEnabled.length>0?'ok':'bad', caHtml);
@@ -802,7 +875,9 @@ async function runScan() {
     addSection('📁','SharePoint', spData?'✅ Connected':'⚠️ N/A', spData?'ok':'warn', spHtml);
     addSection('💻','Devices (Intune)', devs.length===0?'No devices':nonCompliant.length===0?'✅ Compliant':'⚠️ '+nonCompliant.length+' issues', nonCompliant.length===0?'ok':'bad', devHtml);
     addSection('📧','Mail Forwarding', extFwds.length===0?'✅ None':'⚠️ '+extFwds.length, extFwds.length===0?'ok':'bad', fwdHtml);
+    addSection('📬','Inbox Rules', riskyRules.length===0?'✅ None':'⚠️ '+riskyRules.length, riskyRules.length===0?'ok':'bad', rulesHtml);
     addSection('🔑','OAuth App Grants', riskyGrants.length===0?'✅ None':'⚠️ '+riskyGrants.length, riskyGrants.length===0?'ok':'bad', oauthHtml);
+    addSection('📮','Mailbox Sizes', mailboxes.length?mailboxes.length+' mailboxes':'N/A', nearQuota.length?'bad':mailboxes.length?'ok':'warn', mbxHtml);
 
     // Auto-open bad sections
     document.querySelectorAll('.result-section').forEach(s => {
@@ -813,7 +888,7 @@ async function runScan() {
       }
     });
 
-    stepDone(10);
+    stepDone(11);
     document.getElementById('progressWrap').style.display = 'none';
     document.getElementById('resultsWrap').style.display = 'block';
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools</title>
 <link rel="canonical" href="https://salmanittools.co.uk/sharepoint-report.html">
-<meta name="description" content="Generate a client-ready SharePoint report — live site inventory and real Purview audit log search straight from Microsoft Graph, plus storage and usage stats from your exported M365 reports. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta name="description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -16,11 +16,11 @@
   "@type": "FAQPage",
   "mainEntity": [
     {"@type":"Question","name":"Is this SharePoint Report tool free?","acceptedAnswer":{"@type":"Answer","text":"Yes, it's completely free with no registration and no usage limits beyond what Microsoft Graph itself allows."}},
-    {"@type":"Question","name":"Is my SharePoint data uploaded to Salman IT Tools?","acceptedAnswer":{"@type":"Answer","text":"No. Site inventory is fetched directly from Microsoft Graph in your own browser using your own access token. Storage, usage and activity data comes from a CSV file you export yourself from the Microsoft 365 admin center and drop into the page, which is parsed entirely in your browser using JavaScript's FileReader — that file is never uploaded anywhere either."}},
-    {"@type":"Question","name":"Why do I need to sign in?","acceptedAnswer":{"@type":"Answer","text":"Site inventory uses the Sites.Read.All Microsoft Graph permission. Some tenants require a Global Administrator or SharePoint Administrator to grant admin consent the first time this app is used; others allow any signed-in user."}},
-    {"@type":"Question","name":"Why can't the tool fetch storage, usage and activity data automatically like it does site inventory?","acceptedAnswer":{"@type":"Answer","text":"Microsoft Graph's usage report endpoints redirect to a temporary download link that does not allow cross-origin browser requests (a CORS restriction Microsoft applies on their end) — no amount of permissions or code changes on this tool's side can work around it from a browser. The Microsoft 365 admin center can export the same reports as a CSV file, which this tool can then read and turn into charts and a PDF entirely client-side."}},
+    {"@type":"Question","name":"Is my SharePoint data uploaded to Salman IT Tools?","acceptedAnswer":{"@type":"Answer","text":"No. Site inventory, storage, usage and activity data are all fetched directly from Microsoft Graph in your own browser using your own access token. If automatic fetching of storage/usage data is ever blocked for your tenant, you can export a CSV yourself instead and drop it into the page, which is parsed entirely in your browser using JavaScript's FileReader — that file is never uploaded anywhere either."}},
+    {"@type":"Question","name":"Why do I need to sign in?","acceptedAnswer":{"@type":"Answer","text":"Site inventory uses the Sites.Read.All Microsoft Graph permission and storage/usage/activity reports use Reports.Read.All. Some tenants require a Global Administrator or SharePoint Administrator to grant admin consent the first time this app is used; others allow any signed-in user."}},
+    {"@type":"Question","name":"How does the tool fetch storage, usage and activity data automatically like it does site inventory?","acceptedAnswer":{"@type":"Answer","text":"Microsoft Graph's usage report endpoints normally redirect to a temporary CSV download link that doesn't allow cross-origin browser requests. Requesting the same endpoint with $format=application/json makes Graph return the data inline instead of redirecting, so it can be fetched directly from your browser with the Reports.Read.All permission — no CSV export needed. If that permission hasn't been consented for your tenant yet, the tool falls back to letting you export the same reports as a CSV from the Microsoft 365 admin center."}},
     {"@type":"Question","name":"Why are the names in my report hidden or showing as random IDs?","acceptedAnswer":{"@type":"Answer","text":"Microsoft 365 has a privacy setting called 'concealed names' enabled by default on usage reports, which also affects the CSV exports this tool reads. A Global Administrator can disable it in the Microsoft 365 admin center under Settings > Org settings > Reports > 'Display concealed names'."}},
-    {"@type":"Question","name":"Does this show a full audit trail of every file action?","acceptedAnswer":{"@type":"Answer","text":"Yes — the 'Search the Audit Log' step queries the Microsoft Purview unified audit log directly via Microsoft Graph, using your own signed-in token, entirely from your browser. It needs an account with a Global Administrator, Compliance Administrator, Security Administrator (or equivalent custom audit role), and your tenant's audit logging must be turned on. The aggregate storage/usage stats further down the page are separate and still come from an exported CSV, since Microsoft blocks browsers from fetching those specific report endpoints directly."}},
+    {"@type":"Question","name":"Does this show a full audit trail of every file action?","acceptedAnswer":{"@type":"Answer","text":"Yes — the 'Search the Audit Log' step queries the Microsoft Purview unified audit log directly via Microsoft Graph, using your own signed-in token, entirely from your browser. It needs an account with a Global Administrator, Compliance Administrator, Security Administrator (or equivalent custom audit role), and your tenant's audit logging must be turned on."}},
     {"@type":"Question","name":"Why does audit log search fail with a permissions error?","acceptedAnswer":{"@type":"Answer","text":"Two common causes: your account doesn't hold an admin role that's allowed to search the audit log (Global Administrator, Compliance Administrator or Security Administrator, or a custom role with audit search rights), or a Global Administrator hasn't yet granted admin consent for the AuditLogsQuery-SharePoint.Read.All permission on this app in Entra ID. Both are one-time, tenant-side fixes."}},
     {"@type":"Question","name":"Can I export the report as a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Once a report is generated, use the Export / Print Report button, which opens your browser's print dialog — choose 'Save as PDF' for a branded, client-ready document."}}
   ]
@@ -307,6 +307,8 @@ footer a{color:var(--green);text-decoration:none}
       </div>
     </div>
     <div class="notice notice-error" id="genError"></div>
+    <div class="notice notice-warn" id="genWarn"></div>
+    <div class="notice notice-info" id="genInfo"></div>
     <div class="btn-row">
       <button class="pdf-btn-primary" id="genBtn" onclick="generateReport()">📊 Generate Report</button>
     </div>
@@ -412,8 +414,8 @@ footer a{color:var(--green);text-decoration:none}
 
   <!-- IMPORT PANEL (usage / activity CSVs) -->
   <section class="panel" id="importPanel" style="display:none">
-    <h2>4. Storage &amp; Usage Stats <span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;vertical-align:middle">Optional</span></h2>
-    <p class="desc">Microsoft Graph blocks browsers from fetching these specific reports directly — a restriction on Microsoft's end, not something this tool can work around. The admin center can export the same data as a CSV file, which this tool reads entirely on your device.</p>
+    <h2>4. Storage &amp; Usage Stats <span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;vertical-align:middle">Manual fallback</span></h2>
+    <p class="desc">Step 2 already fetches this automatically via Microsoft Graph. You'll only land here if that failed — usually because <strong>Reports.Read.All</strong> hasn't been consented for this app yet, or your account lacks a Global Reader / Reports Reader (or higher) role. Export the same data as a CSV instead and it'll be read entirely on your device.</p>
     <div class="step-list compact">
       <div class="step-item"><div class="step-num">1</div><p>Open <a href="https://admin.microsoft.com/Adminportal/Home#/reportsUsage/SharePointActivity" target="_blank" rel="noopener" style="color:var(--cyan)">Microsoft 365 admin center → Reports → Usage</a> and choose "SharePoint site usage" or "SharePoint activity."</p></div>
       <div class="step-item"><div class="step-num">2</div><p>Match the same period you picked above, then click <strong>Export</strong> to download a CSV.</p></div>
@@ -454,7 +456,7 @@ footer a{color:var(--green);text-decoration:none}
     </div>
 
     <div class="section-title">Top Sites by Storage</div>
-    <p class="section-sub">From the SharePoint site usage report you imported in step 3 — leave this empty and it just won't show.</p>
+    <p class="section-sub">From the SharePoint site usage report, fetched automatically in step 2 (or imported manually in step 4) — leave this empty and it just won't show.</p>
     <div class="bar-list" id="storageBarList"></div>
     <p class="table-note" id="storageNote"></p>
 
@@ -502,8 +504,8 @@ footer a{color:var(--green);text-decoration:none}
     <div class="step-list">
       <div class="step-item"><div class="step-num">1</div><p>You sign in with your own Microsoft 365 account using the button above — a standard Microsoft sign-in popup, not a form on this site. Some tenants will ask a Global Admin or SharePoint Admin to approve this the first time.</p></div>
       <div class="step-item"><div class="step-num">2</div><p>Your browser calls <code>graph.microsoft.com</code> directly using your own token to pull live site inventory — name, URL, template, last activity.</p></div>
-      <div class="step-item"><div class="step-num">3</div><p>Audit log search calls the Microsoft Purview unified audit log via Graph's <code>/security/auditLog/queries</code> API — a query is created, polled until it finishes, then matching records are paged in. This one returns JSON with normal CORS headers, so it genuinely works from a browser, unlike the usage reports below.</p></div>
-      <div class="step-item"><div class="step-num">4</div><p>Storage and usage reports can't be fetched the same way — Microsoft Graph redirects those specific requests to a download link that browsers aren't allowed to follow cross-origin. So you export the report once from the M365 admin center and drop the CSV in; it's parsed with JavaScript's FileReader, entirely on your device.</p></div>
+      <div class="step-item"><div class="step-num">3</div><p>Audit log search calls the Microsoft Purview unified audit log via Graph's <code>/security/auditLog/queries</code> API — a query is created, polled until it finishes, then matching records are paged in. This returns JSON with normal CORS headers, so it works directly from a browser.</p></div>
+      <div class="step-item"><div class="step-num">4</div><p>Storage, usage and activity reports normally redirect to a CSV download link that browsers can't follow cross-origin — but requesting them with <code>$format=application/json</code> makes Graph return the same rows inline instead of redirecting, so they're fetched automatically too. If that's ever blocked (usually a missing <strong>Reports.Read.All</strong> consent), you can export the same report as a CSV from the admin center and drop it in as a fallback; it's parsed with JavaScript's FileReader, entirely on your device.</p></div>
       <div class="step-item"><div class="step-num">5</div><p>Everything renders locally into the report below. Use "Export / Print Report" to save a branded PDF for a client, or "Export Raw Records" for the full audit log as CSV — nothing is uploaded anywhere in this process.</p></div>
     </div>
 
@@ -546,15 +548,18 @@ function closeMobileMenu(){
 // ---- CONFIG ---------------------------------------------------
 const MSAL_CLIENT_ID = "4081224c-ab5c-408c-ba65-6703688c7af5";
 // Reports.Read.All is deliberately NOT requested: Microsoft Graph's usage/
-// activity report endpoints redirect to a download link with no CORS
-// headers, so a browser can never read them directly regardless of scope.
-// Those sections are filled in from an imported CSV export instead — see
-// the CSV import handling below.
+// activity report endpoints redirect by default to a CSV download link with
+// no CORS headers, so a plain fetch() can never follow that redirect from a
+// browser. Appending $format=application/json makes Graph return the same
+// rows inline from graph.microsoft.com itself instead of redirecting, which
+// does carry normal CORS headers — so these can be fetched automatically,
+// same as audit log search below. The CSV import panel stays as a fallback
+// for tenants where Reports.Read.All hasn't been consented yet.
 // AuditLogsQuery-SharePoint.Read.All powers the real audit log search (a
 // different Graph API that returns JSON directly, no CORS redirect) — this
 // needs the app registration's API permissions updated and admin consent
 // granted in Entra ID before it will work for any tenant.
-const GRAPH_SCOPES = ["Sites.Read.All", "AuditLogsQuery-SharePoint.Read.All"];
+const GRAPH_SCOPES = ["Sites.Read.All", "Reports.Read.All", "AuditLogsQuery-SharePoint.Read.All"];
 const GRAPH_BASE = "https://graph.microsoft.com/v1.0";
 
 const msalConfig = {
@@ -796,8 +801,39 @@ function setAuditExportVisible(show){
   document.getElementById('auditExportBtnReport').style.display = d;
 }
 
+// Fetches one of Graph's usage/activity report endpoints as JSON instead of
+// letting it redirect to a CSV download link (see the GRAPH_SCOPES comment
+// above for why that redirect can't be followed from a browser). The JSON
+// rows come back keyed by camelCase property names (e.g. "siteUrl",
+// "storageUsedInBytes") rather than the CSV's header text, but pick()/
+// normalizeRow() strip case and punctuation before matching, so the exact
+// same parsing code handles both sources.
+async function fetchUsageReportJson(reportFn, period, token){
+  const url = `${GRAPH_BASE}/reports/${reportFn}(period='${period}')?$format=application/json`;
+  const res = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+  if (!res.ok) {
+    let detail = ''; try { const j = await res.json(); detail = (j.error && j.error.message) || ''; } catch(e){}
+    const err = new Error(detail || res.statusText); err.status = res.status; throw err;
+  }
+  const json = await res.json();
+  return json.value || [];
+}
+
+async function autoFetchUsageReports(period, token){
+  const [usage, fileCounts, userDetail] = await Promise.all([
+    fetchUsageReportJson('getSharePointSiteUsageDetail', period, token),
+    fetchUsageReportJson('getSharePointActivityFileCounts', period, token),
+    fetchUsageReportJson('getSharePointActivityUserDetail', period, token),
+  ]);
+  importedUsageRows = usage.map(normalizeRow);
+  importedFileCountRows = fileCounts.map(normalizeRow);
+  importedUserRows = userDetail.map(normalizeRow);
+}
+
 async function generateReport(){
   clearGenError();
+  document.getElementById('genWarn').classList.remove('show');
+  document.getElementById('genInfo').classList.remove('show');
   document.getElementById('reportRoot').classList.remove('show');
   const genBtn = document.getElementById('genBtn');
   genBtn.disabled = true;
@@ -807,8 +843,25 @@ async function generateReport(){
     setProgress(15, 'Getting an access token…');
     const token = await getToken();
 
-    setProgress(50, 'Fetching site inventory…');
+    setProgress(40, 'Fetching site inventory…');
     const sites = await graphGetAllPages(`${GRAPH_BASE}/sites?search=*&$top=100`, token, 500);
+
+    setProgress(70, 'Fetching storage & usage reports…');
+    let usageAutoOk = false;
+    try {
+      await autoFetchUsageReports(period, token);
+      usageAutoOk = true;
+    } catch (usageErr) {
+      console.warn('automatic usage/activity report fetch failed, falling back to manual CSV import', usageErr);
+      const usageStatus = usageErr && usageErr.status;
+      const el = document.getElementById('genWarn');
+      if (usageStatus === 403 || usageStatus === 401) {
+        el.innerHTML = "Couldn't fetch storage &amp; usage data automatically — this needs the <strong>Reports.Read.All</strong> permission granted (and consented by a Global Admin) in Entra ID. Export the same reports as CSV from the admin center and drop them in step 4 below instead.";
+      } else {
+        el.textContent = "Couldn't fetch storage & usage data automatically (" + (usageErr.message || 'unknown error') + "). Export the same reports as CSV from the admin center and drop them in step 4 below instead.";
+      }
+      el.classList.add('show');
+    }
 
     setProgress(95, 'Building report…');
     lastSites = sites;
@@ -816,7 +869,12 @@ async function generateReport(){
     siteInventoryFetched = true;
 
     renderReport({ period, sites, usageRows: importedUsageRows, fileCountRows: importedFileCountRows, userRows: importedUserRows });
-    document.getElementById('importPanel').style.display = 'block';
+    document.getElementById('importPanel').style.display = usageAutoOk ? 'none' : 'block';
+    if (usageAutoOk) {
+      const el = document.getElementById('genInfo');
+      el.innerHTML = 'Storage, usage and activity data fetched automatically via Microsoft Graph — no CSV export needed. <a href="#" onclick="document.getElementById(\'importPanel\').style.display=\'block\';this.closest(\'.notice\').classList.remove(\'show\');return false;" style="color:inherit;text-decoration:underline">Import a CSV manually instead</a>';
+      el.classList.add('show');
+    }
     hideProgress();
   } catch (err) {
     console.error('sites', err);

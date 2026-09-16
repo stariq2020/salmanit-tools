@@ -97,9 +97,21 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .opt-field select,.opt-field input[type=text],.opt-field input[type=date]{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit;color-scheme:dark}
 .opt-field select:focus,.opt-field input[type=text]:focus,.opt-field input[type=date]:focus{outline:none;border-color:rgba(0,232,122,0.4)}
 .opt-field select option{background:var(--card);color:var(--white)}
-.opt-field select[multiple]{padding:4px}
-.opt-field select[multiple] option{padding:5px 8px;border-radius:5px}
 .opt-hint{font-size:0.72rem;color:var(--muted);margin-top:6px}
+.multiselect{position:relative}
+.multiselect-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--white);font-size:0.88rem;font-family:inherit;cursor:pointer;text-align:left}
+.multiselect-btn:focus,.multiselect-btn[aria-expanded="true"]{outline:none;border-color:rgba(0,232,122,0.4)}
+.multiselect-btn .ms-caret{color:var(--muted);font-size:0.75rem;flex-shrink:0}
+.multiselect-panel{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:20;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;max-height:280px;overflow-y:auto;box-shadow:0 12px 32px rgba(0,0,0,0.45)}
+.ms-group{margin-bottom:6px}
+.ms-group:last-of-type{margin-bottom:0}
+.ms-group-title{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:6px 8px 4px}
+.ms-option{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:0.85rem;color:var(--white);cursor:pointer}
+.ms-option:hover{background:rgba(255,255,255,0.04)}
+.ms-option input{accent-color:var(--green);flex-shrink:0}
+.ms-actions{border-top:1px solid var(--border);margin-top:6px;padding-top:6px;text-align:right}
+.ms-link{background:none;border:none;color:var(--cyan);font-size:0.78rem;font-family:inherit;cursor:pointer;padding:4px 8px}
+.ms-link:hover{text-decoration:underline}
 .opt-field input[type=text]:-webkit-autofill,
 .opt-field input[type=text]:-webkit-autofill:hover,
 .opt-field input[type=text]:-webkit-autofill:focus{
@@ -246,7 +258,7 @@ footer a{color:var(--green);text-decoration:none}
 <div class="page">
   <div class="page-eyebrow">Microsoft 365 / SharePoint</div>
   <h1 class="page-title">SharePoint<br><span class="acc">Report Builder</span></h1>
-  <p class="page-sub">Generate a client-ready SharePoint report in minutes — live site inventory and real Purview audit log search from Microsoft Graph, plus storage and usage stats from your own exported M365 reports.</p>
+  <p class="page-sub">Generate a client-ready SharePoint report in minutes — live site inventory, storage &amp; usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph.</p>
   <p class="page-sub2">Sign in with your own Microsoft 365 account, search the actual audit log, and get a branded, print-ready report. Nothing runs through our servers, ever.</p>
 
   <div class="badge-row">
@@ -353,41 +365,53 @@ footer a{color:var(--green);text-decoration:none}
     </div>
 
     <div class="opt-field">
-      <label for="auditOperationFilter">Action / operation (optional)</label>
-      <select id="auditOperationFilter" multiple size="6">
-        <optgroup label="Files">
-          <option value="FileAccessed">File accessed</option>
-          <option value="FileModified">File modified</option>
-          <option value="FileModifiedExtended">File modified (extended)</option>
-          <option value="FileDeleted">File deleted</option>
-          <option value="FileDeletedFirstStageRecycleBin">File deleted (recycle bin)</option>
-          <option value="FileDownloaded">File downloaded</option>
-          <option value="FileUploaded">File uploaded</option>
-          <option value="FileRenamed">File renamed</option>
-          <option value="FileMoved">File moved</option>
-          <option value="FileCopied">File copied</option>
-          <option value="FileCheckedOut">File checked out</option>
-          <option value="FileCheckedIn">File checked in</option>
-        </optgroup>
-        <optgroup label="Sharing">
-          <option value="SharingSet">Sharing permissions changed</option>
-          <option value="SharingInvitationCreated">Sharing invitation sent</option>
-          <option value="SharingInvitationAccepted">Sharing invitation accepted</option>
-          <option value="AnonymousLinkCreated">Anonymous link created</option>
-          <option value="AnonymousLinkUsed">Anonymous link used</option>
-          <option value="SecureLinkCreated">Secure link created</option>
-          <option value="SecureLinkUsed">Secure link used</option>
-        </optgroup>
-        <optgroup label="Lists &amp; sites">
-          <option value="ListItemCreated">List item created</option>
-          <option value="ListItemModified">List item modified</option>
-          <option value="ListItemDeleted">List item deleted</option>
-          <option value="SiteCollectionAdminAdded">Site collection admin added</option>
-          <option value="SiteCollectionAdminRemoved">Site collection admin removed</option>
-          <option value="SitePermissionsModified">Site permissions modified</option>
-        </optgroup>
-      </select>
-      <p class="opt-hint">Hold Ctrl/Cmd to pick several. Leave empty to include every action.</p>
+      <label id="auditOperationLabel">Action / operation (optional)</label>
+      <div class="multiselect" id="auditOperationMultiselect">
+        <button type="button" class="multiselect-btn" id="auditOperationBtn" aria-haspopup="true" aria-expanded="false" aria-labelledby="auditOperationLabel" onclick="toggleOperationDropdown()">
+          <span id="auditOperationBtnLabel">All actions</span>
+          <span class="ms-caret">▾</span>
+        </button>
+        <div class="multiselect-panel" id="auditOperationPanel" hidden>
+          <div class="ms-group">
+            <div class="ms-group-title">Files</div>
+            <label class="ms-option"><input type="checkbox" value="FileAccessed"> File accessed</label>
+            <label class="ms-option"><input type="checkbox" value="FileModified"> File modified</label>
+            <label class="ms-option"><input type="checkbox" value="FileModifiedExtended"> File modified (extended)</label>
+            <label class="ms-option"><input type="checkbox" value="FileDeleted"> File deleted</label>
+            <label class="ms-option"><input type="checkbox" value="FileDeletedFirstStageRecycleBin"> File deleted (recycle bin)</label>
+            <label class="ms-option"><input type="checkbox" value="FileDownloaded"> File downloaded</label>
+            <label class="ms-option"><input type="checkbox" value="FileUploaded"> File uploaded</label>
+            <label class="ms-option"><input type="checkbox" value="FileRenamed"> File renamed</label>
+            <label class="ms-option"><input type="checkbox" value="FileMoved"> File moved</label>
+            <label class="ms-option"><input type="checkbox" value="FileCopied"> File copied</label>
+            <label class="ms-option"><input type="checkbox" value="FileCheckedOut"> File checked out</label>
+            <label class="ms-option"><input type="checkbox" value="FileCheckedIn"> File checked in</label>
+          </div>
+          <div class="ms-group">
+            <div class="ms-group-title">Sharing</div>
+            <label class="ms-option"><input type="checkbox" value="SharingSet"> Sharing permissions changed</label>
+            <label class="ms-option"><input type="checkbox" value="SharingInvitationCreated"> Sharing invitation sent</label>
+            <label class="ms-option"><input type="checkbox" value="SharingInvitationAccepted"> Sharing invitation accepted</label>
+            <label class="ms-option"><input type="checkbox" value="AnonymousLinkCreated"> Anonymous link created</label>
+            <label class="ms-option"><input type="checkbox" value="AnonymousLinkUsed"> Anonymous link used</label>
+            <label class="ms-option"><input type="checkbox" value="SecureLinkCreated"> Secure link created</label>
+            <label class="ms-option"><input type="checkbox" value="SecureLinkUsed"> Secure link used</label>
+          </div>
+          <div class="ms-group">
+            <div class="ms-group-title">Lists &amp; sites</div>
+            <label class="ms-option"><input type="checkbox" value="ListItemCreated"> List item created</label>
+            <label class="ms-option"><input type="checkbox" value="ListItemModified"> List item modified</label>
+            <label class="ms-option"><input type="checkbox" value="ListItemDeleted"> List item deleted</label>
+            <label class="ms-option"><input type="checkbox" value="SiteCollectionAdminAdded"> Site collection admin added</label>
+            <label class="ms-option"><input type="checkbox" value="SiteCollectionAdminRemoved"> Site collection admin removed</label>
+            <label class="ms-option"><input type="checkbox" value="SitePermissionsModified"> Site permissions modified</label>
+          </div>
+          <div class="ms-actions">
+            <button type="button" class="ms-link" onclick="clearOperationFilter()">Clear selection</button>
+          </div>
+        </div>
+      </div>
+      <p class="opt-hint">Leave empty to include every action.</p>
     </div>
 
     <div class="opt-field">
@@ -921,6 +945,43 @@ function toggleAuditCustomRange(){
   document.getElementById('auditCustomToWrap').style.display = isCustom ? '' : 'none';
 }
 
+function toggleOperationDropdown(forceOpen){
+  const panel = document.getElementById('auditOperationPanel');
+  const btn = document.getElementById('auditOperationBtn');
+  const willOpen = forceOpen !== undefined ? forceOpen : panel.hidden;
+  panel.hidden = !willOpen;
+  btn.setAttribute('aria-expanded', String(willOpen));
+}
+function getSelectedOperations(){
+  return Array.from(document.querySelectorAll('#auditOperationPanel input[type=checkbox]:checked')).map(cb => cb.value);
+}
+function operationLabelFor(cb){
+  return cb.parentElement.textContent.trim();
+}
+function updateOperationBtnLabel(){
+  const checked = Array.from(document.querySelectorAll('#auditOperationPanel input[type=checkbox]:checked'));
+  const label = document.getElementById('auditOperationBtnLabel');
+  if (!checked.length) label.textContent = 'All actions';
+  else if (checked.length === 1) label.textContent = operationLabelFor(checked[0]);
+  else label.textContent = checked.length + ' actions selected';
+}
+function clearOperationFilter(){
+  document.querySelectorAll('#auditOperationPanel input[type=checkbox]').forEach(cb => cb.checked = false);
+  updateOperationBtnLabel();
+}
+function setupOperationDropdown(){
+  const panel = document.getElementById('auditOperationPanel');
+  panel.addEventListener('change', updateOperationBtnLabel);
+  document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('auditOperationMultiselect');
+    if (wrap && !wrap.contains(e.target)) toggleOperationDropdown(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') toggleOperationDropdown(false);
+  });
+}
+setupOperationDropdown();
+
 async function runAuditSearch(){
   clearAuditNotices();
   setAuditExportVisible(false);
@@ -972,7 +1033,7 @@ async function runAuditSearch(){
     }
     const userFilter = document.getElementById('auditUserFilter').value.trim();
     const keyword = document.getElementById('auditKeywordFilter').value.trim();
-    const operationFilters = Array.from(document.getElementById('auditOperationFilter').selectedOptions).map(o => o.value);
+    const operationFilters = getSelectedOperations();
 
     const body = {
       displayName: 'SalmanITTools SharePoint Report ' + end.toISOString(),

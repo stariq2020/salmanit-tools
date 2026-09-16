@@ -107,11 +107,10 @@ nav {
 
 /* ── HERO ── */
 .hero {
-  min-height: 100vh;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   text-align: center;
-  padding: 120px 24px 80px;
+  padding: 100px 24px 32px;
   position: relative; overflow: hidden;
   background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,232,122,0.08) 0%, transparent 70%),
               radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,200,255,0.05) 0%, transparent 60%),
@@ -150,7 +149,7 @@ nav {
   border: 1px solid rgba(0,232,122,0.25);
   background: rgba(0,232,122,0.06);
   padding: 7px 18px; border-radius: 999px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   animation: fadeUp .7s ease both;
 }
 .eyebrow-dot {
@@ -161,7 +160,7 @@ nav {
 
 .hero h1 {
   font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: clamp(4rem, 10vw, 9rem);
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
   line-height: .95; letter-spacing: .02em;
   color: var(--white);
   animation: fadeUp .7s .1s ease both;
@@ -178,14 +177,14 @@ nav {
 }
 
 .hero-sub {
-  margin-top: 28px; max-width: 520px;
-  font-size: 1.05rem; font-weight: 300;
-  color: rgba(240,246,255,0.5); line-height: 1.75;
+  margin-top: 16px; max-width: 520px;
+  font-size: 0.95rem; font-weight: 300;
+  color: rgba(240,246,255,0.5); line-height: 1.6;
   animation: fadeUp .7s .2s ease both;
 }
 
 .hero-cta {
-  margin-top: 44px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
   animation: fadeUp .7s .3s ease both;
 }
 .btn-primary {
@@ -215,24 +214,21 @@ nav {
 .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--green); }
 
 .hero-stats {
-  margin-top: 72px; display: flex; gap: 0;
-  border: 1px solid var(--border);
-  border-radius: 16px; overflow: hidden;
+  margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
   animation: fadeUp .7s .4s ease both;
-  background: rgba(255,255,255,0.02);
 }
 .stat {
-  padding: 20px 36px; text-align: center;
-  border-right: 1px solid var(--border);
-  flex: 1;
+  display: flex; align-items: baseline; gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: rgba(255,255,255,0.02);
 }
-.stat:last-child { border-right: none; }
 .stat-n {
   font-family: 'Bebas Neue', 'Arial Black', Arial, sans-serif;
-  font-size: 2.2rem; letter-spacing: .05em;
+  font-size: 0.9rem; letter-spacing: .05em;
   color: var(--green);
 }
-.stat-l { font-size: 0.72rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .08em; }
+.stat-l { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 
 /* ── ACCORDIONS ── */
 .accordion-wrap {
@@ -327,6 +323,26 @@ nav {
   color: var(--white);
 }
 .cat-sub { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+
+/* ── QUICK ACCESS GRID (compact, auto-built from the detailed cards below) ── */
+.quick-group { margin-bottom: 26px; }
+.quick-group:last-child { margin-bottom: 0; }
+.quick-group-label {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--muted); margin-bottom: 12px; padding-left: 2px;
+}
+.quick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.quick-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  padding: 16px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  text-decoration: none; cursor: none;
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.quick-tile:hover { border-color: var(--green); transform: translateY(-3px); background: rgba(0,232,122,0.04); }
+.qt-icon { font-size: 1.6rem; line-height: 1; }
+.qt-name { font-size: 0.78rem; font-weight: 600; color: var(--white); line-height: 1.3; }
+.quick-jump { display: block; margin-top: 24px; text-align: center; font-size: 0.82rem; color: var(--muted); text-decoration: none; cursor: none; }
+.quick-jump:hover { color: var(--green); }
 
 /* ── FILTER TABS ── */
 .filter-tabs {
@@ -1086,8 +1102,16 @@ footer a:hover { text-decoration: underline; }
   </div>
 </section>
 
+<!-- QUICK ACCESS — dense, scannable grid built automatically from the
+     detailed tool cards below, so there's one source of truth for the
+     tool list and nothing to keep in sync by hand. -->
+<section id="tools" style="padding:8px 24px 40px; max-width:1120px; margin:0 auto;">
+  <div id="quickGridWrap"></div>
+  <a class="quick-jump" href="#tools-detail">↓ Full details, features &amp; categories</a>
+</section>
+
 <!-- TOOLS -->
-<section id="tools" style="padding:100px 24px; max-width:1120px; margin:0 auto;">
+<section id="tools-detail" style="padding:40px 24px 100px; max-width:1120px; margin:0 auto;">
   <div class="label-tag reveal">Our Tools</div>
   <h2 class="section-h reveal">All Tools</h2>
   <p class="section-p reveal">Free tools for everyone — Windows utilities, online tools and more. No signup, no cost.</p>
@@ -2337,6 +2361,41 @@ footer a:hover { text-decoration: underline; }
       el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
     });
   }
+
+  // ── Quick access grid — read straight off the detailed .tool-card
+  // elements further down the page (icon, name, primary link) so there's
+  // one source of truth for the tool list; nothing here needs updating by
+  // hand when a tool is added, renamed or removed below.
+  function buildQuickGrid() {
+    const wrap = document.getElementById('quickGridWrap');
+    if (!wrap) return;
+    const CAT_LABELS = { windows: '🖥️ Windows PC', it: '🔧 IT Tools', utilities: '🛠️ Utilities', life: '🧮 Everyday Life' };
+    const groups = {};
+    document.querySelectorAll('#tools-detail .tool-card[data-cat]').forEach(card => {
+      const link = card.querySelector('.tc-actions a.dl-btn');
+      const icon = card.querySelector('.tool-icon-wrap');
+      const name = card.querySelector('.tool-name');
+      if (!link || !icon || !name) return;
+      const cat = card.dataset.cat;
+      (groups[cat] = groups[cat] || []).push({
+        href: link.getAttribute('href'),
+        target: link.getAttribute('target') || '',
+        icon: icon.textContent.trim(),
+        name: name.textContent.trim(),
+      });
+    });
+    wrap.innerHTML = Object.keys(CAT_LABELS).filter(cat => groups[cat]).map(cat => `
+      <div class="quick-group">
+        <div class="quick-group-label">${CAT_LABELS[cat]}</div>
+        <div class="quick-grid">
+          ${groups[cat].map(t => `<a class="quick-tile" href="${t.href}"${t.target ? ` target="${t.target}"` : ''}>
+            <span class="qt-icon">${t.icon}</span>
+            <span class="qt-name">${t.name}</span>
+          </a>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+  buildQuickGrid();
 
   // ── Mobile menu
   function toggleMobileMenu() {

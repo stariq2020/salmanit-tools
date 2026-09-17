@@ -6,6 +6,18 @@
 <title>Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools</title>
 <link rel="canonical" href="https://salmanittools.co.uk/sharepoint-report.html">
 <meta name="description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Salman IT Tools">
+<meta property="og:title" content="Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools">
+<meta property="og:description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta property="og:url" content="https://salmanittools.co.uk/sharepoint-report.html">
+<meta property="og:image" content="https://salmanittools.co.uk/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://salmanittools.co.uk/og-image.png">
+<meta name="twitter:title" content="Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools">
+<meta name="twitter:description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -825,6 +837,10 @@ let importedFileCountRows = [];
 let importedUserRows = [];
 let lastAuditRecords = [];
 let siteInventoryFetched = false;
+// Kept so "Check again" can resume polling the SAME Purview query after an
+// 8-minute wait gives up client-side, instead of discarding its progress
+// and starting a brand new (equally slow) query from scratch.
+let pendingAuditQuery = null; // { queryId, start, end }
 
 function setAuditExportVisible(show){
   const d = show ? 'inline-block' : 'none';
@@ -989,9 +1005,100 @@ function setupOperationDropdown(){
 }
 setupOperationDropdown();
 
+// Polls one Purview audit query until it finishes or MAX_WAIT_MS elapses,
+// then pages in its records. Shared by a fresh search and by "Check again"
+// (which resumes polling the SAME queryId instead of paying for a brand new
+// query) — a timeout here doesn't mean the search failed, Purview keeps
+// working on it server-side; we just stopped waiting client-side.
+async function pollAndFetchAuditQuery(queryId, token, start, end){
+  setAuditProgress(25, 'Running query against the audit log… this can take a few minutes, especially the first search on a tenant.');
+  let status = 'notStarted';
+  const pollStart = Date.now();
+  const MAX_WAIT_MS = 8 * 60 * 1000; // Purview audit search can genuinely take several minutes, particularly the first query a tenant runs.
+  let tries = 0;
+  while (status !== 'succeeded' && status !== 'failed' && status !== 'cancelled' && (Date.now() - pollStart) < MAX_WAIT_MS) {
+    const interval = tries < 15 ? 3000 : 8000; // poll quickly at first, then back off to avoid hammering Graph on long-running queries
+    await new Promise(r => setTimeout(r, interval));
+    const pollRes = await fetch(`${GRAPH_BASE}/security/auditLog/queries/${queryId}`, { headers: { Authorization: 'Bearer ' + token } });
+    if (!pollRes.ok) throw new Error('Lost track of the audit query while polling (' + pollRes.status + ').');
+    const pollJson = await pollRes.json();
+    status = pollJson.status;
+    tries++;
+    const elapsedSec = Math.round((Date.now() - pollStart) / 1000);
+    setAuditProgress(25 + Math.min(60, tries * 2), `Running query against the audit log… (${status}, ${elapsedSec}s elapsed)`);
+  }
+  if (status === 'failed') { pendingAuditQuery = null; throw new Error("The audit query failed on Microsoft's side. Try a shorter date range."); }
+  if (status === 'cancelled') { pendingAuditQuery = null; throw new Error('The audit query was cancelled.'); }
+  if (status !== 'succeeded') {
+    pendingAuditQuery = { queryId, start, end };
+    const err = new Error("Still running after 8 minutes, so we stopped waiting. This is common for the first audit search on a tenant while Purview finishes indexing — it's still running on Microsoft's side, so you can just check again instead of starting over.");
+    err.timedOut = true;
+    throw err;
+  }
+  pendingAuditQuery = null;
+
+  setAuditProgress(88, 'Fetching matching records…');
+  let records = [];
+  let next = `${GRAPH_BASE}/security/auditLog/queries/${queryId}/records?$top=999`;
+  const CAP = 5000;
+  while (next && records.length < CAP) {
+    const r = await fetch(next, { headers: { Authorization: 'Bearer ' + token } });
+    if (!r.ok) break;
+    const j = await r.json();
+    records = records.concat(j.value || []);
+    next = j['@odata.nextLink'] || null;
+  }
+
+  lastAuditRecords = records.slice(0, CAP);
+  renderAuditResults(lastAuditRecords, start, end);
+  if (records.length >= CAP) {
+    const el = document.getElementById('auditWarn');
+    el.textContent = `Showing the first ${CAP.toLocaleString()} matching records. Narrow the date range or filters to see a more complete picture.`;
+    el.classList.add('show');
+  } else {
+    const el = document.getElementById('auditInfo');
+    el.textContent = `Found ${records.length.toLocaleString()} matching record(s).`;
+    el.classList.add('show');
+  }
+  setAuditExportVisible(lastAuditRecords.length > 0);
+}
+
+function handleAuditSearchError(err){
+  console.error('audit search', err);
+  hideAuditProgress();
+  const status = err && err.status;
+  if (err && err.timedOut) {
+    showAuditError(escapeHtml(err.message) + ' <button type="button" class="pdf-btn-secondary" style="margin-left:4px;padding:4px 12px;font-size:0.78rem" onclick="resumeAuditSearch()">Check again</button>');
+  } else if (status === 403 || status === 401) {
+    showAuditError("Microsoft blocked this audit search — you likely need a Global Administrator, Compliance Administrator or Security Administrator role (or a custom role with audit search rights). If this is the first time anyone has used audit search with this app, a Global Admin also needs to grant admin consent for <strong>AuditLogsQuery-SharePoint.Read.All</strong> in Entra ID, then sign out and back in.<br><br><details><summary style=\"cursor:pointer;color:inherit\">Technical details</summary>" + escapeHtml(err.message || String(err)) + "</details>");
+  } else {
+    showAuditError('Audit search failed: ' + escapeHtml(err.message || String(err)));
+  }
+}
+
+// Resumes polling the query left running by a previous timeout, instead of
+// creating a new one and losing whatever progress Purview already made.
+async function resumeAuditSearch(){
+  if (!pendingAuditQuery) return;
+  clearAuditNotices();
+  const btn = document.getElementById('auditBtn');
+  btn.disabled = true;
+  const { queryId, start, end } = pendingAuditQuery;
+  try {
+    const token = await getToken();
+    await pollAndFetchAuditQuery(queryId, token, start, end);
+    hideAuditProgress();
+  } catch (err) {
+    handleAuditSearchError(err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 async function runAuditSearch(){
   clearAuditNotices();
   setAuditExportVisible(false);
+  pendingAuditQuery = null;
   const btn = document.getElementById('auditBtn');
   btn.disabled = true;
 
@@ -1065,60 +1172,10 @@ async function runAuditSearch(){
     const query = await createRes.json();
     const queryId = query.id;
 
-    setAuditProgress(25, 'Running query against the audit log… this can take a few minutes, especially the first search on a tenant.');
-    let status = query.status || 'notStarted';
-    const pollStart = Date.now();
-    const MAX_WAIT_MS = 8 * 60 * 1000; // Purview audit search can genuinely take several minutes, particularly the first query a tenant runs.
-    let tries = 0;
-    while (status !== 'succeeded' && status !== 'failed' && status !== 'cancelled' && (Date.now() - pollStart) < MAX_WAIT_MS) {
-      const interval = tries < 15 ? 3000 : 8000; // poll quickly at first, then back off to avoid hammering Graph on long-running queries
-      await new Promise(r => setTimeout(r, interval));
-      const pollRes = await fetch(`${GRAPH_BASE}/security/auditLog/queries/${queryId}`, { headers: { Authorization: 'Bearer ' + token } });
-      if (!pollRes.ok) throw new Error('Lost track of the audit query while polling (' + pollRes.status + ').');
-      const pollJson = await pollRes.json();
-      status = pollJson.status;
-      tries++;
-      const elapsedSec = Math.round((Date.now() - pollStart) / 1000);
-      setAuditProgress(25 + Math.min(60, tries * 2), `Running query against the audit log… (${status}, ${elapsedSec}s elapsed)`);
-    }
-    if (status === 'failed') throw new Error("The audit query failed on Microsoft's side. Try a shorter date range.");
-    if (status === 'cancelled') throw new Error('The audit query was cancelled.');
-    if (status !== 'succeeded') throw new Error("Still running after 8 minutes, so we stopped waiting. This is common for the first audit search on a tenant while Purview finishes indexing — wait a few minutes and search again, or try a shorter date range.");
-
-    setAuditProgress(88, 'Fetching matching records…');
-    let records = [];
-    let next = `${GRAPH_BASE}/security/auditLog/queries/${queryId}/records?$top=999`;
-    const CAP = 5000;
-    while (next && records.length < CAP) {
-      const r = await fetch(next, { headers: { Authorization: 'Bearer ' + token } });
-      if (!r.ok) break;
-      const j = await r.json();
-      records = records.concat(j.value || []);
-      next = j['@odata.nextLink'] || null;
-    }
-
-    lastAuditRecords = records.slice(0, CAP);
-    renderAuditResults(lastAuditRecords, start, end);
-    if (records.length >= CAP) {
-      const el = document.getElementById('auditWarn');
-      el.textContent = `Showing the first ${CAP.toLocaleString()} matching records. Narrow the date range or filters to see a more complete picture.`;
-      el.classList.add('show');
-    } else {
-      const el = document.getElementById('auditInfo');
-      el.textContent = `Found ${records.length.toLocaleString()} matching record(s).`;
-      el.classList.add('show');
-    }
-    setAuditExportVisible(lastAuditRecords.length > 0);
+    await pollAndFetchAuditQuery(queryId, token, start, end);
     hideAuditProgress();
   } catch (err) {
-    console.error('audit search', err);
-    hideAuditProgress();
-    const status = err && err.status;
-    if (status === 403 || status === 401) {
-      showAuditError("Microsoft blocked this audit search — you likely need a Global Administrator, Compliance Administrator or Security Administrator role (or a custom role with audit search rights). If this is the first time anyone has used audit search with this app, a Global Admin also needs to grant admin consent for <strong>AuditLogsQuery-SharePoint.Read.All</strong> in Entra ID, then sign out and back in.<br><br><details><summary style=\"cursor:pointer;color:inherit\">Technical details</summary>" + escapeHtml(err.message || String(err)) + "</details>");
-    } else {
-      showAuditError('Audit search failed: ' + escapeHtml(err.message || String(err)));
-    }
+    handleAuditSearchError(err);
   } finally {
     btn.disabled = false;
   }

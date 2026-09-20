@@ -59,6 +59,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
 @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
 
+.mode-switch{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;gap:4px;margin-bottom:18px}
+.mode-btn{padding:8px 18px;background:transparent;border:none;border-radius:7px;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.mode-btn:hover{color:var(--white)}
+.mode-btn.active{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink)}
 .page-header{max-width:1400px;margin:0 auto;padding:40px 24px 20px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:8px}
 .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:10px}
@@ -109,7 +113,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .colour-row input[type=color]{width:36px;height:28px;border:1px solid var(--border);border-radius:6px;background:transparent;cursor:pointer;padding:2px}
 
 /* Action buttons */
-.action-row{display:flex;gap:10px;padding:20px 24px}
+.action-row{display:flex;flex-wrap:wrap;gap:10px;padding:20px 24px}
 .btn-primary{flex:1;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
 .btn-primary:hover{opacity:.9;transform:scale(1.01)}
 .btn-secondary{padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
@@ -196,9 +200,13 @@ footer a{color:var(--green);text-decoration:none}
 </div>
 
 <div class="page-header">
+  <div class="mode-switch" id="modeSwitch">
+    <button type="button" id="modeInvoiceBtn" class="mode-btn active" onclick="setMode('invoice')">🧾 Invoice</button>
+    <button type="button" id="modeQuoteBtn" class="mode-btn" onclick="setMode('quote')">📝 Quote</button>
+  </div>
   <div class="page-eyebrow">Free Online Tool</div>
-  <h1 class="page-title">Invoice<br><span class="acc">Generator</span></h1>
-  <p class="page-sub">Create professional invoices with your logo, line items, VAT and payment terms. Download as PDF. Runs entirely in your browser — nothing is uploaded or stored.</p>
+  <h1 class="page-title"><span id="titleWord1">Invoice</span><br><span class="acc">Generator</span></h1>
+  <p class="page-sub" id="pageSub">Create professional invoices with your logo, line items, VAT and payment terms. Download as PDF. Runs entirely in your browser — nothing is uploaded or stored.</p>
 </div>
 
 <div class="workspace">
@@ -236,7 +244,7 @@ footer a{color:var(--green);text-decoration:none}
 
       <!-- Client Details -->
       <div class="form-section">
-        <div class="section-title">👤 Bill To</div>
+        <div class="section-title" id="sectionPartyTitle">👤 Bill To</div>
         <div class="form-row">
           <div class="form-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Acme Corporation" oninput="render()"/></div>
           <div class="form-group"><label>Contact Name</label><input type="text" id="clientContact" placeholder="John Smith" oninput="render()"/></div>
@@ -252,14 +260,14 @@ footer a{color:var(--green);text-decoration:none}
 
       <!-- Invoice Details -->
       <div class="form-section">
-        <div class="section-title">📋 Invoice Details</div>
+        <div class="section-title" id="sectionDetailsTitle">📋 Invoice Details</div>
         <div class="form-row">
-          <div class="form-group"><label>Invoice Number</label><input type="text" id="invNumber" placeholder="INV-001" oninput="render()"/></div>
+          <div class="form-group"><label id="numberLabel">Invoice Number</label><input type="text" id="invNumber" placeholder="INV-001" oninput="render()"/></div>
           <div class="form-group"><label>PO Number (optional)</label><input type="text" id="poNumber" placeholder="PO-2024-001" oninput="render()"/></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label>Invoice Date</label><input type="date" id="invDate" oninput="render()"/></div>
-          <div class="form-group"><label>Due Date</label><input type="date" id="dueDate" oninput="render()"/></div>
+          <div class="form-group"><label id="dateLabel">Invoice Date</label><input type="date" id="invDate" oninput="render()"/></div>
+          <div class="form-group"><label id="dueLabel">Due Date</label><input type="date" id="dueDate" oninput="render()"/></div>
         </div>
         <div class="form-row">
           <div class="form-group"><label>Currency</label>
@@ -324,9 +332,9 @@ footer a{color:var(--green);text-decoration:none}
 
       <!-- Payment & Notes -->
       <div class="form-section">
-        <div class="section-title">💳 Payment & Notes</div>
+        <div class="section-title" id="sectionPaymentTitle">💳 Payment & Notes</div>
         <div class="form-row full">
-          <div class="form-group"><label>Bank / Payment Details</label><textarea id="bankDetails" rows="3" placeholder="Bank: Lloyds Bank&#10;Sort Code: 30-00-00&#10;Account: 12345678&#10;Ref: INV-001" oninput="render()"></textarea></div>
+          <div class="form-group"><label id="bankLabel">Bank / Payment Details</label><textarea id="bankDetails" rows="3" placeholder="Bank: Lloyds Bank&#10;Sort Code: 30-00-00&#10;Account: 12345678&#10;Ref: INV-001" oninput="render()"></textarea></div>
         </div>
         <div class="form-row full">
           <div class="form-group"><label>Notes / Terms</label><textarea id="notes" rows="3" placeholder="Payment due within 30 days. Thank you for your business." oninput="render()"></textarea></div>
@@ -400,6 +408,7 @@ footer a{color:var(--green);text-decoration:none}
 
     <div class="action-row">
       <button class="btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      <button class="btn-secondary" id="convertBtn" onclick="convertToInvoice()" style="display:none">➡️ Convert to Invoice</button>
       <button class="btn-secondary" onclick="clearAll()">🗑️ Clear</button>
     </div>
   </div>
@@ -461,6 +470,91 @@ document.getElementById('invNumber').value = 'INV-001';
 
 let logoDataUrl = null;
 let items = [{desc:'', qty:1, price:0}];
+let docMode = 'invoice'; // 'invoice' | 'quote'
+
+const MODE_TEXT = {
+  invoice: {
+    titleWord:'Invoice',
+    sub:'Create professional invoices with your logo, line items, VAT and payment terms. Download as PDF. Runs entirely in your browser — nothing is uploaded or stored.',
+    sectionDetails:'📋 Invoice Details',
+    sectionParty:'👤 Bill To',
+    sectionPayment:'💳 Payment & Notes',
+    numberLabel:'Invoice Number',
+    numberPlaceholder:'INV-001',
+    numberDefault:'INV-001',
+    dateLabel:'Invoice Date',
+    dueLabel:'Due Date',
+    bankLabel:'Bank / Payment Details',
+    notesPlaceholder:'Payment due within 30 days. Thank you for your business.',
+    statusOptions:[['','None'],['draft','Draft'],['sent','Sent'],['paid','Paid'],['overdue','Overdue']],
+    pageTitle:'Free Invoice Generator — Salman IT Tools'
+  },
+  quote: {
+    titleWord:'Quote',
+    sub:'Create professional price quotes to send to potential clients. Add your logo, line items and terms, then download as PDF. Runs entirely in your browser — nothing is uploaded or stored.',
+    sectionDetails:'📋 Quote Details',
+    sectionParty:'👤 Quote For',
+    sectionPayment:'📝 Terms & Notes',
+    numberLabel:'Quote Number',
+    numberPlaceholder:'QUO-001',
+    numberDefault:'QUO-001',
+    dateLabel:'Quote Date',
+    dueLabel:'Valid Until',
+    bankLabel:'Bank / Deposit Details (optional)',
+    notesPlaceholder:'This quote is valid for 30 days from the date above. Prices exclude VAT unless stated.',
+    statusOptions:[['','None'],['draft','Draft'],['sent','Sent'],['accepted','Accepted'],['expired','Expired']],
+    pageTitle:'Free Quote Generator — Salman IT Tools'
+  }
+};
+
+function setMode(mode) {
+  const prevMode = docMode;
+  if (prevMode === mode) return;
+  docMode = mode;
+  const t = MODE_TEXT[mode];
+
+  document.getElementById('modeInvoiceBtn').classList.toggle('active', mode === 'invoice');
+  document.getElementById('modeQuoteBtn').classList.toggle('active', mode === 'quote');
+
+  document.getElementById('titleWord1').textContent = t.titleWord;
+  document.getElementById('pageSub').textContent = t.sub;
+  document.getElementById('sectionDetailsTitle').textContent = t.sectionDetails;
+  document.getElementById('sectionPartyTitle').textContent = t.sectionParty;
+  document.getElementById('sectionPaymentTitle').textContent = t.sectionPayment;
+  document.getElementById('numberLabel').textContent = t.numberLabel;
+  document.getElementById('dateLabel').textContent = t.dateLabel;
+  document.getElementById('dueLabel').textContent = t.dueLabel;
+  document.getElementById('bankLabel').textContent = t.bankLabel;
+  document.title = t.pageTitle;
+
+  const numberInput = document.getElementById('invNumber');
+  if (!numberInput.value.trim() || numberInput.value === MODE_TEXT[prevMode].numberDefault) {
+    numberInput.value = t.numberDefault;
+  }
+  numberInput.placeholder = t.numberPlaceholder;
+
+  document.getElementById('notes').placeholder = t.notesPlaceholder;
+
+  const statusSel = document.getElementById('invStatus');
+  const prevVal = statusSel.value;
+  statusSel.innerHTML = t.statusOptions.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+  const validValues = t.statusOptions.map(o => o[0]);
+  statusSel.value = validValues.includes(prevVal) ? prevVal : '';
+
+  document.getElementById('convertBtn').style.display = mode === 'quote' ? 'inline-block' : 'none';
+
+  render();
+}
+
+function convertToInvoice() {
+  if (docMode !== 'quote') return;
+  setMode('invoice');
+  const today = new Date();
+  const due = new Date(); due.setDate(due.getDate() + 30);
+  document.getElementById('invDate').value = today.toISOString().split('T')[0];
+  document.getElementById('dueDate').value = due.toISOString().split('T')[0];
+  render();
+}
 
 function handleLogo(input) {
   const file = input.files[0];
@@ -569,7 +663,9 @@ function statusBadge(status) {
     draft: 'background:#f1f5f9;color:#64748b',
     sent:  'background:#dbeafe;color:#1d4ed8',
     paid:  'background:#dcfce7;color:#16a34a',
-    overdue: 'background:#fee2e2;color:#dc2626'
+    overdue: 'background:#fee2e2;color:#dc2626',
+    accepted: 'background:#dcfce7;color:#16a34a',
+    expired: 'background:#fee2e2;color:#dc2626'
   };
   return `<span class="inv-status-badge" style="${styles[status]||''}">${status.toUpperCase()}</span>`;
 }
@@ -606,9 +702,21 @@ function render() {
   const bizDetail = bizLines.join('<br>');
   const clientDetail = [g('clientContact'),g('clientAddr'),g('clientEmail'),g('clientVat')?'VAT: '+g('clientVat'):''].filter(Boolean).join('<br>');
   const poRow  = g('poNumber') ? `<div style="font-size:0.75rem;color:#777;margin-top:3px">PO: ${esc(g('poNumber'))}</div>` : '';
-  const invNum = esc(g('invNumber') || 'INV-001');
-  const dateBlock = [g('invDate')?'Issued: '+fmtDate(g('invDate')):'',g('dueDate')?'Due: '+fmtDate(g('dueDate')):''].filter(Boolean).join('<br>');
+  const invNum = esc(g('invNumber') || MODE_TEXT[docMode].numberDefault);
   const badge  = statusBadge(g('invStatus'));
+
+  // Mode-aware document wording
+  const docWord        = docMode === 'quote' ? 'Quote' : 'Invoice';
+  const partyWord       = docMode === 'quote' ? 'Quote For' : 'Bill To';
+  const totalWord       = docMode === 'quote' ? 'Total' : 'Total Due';
+  const amountWord      = docMode === 'quote' ? 'Amount' : 'Amount Due';
+  const issuedWord      = docMode === 'quote' ? 'Date' : 'Issued';
+  const dueInlineWord   = docMode === 'quote' ? 'Valid until' : 'Due';
+  const dueFieldWord    = docMode === 'quote' ? 'Valid Until' : 'Due Date';
+  const issuedFieldWord = docMode === 'quote' ? 'Quote Date' : 'Invoice Date';
+  const totalDueLabel   = docMode === 'quote' ? 'Quote Total' : 'Payment Due';
+
+  const dateBlock = [g('invDate')?issuedWord+': '+fmtDate(g('invDate')):'',g('dueDate')?dueInlineWord+': '+fmtDate(g('dueDate')):''].filter(Boolean).join('<br>');
 
   // Table rows
   const rows = items.map(it=>{
@@ -621,7 +729,7 @@ function render() {
   if(discPct>0) tots+=`<div class="inv-total-row"><span>Discount (${discPct}%)</span><span>−${fmt(discAmt)}</span></div>`;
   if(shipping>0) tots+=`<div class="inv-total-row"><span>Shipping</span><span>${fmt(shipping)}</span></div>`;
   if(vatRate>0)  tots+=`<div class="inv-total-row"><span>VAT (${vatRate}%)</span><span>${fmt(vatAmt+vatOnShip)}</span></div>`;
-  tots+=`<div class="inv-total-row grand" style="border-top:2px solid ${textCol}"><span>Total Due</span><span>${fmt(total)}</span></div>`;
+  tots+=`<div class="inv-total-row grand" style="border-top:2px solid ${textCol}"><span>${totalWord}</span><span>${fmt(total)}</span></div>`;
 
   const bank  = g('bankDetails') ? `<div class="inv-bank"><div class="inv-notes-label">Payment Details</div><div class="inv-notes" style="white-space:pre-line">${esc(g('bankDetails'))}</div></div>` : '';
   const notes = g('notes') ? `<div style="margin-top:12px"><div class="inv-notes-label">Notes & Terms</div><div class="inv-notes">${esc(g('notes'))}</div></div>` : '';
@@ -655,7 +763,7 @@ function render() {
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px">
           <div>${logoHtml}</div>
           <div style="text-align:right">${badge}
-            <div style="font-family:${font};font-size:2.4rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${accent}">Invoice</div>
+            <div style="font-family:${font};font-size:2.4rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${accent}">${docWord}</div>
             <div style="font-size:0.85rem;color:#555;margin-top:2px">${invNum}</div>
             <div style="font-size:0.78rem;color:#777;margin-top:4px;line-height:1.7">${dateBlock}</div>
           </div>
@@ -665,7 +773,7 @@ function render() {
             <div style="font-weight:700;font-size:1rem">${esc(bizName)}</div>
             <div style="font-size:0.8rem;color:#555;line-height:1.7;margin-top:3px">${bizDetail}</div>
           </div>
-          <div><div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:6px">Bill To</div>
+          <div><div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:6px">${partyWord}</div>
             <div style="font-weight:700;font-size:1rem">${esc(g('clientName')||'Client Name')}</div>
             <div style="font-size:0.8rem;color:#555;line-height:1.7;margin-top:3px">${clientDetail}</div>${poRow}
           </div>
@@ -684,17 +792,17 @@ function render() {
       </div>
       <div style="text-align:center;margin-bottom:28px;padding:10px 0;border-bottom:1px solid #ddd">
         ${badge}
-        <div style="font-size:1.6rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:${textCol}">Invoice</div>
+        <div style="font-size:1.6rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:${textCol}">${docWord}</div>
         <div style="font-size:0.82rem;color:#666;margin-top:3px">${invNum} &nbsp;·&nbsp; ${dateBlock.replace('<br>',' &nbsp;·&nbsp; ')}</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:28px">
-        <div><div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999;margin-bottom:5px">Bill To</div>
+        <div><div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999;margin-bottom:5px">${partyWord}</div>
           <div style="font-weight:700">${esc(g('clientName')||'Client Name')}</div>
           <div style="font-size:0.8rem;color:#555;line-height:1.7">${clientDetail}</div>${poRow}
         </div>
-        <div style="text-align:right"><div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999;margin-bottom:5px">Payment Due</div>
+        <div style="text-align:right"><div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999;margin-bottom:5px">${totalDueLabel}</div>
           <div style="font-size:1.4rem;font-weight:900;color:${accent}">${fmt(total)}</div>
-          <div style="font-size:0.78rem;color:#777;margin-top:4px">${g('dueDate')?'Due: '+fmtDate(g('dueDate')):''}</div>
+          <div style="font-size:0.78rem;color:#777;margin-top:4px">${g('dueDate')?dueInlineWord+': '+fmtDate(g('dueDate')):''}</div>
         </div>
       </div>
       ${makeTable(`background:${textCol};color:#fff`)}`;
@@ -709,7 +817,7 @@ function render() {
           <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:6px;line-height:1.7">${bizLines.slice(0,3).join('<br>')}</div>
         </div>
         <div style="text-align:right;position:relative;z-index:1">${badge}
-          <div style="font-size:2rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:${accent}">Invoice</div>
+          <div style="font-size:2rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:${accent}">${docWord}</div>
           <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);margin-top:4px">${invNum}</div>
           <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:3px;line-height:1.7">${dateBlock}</div>
         </div>
@@ -717,7 +825,7 @@ function render() {
       <div style="padding:32px 40px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px">
           <div style="background:#f8f9fa;border-radius:8px;padding:16px">
-            <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#999;margin-bottom:6px">Bill To</div>
+            <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#999;margin-bottom:6px">${partyWord}</div>
             <div style="font-weight:700;font-size:0.95rem">${esc(g('clientName')||'Client Name')}</div>
             <div style="font-size:0.78rem;color:#666;line-height:1.7;margin-top:3px">${clientDetail}</div>${poRow}
           </div>
@@ -741,19 +849,19 @@ function render() {
           <div style="font-size:0.72rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-top:4px">${bizDetail}</div>
         </div>
         <div>
-          <div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:${accent};margin-bottom:8px">Bill To</div>
+          <div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:${accent};margin-bottom:8px">${partyWord}</div>
           <div style="font-size:0.82rem;font-weight:700;color:#fff">${esc(g('clientName')||'Client Name')}</div>
           <div style="font-size:0.72rem;color:rgba(255,255,255,0.55);line-height:1.8;margin-top:4px">${clientDetail}</div>${poRow?`<div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:3px">${poRow}</div>`:''}
         </div>
         <div style="margin-top:auto">
-          <div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:${accent};margin-bottom:6px">Total Due</div>
+          <div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:${accent};margin-bottom:6px">${totalWord}</div>
           <div style="font-size:1.6rem;font-weight:900;color:#fff">${fmt(total)}</div>
-          ${g('dueDate')?`<div style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:3px">Due: ${fmtDate(g('dueDate'))}</div>`:''}
+          ${g('dueDate')?`<div style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:3px">${dueInlineWord}: ${fmtDate(g('dueDate'))}</div>`:''}
         </div>
       </div>
       <div style="padding:40px 32px">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px">
-          <div>${badge}<div style="font-size:1.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:${accent}">Invoice</div><div style="font-size:0.82rem;color:#777;margin-top:2px">${invNum}</div></div>
+          <div>${badge}<div style="font-size:1.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:${accent}">${docWord}</div><div style="font-size:0.82rem;color:#777;margin-top:2px">${invNum}</div></div>
           <div style="text-align:right;font-size:0.78rem;color:#777;line-height:1.7">${dateBlock}</div>
         </div>
         ${makeTable(`background:${accent}18;color:${accent}`)}
@@ -770,23 +878,23 @@ function render() {
             <div style="font-size:0.7rem;color:rgba(0,0,0,0.55);margin-top:6px;line-height:1.7">${bizLines.slice(0,3).join('<br>')}</div>
           </div>
           <div style="text-align:right;color:#fff">${badge}
-            <div style="font-size:2.2rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase">Invoice</div>
+            <div style="font-size:2.2rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase">${docWord}</div>
             <div style="font-size:0.82rem;opacity:.8;margin-top:2px">${invNum}</div>
           </div>
         </div>
       </div>
       <div style="padding:0 48px 48px;margin-top:-12px">
         <div style="background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.08);padding:24px;margin-bottom:28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
-          <div><div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:5px">Bill To</div>
+          <div><div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:5px">${partyWord}</div>
             <div style="font-weight:700;font-size:0.9rem">${esc(g('clientName')||'Client Name')}</div>
             <div style="font-size:0.75rem;color:#666;line-height:1.7;margin-top:3px">${clientDetail}</div>${poRow}
           </div>
-          <div><div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:5px">Invoice Date</div>
+          <div><div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:5px">${issuedFieldWord}</div>
             <div style="font-size:0.85rem;font-weight:600">${g('invDate')?fmtDate(g('invDate')):'—'}</div>
-            <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-top:12px;margin-bottom:5px">Due Date</div>
+            <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-top:12px;margin-bottom:5px">${dueFieldWord}</div>
             <div style="font-size:0.85rem;font-weight:600">${g('dueDate')?fmtDate(g('dueDate')):'—'}</div>
           </div>
-          <div style="text-align:right"><div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:5px">Amount Due</div>
+          <div style="text-align:right"><div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:${accent};margin-bottom:5px">${amountWord}</div>
             <div style="font-size:1.8rem;font-weight:900;color:${textCol}">${fmt(total)}</div>
             ${badge}
           </div>
@@ -801,7 +909,7 @@ function render() {
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:48px">
         <div>${logoHtml}</div>
         <div style="text-align:right">${badge}
-          <div style="font-size:0.65rem;font-weight:300;letter-spacing:.35em;text-transform:uppercase;color:#bbb;margin-top:4px">Invoice</div>
+          <div style="font-size:0.65rem;font-weight:300;letter-spacing:.35em;text-transform:uppercase;color:#bbb;margin-top:4px">${docWord}</div>
           <div style="font-size:0.82rem;color:#aaa;margin-top:2px">${invNum}</div>
         </div>
       </div>
@@ -810,14 +918,14 @@ function render() {
           <div style="font-weight:600;font-size:0.88rem">${esc(bizName)}</div>
           <div style="font-size:0.75rem;color:#999;line-height:1.8;margin-top:4px">${bizDetail}</div>
         </div>
-        <div><div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#ccc;margin-bottom:8px">Bill To</div>
+        <div><div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#ccc;margin-bottom:8px">${partyWord}</div>
           <div style="font-weight:600;font-size:0.88rem">${esc(g('clientName')||'Client Name')}</div>
           <div style="font-size:0.75rem;color:#999;line-height:1.8;margin-top:4px">${clientDetail}</div>${poRow?`<div style="font-size:0.72rem;color:#bbb;margin-top:2px">${poRow}</div>`:''}
         </div>
         <div style="text-align:right"><div style="font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#ccc;margin-bottom:8px">Details</div>
           <div style="font-size:0.75rem;color:#999;line-height:1.9">${dateBlock}</div>
           <div style="font-size:1.4rem;font-weight:800;color:${textCol};margin-top:10px">${fmt(total)}</div>
-          <div style="font-size:0.62rem;color:#bbb">Total Due</div>
+          <div style="font-size:0.62rem;color:#bbb">${totalWord}</div>
         </div>
       </div>
       ${makeTable(`color:#bbb;border-bottom:1px solid #f0f0f0;background:transparent`)}`;
@@ -835,7 +943,7 @@ function clearAll() {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  document.getElementById('invNumber').value = 'INV-001';
+  document.getElementById('invNumber').value = MODE_TEXT[docMode].numberDefault;
   document.getElementById('vatRate').value = '20';
   document.getElementById('discount').value = '0';
   document.getElementById('shipping').value = '0';

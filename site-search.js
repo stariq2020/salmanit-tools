@@ -43,9 +43,9 @@
       description: "Compress JPG, PNG and WebP images instantly — no uploads, 100% private.",
       keywords: ["compress image", "shrink photo", "jpg", "png", "webp", "resize"] },
 
-    { name: "Invoice Generator", url: "invoice-generator.html",
-      description: "Create a professional invoice with logo, line items, VAT and payment terms — download as PDF.",
-      keywords: ["invoice", "pdf", "billing", "vat", "quote"] },
+    { name: "Invoice & Quote Generator", url: "invoice-generator.html",
+      description: "Create a professional invoice or price quote with logo, line items, VAT and terms — download as PDF.",
+      keywords: ["invoice", "pdf", "billing", "vat", "quote", "estimate", "quotation"] },
 
     { name: "JWT Decoder", url: "jwt-decoder.html",
       description: "Decode a JSON Web Token's header, payload and claims — expiry, roles, scopes, tenant info.",

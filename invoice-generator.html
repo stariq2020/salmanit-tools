@@ -205,7 +205,7 @@ footer a{color:var(--green);text-decoration:none}
     <button type="button" id="modeQuoteBtn" class="mode-btn" onclick="setMode('quote')">📝 Quote</button>
   </div>
   <div class="page-eyebrow">Free Online Tool</div>
-  <h1 class="page-title"><span id="titleWord1">Invoice</span><br><span class="acc">Generator</span></h1>
+  <h1 class="page-title">Invoice & Quote<br><span class="acc">Generator</span></h1>
   <p class="page-sub" id="pageSub">Create professional invoices with your logo, line items, VAT and payment terms. Download as PDF. Runs entirely in your browser — nothing is uploaded or stored.</p>
 </div>
 
@@ -474,7 +474,6 @@ let docMode = 'invoice'; // 'invoice' | 'quote'
 
 const MODE_TEXT = {
   invoice: {
-    titleWord:'Invoice',
     sub:'Create professional invoices with your logo, line items, VAT and payment terms. Download as PDF. Runs entirely in your browser — nothing is uploaded or stored.',
     sectionDetails:'📋 Invoice Details',
     sectionParty:'👤 Bill To',
@@ -490,7 +489,6 @@ const MODE_TEXT = {
     pageTitle:'Free Invoice Generator — Salman IT Tools'
   },
   quote: {
-    titleWord:'Quote',
     sub:'Create professional price quotes to send to potential clients. Add your logo, line items and terms, then download as PDF. Runs entirely in your browser — nothing is uploaded or stored.',
     sectionDetails:'📋 Quote Details',
     sectionParty:'👤 Quote For',
@@ -516,7 +514,6 @@ function setMode(mode) {
   document.getElementById('modeInvoiceBtn').classList.toggle('active', mode === 'invoice');
   document.getElementById('modeQuoteBtn').classList.toggle('active', mode === 'quote');
 
-  document.getElementById('titleWord1').textContent = t.titleWord;
   document.getElementById('pageSub').textContent = t.sub;
   document.getElementById('sectionDetailsTitle').textContent = t.sectionDetails;
   document.getElementById('sectionPartyTitle').textContent = t.sectionParty;

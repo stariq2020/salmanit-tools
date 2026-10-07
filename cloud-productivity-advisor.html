@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Productivity Advisor — Microsoft 365 vs Google Workspace vs Zoho | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/cloud-productivity-advisor.html">
+<meta name="description" content="Could your business be paying too much for cloud software? Compare Microsoft 365, Google Workspace, Zoho and Dropbox for cost, features and fit. Free, no login, honest advice.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Cloud Productivity Advisor",
+  "url": "https://salmanittools.co.uk/cloud-productivity-advisor.html",
+  "description": "Compare Microsoft 365, Google Workspace, Zoho and Dropbox for cost, features and suitability. Free, no login, nothing stored.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any (runs in browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
+}
+</script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Salman IT Tools">
+<meta property="og:title" content="Cloud Productivity Advisor — Salman IT Tools">
+<meta property="og:description" content="Compare Microsoft 365, Google Workspace, Zoho and Dropbox for cost, features and fit. Free, no login.">
+<meta property="og:url" content="https://salmanittools.co.uk/cloud-productivity-advisor.html">
+<meta property="og:image" content="https://salmanittools.co.uk/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://salmanittools.co.uk/og-image.png">
+<meta name="twitter:title" content="Cloud Productivity Advisor — Salman IT Tools">
+<meta name="twitter:description" content="Compare Microsoft 365, Google Workspace, Zoho and Dropbox for cost, features and fit. Free, no login.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--green)}
+
+
+.page{max-width:960px;margin:0 auto;padding:60px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1.02rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:28px}
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px;z-index:600}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+
+/* ---- Advisor ---- */
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;padding:13px 26px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .2s,background .2s}
+.btn-primary{background:linear-gradient(135deg,var(--green),var(--green2));color:#04140B}
+.btn-primary:hover{transform:translateY(-1px);opacity:.92}
+.btn-ghost{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--white)}
+.btn-ghost:hover{border-color:rgba(0,232,122,.4);color:var(--green)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+.hero-note{font-size:.82rem;color:var(--muted);margin-top:14px}
+.hero-note strong{color:var(--green);font-weight:600}
+.hero-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.hero-points span{font-size:.78rem;color:rgba(240,246,255,.75);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;padding:6px 14px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:20px}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.progress-top strong{color:var(--green)}
+.bar{height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:28px}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan));transition:width .3s}
+fieldset{border:none;min-width:0}
+legend{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,4vw,2.1rem);letter-spacing:.03em;margin-bottom:6px;padding:0}
+.hint{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.opt{position:relative;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:13px 14px;cursor:pointer;font-size:.92rem;transition:border-color .2s,background .2s}
+.opt:hover{border-color:rgba(0,232,122,.35)}
+.opt input{accent-color:var(--green);width:18px;height:18px;flex-shrink:0;cursor:pointer}
+.opt:has(input:checked){border-color:var(--green);background:rgba(0,232,122,.07)}
+.opt:has(input:focus-visible){outline:2px solid var(--cyan);outline-offset:2px}
+.opt:has(input:disabled){opacity:.45;cursor:not-allowed}
+.sub-q{margin-top:26px}
+.sub-q h3{font-size:1rem;font-weight:600;margin-bottom:10px}
+label.fld{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:18px 0 8px}
+input[type=number],input[type=text]{width:100%;max-width:280px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:1rem}
+input[type=number]:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.err{color:var(--danger);font-size:.84rem;margin-top:8px;min-height:1.2em}
+.calc-line{margin-top:14px;font-size:.95rem;color:var(--green);font-weight:600}
+.row-inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.seg label{padding:11px 18px;font-size:.88rem;cursor:pointer;background:rgba(255,255,255,.03)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:rgba(0,232,122,.14);color:var(--green);font-weight:600}
+.seg label:has(input:focus-visible){outline:2px solid var(--cyan);outline-offset:-2px}
+.nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:30px;flex-wrap:wrap}
+
+/* ---- Results ---- */
+.res-head{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
+.res-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:.03em;line-height:1.05;margin:6px 0}
+.res-sub{color:var(--green);font-weight:600;font-size:1rem}
+.res-meta{font-size:.84rem;color:var(--muted);margin-top:10px;line-height:1.6;max-width:520px}
+.ring{--p:80;width:132px;height:132px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),rgba(255,255,255,.08) 0);display:grid;place-items:center;flex-shrink:0}
+.ring>div{width:104px;height:104px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring b{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;color:var(--green)}
+.ring small{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:16px}
+.stat .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.stat .v{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.02em;line-height:1.1}
+.stat .v.good{color:var(--green)}.stat .v.bad{color:var(--warning)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:520px}
+th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border)}
+td{padding:13px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th.n,td.n{text-align:right}
+tr.is-rec td{background:rgba(0,232,122,.06)}
+.tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:2px 8px;margin-left:6px;background:rgba(0,232,122,.15);color:var(--green);vertical-align:middle}
+.sub{color:var(--muted);font-size:.8rem;display:block}
+.fit{display:inline-block;border-radius:100px;padding:3px 12px;font-size:.78rem;font-weight:600}
+.fit.Excellent{background:rgba(0,232,122,.15);color:var(--green)}
+.fit.Good{background:rgba(0,200,255,.12);color:var(--cyan)}
+.fit.Moderate{background:rgba(245,158,11,.14);color:var(--warning)}
+.fit.Poor{background:rgba(239,68,68,.14);color:#F87171}
+.diff-neg{color:var(--green)}.diff-pos{color:var(--warning)}
+.mig{font-size:1.3rem;font-weight:600;margin-bottom:14px}
+ul.clean{list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.clean li{display:flex;gap:10px;font-size:.92rem;line-height:1.5;color:rgba(240,246,255,.88)}
+ul.clean li .i{flex-shrink:0;width:20px;color:var(--green);font-weight:700}
+ul.clean li .i.w{color:var(--warning)}
+.explain p{font-size:.95rem;line-height:1.75;color:rgba(240,246,255,.85);margin-bottom:12px}
+.explain p:last-child{margin-bottom:0}
+.caveat{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:14px 16px;font-size:.88rem;line-height:1.6;margin-top:16px}
+.disclaimer{font-size:.78rem;color:var(--muted);line-height:1.6}
+.cta{background:linear-gradient(135deg,rgba(0,232,122,.1),rgba(0,200,255,.08));border:1px solid rgba(0,232,122,.25)}
+.cta p{color:rgba(240,246,255,.8);line-height:1.7;max-width:640px;margin-bottom:20px;font-size:.95rem}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.hidden{display:none!important}
+
+@media(max-width:768px){
+  .page{padding:40px 16px 60px}.card{padding:22px 18px}
+  .res-head{grid-template-columns:1fr}.ring{order:-1}
+  .two{grid-template-columns:1fr}
+  table{min-width:0}
+  thead{position:absolute;left:-9999px}
+  table,tbody,tr,td{display:block;width:100%}
+  tr{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;padding:6px 0}
+  td{border:none;display:flex;justify-content:space-between;gap:12px;padding:7px 14px;text-align:right}
+  td::before{content:attr(data-l);color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;text-align:left;flex-shrink:0;padding-top:2px}
+  td.n{text-align:right}
+  .tbl-wrap{overflow:visible}
+  .btn{width:100%}.actions{flex-direction:column}
+}
+@media print{
+  body{background:#fff;color:#111}
+  nav,.mobile-menu,footer,.wa-btn,.no-print,#intro,#wizard{display:none!important}
+  .page{padding:0;max-width:none}
+  .card{background:#fff;border:1px solid #bbb;color:#111;break-inside:avoid}
+  .res-sub,.ring b,.stat .v.good,.diff-neg{color:#0a7a45}
+  .ring>div{background:#fff}.ring small,.stat .l,.sub,.res-meta,.disclaimer,td::before,th{color:#444}
+  ul.clean li,.explain p,.cta p,td{color:#111}
+  .cta{background:#fff}
+}
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script src="site-search.js" defer></script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+
+<main class="page">
+
+  <section id="intro">
+    <div class="page-eyebrow">Business IT · Free Assessment</div>
+    <h1 class="page-title">Could your business be <span class="acc">paying too much</span> for cloud software?</h1>
+    <p class="page-sub">Tell us what you're using today and we'll compare the cost, features and suitability of alternative platforms.</p>
+    <button class="btn btn-primary" id="startBtn" type="button">Start Free Assessment →</button>
+    <p class="hero-note"><strong>No login. No signup. No personal information required.</strong></p>
+    <div class="hero-points">
+      <span>Microsoft 365</span><span>Google Workspace</span><span>Zoho Workplace</span><span>Dropbox</span><span>Or stay put — we'll say so honestly</span>
+    </div>
+  </section>
+
+  <section id="wizard" class="card hidden" aria-labelledby="stepTitle">
+    <div class="progress-top"><span id="stepLabel">Step <strong>1</strong> of 8</span><span>Answers stay in your browser</span></div>
+    <div class="bar" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" aria-label="Assessment progress" id="bar"><i></i></div>
+    <div id="stepBody"></div>
+    <div class="err" id="stepErr" role="alert"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="backBtn" type="button">← Back</button>
+      <button class="btn btn-primary" id="nextBtn" type="button">Next →</button>
+    </div>
+  </section>
+
+  <section id="results" class="hidden" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script src="cloud-advisor-pricing.js"></script>
+<script src="cloud-advisor-engine.js"></script>
+<script>
+(function () {
+  'use strict';
+  var E = window.CloudAdvisorEngine, D = window.CloudAdvisorData, C = D.CONFIG, money = E.money;
+
+  /* ---------- answers (memory only — never stored or sent anywhere) ---------- */
+  var A = { current: '', users: '', storageBand: '', storageExactGB: '', apps: [], desktop: '', collab: [],
+            emailCurrent: '', emailMove: '', costAmount: '', costPeriod: 'month', costUnknown: false, priorities: [] };
+  var step = 1, TOTAL = 8;
+
+  var APPS = [['word','Microsoft Word'],['excel','Microsoft Excel'],['powerpoint','Microsoft PowerPoint'],['outlook','Outlook'],['gmail','Gmail'],['googleDocs','Google Docs'],['googleSheets','Google Sheets'],['googleDrive','Google Drive'],['teams','Microsoft Teams'],['zoom','Zoom'],['sharepoint','SharePoint'],['onedrive','OneDrive'],['dropbox','Dropbox'],['other','Other']];
+  var COLLAB = [['individual','Individual files'],['sharedFolders','Shared folders'],['coedit','Multiple people editing files simultaneously'],['networkDrive','Need something similar to a shared network drive'],['largeFiles','Large files'],['remote','Remote workers'],['external','External sharing with clients'],['notsure','Not sure']];
+  var PRIORITIES = ['Lowest cost','Microsoft Office','Easy file sharing','Email','Security','Remote working','Desktop applications','Collaboration','Large storage','Simple administration','Future growth'];
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function $(id) { return document.getElementById(id); }
+
+  function radios(name, items, cur) {
+    return '<div class="opts">' + items.map(function (it, i) {
+      return '<label class="opt"><input type="radio" name="' + name + '" value="' + esc(it[0]) + '"' + (cur === it[0] ? ' checked' : '') + '><span>' + esc(it[1]) + '</span></label>';
+    }).join('') + '</div>';
+  }
+  function checks(name, items, cur, max) {
+    return '<div class="opts">' + items.map(function (it) {
+      return '<label class="opt"><input type="checkbox" name="' + name + '" value="' + esc(it[0]) + '"' + (cur.indexOf(it[0]) >= 0 ? ' checked' : '') + '><span>' + esc(it[1]) + '</span></label>';
+    }).join('') + '</div>';
+  }
+
+  var STEPS = [
+    function () { return '<fieldset><legend id="stepTitle">What do you currently use?</legend><p class="hint">Pick the platform your business mainly runs on today.</p>' +
+      radios('current', [['google','Google Workspace'],['microsoft','Microsoft 365'],['zoho','Zoho'],['dropbox','Dropbox / Other'],['unsure',"I'm not sure"]], A.current) + '</fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">How many people use your business system?</legend><p class="hint">Roughly how many users or mailboxes (1–500).</p>' +
+      '<label class="fld" for="users">Number of users</label><input type="number" id="users" min="1" max="500" step="1" inputmode="numeric" placeholder="e.g. 10" value="' + esc(A.users) + '"></fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">How much business data do you currently store?</legend><p class="hint">An estimate is fine. Not sure? Choose &ldquo;I don&rsquo;t know&rdquo; and carry on.</p>' +
+      radios('storageBand', [['lt100','Less than 100 GB'],['100-250','100–250 GB'],['250-500','250–500 GB'],['500-1000','500 GB – 1 TB'],['1000-2000','1–2 TB'],['gt2000','2 TB+'],['','I don’t know']], A.storageBand) +
+      '<label class="fld" for="storageExact">Exact figure in GB (optional)</label><input type="number" id="storageExact" min="1" step="1" inputmode="numeric" placeholder="e.g. 320" value="' + esc(A.storageExactGB) + '"></fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">What applications do you use?</legend><p class="hint">Select all that apply.</p>' + checks('apps', APPS, A.apps) +
+      '<div class="sub-q"><h3 id="deskQ">Do you need the desktop Microsoft Office apps?</h3><p class="hint" style="margin-bottom:10px">Installed Word, Excel and PowerPoint &mdash; rather than just opening Office files in a browser.</p>' +
+      '<div role="radiogroup" aria-labelledby="deskQ">' + radios('desktop', [['yes','Yes, we need desktop Office'],['no','No, opening files is enough'],['unsure','Not sure']], A.desktop) + '</div></div></fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">How does your team work with files?</legend><p class="hint">Select all that apply.</p>' + checks('collab', COLLAB, A.collab) + '</fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">What do you use for business email?</legend><p class="hint">&nbsp;</p>' +
+      radios('emailCurrent', [['google','Gmail / Google Workspace'],['microsoft','Microsoft Outlook / Exchange'],['other','Other'],['unsure','Not sure']], A.emailCurrent) +
+      '<div class="sub-q"><h3 id="moveQ">Would you be willing to move your email provider?</h3><div role="radiogroup" aria-labelledby="moveQ">' +
+      radios('emailMove', [['yes','Yes'],['maybe','Maybe'],['no','No']], A.emailMove) + '</div></div></fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">Approximately how much are you currently paying?</legend><p class="hint">Total across the business, as you&rsquo;re billed. We&rsquo;ll work out the annual cost for you.</p>' +
+      '<div class="row-inline"><span class="seg" role="radiogroup" aria-label="Billing period">' +
+      '<label><input type="radio" name="costPeriod" value="month"' + (A.costPeriod === 'month' ? ' checked' : '') + '>£ per month</label>' +
+      '<label><input type="radio" name="costPeriod" value="year"' + (A.costPeriod === 'year' ? ' checked' : '') + '>£ per year</label></span></div>' +
+      '<label class="fld" for="costAmount">Amount (£)</label><input type="number" id="costAmount" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 60" value="' + esc(A.costAmount) + '"' + (A.costUnknown ? ' disabled' : '') + '>' +
+      '<div class="calc-line" id="costCalc" aria-live="polite"></div>' +
+      '<div style="margin-top:16px"><label class="opt" style="max-width:280px"><input type="checkbox" id="costUnknown"' + (A.costUnknown ? ' checked' : '') + '><span>I don&rsquo;t know</span></label></div></fieldset>'; },
+    function () { return '<fieldset><legend id="stepTitle">What matters most to your business?</legend><p class="hint">Choose up to 3. <span id="prioCount"></span></p>' +
+      checks('priorities', PRIORITIES.map(function (p) { return [p, p]; }), A.priorities) + '</fieldset>'; }
+  ];
+
+  /* ---------- read inputs from DOM into A ---------- */
+  function val(name) { var e = document.querySelector('input[name="' + name + '"]:checked'); return e ? e.value : ''; }
+  function vals(name) { return Array.prototype.map.call(document.querySelectorAll('input[name="' + name + '"]:checked'), function (e) { return e.value; }); }
+  function capture() {
+    switch (step) {
+      case 1: A.current = val('current'); break;
+      case 2: A.users = $('users').value; break;
+      case 3: A.storageBand = val('storageBand'); A.storageExactGB = $('storageExact').value; break;
+      case 4: A.apps = vals('apps'); A.desktop = val('desktop'); break;
+      case 5: A.collab = vals('collab'); break;
+      case 6: A.emailCurrent = val('emailCurrent'); A.emailMove = val('emailMove'); break;
+      case 7: A.costPeriod = val('costPeriod') || 'month'; A.costAmount = $('costAmount').value; A.costUnknown = $('costUnknown').checked; break;
+      case 8: A.priorities = vals('priorities'); break;
+    }
+  }
+
+  function updateCostCalc() {
+    var el = $('costCalc'); if (!el) return;
+    var amt = parseFloat($('costAmount').value), period = val('costPeriod') || 'month';
+    if ($('costUnknown').checked || !(amt > 0)) { el.textContent = ''; return; }
+    el.textContent = period === 'month' ? money(amt) + '/month becomes ' + money(amt * 12) + '/year' : money(amt) + '/year (' + money(amt / 12) + '/month)';
+  }
+  function limitPriorities() {
+    var boxes = document.querySelectorAll('input[name="priorities"]'), n = vals('priorities').length;
+    Array.prototype.forEach.call(boxes, function (b) { b.disabled = !b.checked && n >= 3; });
+    var c = $('prioCount'); if (c) c.textContent = n + ' of 3 selected.';
+  }
+  function wireStep() {
+    if (step === 7) {
+      $('costAmount').addEventListener('input', updateCostCalc);
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="costPeriod"]'), function (r) { r.addEventListener('change', updateCostCalc); });
+      $('costUnknown').addEventListener('change', function () { $('costAmount').disabled = this.checked; updateCostCalc(); });
+      updateCostCalc();
+    }
+    if (step === 8) { document.querySelector('#stepBody').addEventListener('change', limitPriorities); limitPriorities(); }
+    // "Not sure" / "Other" style exclusivity for collab
+    if (step === 5) document.querySelector('#stepBody').addEventListener('change', function (e) {
+      if (e.target.value === 'notsure' && e.target.checked) Array.prototype.forEach.call(document.querySelectorAll('input[name="collab"]'), function (b) { if (b.value !== 'notsure') b.checked = false; });
+      else if (e.target.checked) { var ns = document.querySelector('input[name="collab"][value="notsure"]'); if (ns) ns.checked = false; }
+    });
+  }
+
+  function render() {
+    $('stepBody').innerHTML = STEPS[step - 1]();
+    $('stepLabel').innerHTML = 'Step <strong>' + step + '</strong> of ' + TOTAL;
+    $('bar').setAttribute('aria-valuenow', step);
+    $('bar').firstElementChild.style.width = (step / TOTAL * 100) + '%';
+    $('backBtn').style.visibility = step === 1 ? 'hidden' : 'visible';
+    $('nextBtn').textContent = step === TOTAL ? 'See my results →' : 'Next →';
+    $('stepErr').textContent = '';
+    wireStep();
+    var f = $('stepTitle'); if (f) { f.setAttribute('tabindex', '-1'); }
+  }
+
+  function validate() {
+    if (step === 2) {
+      var u = parseInt(A.users, 10);
+      if (!(u >= 1 && u <= 500)) return 'Please enter a number of users between 1 and 500.';
+    }
+    return '';
+  }
+  function go(delta) {
+    capture();
+    if (delta > 0) { var e = validate(); if (e) { $('stepErr').textContent = e; $('users') && $('users').focus(); return; } }
+    var n = step + delta;
+    if (n > TOTAL) { showResults(); return; }
+    if (n < 1) return;
+    step = n; render();
+    var t = $('stepTitle'); if (t) t.focus({ preventScroll: true });
+    $('wizard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---------- results ---------- */
+  function diffText(d, estimated) {
+    if (d == null) return '—';
+    if (Math.round(d) === 0) return estimated ? '≈ Same' : 'Same';
+    return (d < 0 ? '<span class="diff-neg">-' : '<span class="diff-pos">+') + money(Math.abs(d)) + '</span>';
+  }
+  function showResults() {
+    var r = E.evaluate(A), rec = r.recommended, a = r.answers;
+    var cur = r.current, h = '';
+
+    h += '<div class="card"><div class="res-head"><div>' +
+      '<div class="page-eyebrow">Your assessment</div>' +
+      '<h1 class="res-title" id="resTitle" tabindex="-1">' + esc(r.title) + '</h1>' +
+      '<div class="res-sub">' + esc(r.subtitle) + '</div>' +
+      (r.isStay ? '<div class="res-meta">Closest plan on your current platform: <strong>' + esc(rec.name) + '</strong></div>' : '') +
+      '<div class="res-meta">Estimated suitability based on the answers you provided &mdash; a Fit Score is our own estimate, not an official provider score.</div></div>' +
+      '<div class="ring" style="--p:' + r.fitScore + '" role="img" aria-label="Fit Score ' + r.fitScore + ' percent"><div><b>' + r.fitScore + '%</b><small>Fit Score</small></div></div></div>' +
+      (r.caveats.length ? '<div class="caveat"><strong>Worth knowing:</strong> ' + esc(r.caveats.join('. ')) + '.</div>' : '') + '</div>';
+
+    // current cost
+    h += '<div class="card"><h2 class="h3">Your current setup</h2><div class="stats">' +
+      '<div class="stat"><div class="l">Current monthly cost</div><div class="v">' + (cur.known ? money(cur.monthly) : 'Not provided') + '</div></div>' +
+      '<div class="stat"><div class="l">Estimated annual cost</div><div class="v">' + (cur.known ? money(cur.annual) : 'Not provided') + '</div></div>' +
+      '<div class="stat"><div class="l">Cost per user</div><div class="v">' + (cur.known ? money(cur.perUser) + '/year' : 'Not provided') + '</div></div></div>' +
+      (cur.known ? '' : '<p class="hint" style="margin:12px 0 0">You didn&rsquo;t share your current spend, so comparisons use list prices only.</p>') + '</div>';
+
+    // recommended
+    var diffHtml = '';
+    if (r.isStay) diffHtml = '<div class="stat"><div class="l">Change in cost</div><div class="v">No change</div></div>';
+    else if (cur.known) {
+      var saving = r.saving > 0;
+      diffHtml = '<div class="stat"><div class="l">' + (saving ? 'Potential difference' : 'Estimated additional cost') + '</div><div class="v ' + (saving ? 'good' : 'bad') + '">' +
+        (saving ? money(r.saving) + '/year less' : money(Math.abs(r.saving)) + '/year') + '</div></div>';
+    }
+    h += '<div class="card"><h2 class="h3">Recommended platform</h2><div class="stats">' +
+      '<div class="stat"><div class="l">' + (r.isStay ? 'Stay with' : 'Platform') + '</div><div class="v" style="font-size:1.4rem">' + esc(r.isStay ? cur.providerLabel : rec.name) + '</div></div>' +
+      '<div class="stat"><div class="l">Estimated cost</div><div class="v">' + money(r.isStay && cur.known ? cur.annual : rec.annual) + '/year</div></div>' + diffHtml + '</div>' +
+      (rec.plan.components ? '<p class="hint" style="margin:12px 0 0">Made up of: ' + esc(rec.plan.components.join(' + ')) + ' per user per month.</p>' : '') + '</div>';
+
+    // comparison
+    h += '<div class="card"><h2 class="h3">Comparison</h2><div class="tbl-wrap"><table><thead><tr><th>Platform</th><th class="n">Estimated annual cost</th><th class="n">Difference</th><th>Fit</th></tr></thead><tbody>' +
+      r.rows.map(function (x) {
+        return '<tr class="' + (x.rec ? 'is-rec' : '') + '"><td data-l="Platform"><div><strong>' + esc(x.label) + '</strong>' + (x.rec ? '<span class="tag">Recommended</span>' : '') + '<span class="sub">' + esc(x.sub) + '</span></div></td>' +
+          '<td class="n" data-l="Annual cost">' + money(x.annual) + (x.estimated ? '<span class="sub">estimated</span>' : '') + '</td>' +
+          '<td class="n" data-l="Difference">' + (x.isCurrent ? 'Current' : diffText(x.diff, false)) + '</td>' +
+          '<td data-l="Fit"><span class="fit ' + x.fitLabel + '">' + x.fitLabel + ' · ' + x.fit + '%</span></td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      (cur.known ? '' : '<p class="hint" style="margin:12px 0 0">' + (r.stayCandidate ? 'Differences are shown against the list price of your current platform because you didn&rsquo;t enter what you pay.' : 'Differences aren&rsquo;t shown because we don&rsquo;t know your current platform or spend.') + '</p>') + '</div>';
+
+    // migration
+    var lvl = r.migration.level, dot = { Low: '🟢', Moderate: '🟡', High: '🔴' }[lvl];
+    h += '<div class="two"><div class="card"><h2 class="h3">Estimated migration complexity</h2><div class="mig">' + dot + ' ' + lvl + '</div>' +
+      '<h3 style="font-size:.95rem;margin-bottom:10px">What would need to change?</h3><ul class="clean">' +
+      r.migration.changes.map(function (c) { return '<li><span class="i ' + (c.ok ? '' : 'w') + '">' + (c.ok ? '✓' : '⚠') + '</span><span>' + esc(c.text) + '</span></li>'; }).join('') + '</ul></div>' +
+      '<div class="card"><h2 class="h3">' + (r.isStay ? 'Why we suggest staying' : 'Why we recommend ' + esc(rec.plan.platform)) + '</h2><ul class="clean">' +
+      r.reasons.map(function (x) { return '<li><span class="i">✓</span><span>' + esc(x) + '</span></li>'; }).join('') + '</ul></div></div>';
+
+    // explanation
+    h += '<div class="card explain"><h2 class="h3">' + (r.isStay ? 'Our assessment' : 'In plain English') + '</h2>' + r.explanation.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>';
+
+    // lead gen
+    h += '<div class="card cta no-print"><h2 class="h3">Want an expert to review your setup?</h2>' +
+      '<p>These figures are estimates. If you&rsquo;re considering a migration, Salman IT Services can review your current setup and tell you whether moving actually makes sense.</p>' +
+      '<div class="actions"><a class="btn btn-primary" href="' + esc(C.BOOKING_URL) + '">Book a Free Consultation</a>' +
+      '<a class="btn btn-ghost" href="' + esc(C.CONTACT_URL) + '">Talk to Salman IT Services</a></div></div>';
+
+    // actions + disclaimer
+    h += '<div class="actions no-print" style="margin-bottom:22px"><button class="btn btn-ghost" type="button" id="printBtn">🖨 Print / Save Results</button>' +
+      '<button class="btn btn-ghost" type="button" id="changeBtn">Change Answers</button><button class="btn btn-ghost" type="button" id="againBtn">Start Again</button></div>' +
+      '<p class="disclaimer">Prices shown are estimates based on the pricing data currently configured in this tool (last reviewed ' + esc(C.PRICING_LAST_REVIEWED) + ', shown ex VAT, per user per month billed annually). Actual pricing may vary by billing term, taxes, promotions, region and licensing options. Fit Scores are our own estimates, not official provider scores. This assessment ran entirely in your browser; nothing was sent or stored.</p>';
+
+    $('results').innerHTML = h;
+    $('intro').classList.add('hidden'); $('wizard').classList.add('hidden'); $('results').classList.remove('hidden');
+    $('printBtn').onclick = function () { window.print(); };
+    $('changeBtn').onclick = function () { step = 1; $('results').classList.add('hidden'); $('wizard').classList.remove('hidden'); render(); window.scrollTo({ top: 0 }); };
+    $('againBtn').onclick = function () {
+      A = { current: '', users: '', storageBand: '', storageExactGB: '', apps: [], desktop: '', collab: [], emailCurrent: '', emailMove: '', costAmount: '', costPeriod: 'month', costUnknown: false, priorities: [] };
+      step = 1; $('results').classList.add('hidden'); $('intro').classList.remove('hidden'); window.scrollTo({ top: 0 });
+    };
+    var t = $('resTitle'); if (t) t.focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  }
+
+  $('startBtn').addEventListener('click', function () {
+    $('intro').classList.add('hidden'); $('wizard').classList.remove('hidden'); step = 1; render(); $('wizard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('backBtn').addEventListener('click', function () { go(-1); });
+  $('nextBtn').addEventListener('click', function () { go(1); });
+  $('stepBody').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type === 'number') { e.preventDefault(); go(1); } });
+
+  window.__cloudAdvisor = { state: function () { return A; } }; // for testing only
+})();
+
+function toggleMobileMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+</script>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/447947707097" target="_blank" class="wa-btn" title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="white">
+    <path d="M24 4C13 4 4 13 4 24c0 3.6 1 7 2.7 10L4 44l10.3-2.7C17.1 43 20.5 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.1 0-6.1-.8-8.7-2.4l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.8 30.1 8 27.1 8 24 8 15.2 15.2 8 24 8s16 7.2 16 16-7.2 16-16 16zm8.7-11.8c-.5-.2-2.8-1.4-3.2-1.5-.4-.2-.7-.2-1 .2-.3.5-1.1 1.5-1.4 1.8-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.3-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-1 .2-.2.5-.5.7-.8.2-.3.3-.5.4-.8.2-.3.1-.6 0-.8-.1-.2-1-2.5-1.4-3.4-.4-.9-.8-.7-1-.7h-.9c-.3 0-.8.1-1.2.6-.4.5-1.6 1.5-1.6 3.7s1.6 4.3 1.9 4.6c.2.3 3.2 5 7.8 7 1.1.5 1.9.7 2.6.9 1.1.3 2.1.3 2.9.2.9-.1 2.8-1.1 3.2-2.2.4-1.1.4-2 .3-2.2-.2-.3-.5-.4-1-.6z"/>
+  </svg>
+</a>
+<style>
+.wa-btn{position:fixed;bottom:28px;right:28px;z-index:999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform .2s,box-shadow .2s;text-decoration:none}
+.wa-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,0.55)}
+.wa-btn svg{width:32px;height:32px;position:relative;z-index:1}
+.wa-btn::before{content:'';position:absolute;width:58px;height:58px;border-radius:50%;background:rgba(37,211,102,0.35);animation:wa-pulse 2s ease-out infinite}
+@keyframes wa-pulse{0%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+</style>
+
+
+</body>
+</html>

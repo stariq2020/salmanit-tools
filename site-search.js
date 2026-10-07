@@ -55,6 +55,10 @@
       description: "Design a professional letterhead with your logo, colours and contact details — print to PDF.",
       keywords: ["letterhead", "logo", "print pdf", "branding"] },
 
+    { name: "Cloud Productivity Advisor", url: "cloud-productivity-advisor.html",
+      description: "Compare Microsoft 365, Google Workspace, Zoho and Dropbox for cost and fit — or find out if you should stay put.",
+      keywords: ["microsoft 365", "office 365", "google workspace", "zoho", "dropbox", "cloud cost", "licence", "license", "migration", "gsuite", "compare", "cheaper"] },
+
     { name: "Life Calculator", url: "life-calculator.html",
       description: "Everyday calculators: percentage, discount, VAT, salary, mortgage, loan, tip, split bill, age & more.",
       keywords: ["calculator", "percentage", "discount", "vat", "salary", "take-home pay", "mortgage", "loan", "interest", "tip", "split bill", "age", "date"] },

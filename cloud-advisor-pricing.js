@@ -61,7 +61,7 @@
 
     // ---- Migration complexity points ----
     MIGRATION: {
-      lowMax: 2, moderateMax: 5
+      lowMax: 2, moderateMax: 6
     },
 
     FIT_LABELS: [ [85, 'Excellent'], [70, 'Good'], [55, 'Moderate'], [0, 'Poor'] ],

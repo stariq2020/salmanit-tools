@@ -102,7 +102,7 @@
 
     var emailMigrates = plan.email.provider && a.emailMove !== 'no' && emailProviderOf(a) !== plan.email.provider;
     if (emailMigrates) {
-      pts += 3; // mailbox migration + MX/DNS cut-over
+      pts += a.users <= 10 ? 2 : 3; // mailbox migration + MX/DNS cut-over
       changes.push({ ok: false, text: 'Email migration (mailboxes, calendars, contacts)' });
       changes.push({ ok: false, text: 'DNS records (MX, SPF, DKIM, DMARC)' });
     } else if (plan.email.provider && emailProviderOf(a) === plan.email.provider) {
@@ -221,7 +221,10 @@
       var mine = pool.filter(function (p) { return isCurrentPlatform(p, a); }).map(function (p) {
         return scorePlan(p, a, w, ctx);
       });
-      mine.sort(function (x, y) { return y.fit - x.fit || x.annual - y.annual; });
+      // prefer the cheapest plan that meets the requirements and is close to the best fit (a realistic "what you're on now")
+      var top = mine.slice().sort(function (x, y) { return y.fit - x.fit || x.annual - y.annual; })[0];
+      var ok = mine.filter(function (c) { return !c.caps.length && top && c.fit >= top.fit - 8; }).sort(function (x, y) { return x.annual - y.annual; });
+      mine = ok.length ? [ok[0]] : (top ? [top] : []);
       stay = mine[0] ? (a.costKnown ? scorePlan(mine[0].plan, a, w, ctx, { annualOverride: a.annualCost }) : mine[0]) : null;
       if (stay) stay.migration = migration(stay.plan, a, true);
     }
@@ -239,7 +242,8 @@
 
     var topAlt = alts[0] || null;
     var currentAnnual = a.annualCost != null ? a.annualCost : (stay ? stay.annual : null);
-    function savingOf(c) { return a.annualCost != null ? a.annualCost - c.annual : null; }
+    var refCost = a.annualCost != null ? a.annualCost : (stay ? stay.annual : null);
+    function savingOf(c) { return refCost != null ? refCost - c.annual : null; }
 
     // decision
     var rec, isStay = false, stayReason = null;
@@ -249,7 +253,7 @@
       var gain = topAlt.fit - stay.fit, saving = savingOf(topAlt), lvl = topAlt.migration.level;
       var needGain = C.STAY.requiredFitGain[lvl];
       var sv = C.STAY.requiredSaving[lvl];
-      var needSaving = a.annualCost != null ? Math.max(sv[0], sv[1] * a.annualCost) : Infinity;
+      var needSaving = refCost != null ? Math.max(sv[0], sv[1] * refCost) : Infinity;
       var worthwhile = gain >= needGain || (saving != null && saving >= needSaving && gain >= C.STAY.fitTolerance);
       if (stay.fit >= C.STAY.acceptableFit && !worthwhile) { rec = stay; isStay = true; }
       else if (stay.fit < C.STAY.acceptableFit && stay.fit >= topAlt.fit) { rec = stay; isStay = true; }

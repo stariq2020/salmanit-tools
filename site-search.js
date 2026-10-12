@@ -19,6 +19,10 @@
       description: "Merge, split, compress, rotate and convert PDF files — runs entirely in your browser.",
       keywords: ["pdf", "merge pdf", "split pdf", "compress pdf", "convert pdf", "rotate", "organize pdf"] },
 
+    { name: "AI PDF Summarizer", url: "pdf-summarizer.html",
+      description: "Upload a PDF and get the main points, a short summary or action items using AI — the file stays in your browser.",
+      keywords: ["pdf summarizer", "summarize pdf", "pdf summary", "ai", "key points", "tldr", "document summary"] },
+
     { name: "SharePoint Report Builder", url: "sharepoint-report.html",
       description: "Generate a client-ready SharePoint report — live site inventory via Microsoft Graph, plus storage & activity from an imported M365 usage export.",
       keywords: ["sharepoint", "report", "o365", "office 365", "microsoft 365", "storage report", "usage report", "site inventory", "graph api", "csv import"] },

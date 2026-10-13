@@ -1,0 +1,247 @@
+/* Troubleshooting flows: Microsoft 365 (4 flows) and Hardware & power (3 flows) */
+(function (root) {
+  'use strict';
+  var KB = root.WT_KB, V = KB.V, F = KB.flows;
+  var MANAGED = 'On a work or school device, some of these actions may be blocked by IT policy. If a step is unavailable or asks for an administrator password, stop and ask your IT team.';
+
+  /* ---------------- MICROSOFT 365 ---------------- */
+  F.push({
+    id: 'outlook-not-opening', title: 'Outlook not opening', cat: 'm365',
+    blurb: 'Outlook will not start, hangs on "Loading profile", or closes straight away.',
+    symptoms: ['Outlook closes immediately', 'Stuck on "Loading profile" or the splash screen', '"Cannot start Microsoft Outlook"', '"Outlook is not responding"'],
+    keywords: ['outlook not opening', 'outlook wont open', 'outlook won\'t open', 'outlook not working', 'outlook crashes', 'outlook keeps crashing', 'outlook closes immediately', 'outlook not responding', 'outlook loading profile', 'outlook stuck loading', 'cannot start microsoft outlook', 'outlook wont start', 'outlook hangs', 'outlook stuck on splash screen', 'outlook opens then closes', 'outlook freezes', 'outlook error', 'outlook not starting', 'outlook crashed', 'unable to open outlook', 'outlook is not responding', 'cant open outlook'],
+    versions: ['10', '11'], difficulty: 'Moderate', time: '20–45 min', risk: 'Low', admin: false,
+    prereq: 'Know which Outlook you use (classic Outlook, new Outlook for Windows, or Outlook on the web). Close Outlook completely first.',
+    expected: 'Outlook opens and loads your mailbox.',
+    ms: { label: 'Fix Outlook problems (Microsoft Support)', url: 'https://support.microsoft.com/outlook' },
+    questions: [
+      { id: 'which', text: 'Which Outlook is it?', help: 'Classic Outlook has a menu bar with File, Home, Send/Receive. The new Outlook for Windows has a simpler layout and a "New Outlook" toggle.', options: [
+        { v: 'classic', label: 'Classic Outlook (Microsoft 365 / Office desktop app)', m: ['classic outlook', 'desktop outlook', 'office outlook', 'outlook 2019', 'outlook 2021', 'outlook 365'] },
+        { v: 'new', label: 'The new Outlook for Windows', m: ['new outlook'] },
+        { v: 'unsure', label: 'I\'m not sure', m: [] }] },
+      { id: 'when', text: 'What exactly happens?', options: [
+        { v: 'closes', label: 'It closes straight away or never appears', m: ['closes immediately', 'closes straight away', 'opens then closes', 'crashes', 'closes by itself'] },
+        { v: 'loading', label: 'It hangs on "Loading profile" or a splash screen', m: ['loading profile', 'splash screen', 'stuck loading', 'hangs', 'processing'] },
+        { v: 'error', label: 'It shows an error message', m: ['error', 'cannot start', 'cant start', 'message'] }] }],
+    branches: [
+      { when: { which: 'new' }, causes: ['A damaged app installation or cache', 'Account sign-in problem'], steps: ['olk-web-check', 'olk-new-reset', 'sh-updates', 'sh-restart'] },
+      { when: { when: 'loading' }, causes: ['A damaged add-in', 'A large or damaged data file', 'A stuck background Outlook process'], steps: ['olk-end', 'olk-safe', 'olk-addins', 'olk-profile', 'olk-repair', 'olk-web-check'] },
+      { when: { when: 'closes' }, causes: ['An add-in crash', 'A damaged profile or Office installation'], steps: ['olk-end', 'olk-safe', 'olk-addins', 'olk-repair', 'olk-profile', 'olk-web-check'] },
+      { causes: ['An add-in', 'A damaged profile', 'A damaged Office installation'], steps: ['olk-end', 'olk-safe', 'olk-addins', 'olk-repair', 'olk-profile', 'olk-web-check'] }
+    ],
+    escalation: 'If classic Outlook still will not open after a repair and a new profile, ask IT or Microsoft support. For work mailboxes, the problem may be with your account or the Exchange server, not your PC. Remind them you can reach your mail on the web (outlook.office.com), if you can.',
+    steps: {
+      'olk-end': { title: 'Close any hidden Outlook process and restart', why: 'Outlook can keep running invisibly after a crash and block a fresh start.', i: ['Press {{Ctrl + Shift + Esc}}.', 'In **Processes**, look for **Microsoft Outlook** (or OUTLOOK.EXE). Right-click it and choose **End task**.', 'Restart the PC (see Restart).', 'Open Outlook again.'], time: '5 min', diff: 'Easy', result: 'Outlook opens.', warn: 'You may lose any email draft that was not saved.', fail: 'If it still does not open, continue.' },
+      'olk-safe': { title: 'Open Outlook in Safe Mode', why: 'Safe Mode starts Outlook without add-ins or customisations. If it opens, an add-in is probably the cause.', i: ['Press {{Windows key + R}}.', 'Type `outlook.exe /safe` and press Enter.', 'If asked, choose your profile and select **OK**.', 'Note whether Outlook opens.'], cmd: ['outlook-safe'], time: '3 min', diff: 'Easy', result: 'Outlook opens in Safe Mode.', warn: 'Nothing is deleted. ' + MANAGED, fail: 'If it will not open even in Safe Mode, go to Repair.' },
+      'olk-addins': { title: 'Disable add-ins one by one', why: 'Add-ins (for example for meeting tools, CRM or PDF) are the most common cause of Outlook crashes.', i: ['In Outlook Safe Mode, select **File** > **Options** > **Add-ins**.', 'At the bottom, next to **Manage**, choose **COM Add-ins** and select **Go**.', 'Untick all except those you must have, select **OK**, and restart Outlook normally.', 'If it works, re-tick add-ins one at a time (restarting each time) to find the one that causes the problem.'], time: '15 min', diff: 'Moderate', result: 'Outlook opens normally with the faulty add-in off.', warn: 'Add-ins on a work PC may be installed by IT; ask before removing them permanently.', fail: 'If it still fails, continue.' },
+      'olk-repair': { title: 'Repair Microsoft 365 apps', why: 'This checks Office\'s files and replaces any that are damaged. It does not touch your emails.', i: V(['Open **Settings** > **Apps** > **Installed apps**.', 'Find **Microsoft 365** (or Microsoft Office), select the three dots > **Modify**.', 'Choose **Quick Repair** and follow the prompts. If the problem remains, repeat and choose **Online Repair**.', 'Restart the PC.'], ['Open **Settings** > **Apps** > **Apps & features**.', 'Select **Microsoft 365** (or Microsoft Office) > **Modify**.', 'Choose **Quick Repair** and follow the prompts. If the problem remains, repeat and choose **Online Repair**.', 'Restart the PC.']), time: '20–40 min', diff: 'Moderate', result: 'Office is repaired and Outlook opens.', warn: 'Close all Office apps first and save your work. Online Repair needs internet and takes longer. ' + MANAGED, fail: 'If repair fails, continue to the profile step.' },
+      'olk-profile': { title: 'Create a new Outlook profile', why: 'A profile stores your account settings. A damaged profile can stop Outlook opening. A new profile reconnects to your mailbox without losing mail stored online.', i: ['Open **Control Panel** and search for **Mail**. Select **Mail (Microsoft Outlook)**.', 'Choose **Show Profiles** > **Add**.', 'Give it a name such as `NewProfile`, then enter your email address and follow the prompts.', 'Under **When starting Microsoft Outlook, use this profile**, choose **Always use this profile** and select the new one.', 'Open Outlook. Mail will re-download.'], time: '20 min', diff: 'Moderate', result: 'Outlook opens with a fresh profile.', warn: 'Do not delete the old profile until you know everything is working. Mail stored only on this PC (PST files) is not on the server; do not remove those. ' + MANAGED, fail: 'If the new profile also fails, escalate.' },
+      'olk-web-check': { title: 'Check your mail on the web', why: 'Signing in to Outlook on the web shows whether your account itself works. It also gives you access to your mail while you fix the app.', i: ['Open your browser and go to `outlook.office.com`.', 'Sign in with your work or Microsoft account.', 'If it works, your account is fine and the problem is with the app on this PC.', 'If sign-in fails or asks you to reset the password, your account needs attention from IT.'], time: '5 min', diff: 'Easy', result: 'You can read your mail on the web.', warn: 'Only type your password on the genuine Microsoft sign-in page and check the address bar.', fail: 'If sign-in fails on the web too, contact IT.' },
+      'olk-new-reset': { title: 'Reset the new Outlook app', why: 'The new Outlook for Windows is a Store app. Resetting it clears its local data and cache without removing your mailbox.', i: V(['Open **Settings** > **Apps** > **Installed apps**.', 'Find **Outlook (new)**, select the three dots > **Advanced options**.', 'Select **Terminate**, then **Repair**. If that does not help, select **Reset**.', 'Open the app and sign in again.'], ['Open **Settings** > **Apps** > **Apps & features**.', 'Find **Outlook (new)** > **Advanced options**.', 'Select **Terminate**, then **Repair**. If that does not help, select **Reset**.', 'Open the app and sign in again.']), time: '10 min', diff: 'Moderate', result: 'The app opens and you can sign in.', warn: 'Reset removes the app\'s local data; mail stays on the server. You will need to sign in again.', fail: 'If it still fails, use Outlook on the web while escalating.' }
+    }
+  });
+
+  F.push({
+    id: 'outlook-credentials', title: 'Outlook repeatedly asking for credentials', cat: 'm365',
+    blurb: 'Outlook keeps showing a password box, even after you enter it.',
+    symptoms: ['Repeated password prompts', '"Need password" in the status bar', 'Prompt reappears after clicking OK', 'Disconnected and "Trying to connect"'],
+    keywords: ['outlook keeps asking for password', 'outlook keeps asking for my password', 'outlook password prompt', 'outlook asking for password', 'outlook asks for credentials', 'outlook credentials', 'outlook password loop', 'outlook keeps asking to sign in', 'outlook sign in loop', 'outlook need password', 'outlook password keeps popping up', 'outlook wont accept password', 'outlook authentication', 'outlook disconnected', 'outlook trying to connect', 'outlook login prompt', 'outlook asking me to sign in', 'password box keeps appearing', 'outlook mfa loop', 'outlook keeps prompting'],
+    versions: ['10', '11'], difficulty: 'Moderate', time: '20–40 min', risk: 'Low', admin: false,
+    prereq: 'Your Microsoft 365 email address and password. Have your authenticator ready.',
+    expected: 'Outlook connects without repeated prompts.',
+    ms: { label: 'Outlook keeps asking for a password (Microsoft Support)', url: 'https://support.microsoft.com/outlook' },
+    questions: [
+      { id: 'web', text: 'Can you sign in to your email at outlook.office.com in a browser?', options: [
+        { v: 'yes', label: 'Yes, that works', m: ['web works', 'works in browser', 'works on phone'] },
+        { v: 'no', label: 'No, it fails or asks for a new password', m: ['password expired', 'locked out', 'wrong password'] },
+        { v: 'unsure', label: 'I haven\'t tried', m: [] }] },
+      { id: 'changed', text: 'Did you recently change your password or switch on multi-factor authentication?', options: [
+        { v: 'yes', label: 'Yes', m: ['changed my password', 'new password', 'password changed', 'reset my password', 'mfa'] },
+        { v: 'no', label: 'No / I\'m not sure', m: [] }] }],
+    branches: [
+      { when: { web: 'no' }, causes: ['The account password has expired or the account is locked', 'A sign-in policy change'], steps: ['cred-web', 'cred-contact'] },
+      { when: { changed: 'yes' }, causes: ['Outlook still holds the old password or token', 'Saved credentials in Windows are outdated'], steps: ['cred-manager', 'cred-signout', 'cred-profile', 'cred-contact'] },
+      { causes: ['Outdated saved credentials', 'A problem with the stored sign-in token', 'A damaged Outlook profile', 'Office not up to date'], steps: ['cred-web', 'cred-manager', 'cred-signout', 'cred-update', 'cred-profile', 'cred-contact'] }
+    ],
+    escalation: 'If the prompts continue after clearing saved credentials and making a new profile, the problem may be a sign-in policy or account setting your IT admin must change. Give them the date and time the problem began and any error codes.',
+    steps: {
+      'cred-web': { title: 'Check your account works in the browser', why: 'If your password is expired or the account is locked, no app can sign in. The browser test separates account problems from app problems.', i: ['Open a private browser window and go to `outlook.office.com`.', 'Sign in. If it asks you to update your password or approve a sign-in prompt, do that.', 'If the web works, the account is fine and the problem is in the app.'], time: '5 min', diff: 'Easy', result: 'You know whether the account itself is okay.', warn: 'Only enter your password at the genuine Microsoft sign-in page. Never share a verification code.', fail: 'If the web sign-in fails, contact IT.' },
+      'cred-manager': { title: 'Clear old saved Office and Outlook credentials', why: 'Windows keeps saved logins. When the password or sign-in method changes, the old entry can cause endless prompts.', i: ['Close Outlook and all Office apps.', 'Open **Control Panel**, switch **View by** to **Small icons**, and open **Credential Manager**.', 'Select **Windows Credentials**.', 'Under **Generic Credentials**, remove entries that contain **MicrosoftOffice16**, **Outlook** or **OneAuth** for your account, by expanding them and selecting **Remove**.', 'Restart the PC, open Outlook and sign in when prompted.'], time: '10 min', diff: 'Moderate', result: 'Outlook asks once and then stays connected.', warn: 'Only remove entries related to Office and Outlook, not other saved logins. You will need to sign in again. ' + MANAGED, fail: 'If it still loops, continue.' },
+      'cred-signout': { title: 'Sign out of Office and sign back in', why: 'Resetting the account sign-in for Office apps refreshes the stored token.', i: ['Open Outlook (or Word) and go to **File** > **Office Account**.', 'Select **Sign out** and confirm.', 'Close all Office apps.', 'Open Outlook again and sign in with your email and password, completing any verification.'], time: '10 min', diff: 'Easy', result: 'Fresh sign-in; the prompts stop.', warn: 'Make sure you know your password and have your authenticator device.', fail: 'If the prompts return, continue.' },
+      'cred-update': { title: 'Update Microsoft 365 apps', why: 'Older Office versions can have sign-in bugs fixed in newer builds.', i: ['In Outlook (or Word), select **File** > **Office Account**.', 'Select **Update Options** > **Update Now**.', 'Let it finish, then restart Outlook.'], time: '15 min', diff: 'Easy', result: 'Office is up to date.', warn: 'Close all Office apps first. ' + MANAGED, fail: 'If it is already current, continue.' },
+      'cred-profile': { title: 'Create a new Outlook profile', why: 'A damaged profile can keep asking for credentials. A new profile re-links the account; your mail on the server stays safe.', i: ['Close Outlook.', 'Open **Control Panel** > **Mail (Microsoft Outlook)** > **Show Profiles** > **Add**.', 'Name it, enter your email address and complete the sign-in.', 'Choose **Always use this profile** and select the new profile, then open Outlook.'], time: '20 min', diff: 'Moderate', result: 'Outlook connects without repeated prompts.', warn: 'Do not delete the old profile until the new one works. ' + MANAGED, fail: 'If the prompt persists, escalate.' },
+      'cred-contact': { title: 'Ask IT to check your account', why: 'Policy changes, expired passwords and conditional-access rules are controlled by administrators.', i: ['Tell IT: the time it started, whether the web works, what you changed recently, and what you tried.', 'Mention any error code shown.', 'Never share your password or verification codes with anyone, including support, unless you started the contact through your own official helpdesk.'], time: '10 min', diff: 'Easy', result: 'IT has what they need.', fail: 'Escalate with the summary.' }
+    }
+  });
+
+  F.push({
+    id: 'teams-mic-not-working', title: 'Teams microphone not working', cat: 'm365',
+    blurb: 'People cannot hear you in Microsoft Teams meetings or calls.',
+    symptoms: ['"No microphone found" in Teams', 'Mic level does not move in Teams settings', 'You are muted and cannot unmute', 'Others cannot hear you but you hear them'],
+    keywords: ['teams microphone not working', 'teams mic not working', 'teams no microphone', 'teams cant hear me', 'cant hear me in teams', 'microsoft teams mic', 'teams audio not working', 'teams microphone muted', 'teams mic not detected', 'people cant hear me on teams', 'teams call no audio', 'teams meeting microphone', 'teams sound not working', 'teams microphone permission', 'teams headset not working', 'teams unmute not working', 'teams speaker not working', 'teams mic problem'],
+    versions: ['10', '11'], difficulty: 'Easy', time: '10–25 min', risk: 'Low', admin: false,
+    prereq: 'A microphone or headset connected.',
+    expected: 'The Teams test call picks up your voice.',
+    ms: { label: 'Microsoft Teams audio troubleshooting (Microsoft Support)', url: 'https://support.microsoft.com/teams' },
+    questions: [
+      { id: 'other', text: 'Does the microphone work in other apps (for example Windows Sound settings)?', options: [
+        { v: 'yes', label: 'Yes, it works elsewhere', m: ['works elsewhere', 'works in other apps', 'works in zoom'] },
+        { v: 'no', label: 'No, it fails everywhere', m: ['fails everywhere', 'not working anywhere'] },
+        { v: 'unsure', label: 'I haven\'t tried', m: [] }] },
+      { id: 'app', text: 'Which Teams are you using?', options: [
+        { v: 'desktop', label: 'The Teams desktop app', m: ['teams app', 'desktop app'] },
+        { v: 'browser', label: 'Teams in a web browser', m: ['browser', 'web', 'edge', 'chrome'] }] }],
+    branches: [
+      { when: { other: 'no' }, causes: ['The microphone itself or its Windows settings'], steps: ['tm-redirect'] },
+      { when: { app: 'browser' }, causes: ['The browser has blocked the microphone for the Teams site'], steps: ['tm-browser', 'tm-select', 'mic-privacy', 'sh-restart'] },
+      { causes: ['Teams has the wrong microphone selected', 'Windows privacy settings block the app', 'The microphone is muted'], steps: ['tm-mute', 'tm-select', 'mic-privacy', 'tm-restart-teams', 'sh-restart', 'sh-updates'] }
+    ],
+    escalation: 'If the microphone works in other apps but not in Teams even after clearing the Teams cache, ask IT: a meeting policy or device setting may block audio. On managed devices, Teams may be configured centrally.',
+    steps: {
+      'tm-redirect': { title: 'Fix the microphone in Windows first', why: 'If the microphone does not work anywhere, Teams is not the problem.', i: ['Open Windows **Settings** > **System** > **Sound**.', 'Under **Input**, choose the microphone and speak: the test bar should move.', 'If it does not, use the guide **Microphone not working** from this tool, then come back to Teams.'], time: '5 min', diff: 'Easy', result: 'You know the microphone works in Windows.', fail: 'Use the Microphone not working guide.' },
+      'tm-mute': { title: 'Check mute and the in-meeting mic button', why: 'The mute button, a headset mute switch, or a mute set by the meeting organiser can silence you.', i: ['In the meeting, check the microphone button at the top is not crossed out. Select it to unmute.', 'Check any switch or button on your headset or webcam for mute.', 'If the button is greyed out, the organiser may have muted participants: use the chat or raise hand.'], time: '3 min', diff: 'Easy', result: 'Your mic icon shows live and the level moves.', fail: 'If it still fails, continue.' },
+      'tm-select': { title: 'Choose the correct microphone in Teams', why: 'Teams picks a device automatically and may pick the wrong one, such as a monitor or webcam microphone.', i: ['In Teams select the three dots at the top > **Settings** > **Devices**.', 'Under **Microphone**, choose your microphone.', 'Select **Make a test call** and speak. The meter should move and you should hear your recording.', 'Also set **Speaker** to your headphones/speakers.'], time: '5 min', diff: 'Easy', result: 'The test call records your voice.', fail: 'If the microphone is not listed, check Windows privacy settings.' },
+      'tm-browser': { title: 'Allow the microphone for Teams in your browser', why: 'Browsers ask permission to use the microphone. If you chose Block once, it stays blocked.', i: ['Select the padlock or settings icon at the left of the address bar.', 'Find **Microphone** and change it to **Allow**.', 'Reload the Teams page and rejoin the meeting.'], time: '3 min', diff: 'Easy', result: 'The browser asks for or allows the microphone.', warn: 'Only allow the microphone for sites you trust, such as teams.microsoft.com.', fail: 'If it stays blocked, check Windows privacy settings.' },
+      'tm-restart-teams': { title: 'Fully close and reopen Teams', why: 'Teams keeps running in the background. A full close reloads its audio devices.', i: ['Right-click the Teams icon near the clock and choose **Quit** (or end Teams in Task Manager).', 'Wait ten seconds so Windows releases the microphone and speakers.', 'Reopen Teams and rejoin or test again.'], time: '3 min', diff: 'Easy', result: 'Teams picks up the microphone.', warn: 'You will leave any meeting you are in.', fail: 'If it still fails, restart the PC.' }
+    }
+  });
+
+  F.push({
+    id: 'onedrive-sync', title: 'OneDrive not syncing', cat: 'm365',
+    blurb: 'Files are not uploading, the cloud icon shows a red cross or "Sync paused".',
+    symptoms: ['Red X or warning on the OneDrive icon', '"Processing changes" for a long time', '"Sync paused"', '"Sign in to OneDrive"', 'Files show a sync problem'],
+    keywords: ['onedrive not syncing', 'onedrive sync problem', 'onedrive not working', 'onedrive sync paused', 'onedrive stuck', 'onedrive processing changes', 'onedrive red x', 'onedrive error', 'onedrive wont sync', 'onedrive upload stuck', 'files not syncing', 'onedrive sync issues', 'onedrive full', 'onedrive storage full', 'onedrive sign in', 'onedrive pending', 'onedrive syncing forever', 'onedrive cloud icon', 'onedrive red cross', 'onedrive stuck on syncing'],
+    versions: ['10', '11'], difficulty: 'Easy', time: '10–30 min', risk: 'Low', admin: false,
+    prereq: 'Know your OneDrive account. Keep your files: none of these steps delete them from the cloud.',
+    expected: 'The OneDrive icon shows up to date and files sync.',
+    ms: { label: 'Reset OneDrive (Microsoft Support)', url: 'https://support.microsoft.com/en-us/office/reset-onedrive-34701e00-bf7b-42db-b960-84905399050c' },
+    questions: [
+      { id: 'icon', text: 'What does the OneDrive icon (a cloud near the clock) show?', options: [
+        { v: 'paused', label: 'Paused, or "Sync paused"', m: ['paused', 'pause'] },
+        { v: 'signin', label: 'A sign-in prompt, or a warning that I need to sign in', m: ['sign in', 'sign-in', 'log in', 'login'] },
+        { v: 'error', label: 'A red cross, warning or "sync problems"', m: ['red x', 'red cross', 'error', 'problem', 'warning'] },
+        { v: 'busy', label: '"Processing changes" or syncing for a long time', m: ['processing changes', 'syncing forever', 'stuck', 'long time'] },
+        { v: 'none', label: 'I can\'t see the icon', m: ['no icon', 'cant see', 'missing icon'] }] }],
+    branches: [
+      { when: { icon: 'paused' }, causes: ['Sync was paused manually or by battery saver / metered connection'], steps: ['od-resume', 'od-storage', 'od-reset'] },
+      { when: { icon: 'signin' }, causes: ['The sign-in expired or the password changed'], steps: ['od-signin', 'od-storage', 'od-reset'] },
+      { when: { icon: 'none' }, causes: ['OneDrive is not running'], steps: ['od-start', 'od-signin', 'od-reset'] },
+      { when: { icon: 'busy' }, causes: ['A very large file or many files', 'A problem file name or path'], steps: ['od-wait', 'od-names', 'od-storage', 'od-reset'] },
+      { causes: ['Insufficient OneDrive storage', 'A file with an unsupported name or locked by another program', 'A stale sign-in'], steps: ['od-errors', 'od-storage', 'od-names', 'od-signin', 'od-reset'] }
+    ],
+    escalation: 'If OneDrive keeps failing after resetting, contact IT (for work accounts: Files On-Demand, sync limits or a policy may be in play) or Microsoft support. Do not delete files from OneDrive to "fix" it: that can delete them from your other devices too.',
+    steps: {
+      'od-resume': { title: 'Resume syncing', why: 'Sync pauses for 2, 8 or 24 hours when you choose it, or automatically with battery saver or a metered connection.', i: ['Select the OneDrive cloud icon near the clock (it may be under the ^ arrow).', 'If it says **Sync paused**, select **Resume syncing**.', 'Check the laptop is not on battery saver and Wi-Fi is not set as metered (**Settings** > **Network & internet** > Wi-Fi > your network > **Metered connection** off).'], time: '3 min', diff: 'Easy', result: 'The icon returns to a normal cloud and files sync.', fail: 'If it will not resume, continue.' },
+      'od-signin': { title: 'Sign in to OneDrive again', why: 'If your password changed or sign-in expired, OneDrive stops until you sign in again.', i: ['Select the OneDrive icon and choose **Sign in** if offered.', 'Enter your email and password, and complete any verification.', 'If it does not prompt, open **Start**, type **OneDrive** and open the app.'], time: '5 min', diff: 'Easy', result: 'OneDrive signs in and resumes.', warn: 'Only sign in on the genuine Microsoft sign-in page. ' + MANAGED, fail: 'If sign-in loops, contact IT.' },
+      'od-start': { title: 'Start OneDrive', why: 'The icon is missing if OneDrive is not running.', i: ['Select **Start**, type **OneDrive** and open the app.', 'Sign in if asked.', 'Look for the cloud icon near the clock. Select the ^ arrow if it is hidden.'], time: '3 min', diff: 'Easy', result: 'The cloud icon appears.', fail: 'If OneDrive is not installed, ask IT.' },
+      'od-storage': { title: 'Check you have OneDrive storage left', why: 'When your OneDrive storage is full, uploads stop with a warning.', i: ['Select the OneDrive icon and the **Help & Settings** gear to see storage used (or go to `onedrive.live.com` > **Settings** or Manage storage).', 'If it is at or near the limit, delete large files you no longer need from OneDrive and empty its recycle bin, or ask for more space.', 'Wait a few minutes and check the sync status.'], time: '10 min', diff: 'Easy', result: 'Free space allows syncing to resume.', warn: 'Deleting files from OneDrive deletes them on all your devices. Check each item first. Work accounts may have quotas set by IT.', fail: 'If storage is fine, continue.' },
+      'od-errors': { title: 'Read the actual error', why: 'OneDrive tells you which file is failing and why.', i: ['Select the OneDrive icon and open the sync problems list (**View sync problems** or the list of files).', 'Note the file name and message.', 'Close the file if it is open in another program.'], time: '5 min', diff: 'Easy', result: 'You know which file is the problem.', fail: 'Continue to check names.' },
+      'od-names': { title: 'Fix problem file names and sizes', why: 'OneDrive cannot sync some names (for example with the characters " * : < > ? / \\ |), very long paths, or files over its limit.', i: ['Find the problem file in the error list.', 'Rename it to remove special characters, and shorten the folder path.', 'Move very large files (over 250 GB) out of the OneDrive folder.', 'Wait for OneDrive to try again.'], time: '10 min', diff: 'Easy', result: 'The file syncs.', warn: 'Renaming files others use may affect shared links. Check with colleagues first.', fail: 'If nothing helps, continue.' },
+      'od-wait': { title: 'Give OneDrive time to finish', why: '"Processing changes" can take hours after adding thousands of files or large videos.', i: ['Leave the PC on with a stable internet connection (plugged in).', 'Avoid editing the files during the sync.', 'Check progress by selecting the OneDrive icon.'], time: '30–120 min', diff: 'Easy', result: 'Processing finishes.', fail: 'If nothing changes after a few hours, continue.' },
+      'od-reset': { title: 'Reset OneDrive', why: 'Reset reconnects the sync app without deleting your files. It is a last step before contacting support.', i: ['Press {{Windows key + R}}.', 'Paste `%localappdata%\\Microsoft\\OneDrive\\onedrive.exe /reset` and press Enter. (Type this yourself: do not paste commands from unknown sources.)', 'Wait about a minute; the cloud icon may disappear and reappear. If it does not, press {{Windows key + R}} again and run `%localappdata%\\Microsoft\\OneDrive\\onedrive.exe`.', 'Sign in if asked and wait for the sync to re-check files.'], time: '15 min', diff: 'Moderate', result: 'OneDrive restarts and re-checks files.', warn: 'Your files are not deleted but OneDrive will do a full re-check, which can take a while. ' + MANAGED, fail: 'If it fails, escalate.' }
+    }
+  });
+
+  /* ---------------- HARDWARE & POWER ---------------- */
+  F.push({
+    id: 'battery-drain', title: 'Battery draining quickly', cat: 'hardware',
+    blurb: 'The laptop battery lasts far less than it used to.',
+    symptoms: ['Battery drops faster than before', 'Battery percentage jumps', 'Laptop warms up on battery', 'Sleep drains the battery overnight'],
+    keywords: ['battery draining', 'battery drains fast', 'battery drain', 'battery dying quickly', 'battery life bad', 'battery not lasting', 'battery drains quickly', 'poor battery life', 'battery goes down fast', 'battery percentage drops', 'laptop battery draining quickly', 'battery lasts only', 'battery runs out', 'battery draining overnight', 'battery drains in sleep', 'battery health', 'battery drops quickly', 'short battery life', 'battery used up'],
+    versions: ['10', '11'], difficulty: 'Easy', time: '15–30 min', risk: 'Low', admin: false,
+    prereq: 'A laptop or tablet with a battery.',
+    expected: 'Battery life improves, or you know whether the battery is worn out.',
+    ms: { label: 'Battery saving tips for Windows (Microsoft)', url: 'https://support.microsoft.com/en-us/windows/experience/power-battery/battery-saving-tips-for-windows' },
+    questions: [
+      { id: 'when', text: 'When does the battery drain fast?', options: [
+        { v: 'use', label: 'While I am using the laptop', m: ['while using', 'while working', 'in use'] },
+        { v: 'sleep', label: 'While asleep or switched off', m: ['overnight', 'sleep', 'while closed', 'lid closed', 'switched off', 'when off'] },
+        { v: 'always', label: 'All the time; it never lasts', m: ['always', 'all the time', 'never lasts', 'old battery'] }] },
+      { id: 'age', text: 'How old is the laptop?', options: [
+        { v: 'old', label: 'More than 3 years old', m: ['old laptop', 'years old', '4 years', '5 years'] },
+        { v: 'new', label: 'Under 3 years old', m: ['new laptop', 'brand new'] },
+        { v: 'unsure', label: 'I\'m not sure', m: [] }] },
+      { id: 'swell', text: 'Is the battery or the case bulging, or has the trackpad or lid started to lift?', help: 'A swollen battery is a fire risk.', options: [
+        { v: 'no', label: 'No', m: [] },
+        { v: 'yes', label: 'Yes, something looks swollen or lifted', m: ['swollen', 'bulging', 'bulge', 'lifted', 'expanded', 'puffy'], safety: 'battery-swollen' }] }],
+    branches: [
+      { when: { when: 'sleep' }, causes: ['Wake timers or background tasks during sleep', 'Fast Startup keeping the PC partly on', 'A device waking the laptop'], steps: ['bat-sleep', 'bat-usage', 'bat-report'] },
+      { when: { when: 'use' }, causes: ['A busy app or many background apps', 'High screen brightness', 'Power mode set to best performance'], steps: ['bat-usage', 'bat-settings', 'sh-taskmgr', 'sh-updates', 'bat-report'] },
+      { when: { age: 'old' }, causes: ['A worn battery that has lost capacity'], steps: ['bat-report', 'bat-settings', 'bat-usage', 'bat-replace'] },
+      { causes: ['Apps using power', 'Settings that favour performance', 'A worn battery'], steps: ['bat-usage', 'bat-settings', 'bat-report', 'sh-updates', 'bat-replace'] }
+    ],
+    escalation: 'If the battery report shows capacity far below the design capacity, the battery is worn and needs replacing. Do this through the manufacturer or a reputable technician; never use cheap unbranded batteries. If the case is swollen or hot, stop using it.',
+    steps: {
+      'bat-usage': { title: 'See which apps are using the battery', why: 'Windows keeps a record of battery use per app, which quickly shows a single power-hungry program.', i: V(['Open **Settings** > **System** > **Power & battery** > **Battery usage**.', 'Set **Battery levels** to **Last 7 days** and sort by **Battery usage**.', 'Note the top apps. Close or uninstall ones you do not need, or switch off their background activity under **Settings** > **Apps** > **Installed apps** > the app > **Advanced options** > **Background apps permissions**.'], ['Open **Settings** > **System** > **Battery**.', 'Select **See which apps are affecting your battery life**.', 'Set the time to **Last 7 days** and note the top apps.', 'Close or uninstall those you do not need.']), time: '10 min', diff: 'Easy', result: 'You find the apps using the most battery.', fail: 'If nothing stands out, continue.' },
+      'bat-settings': { title: 'Adjust power mode, brightness and battery saver', why: 'Screen brightness and performance mode are the biggest controllable battery drains.', i: V(['Open **Settings** > **System** > **Power & battery**.', 'Set **Power mode** to **Best power efficiency** (or Balanced) when on battery.', 'Under **Battery saver**, set it to turn on at 20–30%.', 'Lower the screen brightness by pressing the brightness-down key.'], ['Open **Settings** > **System** > **Battery**.', 'Turn **Battery saver** on and set it to switch on at 20–30%.', 'Click the battery icon near the clock and drag the power slider towards **Battery saver / Better battery**.', 'Lower the screen brightness.']), time: '5 min', diff: 'Easy', result: 'Longer battery life.', fail: 'If it makes no difference, continue.' },
+      'bat-sleep': { title: 'Stop the laptop using battery while asleep', why: 'Wake timers, connected devices or Fast Startup can keep the laptop active when you think it is off.', i: ['Shut the laptop down fully with **Start** > **Power** > **Shut down** if you will not use it for a day (and use Restart now and then).', 'Unplug USB devices before closing the lid.', 'In **Control Panel** > **Power Options** > **Change plan settings** > **Change advanced power settings**, expand **Sleep** > **Allow wake timers** and set it to **Disable** (or **Important wake timers only**).', 'Compare the battery level after a night.'], time: '10 min', diff: 'Moderate', result: 'Less overnight drain.', warn: 'Scheduled tasks (like backups) will not run during sleep after this change. Work PCs may be managed.', fail: 'If it still drains, continue.' },
+      'bat-report': { title: 'Create a battery health report', why: 'The report shows how much capacity the battery has compared with when it was new, which tells you whether it is simply worn out.', i: ['Open **Command Prompt** (as administrator if it asks).', 'Type `powercfg /batteryreport` and press Enter.', 'It shows where the report was saved (for example `C:\\Users\\<you>\\battery-report.html`). Open that file in your browser.', 'Compare **Design capacity** with **Full charge capacity**. If full charge is much lower, the battery is worn.'], cmd: ['powercfg-battery', 'powercfg-energy'], time: '5 min', diff: 'Moderate', result: 'You can read the battery\'s health.', warn: 'Read-only. The report may include your device name.', fail: 'If the report cannot be created, the battery may not be reporting properly; ask a technician.' },
+      'bat-replace': { title: 'Decide whether the battery needs replacing', why: 'Batteries wear with age and charge cycles, and no setting can bring back lost capacity.', i: ['If the full-charge capacity is far below the design capacity (for example under 60%), plan a replacement.', 'Use the manufacturer or a reputable repair shop and a genuine battery.', 'Meanwhile, keep it cool and avoid leaving it at 0% or 100% for long periods.'], time: '5 min', diff: 'Easy', result: 'You have a plan.', warn: 'Never use a battery that is swollen, hot or damaged.', fail: 'This is an information step.' }
+    }
+  });
+
+  F.push({
+    id: 'overheating', title: 'Laptop overheating', cat: 'hardware',
+    blurb: 'The laptop or PC gets very hot, the fan is loud, or it shuts off to protect itself.',
+    symptoms: ['Very hot case or keyboard', 'Loud fan constantly', 'Sudden shutdowns', 'Performance drops when hot'],
+    keywords: ['overheating', 'overheat', 'laptop overheating', 'laptop too hot', 'pc overheating', 'computer too hot', 'laptop getting hot', 'laptop hot', 'fan loud', 'loud fan', 'fan noisy', 'fan always on', 'fan very loud', 'fan running constantly', 'laptop shuts down hot', 'shutting down from heat', 'thermal throttling', 'cpu temperature high', 'laptop burning hot', 'fan is loud', 'fan is very loud', 'fan is noisy', 'fan too loud', 'noisy fan', 'fan makes noise', 'fan is making noise', 'heat', 'running hot', 'laptop fan noise', 'overheats'],
+    versions: ['10', '11'], difficulty: 'Easy', time: '20–40 min', risk: 'Moderate', admin: false,
+    prereq: 'Switch the device off before touching vents or cleaning.',
+    expected: 'The device runs cooler and quieter.',
+    ms: { label: 'Why is my PC overheating (Microsoft Support)', url: 'https://support.microsoft.com/windows' },
+    questions: [
+      { id: 'danger', text: 'Do you notice a burning smell, smoke, sparks, a swollen battery, or is the case too hot to touch?', help: 'These can be signs of a serious fault.', options: [
+        { v: 'no', label: 'No, it is just hot and the fan is loud', m: [] },
+        { v: 'smoke', label: 'Yes, smoke, burning smell or sparks', m: ['smoke', 'burning smell', 'smells burning', 'smell of burning', 'sparks', 'smells of burning', 'melting'], safety: 'smoke-burning' },
+        { v: 'swollen', label: 'Yes, the battery or case looks swollen', m: ['swollen', 'bulging'], safety: 'battery-swollen' }] },
+      { id: 'when', text: 'When does it get hot?', options: [
+        { v: 'heavy', label: 'During games, video or heavy work', m: ['gaming', 'games', 'video editing', 'rendering', 'heavy'] },
+        { v: 'light', label: 'Even doing light tasks or when idle', m: ['idle', 'doing nothing', 'browsing', 'light'] },
+        { v: 'unsure', label: 'I\'m not sure', m: [] }] }],
+    branches: [
+      { when: { when: 'light' }, causes: ['A runaway program using the processor', 'Blocked vents or dust', 'A fan that is not working'], steps: ['hot-air', 'sh-taskmgr', 'hot-power', 'hot-dust', 'hot-escalate'] },
+      { when: { when: 'heavy' }, causes: ['Normal heat under load plus poor airflow', 'Dust in the fan'], steps: ['hot-air', 'hot-power', 'hot-dust', 'sh-updates', 'hot-escalate'] },
+      { causes: ['Poor airflow', 'Dust', 'Background load', 'An ageing fan or thermal paste'], steps: ['hot-air', 'sh-taskmgr', 'hot-power', 'hot-dust', 'sh-updates', 'hot-escalate'] }
+    ],
+    escalation: 'If it still overheats with clear vents, low load and updated software, a technician should check the fan and replace dried-out thermal paste. Do not open sealed laptops yourself. If it shuts down repeatedly from heat, stop using it for demanding work until it is checked.',
+    steps: {
+      'hot-air': { title: 'Improve airflow around the device', why: 'Laptops cool by pulling air through vents on the underside or sides. Soft surfaces and your lap block them.', i: ['Put the laptop on a hard, flat surface such as a desk or a laptop stand.', 'Make sure no vent is covered by cushions, bedding, paper or a case.', 'Keep it out of direct sun and away from heaters.', 'For desktops, leave a few centimetres of space around the vents.'], time: '5 min', diff: 'Easy', result: 'Lower temperatures and a quieter fan.', fail: 'If it is still hot, continue.' },
+      'hot-power': { title: 'Choose a cooler power mode', why: 'Performance modes make the processor run harder and hotter. Balanced or efficiency modes are cooler and quieter.', i: V(['Open **Settings** > **System** > **Power & battery**.', 'Set **Power mode** to **Balanced** (or **Best power efficiency**).', 'Close demanding apps you are not using.'], ['Click the battery icon near the clock and drag the slider away from **Best performance** to **Better battery** or **Recommended**.', 'Close demanding apps you are not using.']), time: '3 min', diff: 'Easy', result: 'The fan runs quieter and the case is cooler.', fail: 'If nothing changes, continue.' },
+      'hot-dust': { title: 'Clean dust from the vents', why: 'Dust clogs the fan and vents, trapping heat. This is the most common cause of a laptop that has become hot and loud over time.', i: ['Shut the device down and unplug it (and remove the battery only if it is designed to be removed).', 'Gently blow compressed air into the vents in short bursts while holding the fan still with a toothpick or cotton bud.', 'Do not use a vacuum cleaner and do not open the laptop unless you are experienced and it is out of warranty.', 'Wait a few minutes, then switch on again.'], time: '15 min', diff: 'Moderate', result: 'Dust is removed and airflow improves.', warn: 'Do not use liquids. Do not open a sealed laptop or remove battery screws unless experienced; static and sharp parts can cause damage. If it is under warranty, opening the case may void it. If there is any burning smell, stop and use the safety guidance.', fail: 'If it is still hot, escalate.' },
+      'hot-escalate': { title: 'Get a technician to check the cooling', why: 'A failed fan or dried thermal paste cannot be fixed by settings.', i: ['Note when the heat and noise occur, and what you have tried.', 'Contact the manufacturer or a trusted repair technician.', 'Avoid heavy tasks until it is checked.'], time: '5 min', diff: 'Easy', result: 'You have a hand-over to support.', warn: 'Do not ignore frequent heat shutdowns: they can damage hardware.', fail: 'Escalate with the summary.' }
+    }
+  });
+
+  F.push({
+    id: 'not-charging', title: 'Laptop not charging', cat: 'hardware',
+    blurb: 'The laptop says "plugged in, not charging" or the battery will not charge.',
+    symptoms: ['"Plugged in, not charging"', 'Charging light off', 'Battery percentage does not rise', 'Laptop only runs when plugged in'],
+    keywords: ['not charging', 'laptop not charging', 'battery not charging', 'plugged in not charging', 'plugged in but not charging', 'charger not working', 'laptop wont charge', 'laptop won\'t charge', 'battery wont charge', 'charging light off', 'battery stuck at', 'charger not detected', 'laptop charger problem', 'laptop doesnt charge', 'no charging', 'battery percentage not increasing', 'laptop says plugged in not charging', 'charging stopped', 'usb-c charging not working', 'battery stuck'],
+    versions: ['10', '11'], difficulty: 'Easy', time: '15–30 min', risk: 'Moderate', admin: false,
+    prereq: 'The original charger, if possible.',
+    expected: 'The battery charges again.',
+    ms: { label: 'PC is charging slowly or discharging while plugged in (Microsoft)', url: 'https://support.microsoft.com/en-us/windows/pc-is-charging-slowly-or-discharging-while-it-s-plugged-in-cd304490-7f8c-1838-40a6-3394ff525dbd' },
+    questions: [
+      { id: 'danger', text: 'Is the charger, the cable, the charging port or the laptop unusually hot, smelling of burning or visibly damaged?', options: [
+        { v: 'no', label: 'No', m: [] },
+        { v: 'yes', label: 'Yes (hot, burning smell, frayed cable, swollen battery)', m: ['burning smell', 'smoke', 'frayed', 'damaged cable', 'hot charger', 'swollen', 'melted', 'sparks'], safety: 'smoke-burning' }] },
+      { id: 'light', text: 'Does the charging light or screen show it recognises the charger?', options: [
+        { v: 'yes', label: 'Yes, it shows plugged in', m: ['plugged in', 'plugged in not charging'] },
+        { v: 'no', label: 'No light, no sign of power', m: ['no light', 'light off', 'no power', 'nothing happens'] },
+        { v: 'unsure', label: 'I\'m not sure', m: [] }] }],
+    branches: [
+      { when: { light: 'no' }, causes: ['A faulty charger, cable or wall socket', 'A damaged charging port'], steps: ['chg-test', 'chg-port', 'chg-escalate'] },
+      { when: { light: 'yes' }, causes: ['A software or battery driver fault', 'A charging limit setting', 'A worn battery'], steps: ['chg-limit', 'chg-drain', 'chg-driver', 'sh-restart', 'chg-escalate'] },
+      { causes: ['Charger or cable fault', 'Charging port problem', 'Battery or driver fault'], steps: ['chg-test', 'chg-port', 'chg-limit', 'chg-drain', 'chg-driver', 'chg-escalate'] }
+    ],
+    escalation: 'If a known-good charger and a clean port do not help, the charging port, battery or motherboard charging circuit may be faulty. Stop using damaged chargers. Contact the manufacturer or a technician and avoid third-party chargers of unknown quality.',
+    steps: {
+      'chg-test': { title: 'Test the charger, cable and wall socket', why: 'Chargers and cables wear out. Testing each part separately finds which one has failed.', i: ['Plug the charger into a different wall socket. Avoid extension strips.', 'Check the charger\'s light (if it has one) and the cable for kinks, bent pins or frayed parts. Do not use a damaged one.', 'Make sure the charger has the right wattage for your laptop (printed on the laptop and the charger).', 'If possible, try a genuine charger from the same model.'], time: '10 min', diff: 'Easy', result: 'The laptop recognises the charger.', warn: 'Stop immediately and unplug if the charger or cable is hot, smells of burning or is damaged. Use only the manufacturer\'s or properly certified chargers.', fail: 'If a known-good charger fails too, continue.', safety: 'smoke-burning' },
+      'chg-port': { title: 'Check the charging port', why: 'Lint and bent pins in the port can stop the charger making contact.', i: ['Shut the laptop down and unplug the charger.', 'Shine a torch into the port and look for lint, dirt or a bent centre pin.', 'Remove lint carefully with a wooden toothpick or a short burst of compressed air.', 'For USB-C ports, make sure the cable is the one that supports charging and plugs in fully.'], time: '10 min', diff: 'Easy', result: 'The charger fits snugly and charging begins.', warn: 'Do not use metal objects or liquids in the port. If the port is loose, bent or damaged, stop and see a technician.', fail: 'If the port is damaged, escalate.' },
+      'chg-limit': { title: 'Check battery charging limits', why: 'Some laptops cap charging at 80% to extend battery life, which looks like "not charging".', i: ['Check your manufacturer\'s power app (for example in Start, search **Battery**, **Power** or your brand name) for a **Battery care** or **Charge limit** setting.', 'If a limit is on and the battery is at the limit, this is normal.', 'Turn it off only if you want the full capacity.'], time: '5 min', diff: 'Easy', result: 'You know if a limit is set.', fail: 'If no limit is set, continue.' },
+      'chg-drain': { title: 'Do a power reset', why: 'A power reset clears small electrical glitches that can stop charging.', i: ['Shut the laptop down and unplug the charger.', 'If the battery is removable, remove it. If it is sealed, do not open the laptop.', 'Hold the power button for 30 seconds.', 'Reconnect the charger (and battery), then switch on.'], time: '10 min', diff: 'Moderate', result: 'Charging resumes.', warn: 'Do not open a sealed laptop to disconnect the battery unless you are qualified.', fail: 'If it still does not charge, continue.' },
+      'chg-driver': { title: 'Reinstall the battery driver', why: 'Windows uses a battery driver to track charging. A damaged one can show "plugged in, not charging".', i: ['Right-click **Start** and choose **Device Manager**.', 'Expand **Batteries**.', 'Right-click **Microsoft ACPI-Compliant Control Method Battery** and choose **Uninstall device**. Confirm.', 'Shut down, unplug the charger, wait 10 seconds, plug it back in and start the PC. Windows reinstalls it automatically.'], time: '10 min', diff: 'Moderate', result: 'The battery is detected and charges.', warn: 'Do not uninstall anything other than the battery entries. Work PCs may restrict this.', fail: 'If it remains the same, continue.' },
+      'chg-escalate': { title: 'Get the charging hardware checked', why: 'Remaining causes (port, battery, motherboard) need hands-on testing.', i: ['Note what the charging light and Windows show.', 'Note whether a different charger made any difference.', 'Contact the manufacturer or a trusted technician.', 'Keep the laptop off the charger if it feels hot or smells odd.'], time: '5 min', diff: 'Easy', result: 'You have a hand-over to support.', warn: 'Stop using a damaged or hot charger.', fail: 'Escalate with the summary.' }
+    }
+  });
+})(typeof window !== 'undefined' ? window : globalThis);

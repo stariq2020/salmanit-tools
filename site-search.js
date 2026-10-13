@@ -19,9 +19,9 @@
       description: "Merge, split, compress, rotate and convert PDF files — runs entirely in your browser.",
       keywords: ["pdf", "merge pdf", "split pdf", "compress pdf", "convert pdf", "rotate", "organize pdf"] },
 
-    { name: "AI PDF Summarizer", url: "pdf-summarizer.html",
-      description: "Upload a PDF and get the main points, a short summary or action items using AI — the file stays in your browser.",
-      keywords: ["pdf summarizer", "summarize pdf", "pdf summary", "ai", "key points", "tldr", "document summary"] },
+    { name: "PDF Summarizer", url: "pdf-summarizer.html",
+      description: "Upload a PDF and get the main points, a short summary or key facts — no login, runs entirely in your browser.",
+      keywords: ["pdf summarizer", "summarize pdf", "pdf summary", "key points", "tldr", "document summary"] },
 
     { name: "SharePoint Report Builder", url: "sharepoint-report.html",
       description: "Generate a client-ready SharePoint report — live site inventory via Microsoft Graph, plus storage & activity from an imported M365 usage export.",
@@ -50,6 +50,10 @@
     { name: "Invoice & Quote Generator", url: "invoice-generator.html",
       description: "Create a professional invoice or price quote with logo, line items, VAT and terms — download as PDF.",
       keywords: ["invoice", "pdf", "billing", "vat", "quote", "estimate", "quotation"] },
+
+    { name: "What's Wrong With My PC? (Windows Troubleshooter)", url: "windows-troubleshooter.html",
+      description: "Describe a Windows problem and get step-by-step fixes: slow PC, Wi-Fi, blue screen, printer, Outlook, updates.",
+      keywords: ["windows troubleshooter", "pc problem", "slow computer", "blue screen", "wifi no internet", "printer offline", "windows update error", "error code", "fix pc", "outlook not opening", "troubleshoot"] },
 
     { name: "JWT Decoder", url: "jwt-decoder.html",
       description: "Decode a JSON Web Token's header, payload and claims — expiry, roles, scopes, tenant info.",

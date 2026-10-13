@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows Update Error? Step-by-Step Fix | Salman IT Tools</title>
+<meta name="description" content="Windows updates failing with 0x80070005, 0x800f0922 or another error code? Understand the code and follow safe steps in the right order. Free, no sign-up.">
+<link rel="canonical" href="https://salmanittools.co.uk/windows-troubleshooter-windows-update-error.html">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Salman IT Tools">
+<meta property="og:title" content="Windows Update Error? Step-by-Step Fix | Salman IT Tools">
+<meta property="og:description" content="Windows updates failing with 0x80070005, 0x800f0922 or another error code? Understand the code and follow safe steps in the right order. Free, no sign-up.">
+<meta property="og:url" content="https://salmanittools.co.uk/windows-troubleshooter-windows-update-error.html">
+<meta property="og:image" content="https://salmanittools.co.uk/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Windows Update Error? Step-by-Step Fix | Salman IT Tools">
+<meta name="twitter:description" content="Windows updates failing with 0x80070005, 0x800f0922 or another error code? Understand the code and follow safe steps in the right order. Free, no sign-up.">
+<meta name="twitter:image" content="https://salmanittools.co.uk/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="windows-troubleshooter/wt.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Windows Update Failing or Showing an Error Code",
+  "url": "https://salmanittools.co.uk/windows-troubleshooter-windows-update-error.html",
+  "description": "Windows updates failing with 0x80070005, 0x800f0922 or another error code? Understand the code and follow safe steps in the right order. Free, no sign-up.",
+  "inLanguage": "en-GB",
+  "dateModified": "2026-10-13",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Salman IT Tools",
+    "url": "https://salmanittools.co.uk/"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://salmanittools.co.uk/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Windows Troubleshooter",
+      "item": "https://salmanittools.co.uk/windows-troubleshooter.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Windows update installation failure",
+      "item": "https://salmanittools.co.uk/windows-troubleshooter-windows-update-error.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is it safe to run sfc and DISM?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. They repair Windows system files and do not touch your documents. They need administrator rights and can take 30 minutes or more."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does resetting Windows Update components do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It renames the SoftwareDistribution folder so Windows rebuilds it. The old folder is kept, so the step is reversible. It is an advanced step, not for work PCs without IT approval."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I download updates from other websites?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Use Windows Update, or Microsoft's own Update Catalog if you know exactly which KB you need. Never run updates from emails or pop-ups."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will I lose files if an update fails?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Normally no, but have a backup before big feature updates. Never switch the PC off while the update is actively writing to disk."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<nav aria-label="Main">
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="guides.html">Guides</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="index.html#tools">Tools</a>
+  <a href="guides.html">Guides</a>
+  <a href="index.html#faq">FAQ</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#contact">Contact</a>
+</div>
+<main id="main">
+<div class="wrap page-article">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li><a href="windows-troubleshooter.html">Windows Troubleshooter</a></li><li aria-current="page">Windows update installation failure</li></ol></nav>
+  <div class="eyebrow" style="margin-top:26px">Windows troubleshooting guide</div>
+  <h1 class="title" style="font-size:clamp(2.4rem,6vw,4rem)">Windows Update Failing or Showing an Error Code</h1>
+  <p style="margin-top:14px;font-size:1.05rem">Windows Update failures look alarming, but the cause is usually one of a few things: not enough free space, a damaged update cache, a VPN or proxy in the way, or a driver that does not like the update. The error code narrows it down, so the guide takes it into account. Order matters: simple and reversible steps come first and the technical repairs last.</p>
+  <div class="cta"><a class="btn primary" href="windows-troubleshooter.html?issue=windows-update-failure">Start the guided troubleshooter</a><a class="btn" href="windows-troubleshooter.html">Describe a different problem</a></div>
+  <p class="disclaimer" role="note">This guide provides general troubleshooting guidance. It cannot directly inspect or repair your computer. Takes about 45–90 min; difficulty: moderate; risk: moderate. Last reviewed 2026-10-13.</p>
+
+  <h2>What common update error codes point to</h2>
+  <ul class="why">
+    <li><b>0x80070005 (access denied)</b><span>Windows or an app was not allowed to change something. Security software or permissions are typical causes.</span></li>
+    <li><b>0x800f0922</b><span>An installation could not complete. Documented causes include an active VPN, low space on a system partition, or a damaged component store.</span></li>
+    <li><b>0x80073712</b><span>A file in the Windows component store is missing or damaged. Repair with DISM and sfc.</span></li>
+    <li><b>0x8024402C</b><span>Windows could not resolve the update server name: check internet, DNS, proxy or VPN.</span></li>
+    <li><b>0xC1900101</b><span>A feature update was rolled back, often because of a driver or security software.</span></li>
+  </ul>
+
+  <h2>Common signs</h2>
+  <ul class="why">
+    <li><span>&quot;We couldn't complete the updates&quot;</span></li>
+    <li><span>Error 0x8007…, 0x800f… or 0xC19…</span></li>
+    <li><span>&quot;Install error&quot; in Windows Update</span></li>
+    <li><span>The same update keeps retrying and failing</span></li>
+  </ul>
+
+  <h2>The order we try fixes in</h2>
+  <p>The guided troubleshooter personalises this order from your answers. Here is the general sequence, safest and quickest first:</p>
+  <ol class="preview-steps">
+    <li><b>Restart the PC properly</b><span>A restart clears temporary glitches and fully reloads Windows and its drivers. (5 min)</span></li>
+    <li><b>Run the Windows Update troubleshooter</b><span>Windows can detect and fix common update-service problems automatically. (10 min)</span></li>
+    <li><b>Free up space for the update</b><span>Updates need several gigabytes of working space on the C: drive. (15 min)</span></li>
+    <li><b>Check and repair Windows system files</b><span>Windows has a built-in tool that compares protected system files with a stored good copy and repairs damaged ones. (30–60 min)</span></li>
+    <li><b>Reset Windows Update components</b><span>Update files in a cache folder can become damaged. (15 min)</span></li>
+    <li><b>Unplug accessories and update drivers</b><span>Faulty drivers and extra devices can cause feature updates to roll back (errors like 0xC1900101). (30 min)</span></li>
+  </ol>
+  <div class="cta"><a class="btn primary" href="windows-troubleshooter.html?issue=windows-update-failure">Get my personalised steps</a></div>
+
+  <h2>Error codes linked to this problem</h2>
+  <ul class="why">
+    <li><b>0x80070005 – Access denied (E_ACCESSDENIED)</b><span>Windows or an app was refused permission to read or change something. Common causes include missing administrator rights, security software blocking the action, or damaged permissions.</span></li>
+    <li><b>0x80070057 – The parameter is incorrect (E_INVALIDARG)</b><span>A generic message meaning a program passed an invalid value to Windows. It appears in many places, including Windows Update, backup and disk tools, so the surrounding context matters.</span></li>
+    <li><b>0x80070002 – File not found (ERROR_FILE_NOT_FOUND)</b><span>Windows could not find a file it expected. In Windows Update it often points to missing or damaged update files.</span></li>
+    <li><b>0x80004005 – Unspecified error (E_FAIL)</b><span>A catch-all failure code with no specific cause. Treat it as a symptom: look at what you were doing when it appeared.</span></li>
+    <li><b>0x80073712 – Component store file missing or damaged</b><span>A file Windows Update needs in the Windows component store is missing or damaged (ERROR_SXS_COMPONENT_STORE_CORRUPT). Repairing the store with DISM and sfc usually comes first.</span></li>
+    <li><b>0x800f0922 – Update installation failed (CBS_E_INSTALLERS_FAILED)</b><span>A Windows update or feature could not finish installing. Causes documented by Microsoft and support communities include a full System Reserved partition, an active VPN, or a damaged component store.</span></li>
+    <li><b>0x80070643 – Fatal error during installation</b><span>An installer, often a Windows or .NET update, reported a general installation failure. Retrying after a restart and repairing system files are the usual first steps.</span></li>
+    <li><b>0x80070422 – Service is disabled</b><span>A Windows service that the task needs (often Windows Update) is disabled or not running. Starting the service, or resetting update components, may help.</span></li>
+    <li><b>0x8024402c – Update server name could not be resolved</b><span>Windows Update could not look up the update server address. Check the internet connection, DNS, proxy and VPN settings.</span></li>
+    <li><b>0xc1900101 – Upgrade rolled back (driver-related)</b><span>A generic code for a Windows upgrade that was rolled back, frequently linked to incompatible drivers or security software. Disconnecting extra devices and updating drivers are standard first steps.</span></li>
+    <li><b>0x800705b4 – Operation timed out</b><span>Windows waited for something that did not respond in time. Seen with updates and device operations; the underlying cause varies.</span></li>
+  </ul>
+
+  <h2>Quick answers</h2>
+  <div class="faq">
+    <details><summary>Is it safe to run sfc and DISM?</summary><p>Yes. They repair Windows system files and do not touch your documents. They need administrator rights and can take 30 minutes or more.</p></details>
+    <details><summary>What does resetting Windows Update components do?</summary><p>It renames the SoftwareDistribution folder so Windows rebuilds it. The old folder is kept, so the step is reversible. It is an advanced step, not for work PCs without IT approval.</p></details>
+    <details><summary>Should I download updates from other websites?</summary><p>No. Use Windows Update, or Microsoft's own Update Catalog if you know exactly which KB you need. Never run updates from emails or pop-ups.</p></details>
+    <details><summary>Will I lose files if an update fails?</summary><p>Normally no, but have a backup before big feature updates. Never switch the PC off while the update is actively writing to disk.</p></details>
+  </div>
+
+  <h2>If it is a work or school device</h2>
+  <p>Some of these steps may be blocked by your organisation's policies. If a step is unavailable or asks for an administrator password, stop and contact your IT team. Never share passwords or BitLocker recovery keys.</p>
+
+  <h2>Related guides</h2>
+  <div class="related">
+    <a href="windows-troubleshooter.html?issue=stuck-updating">Windows stuck updating</a>
+    <a href="windows-troubleshooter.html?issue=disk-space-low">Disk space running low</a>
+    <a href="windows-troubleshooter.html?issue=blue-screen">Blue screen error</a>
+    <a href="windows-troubleshooter.html?issue=wont-boot">Windows not booting</a>
+    <a href="windows-troubleshooter.html#errors">Error code library</a>
+    <a href="network-tools.html">Network Tools</a>
+  </div>
+  <p style="margin-top:22px;font-size:.9rem">Official reference: <a href="https://support.microsoft.com/windows/troubleshoot-problems-updating-windows-188c2b0f-10a7-d72f-65b8-32d177eb136c" target="_blank" rel="noopener noreferrer">Troubleshoot problems updating Windows (Microsoft)</a></p>
+</div>
+</main>
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;&middot;&nbsp; <a href="index.html">Home</a> &nbsp;&middot;&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="terms.html">Terms of Service</a></p>
+  <p>General troubleshooting guidance only. Guides last reviewed 2026-10-13.</p>
+</footer>
+<script src="windows-troubleshooter/nav.js" defer></script>
+<script src="site-search.js" defer></script>
+</body>
+</html>

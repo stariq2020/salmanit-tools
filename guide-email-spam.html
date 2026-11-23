@@ -117,13 +117,13 @@ footer a{color:var(--green);text-decoration:none}
 
   <div class="article-body">
 
-    <p>This is one of the most common support calls I handle. A business has set up SPF, thinks everything is fine, and then discovers their emails to certain recipients are consistently landing in junk. Or worse — they're not arriving at all. The frustrating thing is that SPF passing is just one piece of a much bigger picture, and on its own it means very little.</p>
+    <p>Email deliverability issues are among the most common challenges encountered in IT environments. An organisation sets up SPF, thinks everything is fine, and then discovers its emails to certain recipients are consistently landing in junk. Or worse — they're not arriving at all. The frustrating thing is that SPF passing is just one piece of a much bigger picture, and on its own it means very little.</p>
 
-    <p>After dealing with email deliverability issues across hundreds of Microsoft 365 tenants over the years, I've seen the same root causes come up repeatedly. Here's what to actually check.</p>
+    <p>Across Microsoft 365 environments, the same root causes of deliverability problems come up repeatedly. Here's what to actually check.</p>
 
     <h2>1. SPF Passes But DKIM Isn't Configured</h2>
 
-    <p>This is the most common scenario I see. An IT team sets up SPF correctly — the record lists all the authorised sending IPs — but nobody has configured DKIM. Without a DKIM signature, the email has no cryptographic proof that the content hasn't been tampered with in transit. Modern spam filters, particularly Google's and Microsoft's, weight DKIM heavily. An email that passes SPF but has no DKIM signature gets a lower trust score than one that passes both.</p>
+    <p>This is the most common scenario. An IT team sets up SPF correctly — the record lists all the authorised sending IPs — but nobody has configured DKIM. Without a DKIM signature, the email has no cryptographic proof that the content hasn't been tampered with in transit. Modern spam filters, particularly Google's and Microsoft's, weight DKIM heavily. An email that passes SPF but has no DKIM signature gets a lower trust score than one that passes both.</p>
 
     <p>In Microsoft 365, DKIM is not enabled by default. You have to go into the Defender portal, find the DKIM settings for each domain, and enable it. Once enabled, Microsoft generates two CNAME records you need to add to your DNS. Most people set this up once and forget about it — but if you've added new sending domains since your initial setup, they won't have DKIM configured.</p>
 
@@ -145,7 +145,7 @@ footer a{color:var(--green);text-decoration:none}
 
     <h2>4. Sending IP or Domain Reputation</h2>
 
-    <p>Even with perfect SPF, DKIM and DMARC, emails can land in spam if the sending IP address has a poor reputation. This happens most often with shared email infrastructure — if you're on a shared IP range and another customer on that range has been sending spam, your IP reputation suffers by association.</p>
+    <p>Even with perfect SPF, DKIM and DMARC, emails can land in spam if the sending IP address has a poor reputation. This happens most often with shared email infrastructure — if you're on a shared IP range and another sender on that range has been sending spam, your IP reputation suffers by association.</p>
 
     <p>Microsoft 365 uses dedicated IP ranges for business email, which generally have good reputations, but newly provisioned tenants or those with very low email volumes can sometimes end up on less reputable shared ranges initially. If you're sending from a third-party platform, check whether they offer dedicated IPs — worth the cost for high-volume sending.</p>
 

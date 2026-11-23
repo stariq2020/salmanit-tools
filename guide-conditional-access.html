@@ -119,7 +119,7 @@ footer a{color:var(--green);text-decoration:none}
 
     <p>Conditional Access is one of those Microsoft 365 features that gets mentioned a lot in security conversations but rarely gets explained clearly. Most IT documentation describes it in terms of its technical components — conditions, controls, policies — without really explaining what problem it's solving or why it matters in practice.</p>
 
-    <p>Having configured Conditional Access policies across hundreds of tenants, here's how I explain it to clients.</p>
+    <p>Based on hands-on experience with Conditional Access policies, here's a straightforward explanation of how they work.</p>
 
     <h2>The Basic Idea</h2>
 
@@ -163,7 +163,7 @@ footer a{color:var(--green);text-decoration:none}
 
     <h2>Why Most Organisations Get It Wrong</h2>
 
-    <p>The most common problem I see is organisations that have Conditional Access policies configured but haven't thought carefully about the exclusions. Every policy needs to exclude the break-glass admin account. Policies requiring compliant devices need to account for users who legitimately use personal devices. Policies blocking certain countries need to account for users who travel.</p>
+    <p>A common problem is organisations that have Conditional Access policies configured but haven't thought carefully about the exclusions. Every policy needs to exclude the break-glass admin account. Policies requiring compliant devices need to account for users who legitimately use personal devices. Policies blocking certain countries need to account for users who travel.</p>
 
     <p>The second most common problem is having too many overlapping policies that interact in unexpected ways. When multiple policies apply to the same user, all of them have to be satisfied — which can create situations where a user is effectively blocked even though no individual policy was intended to block them.</p>
 

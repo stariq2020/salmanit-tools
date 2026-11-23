@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools</title>
 <link rel="canonical" href="https://salmanittools.co.uk/sharepoint-report.html">
-<meta name="description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta name="description" content="Generate a professional SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Salman IT Tools">
 <meta property="og:title" content="Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools">
-<meta property="og:description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta property="og:description" content="Generate a professional SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
 <meta property="og:url" content="https://salmanittools.co.uk/sharepoint-report.html">
 <meta property="og:image" content="https://salmanittools.co.uk/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://salmanittools.co.uk/og-image.png">
 <meta name="twitter:title" content="Free SharePoint Report Builder for Microsoft 365 | Salman IT Tools">
-<meta name="twitter:description" content="Generate a client-ready SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
+<meta name="twitter:description" content="Generate a professional SharePoint report — live site inventory, storage/usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph. Sign in with your own M365 account, export a branded PDF. 100% client-side, nothing is stored on our servers.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:; frame-src https:; object-src 'none'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@
     {"@type":"Question","name":"Why are the names in my report hidden or showing as random IDs?","acceptedAnswer":{"@type":"Answer","text":"Microsoft 365 has a privacy setting called 'concealed names' enabled by default on usage reports, which also affects the CSV exports this tool reads. A Global Administrator can disable it in the Microsoft 365 admin center under Settings > Org settings > Reports > 'Display concealed names'."}},
     {"@type":"Question","name":"Does this show a full audit trail of every file action?","acceptedAnswer":{"@type":"Answer","text":"Yes — the 'Search the Audit Log' step queries the Microsoft Purview unified audit log directly via Microsoft Graph, using your own signed-in token, entirely from your browser. It needs an account with a Global Administrator, Compliance Administrator, Security Administrator (or equivalent custom audit role), and your tenant's audit logging must be turned on."}},
     {"@type":"Question","name":"Why does audit log search fail with a permissions error?","acceptedAnswer":{"@type":"Answer","text":"Two common causes: your account doesn't hold an admin role that's allowed to search the audit log (Global Administrator, Compliance Administrator or Security Administrator, or a custom role with audit search rights), or a Global Administrator hasn't yet granted admin consent for the AuditLogsQuery-SharePoint.Read.All permission on this app in Entra ID. Both are one-time, tenant-side fixes."}},
-    {"@type":"Question","name":"Can I export the report as a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Once a report is generated, use the Export / Print Report button, which opens your browser's print dialog — choose 'Save as PDF' for a branded, client-ready document."}}
+    {"@type":"Question","name":"Can I export the report as a PDF?","acceptedAnswer":{"@type":"Answer","text":"Yes. Once a report is generated, use the Export / Print Report button, which opens your browser's print dialog — choose 'Save as PDF' for a branded, professional document."}}
   ]
 }
 </script>
@@ -270,14 +270,14 @@ footer a{color:var(--green);text-decoration:none}
 <div class="page">
   <div class="page-eyebrow">Microsoft 365 / SharePoint</div>
   <h1 class="page-title">SharePoint<br><span class="acc">Report Builder</span></h1>
-  <p class="page-sub">Generate a client-ready SharePoint report in minutes — live site inventory, storage &amp; usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph.</p>
+  <p class="page-sub">Generate a professional SharePoint report in minutes — live site inventory, storage &amp; usage stats and real Purview audit log search, all fetched automatically from Microsoft Graph.</p>
   <p class="page-sub2">Sign in with your own Microsoft 365 account, search the actual audit log, and get a branded, print-ready report. Nothing runs through our servers, ever.</p>
 
   <div class="badge-row">
     <div class="badge-card"><div class="bi">🔒</div><h4>Direct to Microsoft</h4><p>Your browser talks to Graph directly.</p></div>
     <div class="badge-card"><div class="bi">🚫</div><h4>Nothing Stored</h4><p>We never see or keep your data.</p></div>
     <div class="badge-card"><div class="bi">🆓</div><h4>Free</h4><p>No registration on our side.</p></div>
-    <div class="badge-card"><div class="bi">🖨️</div><h4>PDF Ready</h4><p>Export a branded client report.</p></div>
+    <div class="badge-card"><div class="bi">🖨️</div><h4>PDF Ready</h4><p>Export a branded PDF report.</p></div>
   </div>
 
   <div class="privacy-panel">
@@ -542,14 +542,14 @@ footer a{color:var(--green);text-decoration:none}
       <div class="step-item"><div class="step-num">2</div><p>Your browser calls <code>graph.microsoft.com</code> directly using your own token to pull live site inventory — name, URL, template, last activity.</p></div>
       <div class="step-item"><div class="step-num">3</div><p>Audit log search calls the Microsoft Purview unified audit log via Graph's <code>/security/auditLog/queries</code> API — a query is created, polled until it finishes, then matching records are paged in. This returns JSON with normal CORS headers, so it works directly from a browser.</p></div>
       <div class="step-item"><div class="step-num">4</div><p>Storage, usage and activity reports normally redirect to a CSV download link that browsers can't follow cross-origin — but requesting them with <code>$format=application/json</code> makes Graph return the same rows inline instead of redirecting, so they're fetched automatically too. If that's ever blocked (usually a missing <strong>Reports.Read.All</strong> consent), you can export the same report as a CSV from the admin center and drop it in as a fallback; it's parsed with JavaScript's FileReader, entirely on your device.</p></div>
-      <div class="step-item"><div class="step-num">5</div><p>Everything renders locally into the report below. Use "Export / Print Report" to save a branded PDF for a client, or "Export Raw Records" for the full audit log as CSV — nothing is uploaded anywhere in this process.</p></div>
+      <div class="step-item"><div class="step-num">5</div><p>Everything renders locally into the report below. Use "Export / Print Report" to save a branded PDF for documentation or internal review, or "Export Raw Records" for the full audit log as CSV — nothing is uploaded anywhere in this process.</p></div>
     </div>
 
     <div class="info-grid">
       <div class="info-card"><div class="ico">📦</div><h4>Site Inventory</h4><p>Every SharePoint site visible to the signed-in account — name, URL, template and last activity. Fetched live, automatically.</p></div>
       <div class="info-card"><div class="ico">🧾</div><h4>Real Audit Log</h4><p>Actual Purview audit records — who did what, when, to which file — searched live via Graph. Filter by date range, user, keyword or activity type.</p></div>
       <div class="info-card"><div class="ico">📈</div><h4>Storage &amp; Usage</h4><p>Per-site storage used, file counts and page views — from a usage report you export once and drop in.</p></div>
-      <div class="info-card"><div class="ico">🖨️</div><h4>Branded PDF Export</h4><p>One click turns the on-screen dashboard into a clean, print-ready report for a client.</p></div>
+      <div class="info-card"><div class="ico">🖨️</div><h4>Branded PDF Export</h4><p>One click turns the on-screen dashboard into a clean, print-ready report for documentation or internal review.</p></div>
     </div>
   </div>
 </div>

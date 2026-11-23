@@ -16,8 +16,6 @@
     PRICING_LAST_REVIEWED: '2026-10-07',
     CURRENCY: '£',
 
-    // Where the "Book a Free Consultation" buttons point.
-    BOOKING_URL: 'mailto:support@salmanitservices.com?subject=Cloud%20setup%20review',
     CONTACT_URL: 'index.html#contact',
 
     // ---- Recommendation weighting (relative importance of each factor) ----

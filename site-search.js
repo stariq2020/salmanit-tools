@@ -24,7 +24,7 @@
       keywords: ["pdf summarizer", "summarize pdf", "pdf summary", "key points", "tldr", "document summary"] },
 
     { name: "SharePoint Report Builder", url: "sharepoint-report.html",
-      description: "Generate a client-ready SharePoint report — live site inventory via Microsoft Graph, plus storage & activity from an imported M365 usage export.",
+      description: "Generate a professional SharePoint report — live site inventory via Microsoft Graph, plus storage & activity from an imported M365 usage export.",
       keywords: ["sharepoint", "report", "o365", "office 365", "microsoft 365", "storage report", "usage report", "site inventory", "graph api", "csv import"] },
 
     { name: "Microsoft 365 Tenant Audit", url: "m365-scan.html",

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FileThermal — Free Disk Space Analyzer &amp; Cleanup Tool for Windows | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/filethermal.html">
+<meta name="description" content="Free Windows disk space analyzer. FileThermal scans your drives, finds large, old and duplicate files, shows what is hot, warm or cold, and helps you clear space safely. 100% local.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Salman IT Tools">
+<meta property="og:title" content="FileThermal — Free Disk Space Analyzer &amp; Cleanup Tool for Windows | Salman IT Tools">
+<meta property="og:description" content="Free Windows disk space analyzer. FileThermal scans your drives, finds large, old and duplicate files, shows what is hot, warm or cold, and helps you clear space safely. 100% local.">
+<meta property="og:url" content="https://salmanittools.co.uk/filethermal.html">
+<meta property="og:image" content="https://salmanittools.co.uk/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://salmanittools.co.uk/og-image.png">
+<meta name="twitter:title" content="FileThermal — Free Disk Space Analyzer &amp; Cleanup Tool for Windows | Salman IT Tools">
+<meta name="twitter:description" content="Free Windows disk space analyzer. FileThermal scans your drives, finds large, old and duplicate files, shows what is hot, warm or cold, and helps you clear space safely. 100% local.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is FileThermal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FileThermal is a free Windows disk space analyzer and cleanup tool. It scans the folders or drives you choose, shows what is taking up space, and sorts files into hot, warm and cold based on when they were last modified, so you can quickly see what you have forgotten about."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does FileThermal upload my files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. FileThermal reads file names, sizes and dates only, and everything stays on your PC. Nothing is uploaded and no account is needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it delete my files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not on its own. The Cleanup Centre shows you exactly what it proposes to clear and you review the list before anything is moved. Always check the list before you confirm."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What do hot, warm and cold files mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They are groups based on last-modified date. Hot files were changed recently, warm files less recently, and cold files not for a long time. Windows does not reliably record when a file was last read, so cold results are a guide rather than proof that a file is unused."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to install it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Unlike the single-file tools on this site, FileThermal is a normal Windows installer (about 106 MB). Run it, choose an install folder and it adds a shortcut. You can uninstall it from Windows Settings at any time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does Windows show a SmartScreen warning?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The installer is not signed with a paid code-signing certificate. Click More info then Run anyway. You can compare the SHA-256 checksum on this page with the file you downloaded."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which versions of Windows are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Windows 10 and Windows 11, 64-bit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is FileThermal free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, it is free to download and use."
+      }
+    }
+  ]
+}
+</script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--caution:#EAC54F;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px;z-index:600}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1080px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:700px;margin-bottom:20px}
+
+.privacy-box{display:flex;gap:14px;background:rgba(0,200,255,0.05);border:1px solid rgba(0,200,255,0.2);border-radius:14px;padding:18px 20px;margin-bottom:24px}
+.privacy-box .pi{font-size:1.4rem;flex-shrink:0}
+.privacy-box p{font-size:0.86rem;color:var(--white);line-height:1.7;opacity:.92}
+.privacy-box strong{color:var(--cyan)}
+
+.always-warn{display:flex;gap:10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:0.82rem;color:var(--white);line-height:1.6}
+.always-warn b{color:var(--warning)}
+
+/* Upload zone */
+.drop-zone{border:2px dashed rgba(0,232,122,0.3);border-radius:20px;padding:52px 24px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(0,232,122,0.03);margin-bottom:16px;position:relative}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--green);background:rgba(0,232,122,0.07)}
+.drop-icon{font-size:2.6rem;margin-bottom:14px}
+.drop-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.drop-sub{font-size:0.85rem;color:var(--muted);margin-bottom:18px}
+.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.drop-btn:hover{opacity:.9;transform:scale(1.02)}
+.drop-formats{font-size:0.75rem;color:var(--muted);margin-top:14px}
+#fileInput{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.ghost-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;padding:10px 18px;border-radius:9px;cursor:pointer;transition:all .2s}
+.ghost-btn:hover{background:rgba(255,255,255,0.1)}
+.error-box{display:none;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.25);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:0.85rem;color:var(--white)}
+.error-box b{color:var(--danger)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--border);color:var(--white);padding:12px 20px;border-radius:10px;font-size:0.85rem;box-shadow:0 8px 30px rgba(0,0,0,0.4);opacity:0;pointer-events:none;transition:all .3s;z-index:800}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Editor */
+.editor-wrap{display:none;margin-bottom:32px}
+.editor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.editor-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.04em;color:var(--white)}
+.editor-header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.action-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.action-btn:hover{background:rgba(255,255,255,0.1)}
+.action-btn.danger{color:var(--danger);border-color:rgba(239,68,68,0.25)}
+
+.mode-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.switch-group{display:flex;align-items:center;gap:8px}
+.switch{position:relative;width:40px;height:22px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .slider{position:absolute;inset:0;background:rgba(255,255,255,0.12);border-radius:20px;cursor:pointer;transition:.2s}
+.switch .slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:var(--white);border-radius:50%;transition:.2s}
+.switch input:checked+.slider{background:var(--cyan)}
+.switch input:checked+.slider::before{transform:translateX(18px)}
+.switch-label{font-size:0.82rem;color:var(--white);cursor:pointer}
+.switch-label small{display:block;color:var(--muted);font-size:0.72rem;margin-top:1px}
+
+.viewer-toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;order:0}
+.vt-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vt-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:600;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.vt-btn:hover{background:rgba(255,255,255,0.1)}
+.vt-btn.active{background:var(--cyan);color:var(--ink);border-color:transparent}
+.vt-zoom{font-size:0.78rem;color:var(--muted);min-width:42px;text-align:center}
+
+.editor-viewer{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.viewer-stage{position:relative;width:100%;max-height:60vh;min-height:260px;overflow:auto;border-radius:14px;border:1px solid var(--border);background-color:#0a111d;background-image:linear-gradient(45deg,#0c1424 25%,transparent 25%),linear-gradient(-45deg,#0c1424 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#0c1424 75%),linear-gradient(-45deg,transparent 75%,#0c1424 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;order:1;touch-action:pan-x pan-y;cursor:grab}
+.viewer-stage.dragging{cursor:grabbing}
+.viewer-inner{position:relative;line-height:0}
+.viewer-inner canvas{position:absolute;top:0;left:0;display:block}
+#overlayCanvas{pointer-events:none}
+@media(max-width:640px){.viewer-toolbar{order:2}.viewer-stage{order:1;max-height:48vh}}
+
+.manual-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.mode-pick{display:flex;gap:6px;flex-wrap:wrap}
+.blur-warning{display:none;gap:8px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.8rem;color:var(--white);line-height:1.6;margin-bottom:14px;align-items:flex-start}
+
+.scan-status{display:none;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;font-size:0.85rem;color:var(--white)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,232,122,0.25);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress-track{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;min-width:80px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:4px;transition:width .25s}
+
+.primary-cta{width:100%;padding:16px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-bottom:14px}
+.primary-cta:hover{opacity:.9;box-shadow:0 8px 24px rgba(0,232,122,0.3)}
+.primary-cta:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.primary-cta.cyan{background:linear-gradient(135deg,var(--cyan),#0099CC);color:var(--ink)}
+
+/* Results */
+.results-wrap{display:none}
+.summary-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.sum-chip{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:0.85rem;color:var(--white);font-weight:600}
+.sum-chip .n{font-family:'Bebas Neue',sans-serif;font-size:1.1rem}
+.sum-chip.high{border-color:rgba(239,68,68,0.3)}
+.sum-chip.medium{border-color:rgba(245,158,11,0.3)}
+.sum-chip.review{border-color:rgba(234,197,79,0.3)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+.detect-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.detect-panel h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--white);margin-bottom:10px}
+.detect-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.detect-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto}
+.detect-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--white)}
+.detect-item:hover{background:rgba(255,255,255,0.06)}
+.detect-item.risk-high{border-left:3px solid var(--danger)}
+.detect-item.risk-medium{border-left:3px solid var(--warning)}
+.detect-item.risk-review{border-left:3px solid var(--caution)}
+.detect-item.applied{opacity:.55;cursor:default}
+.di-check{width:18px;height:18px;border-radius:5px;border:2px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px}
+.detect-item.checked .di-check{background:var(--cyan);border-color:var(--cyan);color:var(--ink)}
+.di-body{flex:1;min-width:0}
+.di-label{font-size:0.86rem;font-weight:600;color:var(--white)}
+.di-value{font-family:var(--mono);font-size:0.76rem;color:var(--muted);margin-top:2px;word-break:break-all}
+.di-badge{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+.di-badge.high{background:rgba(239,68,68,0.14);color:var(--danger)}
+.di-badge.medium{background:rgba(245,158,11,0.14);color:var(--warning)}
+.di-badge.review{background:rgba(234,197,79,0.14);color:var(--caution)}
+.di-tag{font-size:0.68rem;color:var(--green);font-weight:700;flex-shrink:0}
+
+.legend-row{display:flex;flex-wrap:wrap;gap:14px;font-size:0.76rem;color:var(--muted);margin-bottom:12px}
+.legend-row span{display:flex;align-items:center;gap:6px}
+.legend-dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* Metadata */
+.meta-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.meta-panel h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--white);margin-bottom:10px}
+.meta-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.meta-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.03);border-radius:8px;padding:9px 12px;font-size:0.84rem}
+.meta-row .mv{font-weight:700}
+.meta-row .mv.found{color:var(--warning)}
+.meta-row .mv.notfound{color:var(--green)}
+.meta-note{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+/* Score */
+.score-hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:14px;display:none}
+.band-low .band-badge{background:rgba(0,232,122,0.12);color:var(--green)}
+.band-caution .band-badge{background:rgba(234,197,79,0.14);color:var(--caution)}
+.band-suspicious .band-badge{background:rgba(245,158,11,0.14);color:var(--warning)}
+.band-high .band-badge{background:rgba(239,68,68,0.14);color:var(--danger)}
+.band-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.05em;padding:7px 16px;border-radius:10px;margin-bottom:12px}
+.score-row{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+.score-num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1}
+.score-num span{font-size:1.2rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:600}
+.band-low .score-num{color:var(--green)}
+.band-caution .score-num{color:var(--caution)}
+.band-suspicious .score-num{color:var(--warning)}
+.band-high .score-num{color:var(--danger)}
+.verdict-line{font-size:0.95rem;color:var(--white);margin-bottom:2px}
+.meter{height:10px;border-radius:6px;background:rgba(255,255,255,0.06);overflow:hidden;margin-top:12px}
+.meter-fill{height:100%;border-radius:6px;transition:width .7s ease}
+.band-low .meter-fill{background:linear-gradient(90deg,var(--green),var(--green2))}
+.band-caution .meter-fill{background:linear-gradient(90deg,var(--caution),#D9A62B)}
+.band-suspicious .meter-fill{background:linear-gradient(90deg,var(--warning),#D97706)}
+.band-high .meter-fill{background:linear-gradient(90deg,#F87171,var(--danger))}
+
+/* Export */
+.export-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;display:none}
+.export-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.fmt-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;min-width:150px}
+.fmt-select option{background:#0E1A2E}
+
+.finalcheck{display:none;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.finalcheck.warn{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.25)}
+.finalcheck.clean{background:rgba(0,232,122,0.06);border-color:rgba(0,232,122,0.25)}
+.finalcheck.unknown{background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.25)}
+.finalcheck h5{font-size:0.95rem;color:var(--white);margin-bottom:6px}
+.finalcheck p{font-size:0.84rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.finalcheck .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+.success-box{display:none;background:rgba(0,232,122,0.06);border:1px solid rgba(0,232,122,0.25);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.success-box h5{color:var(--green);font-size:1.05rem;margin-bottom:6px}
+.success-box p{font-size:0.84rem;color:var(--white);opacity:.85;line-height:1.7;margin-bottom:4px}
+
+.compare-view{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;gap:4px}
+.compare-view .vt-btn{flex:1}
+
+/* Info sections */
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+.section-h{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.section-p{font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px}
+
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+.related-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-decoration:none;transition:all .2s}
+.related-card:hover{border-color:rgba(0,200,255,0.3);background:rgba(0,200,255,0.03)}
+.related-card .rc-ico{font-size:1.3rem;margin-bottom:6px}
+.related-card .rc-name{font-size:0.88rem;font-weight:700;color:var(--white)}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.mode-row{flex-direction:column;align-items:stretch}.export-row{flex-direction:column;align-items:stretch}}
+
+/* Dev self-test panel */
+#selfTestPanel{display:none;position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#000;color:#0f0;font-family:var(--mono);font-size:11px;padding:12px;z-index:900;border-top:2px solid #0f0}
+.dl-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0 8px}
+.dl-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, var(--green), var(--green2));
+  color: var(--ink); font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  border: none; border-radius: 12px;
+  text-decoration: none; cursor: none;
+  transition: opacity .2s, transform .15s, box-shadow .2s;
+  position: relative; overflow: hidden;
+}
+.sha{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--muted);word-break:break-all;margin-top:10px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.meta-row span{font-size:.76rem;font-weight:600;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:4px 12px}
+.ico{font-size:1.4rem;margin-bottom:8px}
+</style>
+<script src="site-search.js" defer></script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+
+<div class="page">
+  <div class="page-eyebrow">Free Windows Tool</div>
+  <h1 class="page-title">🌡️ <span class="acc">FileThermal</span> — Disk Space Analyzer &amp; Cleanup</h1>
+  <p class="page-sub">Find out what is eating your storage and clear it safely. FileThermal scans the folders or drives you choose, shows your biggest and oldest files, and sorts everything into hot, warm and cold so forgotten files stand out.</p>
+
+  <div class="dl-row">
+    <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/latest/download/FileThermal-Setup.exe">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+      Download for Windows
+    </a>
+  </div>
+  <div class="meta-row"><span>🪟 Win 10/11</span><span>🖥️ 64-bit</span><span>💾 Installer · 106 MB</span><span>🔒 Free</span><span>v0.1.0</span></div>
+  <div class="sha">SHA-256: 1e2a6b15ecda3ff2f9d60938835565ec70ab060f5a2d4df5615c8c6f75a38296</div>
+
+  <div class="privacy-box" style="margin-top:24px">
+    <span class="pi">🔒</span>
+    <p><strong>100% local.</strong> FileThermal reads file names, sizes and dates only. Nothing is uploaded and no account is needed.</p>
+  </div>
+
+  <div class="always-warn">
+    <span>⚠️</span>
+    <div><b>Heads up:</b> the installer is not code-signed, so Windows SmartScreen may warn you. Click <b>More info</b> then <b>Run anyway</b>. FileThermal can move files during cleanup, so always review the list before you confirm.</div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">What It Does</div>
+    <h2 class="section-h">Features</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🌡️</div><h4>Hot, warm &amp; cold files</h4><p>Every file is grouped by last-modified date so forgotten, cold files stand out straight away.</p></div>
+      <div class="info-card"><div class="ico">📊</div><h4>Dashboard</h4><p>File counts and sizes for each class, plus how much of the drive FileThermal indexed.</p></div>
+      <div class="info-card"><div class="ico">🔍</div><h4>Thermal Explorer &amp; Large Files</h4><p>Browse everything by temperature and find the biggest space hogs fast.</p></div>
+      <div class="info-card"><div class="ico">🗺️</div><h4>Storage Heatmap &amp; Folder Tree</h4><p>See which folders are using the space, visually and as a tree.</p></div>
+      <div class="info-card"><div class="ico">♊</div><h4>Duplicate Finder</h4><p>Find identical copies of files that are wasting space.</p></div>
+      <div class="info-card"><div class="ico">🧹</div><h4>Cleanup Centre</h4><p>Review every proposed file before it is moved. Nothing happens until you confirm.</p></div>
+      <div class="info-card"><div class="ico">📈</div><h4>Storage History &amp; Reports</h4><p>Track how your storage changes between scans.</p></div>
+      <div class="info-card"><div class="ico">🔒</div><h4>100% local</h4><p>Reads file names, sizes and dates only. Nothing leaves your PC.</p></div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">How It Works</div>
+    <h2 class="section-h">Step by Step</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico" style="font-family:Bebas Neue,Arial Black,sans-serif;font-size:1.6rem;color:var(--green)">01</div><h4>Download &amp; install</h4><p>Download FileThermal-Setup.exe, run it and choose an install folder. Works on Windows 10 and 11.</p></div>
+      <div class="info-card"><div class="ico" style="font-family:Bebas Neue,Arial Black,sans-serif;font-size:1.6rem;color:var(--green)">02</div><h4>Choose what to scan</h4><p>Click <b>Start scan</b> and pick one or more folders or drives.</p></div>
+      <div class="info-card"><div class="ico" style="font-family:Bebas Neue,Arial Black,sans-serif;font-size:1.6rem;color:var(--green)">03</div><h4>See what is using space</h4><p>Use the dashboard, Large Files, Heatmap and Folder Tree to find the big and cold files.</p></div>
+      <div class="info-card"><div class="ico" style="font-family:Bebas Neue,Arial Black,sans-serif;font-size:1.6rem;color:var(--green)">04</div><h4>Clean up safely</h4><p>Open the Cleanup Centre, review the list and confirm only what you want moved.</p></div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="info-card"><h4 style="margin-bottom:6px">What is FileThermal?</h4><p>FileThermal is a free Windows disk space analyzer and cleanup tool. It scans the folders or drives you choose, shows what is taking up space, and sorts files into hot, warm and cold based on when they were last modified, so you can quickly see what you have forgotten about.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Does FileThermal upload my files?</h4><p>No. FileThermal reads file names, sizes and dates only, and everything stays on your PC. Nothing is uploaded and no account is needed.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Does it delete my files?</h4><p>Not on its own. The Cleanup Centre shows you exactly what it proposes to clear and you review the list before anything is moved. Always check the list before you confirm.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">What do hot, warm and cold files mean?</h4><p>They are groups based on last-modified date. Hot files were changed recently, warm files less recently, and cold files not for a long time. Windows does not reliably record when a file was last read, so cold results are a guide rather than proof that a file is unused.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Do I need to install it?</h4><p>Yes. Unlike the single-file tools on this site, FileThermal is a normal Windows installer (about 106 MB). Run it, choose an install folder and it adds a shortcut. You can uninstall it from Windows Settings at any time.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Why does Windows show a SmartScreen warning?</h4><p>The installer is not signed with a paid code-signing certificate. Click <b>More info</b> then <b>Run anyway</b>. You can compare the SHA-256 checksum on this page with the file you downloaded.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Which versions of Windows are supported?</h4><p>Windows 10 and Windows 11, 64-bit.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is FileThermal free?</h4><p>Yes, it is free to download and use.</p></div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">More Windows Tools</div>
+    <h2 class="section-h">Related Salman IT Tools</h2>
+    <div class="related-grid">
+      <a class="related-card" href="index.html#tools"><div class="rc-ico">🔧</div><div class="rc-name">OneClickFix</div></a>
+      <a class="related-card" href="index.html#tools"><div class="rc-ico">🗂️</div><div class="rc-name">ProfileCleaner</div></a>
+      <a class="related-card" href="index.html#tools"><div class="rc-ico">🌐</div><div class="rc-name">NetworkInfo</div></a>
+      <a class="related-card" href="windows-troubleshooter.html"><div class="rc-ico">🩺</div><div class="rc-name">Windows Troubleshooter</div></a>
+      <a class="related-card" href="image-compressor.html"><div class="rc-ico">🖼️</div><div class="rc-name">Image Compressor</div></a>
+      <a class="related-card" href="file-converter.html"><div class="rc-ico">📄</div><div class="rc-name">File Converter</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script>
+function toggleMobileMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+</script>
+</body>
+</html>

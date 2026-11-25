@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montra — Private Expense Tracker &amp; Budget App for Android | Salman IT Tools</title>
+<link rel="canonical" href="https://salmanittools.co.uk/montra.html">
+<meta name="description" content="Montra is a private, offline expense tracker for Android. Add expenses by voice, track recurring bills, set budgets and savings goals, and see insights. No ads, no tracking, encrypted on your phone.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Salman IT Tools">
+<meta property="og:title" content="Montra — Private Expense Tracker &amp; Budget App for Android | Salman IT Tools">
+<meta property="og:description" content="Private, offline expense tracker for Android. Voice add, recurring bills, budgets, savings goals and insights. No ads, no tracking, encrypted on your phone.">
+<meta property="og:url" content="https://salmanittools.co.uk/montra.html">
+<meta property="og:image" content="https://salmanittools.co.uk/montra-promo-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://salmanittools.co.uk/montra-promo-poster.jpg">
+<meta name="twitter:title" content="Montra — Private Expense Tracker &amp; Budget App for Android">
+<meta name="twitter:description" content="Private, offline expense tracker for Android. Voice add, recurring bills, budgets, savings goals and insights. No ads, no tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is Montra?","acceptedAnswer":{"@type":"Answer","text":"Montra is a private expense tracker and budget app for Android. You add what you spend (by typing or by voice), and it shows your remaining balance, recurring bills, budgets, savings goals and spending insights. Your data stays on your phone."}},
+    {"@type":"Question","name":"Why does Android show a warning when I install it?","acceptedAnswer":{"@type":"Answer","text":"Android warns about every app that does not come from the Google Play Store. It is a standard security prompt for any app installed from a downloaded file, not a sign that something is wrong. Follow the install steps on this page: allow installs from your browser or Files app, then choose Install anyway if Play Protect asks."}},
+    {"@type":"Question","name":"Is Montra safe?","acceptedAnswer":{"@type":"Answer","text":"Montra has no ads, no analytics and no tracking, and it runs no servers, so it never receives your data. The database on your phone is encrypted, and you can lock the app with a PIN and optional fingerprint or face unlock. You can compare the SHA-256 checksum on this page with the file you downloaded."}},
+    {"@type":"Question","name":"Does Montra upload my data?","acceptedAnswer":{"@type":"Answer","text":"No. Your expenses, bills and settings are stored only on your phone. The only time anything leaves it is if you choose to make a backup to your own Google Drive, and that backup is encrypted on your phone with a passphrase you choose before it is uploaded."}},
+    {"@type":"Question","name":"Does it work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. Montra works fully offline. The internet is only used if you choose to back up to or restore from Google Drive."}},
+    {"@type":"Question","name":"What happens if I forget my PIN or backup passphrase?","acceptedAnswer":{"@type":"Answer","text":"Neither can be recovered, because they are never stored anywhere else. A lost PIN means clearing the app's data, which erases everything on that phone, so make an encrypted backup first. A backup without its passphrase cannot be opened by anyone."}},
+    {"@type":"Question","name":"Which Android versions are supported?","acceptedAnswer":{"@type":"Answer","text":"Android 8.0 or newer."}},
+    {"@type":"Question","name":"Is there an iPhone version?","acceptedAnswer":{"@type":"Answer","text":"Not at the moment. Montra is Android only."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;
+  --cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;
+  --border:rgba(255,255,255,0.07);--warning:#F59E0B;--gold:#E8C77A;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo .dot{color:var(--green)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:transparent;border:none;cursor:pointer;padding:4px;z-index:600}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(8,13,20,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 24px;z-index:499;gap:14px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:0.95rem;color:var(--white);text-decoration:none;padding:8px 0}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+
+.page{max-width:1080px;margin:0 auto;padding:52px 24px 80px}
+.page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:700px;margin-bottom:20px}
+
+.hero{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.hero img{width:120px;height:120px;border-radius:28px;box-shadow:0 20px 60px rgba(0,232,122,0.18)}
+.hero-text{flex:1;min-width:260px}
+
+.privacy-box{display:flex;gap:14px;background:rgba(0,200,255,0.05);border:1px solid rgba(0,200,255,0.2);border-radius:14px;padding:18px 20px;margin-bottom:24px}
+.privacy-box .pi{font-size:1.4rem;flex-shrink:0}
+.privacy-box p{font-size:0.86rem;color:var(--white);line-height:1.7;opacity:.92}
+.privacy-box strong{color:var(--cyan)}
+.always-warn{display:flex;gap:10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:12px 16px;margin-bottom:24px;font-size:0.82rem;color:var(--white);line-height:1.6}
+.always-warn b{color:var(--warning)}
+
+.dl-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0 8px}
+.dl-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:420px;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;text-decoration:none;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.dl-btn:hover{opacity:.92;box-shadow:0 8px 24px rgba(0,232,122,0.3)}
+.sha{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--muted);word-break:break-all;margin-top:10px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.meta-row span{font-size:.76rem;font-weight:600;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:4px 12px}
+
+.info-section{margin-top:56px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-card .ico{font-size:1.5rem;margin-bottom:8px}
+.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+.info-card p b{color:var(--white)}
+.section-h{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px}
+.section-p{font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px}
+.num{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;color:var(--green);margin-bottom:8px}
+
+.videos{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;margin-top:20px}
+.vid{width:100%;max-width:320px}
+.vid video{width:100%;border-radius:14px;border:1px solid var(--border);background:#000;display:block}
+.vid .cap{font-size:.84rem;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5}
+.vid .cap b{color:var(--white);display:block;font-size:.92rem}
+
+.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+.related-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-decoration:none;transition:all .2s}
+.related-card:hover{border-color:rgba(0,200,255,0.3);background:rgba(0,200,255,0.03)}
+.related-card .rc-ico{font-size:1.3rem;margin-bottom:6px}
+.related-card .rc-name{font-size:0.88rem;font-weight:700;color:var(--white)}
+
+footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo .dot{color:var(--green)}
+footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
+footer a{color:var(--green);text-decoration:none}
+@media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}}
+</style>
+<script src="site-search.js" defer></script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">⚡ Salman IT<span class="dot">.</span>Tools</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#tools">Tools</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#tools" onclick="closeMobileMenu()">Tools</a>
+  <a href="index.html#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="index.html#about" onclick="closeMobileMenu()">About</a>
+  <a href="index.html#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<div class="page">
+  <div class="hero">
+    <img src="montra-icon.png" alt="Montra app icon" width="120" height="120">
+    <div class="hero-text">
+      <div class="page-eyebrow">Free Android App</div>
+      <h1 class="page-title">💷 <span class="acc">Montra</span> — Private Expense Tracker</h1>
+    </div>
+  </div>
+  <p class="page-sub">Know where your money goes. Add expenses by typing or by voice, track recurring bills, set budgets and savings goals, and see plain-English insights. Everything stays on your phone, encrypted, with no ads and no tracking.</p>
+
+  <div class="dl-row">
+    <a class="dl-btn" href="https://github.com/stariq2020/salmanit-tools/releases/download/montra-v0.15.0/Montra.apk">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+      Download for Android (APK)
+    </a>
+  </div>
+  <div class="meta-row"><span>🤖 Android 8.0+</span><span>💾 APK · 10.6 MB</span><span>🔒 Free</span><span>🧪 Beta</span><span>v0.15.0</span></div>
+  <div class="sha">SHA-256: 1fd6e89c4821030972e3102d019939db6636a6ba1975ff23285d5226d3d27030</div>
+
+  <div class="privacy-box" style="margin-top:24px">
+    <span class="pi">🔒</span>
+    <p><strong>Private by design.</strong> No ads, no analytics, no tracking and no servers, so your data never reaches us. Your expenses are stored only on your phone, in an encrypted database.</p>
+  </div>
+
+  <div class="always-warn">
+    <span>⚠️</span>
+    <div><b>Heads up:</b> Montra isn't on the Google Play Store yet, so Android will show a security warning when you install it. That's normal for any app installed from a file. <a href="#install" style="color:var(--warning)">See the 4 install steps below</a> or watch the short video.</div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">See It In Action</div>
+    <h2 class="section-h">Watch the Videos</h2>
+    <div class="videos">
+      <div class="vid">
+        <video controls preload="metadata" playsinline poster="montra-promo-poster.jpg" aria-label="Montra overview video">
+          <source src="montra-promo.mp4" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+        <div class="cap"><b>What Montra does</b>40-second overview</div>
+      </div>
+      <div class="vid">
+        <video controls preload="metadata" playsinline poster="montra-install-poster.jpg" aria-label="How to install Montra on Android">
+          <source src="montra-install-guide.mp4" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+        <div class="cap"><b>How to install it</b>Why the warning appears and what to tap</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">What It Does</div>
+    <h2 class="section-h">Features</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🏠</div><h4>Clear Home screen</h4><p>Remaining balance, spend progress, what's still due, and a comparison with last month. You choose what shows.</p></div>
+      <div class="info-card"><div class="ico">🎙️</div><h4>Voice add</h4><p>Say what you spent to add, edit or delete expenses and bills. Only runs when you tap the mic.</p></div>
+      <div class="info-card"><div class="ico">🔁</div><h4>Recurring bills &amp; subscriptions</h4><p>Enter once and it repeats every month with statuses: Upcoming, Due, Overdue, Paid or Skipped.</p></div>
+      <div class="info-card"><div class="ico">🎯</div><h4>Budgets &amp; limits</h4><p>Category budgets plus weekly and monthly limits, with unused amounts carried over.</p></div>
+      <div class="info-card"><div class="ico">🏦</div><h4>Accounts &amp; transfers</h4><p>Track separate accounts and move money between them. Add income as well as spending.</p></div>
+      <div class="info-card"><div class="ico">🐷</div><h4>Savings goals</h4><p>Set a target, add to it over time and watch your progress.</p></div>
+      <div class="info-card"><div class="ico">📈</div><h4>Insights &amp; forecast</h4><p>6-month trend, category breakdown, cash-flow forecast and plain-English observations worked out only from your own data.</p></div>
+      <div class="info-card"><div class="ico">👪</div><h4>Family budgeting</h4><p>Tag spending by family member and set personal limits. Kept on your phone, no accounts needed.</p></div>
+      <div class="info-card"><div class="ico">💱</div><h4>Multi-currency</h4><p>Use the currency that suits you. Amounts are stored exactly, never as rounded decimals.</p></div>
+      <div class="info-card"><div class="ico">🧾</div><h4>Receipts, tags &amp; search</h4><p>Attach receipt photos, add tags, and search or filter your records by month, category or type.</p></div>
+      <div class="info-card"><div class="ico">📤</div><h4>Export</h4><p>Save a month or all history as CSV, Excel or PDF, wherever you choose.</p></div>
+      <div class="info-card"><div class="ico">🔔</div><h4>Bill reminders &amp; widget</h4><p>Optional daily reminder for bills due soon. Reminders never show amounts. Home-screen widget included.</p></div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">Your Data, Your Phone</div>
+    <h2 class="section-h">Security &amp; Privacy</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="ico">🔐</div><h4>Encrypted database</h4><p>Your data is encrypted with SQLCipher, and the key is held in the Android Keystore.</p></div>
+      <div class="info-card"><div class="ico">🔢</div><h4>PIN &amp; biometric lock</h4><p>PIN lock with escalating lockout, optional fingerprint or face unlock, auto-lock delay, and hide-in-recent-apps.</p></div>
+      <div class="info-card"><div class="ico">💾</div><h4>Encrypted backups</h4><p>Back up to a file or to your own Google Drive (optional). Every backup is AES-256 encrypted on your phone with a passphrase only you know.</p></div>
+      <div class="info-card"><div class="ico">🚫</div><h4>No ads, no tracking</h4><p>No ads, analytics, cookies or servers. Works fully offline. Read the <a href="privacy.html" style="color:var(--green)">Privacy Policy</a>.</p></div>
+    </div>
+    <div class="always-warn" style="margin-top:18px">
+      <span>🗝️</span>
+      <div><b>Keep these safe:</b> a lost PIN or backup passphrase can't be recovered by anyone. Make an encrypted backup before you uninstall or change phones.</div>
+    </div>
+  </div>
+
+  <div class="info-section" id="install">
+    <div class="page-eyebrow">Install Guide</div>
+    <h2 class="section-h">How to Install on Android</h2>
+    <p class="section-p">Android warns about any app that doesn't come from the Play Store. It isn't a virus warning. It's a standard prompt, and the exact wording and menus vary a little between phone brands.</p>
+    <div class="info-grid">
+      <div class="info-card"><div class="num">01</div><h4>Download &amp; open</h4><p>Tap <b>Download for Android</b> above, then open <b>Montra.apk</b> from your notifications or Downloads folder. Chrome may say this type of file can harm your device. Choose to keep it.</p></div>
+      <div class="info-card"><div class="num">02</div><h4>Allow this source</h4><p>If it says <b>Install blocked</b>, tap <b>Settings</b>, switch on <b>Allow from this source</b>, then go back.</p></div>
+      <div class="info-card"><div class="num">03</div><h4>Play Protect</h4><p>If Play Protect warns you, tap <b>More details</b>, then <b>Install anyway</b>.</p></div>
+      <div class="info-card"><div class="num">04</div><h4>Install &amp; open</h4><p>Tap <b>Install</b>, then <b>Open</b>. You can switch the "allow this source" setting off again afterwards.</p></div>
+    </div>
+    <p class="section-p" style="margin-top:18px">To check the file is the one published here, compare its SHA-256 checksum with the one at the top of this page. Only install Montra from this page or from someone you trust.</p>
+  </div>
+
+  <div class="info-section">
+    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="info-card"><h4 style="margin-bottom:6px">What is Montra?</h4><p>Montra is a private expense tracker and budget app for Android. You add what you spend (by typing or by voice), and it shows your remaining balance, recurring bills, budgets, savings goals and spending insights. Your data stays on your phone.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Why does Android show a warning when I install it?</h4><p>Android warns about every app that doesn't come from the Google Play Store. It is a standard security prompt for any app installed from a downloaded file, not a sign that something is wrong. Follow the install steps above: allow installs from your browser or Files app, then choose <b>Install anyway</b> if Play Protect asks.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is Montra safe?</h4><p>Montra has no ads, no analytics and no tracking, and it runs no servers, so it never receives your data. The database on your phone is encrypted, and you can lock the app with a PIN and optional fingerprint or face unlock. You can compare the SHA-256 checksum on this page with the file you downloaded.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Does Montra upload my data?</h4><p>No. Your expenses, bills and settings are stored only on your phone. The only time anything leaves it is if you choose to make a backup to your own Google Drive, and that backup is encrypted on your phone with a passphrase you choose before it is uploaded.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Does it work offline?</h4><p>Yes. Montra works fully offline. The internet is only used if you choose to back up to or restore from Google Drive.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">What happens if I forget my PIN or backup passphrase?</h4><p>Neither can be recovered, because they are never stored anywhere else. A lost PIN means clearing the app's data, which erases everything on that phone, so make an encrypted backup first. A backup without its passphrase cannot be opened by anyone.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Which Android versions are supported?</h4><p>Android 8.0 or newer.</p></div>
+      <div class="info-card"><h4 style="margin-bottom:6px">Is there an iPhone version?</h4><p>Not at the moment. Montra is Android only.</p></div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="page-eyebrow">More Tools</div>
+    <h2 class="section-h">Related Salman IT Tools</h2>
+    <div class="related-grid">
+      <a class="related-card" href="invoice-generator.html"><div class="rc-ico">🧾</div><div class="rc-name">Invoice Generator</div></a>
+      <a class="related-card" href="life-calculator.html"><div class="rc-ico">🧮</div><div class="rc-name">Life Calculator</div></a>
+      <a class="related-card" href="filethermal.html"><div class="rc-ico">🌡️</div><div class="rc-name">FileThermal</div></a>
+      <a class="related-card" href="password-generator.html"><div class="rc-ico">🔑</div><div class="rc-name">Password Generator</div></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">⚡ Salman IT<span class="dot">.</span>Tools</div>
+  <p>Free online tools for everyone &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+</footer>
+
+<script>
+function toggleMobileMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+</script>
+</body>
+</html>

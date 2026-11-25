@@ -43,12 +43,12 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -62,7 +62,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:880px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1.05rem;color:var(--white);opacity:.85;line-height:1.7;max-width:680px;margin-bottom:8px}
 .page-sub2{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:28px}
@@ -100,10 +100,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .mode-card p{font-size:0.76rem;color:var(--muted);line-height:1.5}
 
 .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-.btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
+.btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
 .btn-primary:hover{opacity:.92}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed}
-.btn-secondary{padding:13px 22px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;min-height:48px}
+.btn-secondary{padding:13px 22px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;min-height:48px}
 .btn-secondary:hover{border-color:rgba(255,255,255,0.2)}
 
 .progress-label{font-size:0.82rem;color:var(--muted);margin-top:14px;display:none}
@@ -120,11 +120,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .result{display:none;margin-top:22px;border-top:1px solid var(--border);padding-top:20px}
 .result.show{display:block}
 .result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.result-head h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.5rem;letter-spacing:.03em}
+.result-head h2{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.5rem;letter-spacing:.03em}
 .result-head .btns{display:flex;gap:8px}
 .result-head .btns button{padding:8px 14px;min-height:0;font-size:0.8rem}
 .summary{font-size:0.95rem;line-height:1.75;color:var(--white)}
-.summary h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:var(--green);margin:18px 0 6px}
+.summary h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.2rem;letter-spacing:.04em;color:var(--green);margin:18px 0 6px}
 .summary p{margin-bottom:10px;opacity:.92}
 .summary ul{margin:0 0 10px 22px}
 .summary li{margin-bottom:6px;opacity:.92}
@@ -133,18 +133,23 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
-.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 .more-link{font-size:0.85rem;color:var(--muted);margin-top:24px}
 .more-link a{color:var(--cyan)}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 

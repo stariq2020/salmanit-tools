@@ -42,9 +42,9 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -64,17 +64,17 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 }
 .page{max-width:1080px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:640px;margin-bottom:36px}
 
 /* Input area */
 .input-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:28px}
 .url-row{display:flex;gap:10px;flex-wrap:wrap}
-.url-input{flex:1;min-width:240px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.95rem;outline:none;transition:border-color .2s}
+.url-input{flex:1;min-width:240px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:14px 16px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.95rem;outline:none;transition:border-color .2s}
 .url-input:focus{border-color:rgba(0,232,122,0.4)}
 .url-input::placeholder{color:var(--muted)}
-.check-btn{padding:14px 26px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;white-space:nowrap}
+.check-btn{padding:14px 26px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;white-space:nowrap}
 .check-btn:hover{opacity:.9;transform:scale(1.01)}
 .check-btn:disabled{opacity:.5;cursor:not-allowed}
 .input-note{font-size:0.78rem;color:var(--muted);margin-top:10px}
@@ -96,9 +96,9 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .score-ring-wrap{position:relative;width:140px;height:140px;flex-shrink:0}
 .score-ring-wrap svg{transform:rotate(-90deg)}
 .score-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-num .n{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2.6rem;line-height:1;color:var(--white)}
+.score-num .n{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2.6rem;line-height:1;color:var(--white)}
 .score-num .l{font-size:0.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.score-info h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.score-info h2{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.5rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
 .score-info p{font-size:0.88rem;color:var(--muted);line-height:1.6;max-width:480px}
 .score-breakdown{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap}
 .sb-item{display:flex;align-items:center;gap:6px;font-size:0.82rem}
@@ -109,7 +109,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .check-section-hdr{display:flex;align-items:center;gap:10px;padding:16px 20px;cursor:pointer;transition:background .2s}
 .check-section-hdr:hover{background:rgba(255,255,255,0.02)}
 .check-section-icon{font-size:1.2rem}
-.check-section-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--white);flex:1}
+.check-section-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.04em;color:var(--white);flex:1}
 .check-section-badge{font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:6px}
 .badge-ok{background:rgba(0,232,122,0.12);color:var(--green)}
 .badge-warn{background:rgba(245,158,11,0.12);color:var(--warning)}
@@ -130,17 +130,22 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
 @media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.score-hero{flex-direction:column;text-align:center}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -221,7 +226,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info -->
   <div class="info-section">
     <div class="page-eyebrow">What We Check</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">On-Page & Technical SEO Basics</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">On-Page & Technical SEO Basics</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:24px">
       This tool checks the foundational on-page and technical SEO elements that affect how search engines understand and rank your site —
       title tags, meta descriptions, heading structure, image alt text, mobile-friendliness, and the presence of robots.txt and sitemap.xml.
@@ -239,7 +244,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Tool FAQ -->
   <div class="info-section">
     <div class="page-eyebrow">Using This Tool</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Questions About the Checker</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Questions About the Checker</h2>
     <div class="info-grid" style="grid-template-columns:1fr">
       <div class="info-card"><h4>Why didn't the automatic check work?</h4><p>Automatic fetching relies on free third-party proxy services to bypass browser security restrictions (CORS). These free services have rate limits and occasional downtime, so automatic fetching can fail even on perfectly normal sites. The "paste HTML source" option always works, regardless of the site.</p></div>
       <div class="info-card"><h4>Does this check backlinks or keyword rankings?</h4><p>No. This tool focuses on on-page and technical basics only. Backlink and ranking data requires paid third-party APIs (Ahrefs, SEMrush, Moz) which this free tool doesn't use.</p></div>
@@ -253,7 +258,7 @@ footer a{color:var(--green);text-decoration:none}
 <div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
   <div style="margin-top:56px">
     <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:#00E87A;margin-bottom:12px">SEO Fundamentals</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:#F0F6FF;margin-bottom:16px">On-Page SEO — What Actually Moves the Needle</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:#F0F6FF;margin-bottom:16px">On-Page SEO — What Actually Moves the Needle</h2>
     <p style="font-size:0.92rem;color:#5A6A85;line-height:1.8;max-width:760px;margin-bottom:16px">
       Search engine optimisation covers a vast range of techniques, but the fundamentals that consistently make the biggest difference for most websites are surprisingly straightforward.
       On-page SEO — the technical and content elements within your own pages — is the foundation everything else is built on. Without getting the basics right, no amount of link building
@@ -273,7 +278,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div style="margin-top:48px">
-    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:#F0F6FF;margin-bottom:16px">Technical SEO Basics</h3>
+    <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:#F0F6FF;margin-bottom:16px">Technical SEO Basics</h3>
     <p style="font-size:0.92rem;color:#5A6A85;line-height:1.8;max-width:760px;margin-bottom:16px">
       Page speed is both a ranking factor and a user experience issue. Google uses Core Web Vitals — a set of metrics measuring loading speed, visual stability and interactivity —
       as part of its ranking algorithm. Large uncompressed images, render-blocking JavaScript, and missing browser caching are the most common causes of poor page speed scores.
@@ -288,7 +293,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div style="margin-top:48px">
-    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:#F0F6FF;margin-bottom:16px">Frequently Asked Questions</h3>
+    <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:#F0F6FF;margin-bottom:16px">Frequently Asked Questions</h3>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="background:#0E1A2E;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px 20px">
         <h4 style="color:#F0F6FF;margin-bottom:6px;font-size:0.95rem">How long does it take for SEO changes to show results?</h4>

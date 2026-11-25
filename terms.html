@@ -33,7 +33,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family:Inter,system-ui,sans-serif;
   background: var(--ink);
   color: var(--white);
   overflow-x: hidden;
@@ -49,7 +49,7 @@ nav {
   border-bottom: 1px solid var(--border);
 }
 .nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;
   font-size: 1.5rem; letter-spacing: .08em;
   color: var(--white); text-decoration: none;
 }
@@ -75,7 +75,7 @@ nav {
 }
 
 .page-title {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;
   font-size: clamp(2.8rem, 6vw, 4.5rem);
   letter-spacing: .04em; line-height: 1;
   color: var(--white); margin-bottom: 12px;
@@ -93,7 +93,7 @@ nav {
 }
 
 .section h2 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;
   font-size: 1.4rem; letter-spacing: .06em;
   color: var(--green); margin-bottom: 14px;
 }
@@ -134,7 +134,7 @@ nav {
   margin-top: 48px;
 }
 .contact-box h3 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;
   font-size: 1.3rem; letter-spacing: .06em;
   color: var(--white); margin-bottom: 10px;
 }
@@ -151,7 +151,7 @@ footer {
   padding: 32px 24px; text-align: center;
 }
 .footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;
   font-size: 1.4rem; letter-spacing: .08em;
   color: var(--white);
 }
@@ -177,6 +177,11 @@ footer a { color: var(--green); text-decoration: none; }
 @media (max-width: 768px){.nav-links{display:none}.hamburger{display:flex}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 

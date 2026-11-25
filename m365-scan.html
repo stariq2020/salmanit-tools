@@ -41,22 +41,22 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
 .nav-back:hover{color:var(--green)}
 .page{max-width:1000px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
 .connect-card{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:20px;padding:40px;text-align:center;margin-bottom:40px}
 .connect-icon{font-size:3.5rem;margin-bottom:16px}
-.connect-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.05em;color:var(--white);margin-bottom:10px}
+.connect-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.05em;color:var(--white);margin-bottom:10px}
 .connect-sub{font-size:0.92rem;color:var(--muted);line-height:1.7;max-width:500px;margin:0 auto 28px}
-.connect-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:16px 36px;border-radius:14px;border:none;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.connect-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:16px 36px;border-radius:14px;border:none;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
 .connect-btn:hover{opacity:.9;transform:scale(1.02);box-shadow:0 10px 30px rgba(0,232,122,0.3)}
 .connect-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .connect-note{font-size:0.78rem;color:var(--muted);margin-top:14px}
@@ -69,7 +69,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .status-user{font-weight:600;color:var(--white)}
 .sign-out-btn{margin-left:auto;font-size:0.78rem;color:var(--muted);background:transparent;border:1px solid var(--border);padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .2s}
 .sign-out-btn:hover{border-color:var(--danger);color:var(--danger)}
-.scan-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;border:none;border-radius:14px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-bottom:32px;display:none}
+.scan-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;border:none;border-radius:14px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-bottom:32px;display:none}
 .scan-btn:hover{opacity:.9;transform:scale(1.01);box-shadow:0 10px 30px rgba(0,232,122,0.3)}
 .scan-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .progress-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;display:none}
@@ -83,21 +83,21 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .progress-bar-inner{height:4px;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:2px;width:0%;transition:width .5s ease}
 .results-wrap{display:none}
 .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px}
-.results-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white)}
+.results-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white)}
 .results-tenant{font-size:0.88rem;color:var(--muted);margin-top:4px}
-.rescan-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
+.rescan-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;font-weight:600;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all .2s}
 .rescan-btn:hover{background:rgba(255,255,255,0.08)}
 .score-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:28px}
 .score-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
 .score-card .sc-icon{font-size:1.8rem;margin-bottom:8px}
-.score-card .sc-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.03em;margin-bottom:4px}
+.score-card .sc-val{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.03em;margin-bottom:4px}
 .score-card .sc-lbl{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .result-section{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden}
 .result-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;transition:background .2s;user-select:none}
 .result-section-hdr:hover{background:rgba(255,255,255,0.02)}
 .result-section-hdr-left{display:flex;align-items:center;gap:12px}
 .result-section-icon{font-size:1.3rem}
-.result-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.04em;color:var(--white)}
+.result-section-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.15rem;letter-spacing:.04em;color:var(--white)}
 .result-section-badge{font-size:0.72rem;font-weight:700;padding:3px 8px;border-radius:6px}
 .badge-ok{background:rgba(0,232,122,0.12);color:var(--green)}
 .badge-warn{background:rgba(245,158,11,0.12);color:var(--warning)}
@@ -126,9 +126,9 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .badge-blue{background:rgba(0,200,255,0.1);color:var(--cyan)}
 .badge-grey{background:rgba(255,255,255,0.06);color:var(--muted)}
 .cta-card{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:16px;padding:32px;text-align:center;margin-top:32px}
-.cta-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.cta-card h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.8rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
 .cta-card p{font-size:0.9rem;color:var(--muted);margin-bottom:20px;line-height:1.7}
-.cta-wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:white;font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;padding:13px 28px;border-radius:10px;text-decoration:none;transition:opacity .2s}
+.cta-wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:white;font-family:Inter,system-ui,sans-serif;font-size:0.9rem;font-weight:700;padding:13px 28px;border-radius:10px;text-decoration:none;transition:opacity .2s}
 .cta-wa:hover{opacity:.9}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,232,122,0.3);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -136,7 +136,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .error-card h4{color:var(--danger);margin-bottom:6px;font-size:0.95rem}
 .error-card p{font-size:0.85rem;color:var(--muted);line-height:1.6}
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center;margin-top:60px}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -152,11 +152,11 @@ footer a{color:var(--green);text-decoration:none}
 .ca-modal{background:var(--card);border:1px solid var(--border);border-radius:18px;max-width:720px;width:100%;max-height:85vh;overflow-y:auto;padding:28px}
 .ca-modal-close{position:sticky;top:0;float:right;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;margin-left:12px}
 .ca-modal-close:hover{background:rgba(239,68,68,0.1);border-color:var(--danger);color:var(--danger)}
-.ca-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.ca-modal h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.5rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
 .ca-summary{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:12px;padding:18px 20px;margin:16px 0;font-size:0.95rem;line-height:1.8;color:var(--white)}
 .ca-summary strong{color:var(--cyan)}
 .ca-detail-section{margin-bottom:14px}
-.ca-detail-section h4{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.ca-detail-section h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:0.95rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
 .pill{display:inline-block;background:rgba(0,232,122,0.1);color:var(--green);font-size:0.76rem;font-weight:600;padding:2px 10px;border-radius:6px;margin:2px}
 .pill.warn{background:rgba(245,158,11,0.1);color:var(--warning)}
 .pill.cyan{background:rgba(0,200,255,0.1);color:var(--cyan)}
@@ -165,7 +165,7 @@ footer a{color:var(--green);text-decoration:none}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px}
 .info-card .ico{font-size:1.6rem;margin-bottom:10px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;color:var(--white);margin-bottom:6px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.1rem;letter-spacing:.05em;color:var(--white);margin-bottom:6px}
 .info-card p{font-size:0.82rem;color:var(--muted);line-height:1.65}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -183,6 +183,11 @@ footer a{color:var(--green);text-decoration:none}
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -276,7 +281,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- About this tool -->
   <div class="info-section">
     <div class="page-eyebrow">About This Tool</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why Run a Microsoft 365 Security Health Check?</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why Run a Microsoft 365 Security Health Check?</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:12px">
       Most Microsoft 365 tenants accumulate security gaps over time — accounts created without MFA, Conditional Access policies with unintended exclusions, legacy authentication
       protocols left enabled, mailbox forwarding rules pointing externally, or admin roles assigned more broadly than necessary. Individually these might seem minor, but together
@@ -298,7 +303,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- What gets checked -->
   <div class="info-section">
     <div class="page-eyebrow">Coverage</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">What Gets Checked</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">What Gets Checked</h2>
     <div class="info-grid">
       <div class="info-card"><div class="ico">👤</div><h4>Users &amp; MFA</h4><p>Total users, licensing, and how many have multi-factor authentication registered.</p></div>
       <div class="info-card"><div class="ico">🛡️</div><h4>Admin Roles</h4><p>Who holds privileged roles like Global Administrator, and whether the count looks excessive.</p></div>

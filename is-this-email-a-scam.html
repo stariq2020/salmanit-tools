@@ -46,11 +46,11 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 a{color:inherit}
 
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -65,7 +65,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:1080px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:20px}
 .brand-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
@@ -78,7 +78,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 /* Source tabs */
 .source-tabs{display:flex;gap:4px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:16px;width:fit-content;max-width:100%;flex-wrap:wrap}
-.source-tab-btn{padding:10px 20px;border:none;border-radius:9px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.source-tab-btn{padding:10px 20px;border:none;border-radius:9px;background:transparent;color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all .2s}
 .source-tab-btn.active{background:var(--card);color:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
 .source-panel{display:none}
 .source-panel.active{display:block}
@@ -109,12 +109,12 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .file-chip .fc-remove{margin-left:auto;background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.25);border-radius:8px;padding:6px 12px;font-size:0.78rem;cursor:pointer;font-weight:700}
 
 .btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.analyze-btn{padding:15px 30px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.98rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;min-height:48px}
+.analyze-btn{padding:15px 30px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.98rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;min-height:48px}
 .analyze-btn:hover{opacity:.9;transform:scale(1.01)}
 .analyze-btn:disabled{opacity:.5;cursor:not-allowed}
-.clear-btn{padding:14px 20px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.9rem;border-radius:10px;cursor:pointer;transition:all .2s;min-height:48px}
+.clear-btn{padding:14px 20px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.9rem;border-radius:10px;cursor:pointer;transition:all .2s;min-height:48px}
 .clear-btn:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
-.sample-btn{padding:14px 20px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan);font-family:'Outfit',sans-serif;font-size:0.9rem;border-radius:10px;cursor:pointer;transition:all .2s;min-height:48px}
+.sample-btn{padding:14px 20px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan);font-family:Inter,system-ui,sans-serif;font-size:0.9rem;border-radius:10px;cursor:pointer;transition:all .2s;min-height:48px}
 .sample-btn:hover{background:rgba(0,200,255,0.12)}
 .pre-note{font-size:0.8rem;color:var(--muted);line-height:1.6;margin-top:14px}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(8,13,20,0.3);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
@@ -137,10 +137,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .band-caution .band-badge{background:rgba(234,197,79,0.14);color:var(--caution)}
 .band-suspicious .band-badge{background:rgba(245,158,11,0.14);color:var(--warning)}
 .band-high .band-badge{background:rgba(239,68,68,0.14);color:var(--danger)}
-.band-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.05em;padding:8px 18px;border-radius:10px;margin-bottom:14px}
+.band-badge{display:inline-flex;align-items:center;gap:8px;font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.05em;padding:8px 18px;border-radius:10px;margin-bottom:14px}
 .score-row{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:10px}
-.score-num{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:3.2rem;line-height:1}
-.score-num span{font-size:1.3rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:600}
+.score-num{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:3.2rem;line-height:1}
+.score-num span{font-size:1.3rem;color:var(--muted);font-family:Inter,system-ui,sans-serif;font-weight:600}
 .band-low .score-num{color:var(--green)}
 .band-caution .score-num{color:var(--caution)}
 .band-suspicious .score-num{color:var(--warning)}
@@ -160,7 +160,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 /* Concerns / actions / types */
 .section-block{margin-bottom:24px}
-.section-h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.04em;color:var(--white);margin-bottom:12px}
+.section-h2{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.04em;color:var(--white);margin-bottom:12px}
 .concern-list,.action-list{list-style:none;display:flex;flex-direction:column;gap:8px}
 .concern-list li,.action-list li{display:flex;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:0.88rem;color:var(--white);line-height:1.6}
 .concern-list li .cn{flex-shrink:0}
@@ -218,7 +218,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .raw-section{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:20px}
 .raw-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;transition:background .2s}
 .raw-header:hover{background:rgba(255,255,255,0.02)}
-.raw-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1rem;letter-spacing:.04em;color:var(--muted)}
+.raw-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1rem;letter-spacing:.04em;color:var(--muted)}
 .raw-arrow{color:var(--muted);transition:transform .2s}
 .raw-body{display:none;padding:16px 18px;border-top:1px solid var(--border)}
 .raw-body.open{display:block}
@@ -237,11 +237,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -249,6 +249,11 @@ footer a{color:var(--green);text-decoration:none}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -404,7 +409,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Educational -->
   <div class="info-section">
     <div class="page-eyebrow">How Phishing Works</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">How Phishing Emails Work</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">How Phishing Emails Work</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
       Phishing emails are designed to look like they come from someone you trust — a bank, a well-known brand, your employer, or even a colleague — in order to trick you into clicking a link, opening an attachment, or replying with sensitive information.
       They rely on a mix of technical tricks (spoofed sender addresses, lookalike domains, disguised links) and psychological pressure (urgency, fear, curiosity, reward) to get you to act quickly instead of carefully.
@@ -419,7 +424,7 @@ footer a{color:var(--green);text-decoration:none}
 
   <div class="info-section">
     <div class="page-eyebrow">Deep Dive</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">How To Spot a Fake Email</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">How To Spot a Fake Email</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
       There is rarely a single, definitive sign that an email is a scam. Instead, genuine phishing and fraud attempts tend to combine several weaker signals — a slightly-off domain name, a link that doesn't quite match, some urgency in the wording, a request that's just a little unusual for that sender.
       This is why this tool doesn't rely on a single keyword or rule; it weighs up sender details, links, wording and (where available) authentication results together, the same way an experienced analyst would.
@@ -434,7 +439,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div class="info-section">
-    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div class="info-card"><h4 style="margin-bottom:6px">How does the email scam checker work?</h4><p>It runs entirely in your browser and checks the sender address, display name, links, wording and (optionally) email headers against dozens of known phishing and scam patterns — sender impersonation, lookalike domains, mismatched links, urgency and pressure language, credential and financial requests, and SPF/DKIM/DMARC authentication results — then combines the evidence into a single risk score with a plain-English explanation for every flag.</p></div>
       <div class="info-card"><h4 style="margin-bottom:6px">Can this tool detect phishing emails?</h4><p>It can flag many common phishing indicators — spoofed display names, mismatched sender domains, suspicious or mismatched links, credential requests and pressure tactics. But no automated tool can guarantee an email is or isn't a scam with certainty. Always treat the result as guidance to help you decide, not a final verdict.</p></div>

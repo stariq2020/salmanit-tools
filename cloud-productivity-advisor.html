@@ -37,10 +37,10 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
 .nav-back:hover{color:var(--green)}
@@ -48,11 +48,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:960px;margin:0 auto;padding:60px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1.02rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:28px}
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -73,7 +73,7 @@ footer a{color:var(--green);text-decoration:none}
 
 /* ---- Advisor ---- */
 :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;padding:13px 26px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .2s,background .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:Inter,system-ui,sans-serif;font-size:.95rem;font-weight:700;padding:13px 26px;border-radius:12px;border:none;cursor:pointer;text-decoration:none;transition:transform .15s,opacity .2s,background .2s}
 .btn-primary{background:linear-gradient(135deg,var(--green),var(--green2));color:#04140B}
 .btn-primary:hover{transform:translateY(-1px);opacity:.92}
 .btn-ghost{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--white)}
@@ -90,7 +90,7 @@ footer a{color:var(--green);text-decoration:none}
 .bar{height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-bottom:28px}
 .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan));transition:width .3s}
 fieldset{border:none;min-width:0}
-legend{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,4vw,2.1rem);letter-spacing:.03em;margin-bottom:6px;padding:0}
+legend{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(1.6rem,4vw,2.1rem);letter-spacing:.03em;margin-bottom:6px;padding:0}
 .hint{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:18px}
 .opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 .opt{position:relative;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:13px 14px;cursor:pointer;font-size:.92rem;transition:border-color .2s,background .2s}
@@ -102,7 +102,7 @@ legend{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,4vw,2.1rem);le
 .sub-q{margin-top:26px}
 .sub-q h3{font-size:1rem;font-weight:600;margin-bottom:10px}
 label.fld{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:18px 0 8px}
-input[type=number],input[type=text]{width:100%;max-width:280px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:1rem}
+input[type=number],input[type=text]{width:100%;max-width:280px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:1rem}
 input[type=number]:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
 .err{color:var(--danger);font-size:.84rem;margin-top:8px;min-height:1.2em}
 .calc-line{margin-top:14px;font-size:.95rem;color:var(--green);font-weight:600}
@@ -116,18 +116,18 @@ input[type=number]:focus-visible{outline:2px solid var(--cyan);outline-offset:1p
 
 /* ---- Results ---- */
 .res-head{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
-.res-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:.03em;line-height:1.05;margin:6px 0}
+.res-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:.03em;line-height:1.05;margin:6px 0}
 .res-sub{color:var(--green);font-weight:600;font-size:1rem}
 .res-meta{font-size:.84rem;color:var(--muted);margin-top:10px;line-height:1.6;max-width:520px}
 .ring{--p:80;width:132px;height:132px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),rgba(255,255,255,.08) 0);display:grid;place-items:center;flex-shrink:0}
 .ring>div{width:104px;height:104px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring b{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;color:var(--green)}
+.ring b{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2.4rem;line-height:1;color:var(--green)}
 .ring small{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
-.h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:14px}
+.h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.5rem;letter-spacing:.04em;margin-bottom:14px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:16px}
 .stat .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
-.stat .v{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:.02em;line-height:1.1}
+.stat .v{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.9rem;letter-spacing:.02em;line-height:1.1}
 .stat .v.good{color:var(--green)}.stat .v.bad{color:var(--warning)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -185,6 +185,11 @@ ul.clean li .i.w{color:var(--warning)}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 

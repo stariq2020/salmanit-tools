@@ -41,9 +41,9 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -57,7 +57,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(3rem,7vw,5.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:580px;margin-bottom:48px}
 
@@ -65,7 +65,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 @media(max-width:800px){.tool-wrap{grid-template-columns:1fr}}
 
 .input-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px}
-.input-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.05em;color:var(--white);margin-bottom:18px}
+.input-card h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.2rem;letter-spacing:.05em;color:var(--white);margin-bottom:18px}
 
 /* Tabs */
 .tabs-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
@@ -75,12 +75,12 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 /* Section tabs (Content / Style) */
 .section-tabs{display:flex;gap:4px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:20px}
-.sec-btn{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.sec-btn{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s}
 .sec-btn.active{background:var(--card);color:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
 
 .form-group{margin-bottom:14px}
 .form-group label{display:block;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
-.form-group input,.form-group select,.form-group textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.88rem;outline:none;transition:border-color .2s;resize:none}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;outline:none;transition:border-color .2s;resize:none}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:rgba(0,232,122,0.4)}
 .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted)}
 .form-group select{background:#0E1A2E;color:var(--white)}
@@ -114,7 +114,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .logo-preview{display:none;align-items:center;gap:10px;margin-bottom:14px}
 .logo-preview img{width:40px;height:40px;object-fit:contain;border-radius:6px;background:#fff;padding:2px}
 .logo-preview span{font-size:0.82rem;color:var(--muted);flex:1}
-.logo-remove{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#EF4444;padding:4px 10px;border-radius:6px;font-size:0.75rem;cursor:pointer;font-family:'Outfit',sans-serif}
+.logo-remove{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#EF4444;padding:4px 10px;border-radius:6px;font-size:0.75rem;cursor:pointer;font-family:Inter,system-ui,sans-serif}
 
 /* Size slider */
 .slider-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
@@ -122,7 +122,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .slider-row input[type=range]{flex:1;accent-color:var(--green)}
 .slider-val{font-size:0.85rem;font-weight:600;color:var(--green);min-width:42px;text-align:right}
 
-.generate-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-top:8px}
+.generate-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s;margin-top:8px}
 .generate-btn:hover{opacity:.9;transform:scale(1.01);box-shadow:0 8px 24px rgba(0,232,122,0.3)}
 
 /* QR output */
@@ -133,7 +133,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 #qrOutput{border-radius:12px}
 #qrOutput canvas,#qrOutput svg{border-radius:12px}
 .qr-actions{display:flex;gap:10px;width:100%}
-.dl-btn{flex:1;padding:11px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:700;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.dl-btn{flex:1;padding:11px;border-radius:10px;font-family:Inter,system-ui,sans-serif;font-size:0.82rem;font-weight:700;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
 .dl-png{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink)}
 .dl-svg{background:rgba(255,255,255,0.06);color:var(--white);border:1px solid var(--border)!important}
 .dl-btn:hover{opacity:.85;transform:scale(1.02)}
@@ -143,16 +143,21 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
 @media(max-width:640px){nav{padding:0 20px}.tool-wrap{gap:20px}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -339,7 +344,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info section -->
   <div class="info-section">
     <div class="page-eyebrow">How It Works</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:20px">7 QR Code Types Supported</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2.2rem;letter-spacing:.04em;color:var(--white);margin-bottom:20px">7 QR Code Types Supported</h2>
     <div class="info-grid">
       <div class="info-card"><div class="ico">🔗</div><h4>URL / Website</h4><p>Link directly to any website, landing page, product listing, or booking page. The most common QR use case.</p></div>
       <div class="info-card"><div class="ico">📶</div><h4>WiFi Access</h4><p>Encode your network name and password so guests scan to connect instantly — no typing the password.</p></div>
@@ -355,12 +360,12 @@ footer a{color:var(--green);text-decoration:none}
   <div class="page" style="padding-top:0">
     <div style="margin-top:48px">
       <div class="page-eyebrow">About QR Codes</div>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is a QR Code and When Should You Use One?</h2>
+      <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is a QR Code and When Should You Use One?</h2>
       <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">A QR code (Quick Response code) is a two-dimensional barcode that stores information — URLs, contact details, Wi-Fi credentials and more. When scanned with a smartphone camera, the device instantly acts on the encoded data without the user typing anything. Originally developed for automotive manufacturing in Japan in 1994, QR codes are now used everywhere from restaurant menus and business cards to product packaging and event tickets.</p>
       <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">This generator runs entirely in your browser — no data is sent to any server and no account is required. The QR code is generated locally and downloaded directly to your device.</p>
     </div>
     <div style="margin-top:40px">
-      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+      <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="info-card"><h4 style="margin-bottom:6px">Do QR codes expire?</h4><p>Static QR codes like these do not expire — they encode data directly and work forever as long as the code is scannable. Dynamic QR codes (offered by paid services) redirect through a URL shortener and can expire, but require a subscription.</p></div>
         <div class="info-card"><h4 style="margin-bottom:6px">What size should I print my QR code?</h4><p>At minimum 2cm × 2cm for reliable scanning. The more data encoded, the denser the code and the larger it needs to be. For business cards 2–3cm works fine. For posters aim for at least 5cm and include a white border around the code.</p></div>

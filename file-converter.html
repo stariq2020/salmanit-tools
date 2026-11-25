@@ -42,13 +42,13 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .page{max-width:960px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
 
@@ -57,9 +57,9 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .drop-zone:hover,.drop-zone.dragover{border-color:var(--green);background:rgba(0,232,122,0.07)}
 .drop-zone.has-file{padding:28px 24px}
 .drop-icon{font-size:2.6rem;margin-bottom:14px}
-.drop-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.drop-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
 .drop-sub{font-size:0.86rem;color:var(--muted);margin-bottom:18px}
-.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:12px 26px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:12px 26px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
 .drop-btn:hover{opacity:.9;transform:scale(1.02)}
 .drop-formats{font-size:0.74rem;color:var(--muted);margin-top:12px}
 #fileInput{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -78,10 +78,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .convert-group{flex:1;min-width:180px}
 .convert-group label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
 .fmt-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-weight:700;font-size:0.95rem;color:var(--white);width:100%}
-.fmt-select{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:600;outline:none;cursor:pointer}
+.fmt-select{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.95rem;font-weight:600;outline:none;cursor:pointer}
 .fmt-select option{background:#0E1A2E}
 .convert-arrow{font-size:1.4rem;color:var(--green);flex-shrink:0;padding-top:22px}
-.go-btn{width:100%;margin-top:22px;padding:16px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.go-btn{width:100%;margin-top:22px;padding:16px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
 .go-btn:hover{opacity:.9;box-shadow:0 8px 24px rgba(0,232,122,0.3)}
 .go-btn:disabled{opacity:.5;cursor:not-allowed}
 .status-line{margin-top:16px;font-size:0.86rem;color:var(--muted);display:none;align-items:center;gap:8px}
@@ -94,7 +94,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .result-icon{font-size:1.8rem}
 .result-name{font-weight:700;color:var(--white);font-size:0.92rem}
 .result-sub{font-size:0.78rem;color:var(--muted)}
-.dl-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.86rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:12px 22px;border-radius:10px;text-decoration:none;transition:opacity .2s}
+.dl-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.86rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:12px 22px;border-radius:10px;text-decoration:none;transition:opacity .2s}
 .dl-btn:hover{opacity:.9}
 
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,232,122,0.3);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
@@ -114,11 +114,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -137,6 +137,11 @@ footer a{color:var(--green);text-decoration:none}
 @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -226,7 +231,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- How it works -->
   <div class="info-section">
     <div class="page-eyebrow">How It Works</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Convert Files Without Uploading Them Anywhere</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Convert Files Without Uploading Them Anywhere</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:720px;margin-bottom:12px">
       Most online file converters work by uploading your document to a server, converting it there, and sending the result back — which means your file, and potentially anything sensitive inside it, passes through a third party's infrastructure. This tool works differently: every conversion — decoding the original file, re-encoding it into the new format, and generating the download — happens entirely inside your browser using your device's own processing power.
     </p>
@@ -238,7 +243,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Supported conversions -->
   <div class="info-section">
     <div class="page-eyebrow">Reference</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Supported Conversions</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Supported Conversions</h2>
     <p style="font-size:0.88rem;color:var(--muted);margin-top:10px;max-width:700px">Not every format can convert to every other format — the list below shows exactly what's available for each source file type, so there are no surprises.</p>
     <p style="font-size:0.85rem;color:var(--cyan);margin-top:10px;max-width:700px">📕 Converting an existing PDF (to images or otherwise), or turning images into a PDF? That's handled by the dedicated <a href="pdf-toolkit.html" style="color:var(--cyan);text-decoration:underline">PDF Toolkit</a> — with page selection, quality control and layout options this table doesn't cover.</p>
     <div class="conv-table-wrap">
@@ -261,7 +266,7 @@ footer a{color:var(--green);text-decoration:none}
 <div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
   <div style="margin-top:56px">
     <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Choosing The Right Format</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why File Format Actually Matters</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Why File Format Actually Matters</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
       Every file format is a trade-off. PDF preserves exact layout and is universally viewable, which makes it the right choice for anything you need to look identical on every device — invoices, contracts, printed documents. But a PDF is difficult to edit and awkward to insert into a web page or slide deck, which is why converting it to JPG or PNG is often the more practical option when you just need the visual content, not an editable document. That conversion — along with merging, splitting, compressing and everything else involving an existing PDF — now lives in the dedicated <a href="pdf-toolkit.html" style="color:var(--cyan)">PDF Toolkit</a>.
     </p>
@@ -274,7 +279,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div style="margin-top:48px">
-    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
         <h4 style="color:var(--white);margin-bottom:6px;font-size:0.95rem">Is my file uploaded to a server?</h4>

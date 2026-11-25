@@ -1,0 +1,55 @@
+/* Salman IT Tools - shared theme for tool pages. Loaded AFTER each page's own <style>,
+ * so it re-maps the colour variables every page already uses (--ink, --deep, --green ...)
+ * to the new navy / electric-blue palette and restyles the shared header, footer and form controls.
+ * Tool pages stay dark; the homepage offers the light theme. */
+:root {
+  --ink: #080F1C; --deep: #0D1728; --navy: #142033; --card: #142033; --card2: #19283D;
+  --green: #00C8FF; --green2: #38BDF8; --cyan: #38BDF8;
+  --white: #F8FAFC; --muted: #94A3B8; --border: #26364D;
+  --sx-blue: #0066FF; --sx-line: #26364D;
+  color-scheme: dark;
+}
+html { scroll-padding-top: 76px; }
+body {
+  font-family: Inter, 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  background: radial-gradient(900px 380px at 80% -80px, rgba(0,102,255,.14), transparent 70%), var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font-family: inherit; }
+body::after { opacity: 0 !important; } /* old noise overlay */
+
+/* Header */
+nav:not(.quick-nav):not(.crumbs) {
+  background: rgba(8,15,28,.88) !important;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--sx-line) !important;
+}
+nav .nav-logo, nav .logo, nav > a:first-child {
+  font-family: Inter, system-ui, sans-serif !important; font-weight: 800 !important; letter-spacing: -.02em !important; font-size: 1.2rem !important;
+}
+nav .nav-logo .dot, nav .logo .dot { color: var(--cyan) !important; }
+.nav-links a, .nav-back { font-weight: 500; border-radius: 999px; }
+.nav-links a:hover, .nav-back:hover { color: var(--white) !important; }
+.nav-contact, a.nav-contact {
+  background: linear-gradient(180deg, #0a72ff, #0052d6) !important; color: #fff !important;
+  border-radius: 999px !important; border: 1px solid rgba(120,190,255,.3) !important;
+}
+.mobile-menu { background: rgba(13,23,40,.98) !important; border-bottom: 1px solid var(--sx-line); }
+
+/* Primary actions pick up the brand blue */
+.btn-primary, .primary-btn, .dl-btn, button.primary, .btn-main {
+  background: linear-gradient(180deg, #0a72ff, #0052d6) !important; color: #fff !important;
+  border: 1px solid rgba(120,190,255,.3) !important; box-shadow: 0 6px 16px rgba(0,82,214,.3) !important; border-radius: 12px !important;
+}
+.btn-primary:hover, .primary-btn:hover, .dl-btn:hover, button.primary:hover, .btn-main:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+/* Surfaces and controls */
+input, select, textarea { border-radius: 11px; }
+input:focus, select:focus, textarea:focus { border-color: var(--cyan) !important; box-shadow: 0 0 0 3px rgba(0,200,255,.14); outline: none; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+/* Footer */
+footer { background: rgba(5,11,22,.88) !important; border-top: 1px solid var(--sx-line) !important; }
+footer a { color: var(--green2); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

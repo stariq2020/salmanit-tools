@@ -45,9 +45,9 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -60,12 +60,12 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
 
 .mode-switch{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;gap:4px;margin-bottom:18px}
-.mode-btn{padding:8px 18px;background:transparent;border:none;border-radius:7px;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.mode-btn{padding:8px 18px;background:transparent;border:none;border-radius:7px;color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s}
 .mode-btn:hover{color:var(--white)}
 .mode-btn.active{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink)}
 .page-header{max-width:1400px;margin:0 auto;padding:40px 24px 20px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:8px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,4rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:10px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.4rem,5vw,4rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:10px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:0.95rem;color:var(--muted);line-height:1.7;max-width:600px}
 
@@ -81,7 +81,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .form-row.full{grid-template-columns:1fr}
 .form-group{display:flex;flex-direction:column;gap:4px}
 .form-group label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.form-group input,.form-group textarea,.form-group select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none;transition:border-color .2s;resize:none;width:100%}
+.form-group input,.form-group textarea,.form-group select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;outline:none;transition:border-color .2s;resize:none;width:100%}
 .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(0,232,122,0.4)}
 .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted)}
 .form-group select{background:#0E1A2E;color:var(--white)}
@@ -94,15 +94,15 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .logo-upload p{font-size:0.78rem;color:var(--muted)}
 .logo-thumb{display:none;align-items:center;gap:10px;margin-bottom:10px}
 .logo-thumb img{max-height:40px;max-width:80px;object-fit:contain;background:#fff;border-radius:4px;padding:2px}
-.logo-thumb button{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:var(--danger);padding:3px 8px;border-radius:5px;font-size:0.72rem;cursor:pointer;font-family:'Outfit',sans-serif}
+.logo-thumb button{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:var(--danger);padding:3px 8px;border-radius:5px;font-size:0.72rem;cursor:pointer;font-family:Inter,system-ui,sans-serif}
 
 /* Line items */
 .line-items{display:flex;flex-direction:column;gap:8px}
 .line-item{display:grid;grid-template-columns:1fr 60px 80px 28px;gap:6px;align-items:center}
 .line-item input{font-size:0.82rem;padding:7px 10px}
-.add-item-btn{width:100%;margin-top:8px;padding:8px;background:rgba(0,232,122,0.06);border:1px dashed rgba(0,232,122,0.2);border-radius:8px;color:var(--green);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+.add-item-btn{width:100%;margin-top:8px;padding:8px;background:rgba(0,232,122,0.06);border:1px dashed rgba(0,232,122,0.2);border-radius:8px;color:var(--green);font-family:Inter,system-ui,sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all .2s}
 .add-item-btn:hover{background:rgba(0,232,122,0.1)}
-.remove-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.15);border-radius:6px;color:var(--danger);width:26px;height:26px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Outfit',sans-serif}
+.remove-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.15);border-radius:6px;color:var(--danger);width:26px;height:26px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Inter,system-ui,sans-serif}
 
 /* Colour picker */
 .tpl-btn{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .2s;padding:0;overflow:hidden;text-align:left}
@@ -114,9 +114,9 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 /* Action buttons */
 .action-row{display:flex;flex-wrap:wrap;gap:10px;padding:20px 24px}
-.btn-primary{flex:1;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
+.btn-primary{flex:1;padding:12px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
 .btn-primary:hover{opacity:.9;transform:scale(1.01)}
-.btn-secondary{padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn-secondary{padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
 .btn-secondary:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
 
 /* Preview panel */
@@ -157,10 +157,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-section{max-width:1400px;margin:0 auto;padding:0 24px 60px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -176,6 +176,11 @@ footer a{color:var(--green);text-decoration:none}
 }
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 <nav>
@@ -430,7 +435,7 @@ footer a{color:var(--green);text-decoration:none}
 <!-- Info section -->
 <div class="info-section">
   <div class="page-eyebrow">Features</div>
-  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Everything You Need to Invoice Professionally</h2>
+  <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Everything You Need to Invoice Professionally</h2>
   <div class="info-grid">
     <div class="info-card"><h4>Logo & Branding</h4><p>Upload your business logo and choose an accent colour — the invoice looks like it came from your own accounting software.</p></div>
     <div class="info-card"><h4>Automatic VAT Calculation</h4><p>Set your VAT or tax rate and it calculates subtotal, tax, discount, shipping and grand total automatically.</p></div>
@@ -441,7 +446,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div style="margin-top:48px">
-    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div class="info-card"><h4 style="margin-bottom:6px">Is this invoice legally valid in the UK?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">The invoice format meets HMRC requirements for VAT invoices — it includes all required fields (business name, address, VAT number, invoice number, date, itemised amounts and VAT). However you should always check with an accountant to ensure your specific invoices comply with your business circumstances.</p></div>
       <div class="info-card"><h4 style="margin-bottom:6px">Can I save my invoice to edit later?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Currently the tool doesn't save between sessions — everything is in your browser's memory while you have the page open. To save your work, print to PDF or take a screenshot before closing the tab. A save feature is planned for a future update.</p></div>

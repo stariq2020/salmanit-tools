@@ -48,7 +48,7 @@
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html { scroll-behavior:smooth; }
 body {
-  font-family:'Outfit','Segoe UI',Arial,sans-serif;
+  font-family:Inter,system-ui,sans-serif;
   background:var(--ink) !important;
   color:var(--site-white);
   overflow-x:hidden;
@@ -60,7 +60,7 @@ body {
   background:rgba(8,13,20,0.95); backdrop-filter:blur(20px);
   border-bottom:1px solid var(--site-border);
 }
-.nav-logo { font-family:'Bebas Neue','Arial Black',sans-serif; font-size:1.4rem; letter-spacing:.08em; color:var(--site-white); text-decoration:none; }
+.nav-logo { font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em; font-size:1.4rem; letter-spacing:.08em; color:var(--site-white); text-decoration:none; }
 .nav-logo .dot { color:var(--green); }
 .nav-links { display:flex; gap:28px; align-items:center; }
 .nav-links a { font-size:0.88rem; color:var(--site-muted); text-decoration:none; transition:color .2s; }
@@ -76,7 +76,7 @@ body {
   max-width:1400px; margin:0 auto; padding:36px 24px 20px;
 }
 .page-eyebrow { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.18em; color:var(--green); margin-bottom:8px; }
-.page-title { font-family:'Bebas Neue','Arial Black',sans-serif; font-size:clamp(2.4rem,5vw,4rem); line-height:.95; letter-spacing:.03em; color:var(--site-white); margin-bottom:10px; }
+.page-title { font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em; font-size:clamp(2.4rem,5vw,4rem); line-height:.95; letter-spacing:.03em; color:var(--site-white); margin-bottom:10px; }
 .page-title .acc { background:linear-gradient(135deg,var(--green),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .page-sub { font-size:0.95rem; color:var(--site-muted); line-height:1.7; max-width:600px; }
 
@@ -405,7 +405,7 @@ summary::before { color: var(--green) !important; }
 .mini { background: rgba(255,255,255,0.05) !important; }
 
 site-footer { background:var(--deep); border-top:1px solid var(--site-border); padding:32px 24px; text-align:center; display:block; }
-.footer-logo { font-family:'Bebas Neue','Arial Black',sans-serif; font-size:1.3rem; letter-spacing:.08em; color:var(--site-white); }
+.footer-logo { font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em; font-size:1.3rem; letter-spacing:.08em; color:var(--site-white); }
 .footer-logo .dot { color:var(--green); }
 .footer-sub { font-size:0.8rem; color:var(--site-muted); margin-top:6px; }
 .footer-sub a { color:var(--green); text-decoration:none; }
@@ -416,6 +416,11 @@ site-footer { background:var(--deep); border-top:1px solid var(--site-border); p
 }
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -981,7 +986,7 @@ init();
 <div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
   <div style="margin-top:56px">
     <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Professional Documents</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--site-white);margin-bottom:16px">Why a Professional Letterhead Matters for Your Business</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--site-white);margin-bottom:16px">Why a Professional Letterhead Matters for Your Business</h2>
     <p style="font-size:0.92rem;color:var(--site-muted);line-height:1.8;max-width:760px;margin-bottom:16px">
       A well-designed letterhead is one of the simplest ways to establish credibility and professionalism in written business communications. Whether you're sending a proposal,
       an invoice, a formal notice, or client correspondence, a consistent branded letterhead immediately communicates that you take your business seriously.
@@ -1000,7 +1005,7 @@ init();
   </div>
 
   <div style="margin-top:48px">
-    <h3 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--site-white);margin-bottom:16px">Frequently Asked Questions</h3>
+    <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--site-white);margin-bottom:16px">Frequently Asked Questions</h3>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="background:var(--site-card);border:1px solid var(--site-border);border-radius:12px;padding:18px 20px">
         <h4 style="color:var(--site-white);margin-bottom:6px;font-size:0.95rem">How do I save my letterhead as a PDF?</h4>

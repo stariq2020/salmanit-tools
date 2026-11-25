@@ -40,20 +40,20 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-back{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
 .nav-back:hover{color:var(--green)}
 .page{max-width:1000px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:640px;margin-bottom:36px}
 
 .how-to{background:rgba(0,200,255,0.04);border:1px solid rgba(0,200,255,0.15);border-radius:14px;padding:20px 24px;margin-bottom:32px}
-.how-to h3{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--cyan);margin-bottom:10px}
+.how-to h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.1rem;letter-spacing:.04em;color:var(--cyan);margin-bottom:10px}
 .how-to ol{margin-left:20px;color:var(--muted);font-size:0.88rem;line-height:1.8}
 .how-to code{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:0.82rem;color:var(--green)}
 
@@ -63,10 +63,10 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .json-input::placeholder{color:var(--muted)}
 
 .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
-.explain-btn{flex:1;min-width:200px;padding:16px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.explain-btn{flex:1;min-width:200px;padding:16px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
 .explain-btn:hover{opacity:.9;transform:scale(1.01);box-shadow:0 8px 24px rgba(0,232,122,0.3)}
 .explain-btn:disabled{opacity:.5;cursor:not-allowed}
-.sample-btn,.clear-btn{padding:16px 24px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:600;border-radius:12px;cursor:pointer;transition:all .2s}
+.sample-btn,.clear-btn{padding:16px 24px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.9rem;font-weight:600;border-radius:12px;cursor:pointer;transition:all .2s}
 .sample-btn:hover,.clear-btn:hover{background:rgba(255,255,255,0.1)}
 
 .error-card{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:20px;margin-bottom:24px;display:none}
@@ -76,19 +76,19 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 /* Results */
 .result-wrap{display:none}
 .policy-header{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 28px;margin-bottom:20px}
-.policy-name{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
+.policy-name{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px}
 .policy-state{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:700;padding:4px 12px;border-radius:6px;text-transform:uppercase;letter-spacing:.05em}
 .state-enabled{background:rgba(0,232,122,0.12);color:var(--green)}
 .state-disabled{background:rgba(239,68,68,0.12);color:var(--danger)}
 .state-report{background:rgba(245,158,11,0.12);color:var(--warning)}
 
 .summary-card{background:linear-gradient(135deg,rgba(0,232,122,0.06),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:16px;padding:24px 28px;margin-bottom:24px}
-.summary-card h3{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:var(--green);margin-bottom:10px}
+.summary-card h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.1rem;letter-spacing:.04em;color:var(--green);margin-bottom:10px}
 .summary-text{font-size:1rem;color:var(--white);line-height:1.8}
 .summary-text strong{color:var(--cyan)}
 
 .detail-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin-bottom:16px}
-.detail-section h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.detail-section h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .detail-row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.9rem}
 .detail-row:last-child{border-bottom:none}
 .detail-key{font-size:0.76rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);min-width:160px;flex-shrink:0;padding-top:1px}
@@ -103,11 +103,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -128,6 +128,11 @@ footer a{color:var(--green);text-decoration:none}
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1422800539759521" crossorigin="anonymous"></script>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -202,7 +207,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- What is CA -->
   <div class="info-section">
     <div class="page-eyebrow">Background</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is Conditional Access?</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is Conditional Access?</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:12px">
       Conditional Access is a feature within Microsoft Entra ID (formerly Azure Active Directory) that lets organisations control how and when users can access cloud applications and resources.
       Rather than a simple username-and-password check, Conditional Access policies evaluate signals such as who the user is, what application they're accessing, what device and location they're
@@ -223,7 +228,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info -->
   <div class="info-section">
     <div class="page-eyebrow">Why This Helps</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Making Conditional Access Readable</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Making Conditional Access Readable</h2>
     <div class="info-grid">
       <div class="info-card"><div class="ico">🔒</div><h4>100% Private</h4><p>Your policy JSON never leaves your browser. Nothing is uploaded, logged or stored anywhere.</p></div>
       <div class="info-card"><div class="ico">⚡</div><h4>Instant</h4><p>Paste and click — get a plain English explanation in milliseconds. No waiting, no signup.</p></div>
@@ -235,7 +240,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- FAQ -->
   <div class="info-section">
     <div class="page-eyebrow">FAQ</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
     <div class="info-grid" style="grid-template-columns:1fr">
       <div class="info-card"><h4>Do I need admin access to get the policy JSON?</h4><p>Yes, you'll need at least Security Reader or Conditional Access Administrator access in Microsoft Entra ID to view and export Conditional Access policies.</p></div>
       <div class="info-card"><h4>Does this tool work for all Conditional Access policies?</h4><p>Yes — it handles all standard fields including users, groups, applications, platforms, locations, risk levels, grant controls and session controls. If a field isn't recognised, it's displayed as-is so you don't lose any information.</p></div>

@@ -41,9 +41,9 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--mono:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -57,7 +57,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
 .eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
 
@@ -68,11 +68,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .jwt-input:focus{border-color:rgba(0,232,122,0.4)}
 .jwt-input::placeholder{color:var(--muted)}
 .btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.decode-btn{padding:13px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
+.decode-btn{padding:13px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s}
 .decode-btn:hover{opacity:.9;transform:scale(1.01)}
-.sample-btn{padding:13px 18px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
+.sample-btn{padding:13px 18px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);color:var(--cyan);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
 .sample-btn:hover{background:rgba(0,200,255,0.12)}
-.clear-btn{padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
+.clear-btn{padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.88rem;border-radius:10px;cursor:pointer;transition:all .2s}
 .clear-btn:hover{color:var(--white)}
 
 /* Error */
@@ -95,7 +95,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .section-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;user-select:none}
 .section-header:hover{background:rgba(255,255,255,0.02)}
 .section-icon{font-size:1.1rem}
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white)}
+.section-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white)}
 .section-arrow{margin-left:auto;color:var(--muted);transition:transform .2s;font-size:0.9rem}
 .section-body{padding:20px}
 
@@ -130,17 +130,22 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-section{margin-top:56px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
 @media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.claim-key{width:100px}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 <nav>
@@ -241,7 +246,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info section -->
   <div class="info-section">
     <div class="eyebrow">What Is a JWT?</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">JSON Web Tokens Explained</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">JSON Web Tokens Explained</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">A JSON Web Token (JWT) is a compact, self-contained way of securely transmitting information between parties. They are widely used in modern authentication — when you sign into Microsoft 365, Azure, an API, or any OAuth-based system, a JWT is issued to prove your identity and permissions. The token contains claims — statements about the user such as their email, roles, tenant ID, and when the token expires.</p>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:32px">A JWT has three parts separated by dots: the header (algorithm and token type), the payload (the actual claims), and the signature (cryptographic proof). The header and payload are base64url encoded — not encrypted, just encoded — which means anyone can read the contents. The signature is what prevents tampering.</p>
 
@@ -253,7 +258,7 @@ footer a{color:var(--green);text-decoration:none}
     </div>
 
     <div style="margin-top:48px">
-      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+      <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="info-card"><h4 style="margin-bottom:6px">How do I get a JWT token from Microsoft 365?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">The easiest way is via the Microsoft Graph Explorer at graph.microsoft.com — sign in, click the Access token tab, and copy the token. You can also capture tokens using browser DevTools (Network tab) while authenticated in the Azure portal or M365 admin centre.</p></div>
         <div class="info-card"><h4 style="margin-bottom:6px">What does the exp claim mean?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">exp is the expiry time, stored as a Unix timestamp (seconds since 1 January 1970). This tool converts it to a readable date and time, and flags the token as expired if the current time is past the exp value. Most Microsoft 365 access tokens expire after 1 hour.</p></div>

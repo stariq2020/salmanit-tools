@@ -47,12 +47,12 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;color-scheme:dark}
-body{font-family:'Outfit','Segoe UI',Arial,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--green);outline-offset:2px}
 
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -66,7 +66,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:1120px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(2.6rem,6vw,4.5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1.05rem;color:var(--white);opacity:.85;line-height:1.7;max-width:680px;margin-bottom:8px}
 .page-sub2{font-size:0.9rem;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:28px}
@@ -74,16 +74,16 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .badge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px}
 .badge-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
 .badge-card .bi{font-size:1.3rem;margin-bottom:6px}
-.badge-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:3px}
+.badge-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.04em;color:var(--white);margin-bottom:3px}
 .badge-card p{font-size:0.78rem;color:var(--muted);line-height:1.5}
 @media(max-width:760px){.badge-row{grid-template-columns:1fr 1fr}}
 
 .panel{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px}
-.panel h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.7rem;letter-spacing:.03em;color:var(--white);margin-bottom:6px}
+.panel h2{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.7rem;letter-spacing:.03em;color:var(--white);margin-bottom:6px}
 .panel p.desc{font-size:0.88rem;color:var(--muted);max-width:680px;line-height:1.6;margin-bottom:18px}
 
 .privacy-panel{background:linear-gradient(135deg,rgba(0,232,122,0.05),rgba(0,200,255,0.04));border:1px solid rgba(0,232,122,0.2);border-radius:18px;padding:32px;margin-bottom:24px}
-.privacy-panel h2{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.5rem;letter-spacing:.03em;color:var(--white);margin-bottom:14px}
+.privacy-panel h2{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.5rem;letter-spacing:.03em;color:var(--white);margin-bottom:14px}
 .privacy-panel p{font-size:0.88rem;color:var(--white);opacity:.85;line-height:1.7;max-width:760px;margin-bottom:12px}
 .privacy-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
 .privacy-list span{font-size:0.78rem;font-weight:600;color:var(--muted);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:6px 14px}
@@ -97,7 +97,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 /* Buttons (shared) */
 .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center}
-.pdf-btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
+.pdf-btn-primary{padding:14px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.94rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;min-height:48px}
 .pdf-btn-primary:hover{opacity:.92}
 .pdf-btn-primary:disabled{opacity:.4;cursor:not-allowed}
 .pdf-btn-secondary{padding:13px 22px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-size:0.88rem;border-radius:10px;cursor:pointer;min-height:48px}
@@ -170,17 +170,17 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 #reportRoot{display:none}
 #reportRoot.show{display:block}
 .report-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
-.report-header .rh-brand{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.6rem;letter-spacing:.04em}
+.report-header .rh-brand{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em}
 .report-header .rh-meta{font-size:0.8rem;color:var(--muted);line-height:1.7}
 
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
 .stat-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:18px}
 .stat-card .sl{font-size:0.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
-.stat-card .sv{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.7rem;color:var(--white)}
+.stat-card .sv{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.7rem;color:var(--white)}
 .stat-card .sv.accent{color:var(--green)}
 @media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr}}
 
-.section-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.35rem;letter-spacing:.03em;color:var(--white);margin:32px 0 6px}
+.section-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.35rem;letter-spacing:.03em;color:var(--white);margin:32px 0 6px}
 .section-sub{font-size:0.8rem;color:var(--muted);margin-bottom:16px;line-height:1.6}
 
 .bar-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
@@ -203,7 +203,7 @@ table.data-table tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 
 .step-list{display:flex;flex-direction:column;gap:10px;margin:16px 0}
@@ -213,7 +213,7 @@ table.data-table tr:nth-child(even) td{background:rgba(255,255,255,0.015)}
 .step-item code{font-family:var(--mono);font-size:0.78rem;background:rgba(255,255,255,0.05);padding:1px 6px;border-radius:4px;color:var(--cyan)}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -243,6 +243,11 @@ footer a{color:var(--green);text-decoration:none}
 }
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -505,7 +510,7 @@ footer a{color:var(--green);text-decoration:none}
     <p class="table-note" id="inventoryNote"></p>
 
     <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-      <span>Audit Log <span id="auditRangeLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></span>
+      <span>Audit Log <span id="auditRangeLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:Inter,system-ui,sans-serif;font-weight:400"></span></span>
       <button class="pdf-btn-secondary no-print" id="auditExportBtnReport" style="display:none;padding:8px 16px;font-size:0.78rem;min-height:auto" onclick="exportAuditCsv()">⬇️ Export Raw Records (CSV)</button>
     </div>
     <p class="section-sub">Raw activity records from the Microsoft Purview unified audit log, fetched live via Microsoft Graph using your own signed-in permissions.</p>
@@ -515,7 +520,7 @@ footer a{color:var(--green);text-decoration:none}
     </table></div>
     <p class="table-note" id="auditNote"></p>
 
-    <div class="section-title">Activity Summary <span id="activityPeriodLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:'Outfit',sans-serif;font-weight:400"></span></div>
+    <div class="section-title">Activity Summary <span id="activityPeriodLabel" style="font-size:0.7rem;color:var(--muted);text-transform:none;letter-spacing:normal;font-family:Inter,system-ui,sans-serif;font-weight:400"></span></div>
     <p class="section-sub">Tenant-wide file activity counts from the imported SharePoint activity report.</p>
     <div class="stat-grid" id="activityGrid">
       <div class="stat-card"><div class="sl">Viewed / Edited</div><div class="sv" id="actViewed">—</div></div>

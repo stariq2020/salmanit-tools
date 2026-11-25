@@ -42,13 +42,13 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .page{max-width:960px;margin:0 auto;padding:52px 24px 80px}
 .page-eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:620px;margin-bottom:24px}
 
@@ -61,9 +61,9 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .drop-zone{border:2px dashed rgba(0,232,122,0.3);border-radius:20px;padding:60px 24px;text-align:center;cursor:pointer;transition:all .3s;background:rgba(0,232,122,0.03);margin-bottom:32px;position:relative}
 .drop-zone:hover,.drop-zone.dragover{border-color:var(--green);background:rgba(0,232,122,0.07)}
 .drop-icon{font-size:3rem;margin-bottom:16px}
-.drop-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
+.drop-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.8rem;letter-spacing:.04em;color:var(--white);margin-bottom:8px}
 .drop-sub{font-size:0.88rem;color:var(--muted);margin-bottom:20px}
-.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.drop-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:13px 28px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
 .drop-btn:hover{opacity:.9;transform:scale(1.02)}
 .drop-formats{font-size:0.75rem;color:var(--muted);margin-top:12px}
 #fileInput{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -71,8 +71,8 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 /* Editor */
 .editor-wrap{display:none;margin-bottom:32px}
 .editor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
-.editor-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.04em;color:var(--white)}
-.action-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+.editor-header h3{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.04em;color:var(--white)}
+.action-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.82rem;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
 .action-btn:hover{background:rgba(255,255,255,0.1)}
 .editor-toolbar{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
 .tool-group{display:flex;flex-direction:column;gap:6px;min-width:150px}
@@ -83,7 +83,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .mode-row{margin-bottom:14px}
 .mode-toggle{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
 .ai-key-row{display:none;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-.ai-key-row input[type=password]{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none;min-width:220px;flex:1}
+.ai-key-row input[type=password]{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;outline:none;min-width:220px;flex:1}
 .remember-label{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted);cursor:pointer;white-space:nowrap}
 .remember-label input{accent-color:var(--cyan)}
 .get-key-link{white-space:nowrap;text-decoration:none}
@@ -94,7 +94,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .brush-cursor{position:absolute;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);display:none;z-index:5;box-shadow:0 0 0 1px rgba(0,0,0,0.5)}
 .resize-note{font-size:0.76rem;color:var(--muted);margin-bottom:14px}
 .engine-status{font-size:0.82rem;color:var(--cyan);margin-bottom:12px;display:none;align-items:center;gap:8px}
-.compress-all-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
+.compress-all-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:none;border-radius:12px;cursor:pointer;transition:opacity .2s,transform .15s,box-shadow .2s}
 .compress-all-btn:hover{opacity:.9;box-shadow:0 8px 24px rgba(0,232,122,0.3)}
 .compress-all-btn:disabled{opacity:.5;cursor:not-allowed}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,232,122,0.3);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-right:4px;vertical-align:middle}
@@ -103,14 +103,14 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 /* Result */
 .result-wrap{display:none;margin-top:28px}
 .result-toggle{display:inline-flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:14px;gap:4px}
-.toggle-btn{padding:8px 20px;border:none;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s}
+.toggle-btn{padding:8px 20px;border:none;background:transparent;color:var(--muted);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;font-weight:600;border-radius:7px;cursor:pointer;transition:all .2s}
 .toggle-btn.active{background:var(--cyan);color:var(--ink)}
 .result-stage{position:relative;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--border);line-height:0}
 .result-img{width:100%;display:block}
 #afterImg{position:absolute;inset:0;opacity:0;transition:opacity .25s;width:100%;height:100%}
 #afterImg.show{opacity:1}
 .result-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
-.fmt-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;cursor:pointer;max-width:150px}
+.fmt-select{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.9rem;outline:none;cursor:pointer;max-width:150px}
 .fmt-select option{background:#0E1A2E}
 
 /* Info cards */
@@ -118,11 +118,11 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
 .info-card .ico{font-size:1.5rem;margin-bottom:8px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.6}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
@@ -141,6 +141,11 @@ footer a{color:var(--green);text-decoration:none}
 @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 
@@ -269,7 +274,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Info -->
   <div class="info-section">
     <div class="page-eyebrow">How It Works</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Two Modes: Private &amp; Free, or Enhanced with AI</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Two Modes: Private &amp; Free, or Enhanced with AI</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:24px">
       <strong>Free mode</strong> uses inpainting — the same technique behind "content-aware fill" — to reconstruct the area you paint over using the surrounding pixels. It runs entirely on your
       device via your browser's WebAssembly engine, so your photo is never uploaded anywhere. It works well for logos, watermarks and objects on fairly simple backgrounds, but can look hazy or
@@ -288,7 +293,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Tips -->
   <div class="info-section">
     <div class="page-eyebrow">Tips</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Getting the Best Results</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Getting the Best Results</h2>
     <div class="info-grid">
       <div class="info-card"><div class="ico">🎯</div><h4>Cover Fully</h4><p>Make sure your paint fully covers the watermark or object, including any faint edges — a little extra overlap into the background is fine.</p></div>
       <div class="info-card"><div class="ico">🧩</div><h4>Simple Backgrounds Work Best</h4><p>Removal blends best on plain, textured or repeating backgrounds (sky, grass, walls). Busy, detailed backgrounds may show minor blending artefacts.</p></div>
@@ -300,7 +305,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- FAQ -->
   <div class="info-section">
     <div class="page-eyebrow">FAQ</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Common Questions</h2>
     <div class="info-grid" style="grid-template-columns:1fr">
       <div class="info-card"><h4>Is it legal to remove a watermark?</h4><p>It depends entirely on whose image it is and what rights you have. Removing a watermark from your own photo, or one you have written permission to edit, is fine. Removing a copyright or stock-photo watermark from an image you don't own or haven't licensed is copyright infringement in most jurisdictions — this tool is intended for the former, not the latter.</p></div>
       <div class="info-card"><h4>Why does the result look slightly blurred, hazy or smudged?</h4><p>That's a Free-mode limitation — inpainting reconstructs the painted area by blending nearby pixels, which works best on simple or repetitive backgrounds. Complex or structured backgrounds (horizons, faces, intricate patterns) are harder to reconstruct convincingly and can come out hazy. Try a tighter paint area, smaller multi-pass touch-ups, or switch to Enhanced (AI) mode for a much cleaner result on these cases.</p></div>
@@ -315,7 +320,7 @@ footer a{color:var(--green);text-decoration:none}
 <div style="max-width:960px;margin:0 auto;padding:0 24px 60px">
   <div style="margin-top:56px">
     <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px">Object Removal Explained</div>
-    <h2 style="font-family:'Bebas Neue','Arial Black',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is Inpainting, and How Does It Remove Objects Without Touching the Rest of the Photo?</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">What Is Inpainting, and How Does It Remove Objects Without Touching the Rest of the Photo?</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">
       Inpainting is a computer-vision technique that reconstructs a masked region of an image by analysing the texture, colour and structure of the pixels surrounding it. Rather than cropping,
       blurring or covering the area, the algorithm essentially asks "what would likely be here based on everything around it?" and fills the gap accordingly — which is exactly how professional

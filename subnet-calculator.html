@@ -41,9 +41,9 @@
 :root{--ink:#080D14;--deep:#0B1120;--green:#00E87A;--green2:#00C468;--cyan:#00C8FF;--white:#F0F6FF;--muted:#5A6A85;--card:#0E1A2E;--border:rgba(255,255,255,0.07);--danger:#EF4444;--warning:#F59E0B;--mono:'JetBrains Mono',monospace}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
 nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,13,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
+.nav-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.4rem;letter-spacing:.08em;color:var(--white);text-decoration:none}
 .nav-logo .dot{color:var(--green)}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:0.88rem;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -57,7 +57,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 
 .page{max-width:1080px;margin:0 auto;padding:60px 24px 80px}
 .eyebrow{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
+.page-title{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(3rem,7vw,5rem);line-height:.95;letter-spacing:.03em;color:var(--white);margin-bottom:16px}
 .page-title .acc{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:40px}
 
@@ -71,7 +71,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .ip-input::placeholder{color:var(--muted)}
 .slash{font-family:var(--mono);font-size:1.4rem;color:var(--muted);padding-bottom:12px;flex-shrink:0}
 .cidr-input{width:80px;text-align:center;flex:none}
-.calc-btn{padding:12px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;flex-shrink:0;height:48px}
+.calc-btn{padding:12px 28px;background:linear-gradient(135deg,var(--green),var(--green2));color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:0.92rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:none;border-radius:10px;cursor:pointer;transition:opacity .2s,transform .15s;flex-shrink:0;height:48px}
 .calc-btn:hover{opacity:.9;transform:scale(1.01)}
 
 /* Quick CIDR buttons */
@@ -110,7 +110,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .split-card h4{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:14px}
 .split-controls{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .split-controls label{font-size:0.78rem;color:var(--muted)}
-.split-controls select{background:#0E1A2E;border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none}
+.split-controls select{background:#0E1A2E;border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-family:Inter,system-ui,sans-serif;font-size:0.85rem;outline:none}
 .subnets-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:0.78rem}
 .subnets-table th{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
 .subnets-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--white)}
@@ -121,7 +121,7 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .info-section{margin-top:56px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
-.info-card h4{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
+.info-card h4{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.05rem;letter-spacing:.05em;color:var(--white);margin-bottom:5px}
 .info-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
 
 /* Common subnets reference */
@@ -132,13 +132,18 @@ nav{position:sticky;top:0;z-index:500;display:flex;align-items:center;justify-co
 .ref-table tr:hover td{background:rgba(255,255,255,0.02)}
 
 footer{background:var(--deep);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.3rem;letter-spacing:.08em;color:var(--white)}
 .footer-logo .dot{color:var(--green)}
 footer p{font-size:0.8rem;color:var(--muted);margin-top:6px}
 footer a{color:var(--green);text-decoration:none}
 @media(max-width:640px){nav{padding:0 20px}.page{padding:40px 16px 60px}.input-row{flex-direction:column}.slash{display:none}.cidr-input{width:100%}}
 </style>
 <script src="site-search.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sx-page.css">
+<script src="sx-bg.js" defer></script>
 </head>
 <body>
 <nav>
@@ -227,7 +232,7 @@ footer a{color:var(--green);text-decoration:none}
   <!-- Reference table -->
   <div class="info-section">
     <div class="eyebrow">Quick Reference</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Common Subnet Reference</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:4px">Common Subnet Reference</h2>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px">
       <table class="ref-table">
         <thead><tr><th>CIDR</th><th>Subnet Mask</th><th>Hosts</th><th>Common Use</th></tr></thead>
@@ -252,7 +257,7 @@ footer a{color:var(--green);text-decoration:none}
   </div>
 
   <div class="info-section">
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Understanding Subnetting</h2>
+    <h2 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:2rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Understanding Subnetting</h2>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">Subnetting is the process of dividing a larger IP network into smaller, more manageable sub-networks. Every IP address on a network has two parts — the network portion (which identifies which network it belongs to) and the host portion (which identifies the specific device). The CIDR prefix length (the number after the slash) tells you how many bits are used for the network portion.</p>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px;margin-bottom:16px">A /24 network, for example, uses 24 bits for the network and 8 bits for hosts — giving 2⁸ = 256 addresses, minus 2 reserved (network address and broadcast), leaving 254 usable hosts. A /25 splits that in half — two subnets of 126 hosts each. Every time you add one to the prefix, you halve the number of hosts but double the number of subnets you can create.</p>
     <p style="font-size:0.92rem;color:var(--muted);line-height:1.8;max-width:760px">In cloud environments like Azure and AWS, subnetting is particularly important — VNets and VPCs are defined by CIDR blocks, and subnets within them must be planned carefully to allow room for growth, separate security zones, and efficient routing.</p>
@@ -265,7 +270,7 @@ footer a{color:var(--green);text-decoration:none}
     </div>
 
     <div style="margin-top:40px">
-      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
+      <h3 style="font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:1.6rem;letter-spacing:.04em;color:var(--white);margin-bottom:16px">Frequently Asked Questions</h3>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="info-card"><h4 style="margin-bottom:6px">What is CIDR notation?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">CIDR (Classless Inter-Domain Routing) notation represents an IP address and its network prefix in one compact form — for example 192.168.1.0/24. The number after the slash tells you how many bits of the address are the network portion. It replaced the older Class A/B/C system and allows much more flexible network sizing.</p></div>
         <div class="info-card"><h4 style="margin-bottom:6px">Why can't I use all addresses in a subnet?</h4><p style="font-size:0.82rem;color:var(--muted);line-height:1.6">Two addresses in every subnet are reserved — the first (network address, all host bits zero) identifies the subnet itself, and the last (broadcast address, all host bits one) is used to send messages to all hosts on the subnet. So a /24 has 256 total addresses but only 254 usable for hosts.</p></div>

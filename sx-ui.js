@@ -390,7 +390,7 @@
     document.body.insertAdjacentHTML('afterbegin', defs());
     $('#sxHeroArt').innerHTML = heroArt();
     $$('[data-gl]').forEach(function (el) { el.innerHTML = plain(el.dataset.gl); });
-    initHeader(); initSearch(); initGrid(); initWinApps();
+    initHeader(); initSearch(); if (location.hash === '#search') { var si = $('#sxSearch'); if (si) setTimeout(function () { si.focus(); }, 150); } initGrid(); initWinApps();
   }
   window.SX = { icon: icon, ACCENTS: ACCENTS, GLYPHS: GLYPHS, tools: TOOLS, search: search };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();

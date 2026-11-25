@@ -237,7 +237,7 @@
 .step p{ font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
 .about-section{
   padding: 100px 24px;
-  background: var(--deep);
+  background: rgba(13,23,40,.45);
   border-top: 1px solid var(--border);
 }
 .about-inner{ max-width: 860px; margin: 0 auto; }

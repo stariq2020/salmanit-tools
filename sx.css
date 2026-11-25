@@ -279,3 +279,10 @@ footer.sx-footer { background: color-mix(in srgb, var(--hero) 88%, transparent);
   background-image: linear-gradient(rgba(56,189,248,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,.06) 1px, transparent 1px); background-size: 44px 44px;
   -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000, transparent 75%); mask-image: radial-gradient(ellipse at 70% 40%, #000, transparent 75%); }
 .sx-hero .sx-wrap { position: relative; z-index: 1; }
+
+.sx-contact { margin-right: 4px; }
+@media (max-width: 900px) { .sx-contact { display: none; } }
+.faq-section, .about-section, .accordion-body { background-color: transparent; }
+.sx-nav-links > a, .sx-nav-links > .sx-dd > button { white-space: nowrap; }
+@media (max-width: 1200px) { .sx-header .sx-wrap { gap: 14px; } .sx-nav-links > a, .sx-nav-links > .sx-dd > button { padding: 8px 11px; font-size: .9rem; } }
+@media (max-width: 1060px) { .sx-contact { display: none; } }
